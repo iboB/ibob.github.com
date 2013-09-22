@@ -6,7 +6,7 @@
 
     <title>Boost.Mixin</title>
 
-    <meta name="description" content="C++ библиотека за динамично създаване и мутиране на типове">
+    <meta name="description" content="C++ библиотека за динамично композиране и мутиране на типове">
     <meta name="author" content="Борислав Станимиров">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -16,6 +16,9 @@
 
     <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
     <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
 
     <!-- For syntax highlighting -->
     <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
@@ -37,15 +40,127 @@
 
             <section>
                 <h1>Boost.Mixin</h1>
-                <h4>Динамично създаване и мутиране на типове в С++</h4>
+                <h4>Динамично композиране и мутиране на типове в С++</h4>
                 <p>
                     <small>Автор <a href="http://ibob.github.io">Борислав Станимиров</a></small>
                 </p>
             </section>
 
             <section>
+                <h3>Не е част от Boost</h3>
+                <small>...още</small>
+            </section>
+
+            <section>
+                <h2>Динамично кво?!</h2>
+            </section>
+
+            <section>
+                <h2>Композиране</h2>
+                <ul>
+                    <li>Имаме парчета от типове - миксини</li>
+                    <li>Например имаме класовете:
+                    <ul>
+                        <li><code>apple_product</code></li>
+                        <li><code>mp3_player</code></li>
+                        <li><code>headphones_player</code></li>
+                    </ul>
+                    <li>Сглобяваме си iPod</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Мутиране</h2>
+                <p>Подменяме <code>mp3_player</code> с <code>casette_player</code> и получаваме iWalkman</p>
+            </section>
+
+            <section>
+                <h2>Или...</h2>
+                <p>подменяме <code>apple_product</code> с <code>microsoft_product</code> и получаваме Zune</p>
+            </section>
+
+            <section>
+            <img src="zunezunezune.jpg" />
+            <br/>
+            <a href="http://www.youtube.com/watch?v=PcCGKL-2g-Y">Zune. Zune. Zune.</a>
+            </section>
+
+            <section>
+                <h2>Или...</h2>
+                <p>Добавяме, махаме, подменяме неща колкото ни душа иска</p>
+            </section>
+
+            <section>
+                <h2>Миксин?</h2>
+                <ul>
+                    <li>Най-много прилича на миксините в Ruby</li>
+                    <li>Не е CRTP миксин</li>
+                    <li>По-малко прилича на traits в Self, Scala, PHP, и др.</li>
+                    <li>Съвсем малко на множествено наследяване</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Приятности</h2>
+                <ul>
+                    <li>Дъъ. Рънтайм типове</li>
+                    <li>PIML</li>
+                    <li>Неинтрузивна</li>
+                    <li>Мултикасти (няма в Ruby)</li>
+                    <li>Екстри. Алокатори. Комбинатори. Още екстри</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Неприятности</h2>
+                <ul>
+                    <li>Няма compile-time тип</li>
+                    <li>Няма обект.метод(), а има метод(обект)</li>
+                    <li>Харчи повече памет</li>
+                    <li>Харчи повече ток &mdash;<br/>call overhead (пренебрежим (?)) </li>
+                </ul>
+            </section>
+
+            <section>
+            <h2>Бам! Код</h2>
+            <pre><code class="language-cpp" data-trim>
+object obj;
+
+mutate(obj)
+    .add&lt;apple_product&gt;()
+    .add&lt;mp3_player&gt;()
+    .add&lt;headphones_player&gt;();
+
+get_looks(obj); // -&gt; "cool"
+set_audio(obj, "some.mp3"); // handled by mp3_player
+play(obj); // playing some.mp3 through headphones
+
+mutate(obj)
+    .remove&lt;headphones_player&gt;()
+    .add&lt;speakers_player&gt;();
+
+play(obj); // playing some.mp3 through speakers
+            </code></pre>
+            </section>
+
+            <section>
+            <h2>Do you want to know more?</h2>
+            <p>РТФМ</p>
+            <p><a href="http://ibob.github.io/boost.mixin/">ibob.github.io/boost.mixin/</a></p>
+            </section>
+
+            <section>
             <h1>Край</h1>
-            <h4>От Борислав Станимиров / ibob.github.io</h4>
+            <h4>От Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a></h4>
+            <p>
+                Boost.Mixin е тук: <a href="https://github.com/iboB/boost.mixin">github.com/iboB/boost.mixin</a>
+            </p>
+            <p>
+                <br />
+                <small>
+                Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                </small>
+            </p>
             </section>
 
         </div>
