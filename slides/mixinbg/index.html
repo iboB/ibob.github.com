@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Boost.Mixin</title>
+
+    <meta name="description" content="C++ библиотека за динамично композиране и мутиране на типове">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1>Boost.Mixin</h1>
+                <h4>Динамично композиране и мутиране на типове в С++</h4>
+                <p>
+                    <small>Автор <a href="http://ibob.github.io">Борислав Станимиров</a></small>
+                </p>
+            </section>
+            
+            <section>
+                <h2>Какво става тук?</h2>
+                <ul>
+                    <li>Представяне на библиотека - Boost.Mixin</li>
+                    <li>Времето е недостатъчно за всичко</li>
+                    <ul>
+                        <li>Повече "какво"</li>
+                        <li>По-малко "защо"</li>
+                        <li>...но не нула "защо"</li>
+                    </ul>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Какво трябва да знаете?</h2>
+                <ul>
+                    <li>Поне малко С++</li>
+                    <ul>
+                        <li>Няма да се занимаваме с имплементация</li>
+                    </ul>
+                    <li>Обектно-ориентирано програмиране</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Boost</h2>
+                <ul>
+                    <li>Какво е <a href="http://www.boost.org/">Boost</a>?</li>
+                    <li>Boost.Mixin още не е там</li>
+                    <ul>
+                        <li>Ревю до края на 2013</li>
+                        <li>Част от Boost до края на 2014? 201_?</li>
+                    </ul>
+                    <li>Все пак библиотеката е използваема</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Mixin (библиотеката)</h2>
+                <ul>
+                    <li>За какво служи?</li>
+                    <li>Организация на сложни обекти</li>
+                    <ul>
+                        <li>Ама наистина сложни</li>
+                        <li>В различни подсистеми</li>
+                    </ul>
+                    <li>Чрез позволяването на динамични типове</li>
+                </ul>
+            </section>
+            
+            <section>
+                <ul>
+                    <li>Може да не се справя със защитаването ѝ, но...</li>
+                    <li>История.</li>
+                    <ul>
+                        <li>Masthead Studios и Захари Караджов. Идея. Интерфейс</li>
+                        <li>Аз. Пренаписване. Подобряване?</li>
+                        <li>Epic Devs</li>
+                    </ul>
+                    <li>Има 15☆ в GitHub</li>
+                    <li>Не е просто използваема, но и използвана</li>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Какво точно прави?</h2>
+                <ul>
+                    <li>Няма прости примери</li>
+                    <ul>
+                        <li>Или ще са твърде глупави</li>
+                        <li>...или твърде дълги</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>"Прост" пример</h2>
+                <a href="basic_example.png"><img style="height:50%;" src="basic_example.png" /></a>
+            </section>
+            
+            <section>
+                <h2>Основни функции</h2>
+                <ul>
+                    <li>Композиране</li>
+                    <ul>
+                        <li>Композиране vs Наследяване</li>
+                        <li>Редовен проблем в ООП</li>
+                        <li>Статичен полиморфизъм</li>
+                    </ul>
+                    <li>Модифициране (Мутация)</li>
+                    <ul>
+                        <li>Динамичен полиморфизъм</li>
+                    </ul>
+                </ul>
+            </section>
+            
+            <section>
+                <h2>Не-прост пример</h2>
+            </section>
+
+            <section>
+                <h2>Композиране</h2>
+                <ul>
+                    <li>Имаме класовете:
+                    <ul>
+                        <li><code>apple_product</code></li>
+                        <li><code>mp3_player</code></li>
+                        <li><code>headphones_player</code></li>
+                    </ul>
+                    <li>Сглобяваме си iPod</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Мутиране</h2>
+                <p>Подменяме <code>mp3_player</code> с <code>casette_player</code> и получаваме iWalkman</p>
+            </section>
+
+            <section>
+                <h2>Или...</h2>
+                <p>подменяме <code>apple_product</code> с <code>microsoft_product</code> и получаваме Zune</p>
+            </section>
+
+            <section>
+            <img src="zunezunezune.jpg" />
+            <br/>
+            <a href="http://www.youtube.com/watch?v=PcCGKL-2g-Y">Zune. Zune. Zune.</a>
+            </section>
+
+            <section>
+                <h2>Интерфейси</h2>
+                <p class="fragment">Не работи.</p>
+                <p class="fragment">Тотално.</p>
+                <p class="fragment">:(</p>
+            </section>
+            
+            <section>
+                <h2>Oppan C++ Style</h2>
+                <ul>
+                    <li>Mножествено наследяване</li>
+                    <li>Силно типизиран език</li>
+                    <li>Duck type език</li>
+                </ul>
+            </section>
+
+            <section>
+            <h2>Do you want to know more?</h2>
+            <p>РТФМ</p>
+            <p><a href="http://ibob.github.io/boost.mixin/">ibob.github.io/boost.mixin/</a></p>
+            </section>
+
+            <section>
+            <h1>Край</h1>
+            <h2>Въпроси?</h2>
+            <br/>
+            <h4>От Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a></h4>
+            <p>
+                Boost.Mixin е тук: <a href="https://github.com/iboB/boost.mixin">github.com/iboB/boost.mixin</a>
+            </p>
+            <p>
+                <br />
+                <small>
+                Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                </small>
+            </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
