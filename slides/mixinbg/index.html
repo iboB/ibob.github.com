@@ -152,6 +152,11 @@
             </section>
 
             <section>
+                <p>Реалните случаи са по-тежки</p>
+                <img class="diagram" src="venn.png" />
+            </section>
+
+            <section>
                 <ul>
                     <li>Таксономия срещу тагове</li>
                     <ul>
@@ -365,9 +370,9 @@ BOOST_DEFINE_MIXIN(monster_ai, simulate_tick_msg &amp; get_info_msg);
                     <li>Разбиване на класическите интерфейси</li>
                     <li>Месиджите в Boost.Mixin. Как?</li>
                     <pre><code class="language-cpp" data-trim>
-BOOST_MIXIN_MESSAGE_0(simulate_tick);
-BOOST_MIXIN_MESSAGE_1(move_to, object*, target);
-BOOST_MIXIN_MESSAGE_2(foo, arg1_t, arg1, arg2_t, arg2);
+BOOST_MIXIN_MESSAGE_0(void, simulate_tick);
+BOOST_MIXIN_MESSAGE_1(void, move_to, object*, target);
+BOOST_MIXIN_MESSAGE_2(rt, foo, arg1_t, arg1, arg2_t, arg2);
                     </code></pre>
                     <pre><code class="language-cpp" data-trim>
 BOOST_MIXIN_DEFINE_MESSAGE(simulate_tick);
@@ -397,12 +402,20 @@ BOOST_MIXIN_DEFINE_MESSAGE(foo);
                 <ul>
                     <li>Освен тези, които видяхме...</li>
                     <li>Харчи малко повече памет - пренебрежимо (?)</li>
-                    <li>Call overhead - пренебрежим (?)</li>
+                    <ul>
+                        <li>Допълнителна памет на уникален тип</li>
+                        <li>Допълнителна памет за обект</li>
+                    </ul>
+                    <li>Message call overhead - пренебрежим (?)</li>
+                    <ul>
+                        <li>Малко по-бавно от виртуална функция.</li>
+                        <li>Основният проблем е cache-locality</li>
+                    </ul>
                 </ul>
             </section>
 
             <section>
-                <h2>Кога да я ползвате</h2>
+                <h2>Кога да ползвате Boost.Mixin?</h2>
                 <ul>
                     <li>Когато имате сложни обекти - поне ECS</li>
                     <li>Когато имате подсистеми</li>
