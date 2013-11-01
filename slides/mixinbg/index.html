@@ -45,7 +45,7 @@
                     <small>Автор <a href="http://ibob.github.io">Борислав Станимиров</a></small>
                 </p>
             </section>
-            
+
             <section>
                 <h2>Какво става тук?</h2>
                 <ul>
@@ -58,7 +58,7 @@
                     </ul>
                 </ul>
             </section>
-            
+
             <section>
                 <h2>Какво трябва да знаете?</h2>
                 <ul>
@@ -82,7 +82,7 @@
                     <li>Все пак библиотеката е използваема</li>
                 </ul>
             </section>
-            
+
             <section>
                 <h2>Mixin (библиотеката)</h2>
                 <ul>
@@ -93,9 +93,10 @@
                         <li>В различни подсистеми</li>
                     </ul>
                     <li>Чрез позволяването на динамични типове</li>
+                    <li>Името или "Аз знам какво значи Mixin и не е това"</li>
                 </ul>
             </section>
-            
+
             <section>
                 <ul>
                     <li>Може да не се справя със защитаването ѝ, но...</li>
@@ -109,7 +110,7 @@
                     <li>Не е просто използваема, но и използвана</li>
                 </ul>
             </section>
-            
+
             <section>
                 <h2>Какво точно прави?</h2>
                 <ul>
@@ -123,9 +124,9 @@
 
             <section>
                 <h2>"Прост" пример</h2>
-                <a href="basic_example.png"><img style="height:50%;" src="basic_example.png" /></a>
+                <a href="basic_example.png"><img src="basic_example.png" /></a>
             </section>
-            
+
             <section>
                 <h2>Основни функции</h2>
                 <ul>
@@ -141,60 +142,277 @@
                     </ul>
                 </ul>
             </section>
-            
+
             <section>
-                <h2>Не-прост пример</h2>
+                <h2>Защо?</h2>
+            </section>
+
+            <section>
+                <img class="diagram" src="taxonomy.png" />
+            </section>
+
+            <section>
+                <ul>
+                    <li>Таксономия срещу тагове</li>
+                    <ul>
+                        <li>Йерархиите често не работят</li>
+                        <li>Блоговете ни научиха, че таговете са нещо яко</li>
+                    </ul>
+                    <li>Отново - сложни обекти</li>
+                    <ul>
+                        <li>Срещат се често в игрите</li>
+                        <li>...и не само игрите</li>
+                        <li>Особено, където има подсистеми</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Конкретен пример</h2>
+                <p>...най-сетне</p>
             </section>
 
             <section>
                 <h2>Композиране</h2>
                 <ul>
-                    <li>Имаме класовете:
-                    <ul>
-                        <li><code>apple_product</code></li>
-                        <li><code>mp3_player</code></li>
-                        <li><code>headphones_player</code></li>
-                    </ul>
-                    <li>Сглобяваме си iPod</li>
+                    <li><code>flying_creature</code></li>
+                    <li><code>two_legged_creature</code></li>
+                    <li><code>monster_ai</code></li>
+                    <li><code>animated_model</code></li>
+                    <li><code>directx_rendering</code></li>
                 </ul>
             </section>
 
             <section>
+                <img class="diagram" src="dragon.png" />
+            </section>
+
+            <section>
                 <h2>Мутиране</h2>
-                <p>Подменяме <code>mp3_player</code> с <code>casette_player</code> и получаваме iWalkman</p>
+                <ul>
+                <li>Подменяме <code>monster_ai</code> с <code>player_control</code> и ставаме шофьор на дракон</li>
+                <li>Подменяме <code>directx_rendering</code> с <code>opengl_rendering</code> - имаме игра за Линукс</li>
+                <li>Махаме <code>flying_creature</code> - (двукрак) гущер</li>
+                <li>Добавяме <code>fire_breather</code> - става страшно</li>
             </section>
 
             <section>
-                <h2>Или...</h2>
-                <p>подменяме <code>apple_product</code> с <code>microsoft_product</code> и получаваме Zune</p>
+                <h2>Подходи</h2>
             </section>
 
-            <section>
-            <img src="zunezunezune.jpg" />
-            <br/>
-            <a href="http://www.youtube.com/watch?v=PcCGKL-2g-Y">Zune. Zune. Zune.</a>
-            </section>
-
-            <section>
-                <h2>Интерфейси</h2>
-                <p class="fragment">Не работи.</p>
-                <p class="fragment">Тотално.</p>
-                <p class="fragment">:(</p>
-            </section>
-            
             <section>
                 <h2>Oppan C++ Style</h2>
                 <ul>
                     <li>Mножествено наследяване</li>
-                    <li>Силно типизиран език</li>
-                    <li>Duck type език</li>
+                    <li>CRTP Миксини</li>
+                    <ul>
+                        <li>Като трейтовете в Scala, PHP или Self</li>
+                        <li>...или ролите в Perl 6</li>
+                        <li>...или наследяването в Eiffel</li>
+                        <li>...или миксините в Ruby</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <img class="diagram" src="inheritance.png" />
+            </section>
+
+            <section>
+                <ul>
+                    <li>Mножествено наследяване</li>
+                    <ul>
+                        <li>Няма лесен начин за комункация</li>
+                        <li>side cast</li>
+                    </ul>
+                    <li>CRTP Миксини, трейтове и т.н. - комуникация</li>
+                    <li>Комбинаторна експлозия от типове</li>
+                    <li>Колекции в силно типизирани езици. Нямаме общ тип.</li>
+                    <li>Ами мутацията?</li>
+                    <ul>
+                        <li>Само Ruby е готин</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Алтернатива: ECS</h2>
+                <p>Entity-component system</p>
+                <ul>
+                    <li>Базов обект (entity) съдържа компоненти</li>
+                    <li>Интерфейси към компоненти</li>
+                    <li>Базов клас за компоненти</li>
+                </ul>
+            </section>
+
+            <section>
+            <p>Entity</p>
+            <pre><code class="language-cpp" data-trim>
+class game_entity
+{
+    control* m_control;
+    physical_data* m_physical_data;
+    rendering* rendering;
+    vector&lt;type*&gt; m_types; // ??
+    ...
+};
+
+game_entity dragon;
+dragon.set_control(new monster_ai);
+dragon.set_physical_data(new animated_model("dragon.model"));
+dragon.add_type(new flying_creature);
+...
+
+dragon.set_ai(new player_control);
+            </code></pre>
+            </section>
+
+            <section>
+            <p>Component</p>
+            <pre><code class="language-cpp" data-trim>
+class component
+{
+    entity* self;
+};
+
+class monster_ai : public control, public component
+{
+    void simulation_tick() override
+    {
+        ...
+        self->get_physical_data()->move_to(enemy);
+        self->get_physical_data()->animate("flying"); // ??
+    }
+};
+            </code></pre>
+            </section>
+
+            <section>
+                <h2>Ползвайте ECS</h2>
+                <ul>
+                    <li>Entity-component системите не са зло</li>
+                    <li>Ползват се много. Особено в игрите</li>
+                    <li>Лесни са за разбиране</li>
+                    <li>В крайна сметка решават споменатите проблеми</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Най сетне: Boost.Mixin</h2>
+                <p>Entity-component система на стероиди</p>
+            </section>
+
+            <section>
+                <p>Boost.Mixin.Дракон</p>
+                <pre><code class="language-cpp" data-trim>
+object dragon; // just an empty object
+
+mutate(dragon)
+    .add&lt;flying_creature&gt;().add&lt;two_legged_creature&gt;()
+    .add&lt;monster_ai&gt;().add&lt;animated_model&gt;().add&lt;directx_rendering&gt;();
+
+set_model(dragon, "dragon.model"); // handled by animated_model
+...
+mutate(dragon).remove&lt;monster_ai&gt;().add&lt;player_control&gt;();
+                </code></pre>
+                <ul>
+                    <li>Миксин тук = компонент в ECS</li>
+                    <li>C++ няма extension методи :(</li>
+                    <li>Няма нужда да предвиждаме всичко в базовия обект</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Boost.Mixin Миксин</p>
+                <pre><code class="language-cpp" data-trim>
+class monster_ai
+{
+    void simulate_tick()
+    {
+        ...
+        move_to(bm_this, enemy);
+        animate(bm_this, "flying");
+    }
+};
+                </code></pre>
+                <ul>
+                    <li>Да. Не наследява нищо. Библиотеката не е интрузивна.</li>
+                    <li><code>bm_this = self = </code>обектът, от който миксинът е част</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Не може да бъде!</h2>
+                <ul>
+                    <li>Да. Не може. Трябва още малко</li>
+                    <li>В някой хедър:</li>
+                    <pre><code class="language-cpp" data-trim>
+BOOST_DECLARE_MIXIN(monster_ai);
+                    </code></pre>
+                    <li>Хедър? C++ sucks. Трябват хедъри</li>
+                    <li>Това е достатъчно за мутации на обекти</li>
+                    <li>В някой .cpp файл:</li>
+                    <pre><code class="language-cpp" data-trim>
+BOOST_DEFINE_MIXIN(monster_ai, simulate_tick_msg &amp; get_info_msg);
+                    </code></pre>
+                    <li>Месиджи? Методи? Smalltalk (тайна: едно и също са)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Ин / тер / ф / ей / с</h2>
+                <ul>
+                    <li>Разбиване на класическите интерфейси</li>
+                    <li>Месиджите в Boost.Mixin. Как?</li>
+                    <pre><code class="language-cpp" data-trim>
+BOOST_MIXIN_MESSAGE_0(simulate_tick);
+BOOST_MIXIN_MESSAGE_1(move_to, object*, target);
+BOOST_MIXIN_MESSAGE_2(foo, arg1_t, arg1, arg2_t, arg2);
+                    </code></pre>
+                    <pre><code class="language-cpp" data-trim>
+BOOST_MIXIN_DEFINE_MESSAGE(simulate_tick);
+BOOST_MIXIN_DEFINE_MESSAGE(move_to);
+BOOST_MIXIN_DEFINE_MESSAGE(foo);
+                    </code></pre>
+                    <li>Mixin feature list</li>
+                    <li>Функциите на обекта = обединението на миксините</li>
+                    <li>Резултат. Истински decoupling</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Други приятности</h2>
+                <ul>
+                    <li>Приоритет на месиджи. Скриване на миксини.</li>
+                    <li>Мултикаст.</li>
+                    <li>Плъгини и динамични библиотеки.</li>
+                    <li>Потребителски алокатори</li>
+                    <li>Thread safety</li>
+                    <li>Бъдеще</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Други неприятности</h2>
+                <ul>
+                    <li>Освен тези, които видяхме...</li>
+                    <li>Харчи малко повече памет - пренебрежимо (?)</li>
+                    <li>Call overhead - пренебрежим (?)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Кога да я ползвате</h2>
+                <ul>
+                    <li>Когато имате сложни обекти - поне ECS</li>
+                    <li>Когато имате подсистеми</li>
+                    <li>Когато имате плъгини</li>
                 </ul>
             </section>
 
             <section>
             <h2>Do you want to know more?</h2>
-            <p>РТФМ</p>
-            <p><a href="http://ibob.github.io/boost.mixin/">ibob.github.io/boost.mixin/</a></p>
+            <p>РТФМ @ <a href="http://ibob.github.io/boost.mixin/">ibob.github.io/boost.mixin/</a></p>
             </section>
 
             <section>
@@ -218,7 +436,6 @@
 
     <script src="/third_party/reveal/lib/js/head.min.js"></script>
     <script src="/third_party/reveal/js/reveal.min.js"></script>
-
 
     <script>
         Reveal.initialize({

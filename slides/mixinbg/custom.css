@@ -7,3 +7,11 @@
 .reveal h6 {
   font-family: Impact, sans-serif;
 }
+
+.reveal section img.diagram
+{
+	/*height: 100%;*/
+	border: none;
+	background: none;
+	box-shadow: none;
+}
