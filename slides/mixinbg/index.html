@@ -161,6 +161,7 @@
                     <li>Таксономия срещу тагове</li>
                     <ul>
                         <li>Йерархиите често не работят</li>
+                        <li>В някои езици йерархиите винаги не работят</li>
                         <li>Блоговете ни научиха, че таговете са нещо яко</li>
                     </ul>
                     <li>Отново - сложни обекти</li>
@@ -227,12 +228,15 @@
                 <ul>
                     <li>Mножествено наследяване</li>
                     <ul>
-                        <li>Няма лесен начин за комункация</li>
+                        <li>Няма лесен начин за комуникация</li>
                         <li>side cast</li>
                     </ul>
                     <li>CRTP Миксини, трейтове и т.н. - комуникация</li>
                     <li>Комбинаторна експлозия от типове</li>
                     <li>Колекции в силно типизирани езици. Нямаме общ тип.</li>
+                    <ul>
+                        <li>Виртуално множествено наследяване?</li>
+                    </ul>
                     <li>Ами мутацията?</li>
                     <ul>
                         <li>Само Ruby е готин</li>
@@ -387,18 +391,67 @@ BOOST_MIXIN_DEFINE_MESSAGE(foo);
 
             <section>
                 <h2>Други приятности</h2>
+            </section>
+
+            <section>
+                <h2>Мултикаст</h2>
+                <pre><code class="language-cpp" data-trim>
+BOOST_MIXIN_MULTICAST_MESSAGE_1(void, get_info, ostream&amp;, out);
+...
+get_info(obj, cout);
+                </code></pre>
+
                 <ul>
-                    <li>Приоритет на месиджи. Скриване на миксини.</li>
-                    <li>Мултикаст.</li>
-                    <li>Плъгини и динамични библиотеки.</li>
-                    <li>Потребителски алокатори</li>
-                    <li>Thread safety</li>
-                    <li>Бъдеще</li>
+                    <li>Повече от един клиент на месидж</li>
+                    <li>Мултикаст комбинатори</li>
+                    <li><code>get_rendering_elements</code></li>
+                    <li>Приоритет</li>
+                    <code>... &amp; foo_msg &amp; priority(5, bar_msg));</code>
                 </ul>
             </section>
 
             <section>
-                <h2>Други неприятности</h2>
+                <h2>Уникаст приоритет</h2>
+                <ul>
+                    <li>Най добрият печели.</li>
+                    <li>Скриване на миксини. Не точно както в Ruby</li>
+                </ul>
+                <pre><code class="language-cpp" data-trim>
+mutate(monster).add&lt;berserk_ai&gt;();
+... // do berserk stuff
+mutate(monster).remove&lt;berserk_ai&gt;();
+... // do regular stuff
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Плъгини</h2>
+                <ul>
+                    <li>Пълна абстракция между интерфейс и имплементация</li>
+                    <li>Плъгин динамична библиотека - няма проблем</li>
+                    <li>Външно обогатяване на обекти</li>
+                    <li>Пример: Архитектурна CAD система</li>
+                    <ul>
+                        <li>Плъгин за водопроводни/електриджийски екстри</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Потребителски алокатори</li>
+                    <li>Thread safety</li>
+                    <li>Бъдеще</li>
+                    <ul>
+                        <li>Reflection. Интеграция със скриптови езици</li>
+                        <li>Mixin features</li>
+                        <li>Roadmap</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Неприятности</h2>
                 <ul>
                     <li>Освен тези, които видяхме...</li>
                     <li>Харчи малко повече памет - пренебрежимо (?)</li>
@@ -415,7 +468,7 @@ BOOST_MIXIN_DEFINE_MESSAGE(foo);
             </section>
 
             <section>
-                <h2>Кога да ползвате Boost.Mixin?</h2>
+                <h2>Кога е Boost.Mixin e добра идея?</h2>
                 <ul>
                     <li>Когато имате сложни обекти - поне ECS</li>
                     <li>Когато имате подсистеми</li>
@@ -426,6 +479,12 @@ BOOST_MIXIN_DEFINE_MESSAGE(foo);
             <section>
             <h2>Do you want to know more?</h2>
             <p>РТФМ @ <a href="http://ibob.github.io/boost.mixin/">ibob.github.io/boost.mixin/</a></p>
+            <p>
+                <br />
+                <small>
+                Документацията не е съвсем пълна :(
+                </small>
+            </p>
             </section>
 
             <section>
