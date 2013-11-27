@@ -1,0 +1,14 @@
+use.tabs=0
+line.margin.visible=1
+tab.size.$(file.patterns.rb)=2
+use.tabs.$(file.patterns.rb)=0
+indent.size.$(file.patterns.rb)=2
+font.base=$(font.monospace)
+font.small=$(font.monospace)
+font.comment=$(font.monospace)
+font.text=$(font.monospace)
+font.text.comment=$(font.monospace)
+font.embedded.base=$(font.monospace)
+font.embedded.comment=$(font.monospace)
+font.vbs=$(font.monospace)
+split.vertical=0

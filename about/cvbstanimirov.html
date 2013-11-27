@@ -1,0 +1,275 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"  "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<script type="application/javascript">
+function Hash(obj)
+{
+    this.length = 0;
+    this.items = {};
+    for (var p in obj)
+	{
+        if (obj.hasOwnProperty(p))
+		{
+            this.items[p] = obj[p];
+            ++this.length;
+        }
+    }
+
+	this.has = function(key)
+    {
+        return this.items.hasOwnProperty(key);
+    }
+
+	this.at = function(key)
+	{
+        return this.has(key) ? this.items[key] : undefined;
+    }
+}
+
+function CalcLastPositionTime()
+{
+	var yearElem = document.getElementById('lp_year');
+	if(!yearElem)
+	{
+		return;
+	}
+
+	var now = new Date();
+	var ydif = now.getFullYear() - parseInt(yearElem.innerHTML);
+
+	var monthPart = '';
+	var monthElem = document.getElementById('lp_month');
+	if(monthElem)
+	{
+		var monthStrToI = new Hash({Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, June: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Noe: 10, Dec: 11});
+		var imonth = monthStrToI.at(monthElem.innerHTML);
+
+		var mdif = now.getMonth() - imonth;
+		if(mdif < 0)
+		{
+			--ydif;
+			mdif += 12
+		}
+
+		// no else, since we might come from the previous if
+		if(mdif > 0)
+		{
+			monthPart = mdif + ' month';
+			if(mdif > 1)
+			{
+				monthPart += 's';
+			}
+		}
+	}
+
+	var yearPart = '';
+	if(ydif > 0)
+	{
+		yearPart = ydif + ' year';
+		if(ydif > 1)
+		{
+			yearPart += 's';
+		}
+	}
+
+	var timeElem = document.getElementById('lp_time');
+
+	if(!yearPart && !monthPart)
+	{
+		timeElem.innerHTML = '(less than a month)';
+	}
+	else
+	{
+		var div = ''
+		if(yearPart && monthPart)
+		{
+			div = ', ';
+		}
+
+		timeElem.innerHTML = '(' + yearPart + div + monthPart +')';
+	}
+}
+
+function CalcAge()
+{
+	var now = new Date();
+	var age = now.getFullYear() - 1984;
+	var mdif = now.getMonth() - 5; //0=jan
+
+	if(mdif < 0)
+	{
+		--age;
+	}
+	else if(mdif == 0)
+	{
+		var ddif = now.getDate() - 25;
+
+		if(ddif < 0)
+		{
+			--age;
+		}
+	}
+
+	var el = document.getElementById('age');
+	el.innerHTML = '(' + age + ' years old)';
+}
+
+addEventListener('load', CalcAge, false);
+addEventListener('load', CalcLastPositionTime, false);
+</script>
+<style media="screen" type="text/css">
+
+/*reset globals*/
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;vertical-align: baseline;background: transparent;}
+body {line-height: 1}
+ol,ul {list-style: none}
+blockquote,q {quotes: none}
+blockquote:before,blockquote:after,q:before,q:after {content: '';content: none}
+:focus {outline: 0}
+ins {text-decoration: none}
+del {text-decoration: line-through}
+table {border-collapse: collapse;border-spacing: 0}
+/* end reset */
+
+body
+{
+	color: #151510;
+	background: #cdcdcd;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 1.8;
+}
+
+.shadow
+{
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid b5b5b5;
+	width: 800px;
+	background: #a0a0a7;
+}
+
+.main
+{
+	margin: 2px;
+	background: #f5f5ff;
+}
+
+.content
+{
+	padding-top: 100px;
+	padding-bottom: 150px;
+	padding-left: 25px;
+	padding-right: 25px;
+}
+
+th
+{
+	font-size: 12px;
+	font-weight:bold;
+	font-family: Arial, Helvetica, sans-serif;
+	margin-bottom: 0.5em;
+	text-transform: uppercase;
+}
+
+th:first-letter
+{
+	font-size:1.5em;
+	font-weight:normal;
+}
+
+.left
+{
+	width: 30%;
+	text-align: right;
+	padding-right: 12px;
+	padding-top: 10px;
+	border-right: 1px solid #a0a0a0;
+}
+
+.right
+{
+	padding-left: 15px;
+}
+
+#age, #lp_month, #lp_year, #lp_time
+{
+	display: inline;
+}
+</style>
+<title>Borislav Stanimirov</title>
+</head>
+<body>
+<div class="shadow">
+<div class="main">
+<div class="content">
+	<table id="table" width="100%">
+	<tr><th class="left"></th></tr>
+	<tr><th class="left">Personal information</th><th></th></tr>
+	<tr><td class="left">Name</td><td class="right">Borislav Stanimirov</td></tr>
+	<tr><td class="left">Address</td><td class="right">Sofia, Bulgaria</td></tr>
+	<tr><td class="left">Cell</td><td class="right">+ 359 897 955 976</td></tr>
+	<tr><td class="left">E-mail</td><td class="right"><a href="mailto:b.stanimirov@abv.bg">b.stanimirov@abv.bg</a></td></tr>
+	<tr><td class="left">Date of birth</td><td class="right">25.06.1984 <div id="age"></div></td></tr>
+	<tr><td class="left"></td><td class="right"></td></tr>
+	<tr><th class="left">Work experience</th><th></th></tr>
+    <tr><td class="left">Period</td><td class="right"><div id="lp_month">Mar</div>, <div id="lp_year">2013</div> - present <div id="lp_time"></div></td></tr>
+	<tr><td class="left">Employer</td><td class="right"><a href="http://www.epic-devs.com">Epic Devs</a></td></tr>
+	<tr><td class="left">Product</td><td class="right">Epic Pirate Story II</td></tr>
+	<tr><td class="left">Position</td><td class="right">Lead programmer</td></tr>
+	<tr><td class="left">Activities and responsibilities</td><td class="right">Management of tasks within the team. Software architecture and design. Planning. RnD. Training. Internal software development.</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><td class="left">Period</td><td class="right">Mar, 2012 - Mar, 2013</td></tr>
+	<tr><td class="left">Employer</td><td class="right"><a href="http://www.gameloft.com">Gameloft Bulgaria</a></td></tr>
+	<tr><td class="left">Product</td><td class="right"><a href="http://blog.gameloft.com/index.php/2011/12/08/fantasy-town/">Fantasy Town</a>, <a href="http://forum.gameloft.com/index.php?topic=22845.0">Gangstar 3 Rio</a>, Minor work in other projects</td></tr>
+	<tr><td class="left">Position</td><td class="right">Lead programmer</td></tr>
+	<tr><td class="left">Activities and responsibilities</td><td class="right">Project evolution. Management of tasks within the team. Planning. RnD. Training. Support.</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><td class="left">Period</td><td class="right">Oct, 2011 - Feb, 2012 (4 months)</td></tr>
+	<tr><td class="left">Employer</td><td class="right"><a href="www.abaltatech.com">Abalta Technologies</a></td></tr>
+	<tr><td class="left">Product</td><td class="right">Various</td></tr>
+	<tr><td class="left">Position</td><td class="right">Senior programmer</td></tr>
+	<tr><td class="left">Activities and responsibilities</td><td class="right">Reserach and development for the newest projects of the company.</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><td class="left">Period</td><td class="right">Jan, 2006 - Jan, 2010 (4 years)</td></tr>
+	<tr><td class="left">Employer</td><td class="right"><a href="http://mastheadstudios.com">Masthead Studios</a></td></tr>
+	<tr><td class="left">Product</td><td class="right"><a href="http://play-earthrise.com">Earthrise MMORPG</a></td></tr>
+	<tr><td class="left">Position</td><td class="right">Senior programmer</td></tr>
+	<tr><td class="left">Activities and responsibilities</td><td class="right">Management of tasks within the team. Planning. Core design. Rendering engine design and implementation: Terrain, Water, Sky, General rendering pipeline. Design and various implementation in the editors. Network design. Database design and implementation. Build-system design and implementation. Game-design-related coding.</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><td class="left">Period</td><td class="right">Mar, 2004 - Jan, 2006 (1 year, 9 months)</td></tr>
+	<tr><td class="left">Employer</td><td class="right">&mdash;</td></tr>
+	<tr><td class="left">Product</td><td class="right">Various: games, desktop applications, libraries</td></tr>
+	<tr><td class="left">Position</td><td class="right">Freelance programmer</td></tr>
+	<tr><td class="left">Activities and responsibilities</td><td class="right">Planning. Design. Coding. Support.</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><td class="left">Period</td><td class="right">Sep, 2002 - Mar, 2004 (1 year, 6 months)</td></tr>
+	<tr><td class="left">Employer</td><td class="right"><a href="http://www.icb.bg">Interconsult Bulgaria</a></td></tr>
+	<tr><td class="left">Product</td><td class="right"><a href="http://www.caddiesoftware.com">Caddie</a></td></tr>
+	<tr><td class="left">Position</td><td class="right">Programmer</td></tr>
+	<tr><td class="left">Activities and responsibilities</td><td class="right">Tasks in the GUI and the rendering system. Maintaining and migrating legacy code.</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><th class="left">Languages</th><th></th></tr>
+	<tr><td class="left">Bulgarian</td><td class="right">native</td></tr>
+	<tr><td class="left">English</td><td class="right">excellent</td></tr>
+	<tr><td class="left">Russian</td><td class="right">good</td></tr>
+	<tr><td class="left">German</td><td class="right">good</td></tr>
+	<tr><th class="left">Technical skills</th><th></th></tr>
+	<tr><td class="left">C++</td><td class="right">Excellent. More than 13 years of experience. More than 7 years of professional experience</td></tr>
+	<tr><td class="left">Programming languages</td><td class="right">Advanced in C, Ruby, lua, Mathematica. Good understanding of C#, Boo, Java, Scala, D, PHP, JavaScript, Haskell, Assembly, Perl, Python, and others</td></tr>
+	<tr><td class="left">APIs and libraries</td><td class="right">Excellent knowledge of DirectX, boost, MFC, Win32. Advanced in OpenGL, Qt, SDL, and others</td></tr>
+	<tr><td class="left">Other</td><td class="right">Advanced knowledge in graphical programming, programming algorithms, programming concepts, multi-threaded programming, mathematical algorithms, discrete mathematics, number theory. Experience with Windows and Linux programming, various compilers, version control systems, build systems, and development environments. Some experience in iOS and Android development.</td></tr>
+	<tr><th class="left">Education</th><th></th></tr>
+	<tr><td class="left">1997-2002</td><td class="right">Sofia Gymnasium of Mathematics</td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	<tr><th class="left">Other</th><th></th></tr>
+	<tr><td class="left">GitHub profile</td><td class="right"><a href="http://github.com/iboB">github.com/iboB</a></td></tr>
+	<tr><td class="left">Linkedin profile</td><td class="right"><a href="http://www.linkedin.com/pub/borislav-stanimirov/47/630/471">linkedin.com/pub/borislav-stanimirov/47/630/471</a></td></tr>
+	<tr><td class="left"> </td><td class="right"></td></tr>
+	</table>
+</div>
+</div>
+</div>
+</body>
+</html>
