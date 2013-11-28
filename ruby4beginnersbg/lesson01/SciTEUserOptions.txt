@@ -12,3 +12,8 @@ font.embedded.base=$(font.monospace)
 font.embedded.comment=$(font.monospace)
 font.vbs=$(font.monospace)
 split.vertical=0
+code.page=65001
+if PLAT_GTK
+	output.code.page=65001
+if PLAT_MAC
+	output.code.page=65001
