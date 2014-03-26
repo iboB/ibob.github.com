@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Разходка през съвременния CPU pipeline</title>
+
+    <meta name="description" content="Лекция за Rogue Conf 2014">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h2>Разходка през съвременния CPU pipeline</h2>
+                <p>
+                    Автор <a href="http://ibob.github.io">Борислав Станимиров</a>
+                </p>
+                <p>
+                    <a href="https://twitter.com/natcbb">@natcbb</a>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е тази лекция?</h3>
+                <br/>
+                <ul>
+                    <li class="frg">Препускане през материята</li>
+                    <li class="frg">Почти всяка точка от нея може да се разгледа детайлно в една или повече такива лекции</li>
+                    <li class="frg">Много неща, само ще споменем и няма да разгледаме</li>
+                    <li class="frg">Много неща няма и да споменем</li>
+                    <li class="frg">Ще пропуснем много детайли</li>
+                    <li class="frg">Ще се фокусираме върху х86</li>
+                <ul>
+            </section>
+
+            <section class="slide">
+                <h3>Някои основни понятия</h3>
+                <div class="frg">
+                    <h4>Цикъл или тик (Cycle/Tick)</h4>
+                    <ul>
+                        <li>Основната единица за време за процесора. Честота</li>
+                        <li>Отлично мерило за сложността на дадена операция</li>
+                        <li>Процесорът казва: "цик... цик... цик..."</li>
+                    <ul>
+                </div>
+                <div class="frg">
+                    <h4>Инструкция</h4>
+                    <ul>
+                        <li>"Пътечка" сред транзисторите на процесора</li>
+                        <li>Наборът от инструкции e Instruction set</li>
+                    <ul>
+                </div>
+                <div class="frg">
+                    <h4>Регистър</h4>
+                    <ul>
+                        <li>Парче данни в рамките на процесора</li>
+                        <li>Работи супермегабързо</li>
+                    <ul>
+                </div>
+            </section>
+
+            <section class="slide">
+                <h3>Други екстри</h3>
+                <br/>
+                <ul>
+                    <li>CU - цар, ALU, FPU, MMX, SSE ... - боклици</li>
+                    <li>Конкретни регистри</li>
+                    <li>Конкретни инструкции</li>
+                    <li>Комуникация с външни (за процесора) устройства</li>
+                </ul>
+                <br/><br/>
+                <p>Няма да се занимаваме с тях.</p>
+                <p>Ако някой се интересува, "But How Do It Know" е една чудесна книга по въпроса:</p>
+                <p><a href="http://www.buthowdoitknow.com/">http://www.buthowdoitknow.com</a></p>
+            </section>
+
+            <section class="slide">
+                <h3>Видове процесори</h3>
+                <p>Има много начини да се класифирицират:</p>
+                <p class="frg">Например по instruction set:</p>
+                <ul class="frg">
+                    <li>CISC - x86</li>
+                    <li>RISC - ARM, SPARC, PowerPC</li>
+                </ul>
+                <p class="frg">Или по предназначение:</p>
+                <ul class="frg">
+                    <li>GPUs, CUDA - правят фреймбуфер, растеризират</li>
+                    <li>Други акселератори</li>
+                </ul>
+                <p class="frg"><em>За тях може би ще си говорим на следващия OpenFest</em></p>
+                <p class="frg"><br/>Микроконтролери, виртуално CPU, екзотики, MISC, и др.</p>
+            </section>
+
+            <section class="slide">
+                <h3>CISC и RISC</h3>
+                </br>
+                <p class="frg">Ужасно много си приличат</p>
+                <div class="frg">
+                    <p>С тези разлики:</p>
+                    <ul>
+                        <li>Различни имена за практически еднакви неща</li>
+                        <li>Дъъ... instruction set. MISC пести ток.</li>
+                        <li>Load/Store и Register Memory</li>
+                        <li>Други дреболии</li>
+                    </ul>
+                </div>
+                </br></br>
+                <p class="frg">Фокусираме се върху х86</p>
+            </section>
+
+            <section class="slide">
+                <h3>Лето 1978: Intel 8086</h3>
+                <br/>
+                <br/>
+                <ul>
+                    <li class="frg">Готини неща</li>
+                    <li class="frg">Набор от готини регистри (AX-DX, адреси, IP)</li>
+                    <li class="frg">Набор от готини инструкции</li>
+                    <li class="frg">Готина съвместимост със цялата рода. Много неща са добавяни, но не са махани</li>
+                    <li class="frg">PCDOS на готин Core i7</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Една инструкция на 8086</h3>
+                <ul>
+                    <li class="frg">Цик. Прочитаме какво има в IP</li>
+                    <li class="frg">Цик. Подготвяме инструкцията - входа</li>
+                    <li class="frg">Цик. Изпълняваме инструкцията</li>
+                    <li class="frg">Цик. Пенсионираме инструкцията - изхода</li>
+                    <li class="frg">Цик. Инкрементираме IP</li>
+                </ul>
+                <p class="frg"><br/>... и всичко това се случва само в идеалния вариант.</p>
+                <p class="frg">Четене на данни. Wait state. Празни цикли.</p>
+                <p class="frg" style="text-align:center"><img class="diagram" src="sad_panda.png"/></p>
+            </section>
+
+            <section class="slide">
+                <h3>Модерни иновации</h3>
+                <br/>
+                <ul>
+                    <li class="frg">80286: Instruction cache</li>
+                    <li class="frg">80386: Data cache</li>
+                    <li class="frg">80386: Translation lookaside buffer cache (TLB)</li>
+                    <li class="frg">L2, L3, L-амнайсе cache</li>
+                </ul>
+                <p class="frg">Стига cache (благодарете ми с cache, в брой или на ръка)<br/></p>
+                <ul>
+                    <li class="frg">80486: Първи pipeline. Big Success. Средно двойно по-добра производителност от еквивалентен по честота 386</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>486 pipeline</h3>
+                <br/>
+                <ul>
+                    <li class="frg">Fetch - взимаме от instruction cache</li>
+                    <li class="frg">Decode 1 - определяме пътечката за инструкцията</li>
+                    <li class="frg">Decode 2 - приготвяме входа</li>
+                    <li class="frg">Execution - изпълняваме инструкцията</li>
+                    <li class="frg">Writeback - попълваме изхода</li>
+                </ul>
+                <div class="frg">
+                    <p><br/>Всичко това в 5 нива:</p>
+                    <pre>
+                    1:  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+                    2:      <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+                    3:          <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+                    4:              <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+                    5:                  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+                    cpu: <span class="cpucyc">цик цик цик цик цик цик цик цик цик<span>
+                    </pre>
+                </div>
+            </section>
+
+            <section class="slide">
+                <h3>Проблеми с 486 pipeline</h3>
+                <p class="frg">Има ги очевидните, наследени от преди: Преджуркване на cache &#8594; Wait state &#8594; Sad panda</p>
+                <h4 class="frg">Нов специфичен проблем: pipeline stall</h4>
+                <div class="frg">
+                    <p>Размяна на стойности</p>
+                    <pre>      XOR a, b; XOR b, a; XOR a, b;</pre>
+                <div>
+                <div class="frg">
+                    <p>Как работи това в нашия pipeline?</p>
+                    <pre>
+
+        XOR a,b: <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+        XOR b,a:     <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+        XOR a,b:         <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS][PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+        cpu:      <span class="cpucyc">цик цик цик цик цик цик цик цик цик цик цик<span>
+                    </pre>
+                </div>
+                <p class="frg">Stall се получава и когато инструкция трябва да чака</p>
+            </section>
+
+            <section class="slide">
+                <h3>Pentium Христос - спасителя</h3>
+                <p class="frg">ООО че яко. Out-of-order execution. 486 на стероиди</p>
+                <p class="frg" style="text-align:center"><img class="diagram" src="ooo_core.png" /></p>
+            </section>
+
+            <section class="islide">
+                <img class="diagram" src="ooo_core_fetch.png" />
+                <p>Хитро взимаме до 24 инструкции от instruction cache</p>
+            </section>
+
+            <section class="islide">
+                <img class="diagram" src="ooo_core_d1.png" />
+                <p>Взимаме до 4 инструкции от fetch buffer</p>
+                <p>Разталпваме ги на &#181;-ops - парчета от инструкции</p>
+            </section>
+
+            <section class="islide">
+                <img class="diagram" src="ooo_core_d2_1.png" />
+                <p>Подреждаме входа в регистри по 4 &#181;-ops на цикъл</p>
+                <p>Копираме ги в тайни регистри за паралелизъм</p>
+            </section>
+
+            <section class="islide">
+                <img class="diagram" src="ooo_core_d2_2.png" />
+                <p>Преподреждаме &#181;-ops в подходящ ред за изпълнение</p>
+            </section class="islide">
+
+            <section class="islide">
+                <img class="diagram" src="ooo_core_ex.png" />
+                <p>ООО Меджик. Изпълняваме &#181;-ops по ултрамегабърз начин</p>
+                <p>Заемаме максимално количество портове (execution units)</p>
+            </section>
+
+            <section class="islide">
+                <img class="diagram" src="ooo_core_wb.png" />
+                <p>Изчакваме всички &#181;-ops за инструкция</p>
+                <p>Попълваме изхода в подходящия ред</p>
+            </section>
+
+            <section class="slide">
+                <h3>ООО че яко</h3>
+                <br/><br/>
+                <p class="frg">Решихме pipeline stall проблема!</p>
+                <p class="frg">За програмата и програмиста цялата тая магия изглежда не по-различна от дедо 8086</p>
+            </section>
+
+            <section class="slide">
+                <h3>ООО че не чак толкова яко</h3>
+                <p class="frg">Създадохме нов проблем</p>
+                <p class="frg">... когато имаме branching</p>
+                <p class="frg">... инвестираме прекалено много</p>
+                <p class="frg">Получаваме Pipeline stall с чудовищни размери</p>
+                <ul class="frg">
+                    <li>Чакаме да приключат всички заредени инструкции</li>
+                    <li>Правим roll-back до предишно състояние</li>
+                    <li>Рестартираме целия pipeline на новото място</li>
+                </ul>
+                <p class="frg">Когато имаме сто (или повече) инструкции, заредени в pipeline-a, това е неприемливо</p>
+            </section>
+
+            <section class="slide">
+                <h3>Спекулативно изпълнение</h3>
+                <br/>
+                <p>Отговорът на нашия проблем</p>
+                <ul>
+                    <li class="frg">При branch изпълняваме всичките му разклонения</li>
+                    <li class="frg">Когато разберем кое разклонение е правилното, изхвърляме резултатите от другото на боклука</li>
+                    <li class="frg">Да, има разхищение, но многократно по-малко</li>
+                    <li class="frg">Можем да поскажем на процесора кой branch да избере (__builtin_expect)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Край</h1>
+                <br/>
+                <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/natcbb">@natcbb</a></p>
+                <p>
+                    <br />
+                    <small>
+                    Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>Бонус</h3>
+                <p>Как работи Hyper-Threading?</p>
+                <p class="frg" style="text-align:center"><img class="diagram" src="ooo_core_hyper.png" /></p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'solarized', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>

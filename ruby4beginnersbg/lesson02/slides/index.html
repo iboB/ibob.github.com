@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Урок 2 :: Ruby за начинаещи</title>
+
+    <meta name="description" content="Уроци по програмиране с Ruby за начинаещи. Урок 02.">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="../../common/css/slides_custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h3>Програмиране с Ruby за начинаещи</h3>
+                <h1>Урок 2</h1>
+                <h4>Първи стъпки</h4>
+                <p>
+                    <small>Автор <a href="http://ibob.github.io">Борислав Станимиров</a></small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: false,
+            progress: false,
+            history: true,
+            center: true,
+
+            theme: 'solarized', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
