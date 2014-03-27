@@ -52,18 +52,18 @@
                 <h3>Какво е тази лекция?</h3>
                 <br/>
                 <ul>
-                    <li class="frg">Препускане през материята</li>
-                    <li class="frg">Почти всяка точка от нея може да се разгледа детайлно в една или повече такива лекции</li>
-                    <li class="frg">Много неща, само ще споменем и няма да разгледаме</li>
-                    <li class="frg">Много неща няма и да споменем</li>
-                    <li class="frg">Ще пропуснем много детайли</li>
-                    <li class="frg">Ще се фокусираме върху х86</li>
+                    <li class="fragment">Препускане през материята</li>
+                    <li class="fragment">Почти всяка точка от нея може да се разгледа детайлно в една или повече такива лекции</li>
+                    <li class="fragment">Много неща, само ще споменем и няма да разгледаме</li>
+                    <li class="fragment">Много неща няма и да споменем</li>
+                    <li class="fragment">Ще пропуснем много детайли</li>
+                    <li class="fragment">Ще се фокусираме върху х86</li>
                 <ul>
             </section>
 
             <section class="slide">
                 <h3>Някои основни понятия</h3>
-                <div class="frg">
+                <div class="fragment">
                     <h4>Цикъл или тик (Cycle/Tick)</h4>
                     <ul>
                         <li>Основната единица за време за процесора. Честота</li>
@@ -71,14 +71,14 @@
                         <li>Процесорът казва: "цик... цик... цик..."</li>
                     <ul>
                 </div>
-                <div class="frg">
+                <div class="fragment">
                     <h4>Инструкция</h4>
                     <ul>
                         <li>"Пътечка" сред транзисторите на процесора</li>
                         <li>Наборът от инструкции e Instruction set</li>
                     <ul>
                 </div>
-                <div class="frg">
+                <div class="fragment">
                     <h4>Регистър</h4>
                     <ul>
                         <li>Парче данни в рамките на процесора</li>
@@ -105,25 +105,25 @@
             <section class="slide">
                 <h3>Видове процесори</h3>
                 <p>Има много начини да се класифирицират:</p>
-                <p class="frg">Например по instruction set:</p>
-                <ul class="frg">
+                <p class="fragment">Например по instruction set:</p>
+                <ul class="fragment">
                     <li>CISC - x86</li>
                     <li>RISC - ARM, SPARC, PowerPC</li>
                 </ul>
-                <p class="frg">Или по предназначение:</p>
-                <ul class="frg">
+                <p class="fragment">Или по предназначение:</p>
+                <ul class="fragment">
                     <li>GPUs, CUDA - правят фреймбуфер, растеризират</li>
                     <li>Други акселератори</li>
                 </ul>
-                <p class="frg"><em>За тях може би ще си говорим на следващия OpenFest</em></p>
-                <p class="frg"><br/>Микроконтролери, виртуално CPU, екзотики, MISC, и др.</p>
+                <p class="fragment"><em>За тях може би ще си говорим на следващия OpenFest</em></p>
+                <p class="fragment"><br/>Микроконтролери, виртуално CPU, екзотики, MISC, и др.</p>
             </section>
 
             <section class="slide">
                 <h3>CISC и RISC</h3>
                 </br>
-                <p class="frg">Ужасно много си приличат</p>
-                <div class="frg">
+                <p class="fragment">Ужасно много си приличат</p>
+                <div class="fragment">
                     <p>С тези разлики:</p>
                     <ul>
                         <li>Различни имена за практически еднакви неща</li>
@@ -133,7 +133,7 @@
                     </ul>
                 </div>
                 </br></br>
-                <p class="frg">Фокусираме се върху х86</p>
+                <p class="fragment">Фокусираме се върху х86</p>
             </section>
 
             <section class="slide">
@@ -141,40 +141,40 @@
                 <br/>
                 <br/>
                 <ul>
-                    <li class="frg">Готини неща</li>
-                    <li class="frg">Набор от готини регистри (AX-DX, адреси, IP)</li>
-                    <li class="frg">Набор от готини инструкции</li>
-                    <li class="frg">Готина съвместимост със цялата рода. Много неща са добавяни, но не са махани</li>
-                    <li class="frg">PCDOS на готин Core i7</li>
+                    <li class="fragment">Готини неща</li>
+                    <li class="fragment">Набор от готини регистри (AX-DX, адреси, IP)</li>
+                    <li class="fragment">Набор от готини инструкции</li>
+                    <li class="fragment">Готина съвместимост със цялата рода. Много неща са добавяни, но не са махани</li>
+                    <li class="fragment">PCDOS на готин Core i7</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Една инструкция на 8086</h3>
                 <ul>
-                    <li class="frg">Цик. Прочитаме какво има в IP</li>
-                    <li class="frg">Цик. Подготвяме инструкцията - входа</li>
-                    <li class="frg">Цик. Изпълняваме инструкцията</li>
-                    <li class="frg">Цик. Пенсионираме инструкцията - изхода</li>
-                    <li class="frg">Цик. Инкрементираме IP</li>
+                    <li class="fragment">Цик. Прочитаме какво има в IP</li>
+                    <li class="fragment">Цик. Подготвяме инструкцията - входа</li>
+                    <li class="fragment">Цик. Изпълняваме инструкцията</li>
+                    <li class="fragment">Цик. Пенсионираме инструкцията - изхода</li>
+                    <li class="fragment">Цик. Инкрементираме IP</li>
                 </ul>
-                <p class="frg"><br/>... и всичко това се случва само в идеалния вариант.</p>
-                <p class="frg">Четене на данни. Wait state. Празни цикли.</p>
-                <p class="frg" style="text-align:center"><img class="diagram" src="sad_panda.png"/></p>
+                <p class="fragment"><br/>... и всичко това се случва само в идеалния вариант.</p>
+                <p class="fragment">Четене на данни. Wait state. Празни цикли.</p>
+                <p class="fragment" style="text-align:center"><img class="diagram" src="sad_panda.png"/></p>
             </section>
 
             <section class="slide">
                 <h3>Модерни иновации</h3>
                 <br/>
                 <ul>
-                    <li class="frg">80286: Instruction cache</li>
-                    <li class="frg">80386: Data cache</li>
-                    <li class="frg">80386: Translation lookaside buffer cache (TLB)</li>
-                    <li class="frg">L2, L3, L-амнайсе cache</li>
+                    <li class="fragment">80286: Instruction cache</li>
+                    <li class="fragment">80386: Data cache</li>
+                    <li class="fragment">80386: Translation lookaside buffer cache (TLB)</li>
+                    <li class="fragment">L2, L3, L-амнайсе cache</li>
                 </ul>
-                <p class="frg">Стига cache (благодарете ми с cache, в брой или на ръка)<br/></p>
+                <p class="fragment">Стига cache (благодарете ми с cache, в брой или на ръка)<br/></p>
                 <ul>
-                    <li class="frg">80486: Първи pipeline. Big Success. Средно двойно по-добра производителност от еквивалентен по честота 386</li>
+                    <li class="fragment">80486: Първи pipeline. Big Success. Средно двойно по-добра производителност от еквивалентен по честота 386</li>
                 </ul>
             </section>
 
@@ -182,13 +182,13 @@
                 <h3>486 pipeline</h3>
                 <br/>
                 <ul>
-                    <li class="frg">Fetch - взимаме от instruction cache</li>
-                    <li class="frg">Decode 1 - определяме пътечката за инструкцията</li>
-                    <li class="frg">Decode 2 - приготвяме входа</li>
-                    <li class="frg">Execution - изпълняваме инструкцията</li>
-                    <li class="frg">Writeback - попълваме изхода</li>
+                    <li class="fragment">Fetch - взимаме от instruction cache</li>
+                    <li class="fragment">Decode 1 - определяме пътечката за инструкцията</li>
+                    <li class="fragment">Decode 2 - приготвяме входа</li>
+                    <li class="fragment">Execution - изпълняваме инструкцията</li>
+                    <li class="fragment">Writeback - попълваме изхода</li>
                 </ul>
-                <div class="frg">
+                <div class="fragment">
                     <p><br/>Всичко това в 5 нива:</p>
                     <pre>
                     1:  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
@@ -203,13 +203,13 @@
 
             <section class="slide">
                 <h3>Проблеми с 486 pipeline</h3>
-                <p class="frg">Има ги очевидните, наследени от преди: Преджуркване на cache &#8594; Wait state &#8594; Sad panda</p>
-                <h4 class="frg">Нов специфичен проблем: pipeline stall</h4>
-                <div class="frg">
+                <p class="fragment">Има ги очевидните, наследени от преди: Преджуркване на cache &#8594; Wait state &#8594; Sad panda</p>
+                <h4 class="fragment">Нов специфичен проблем: pipeline stall</h4>
+                <div class="fragment">
                     <p>Размяна на стойности</p>
                     <pre>      XOR a, b; XOR b, a; XOR a, b;</pre>
                 <div>
-                <div class="frg">
+                <div class="fragment">
                     <p>Как работи това в нашия pipeline?</p>
                     <pre>
 
@@ -219,13 +219,13 @@
         cpu:      <span class="cpucyc">цик цик цик цик цик цик цик цик цик цик цик<span>
                     </pre>
                 </div>
-                <p class="frg">Stall се получава и когато инструкция трябва да чака</p>
+                <p class="fragment">Stall се получава и когато инструкция трябва да чака</p>
             </section>
 
             <section class="slide">
                 <h3>Pentium Христос - спасителя</h3>
-                <p class="frg">ООО че яко. Out-of-order execution. 486 на стероиди</p>
-                <p class="frg" style="text-align:center"><img class="diagram" src="ooo_core.png" /></p>
+                <p class="fragment">ООО че яко. Out-of-order execution. 486 на стероиди</p>
+                <p class="fragment" style="text-align:center"><img class="diagram" src="ooo_core.png" /></p>
             </section>
 
             <section class="islide">
@@ -265,22 +265,22 @@
             <section class="slide">
                 <h3>ООО че яко</h3>
                 <br/><br/>
-                <p class="frg">Решихме pipeline stall проблема!</p>
-                <p class="frg">За програмата и програмиста цялата тая магия изглежда не по-различна от дедо 8086</p>
+                <p class="fragment">Решихме pipeline stall проблема!</p>
+                <p class="fragment">За програмата и програмиста цялата тая магия изглежда не по-различна от дедо 8086</p>
             </section>
 
             <section class="slide">
                 <h3>ООО че не чак толкова яко</h3>
-                <p class="frg">Създадохме нов проблем</p>
-                <p class="frg">... когато имаме branching</p>
-                <p class="frg">... инвестираме прекалено много</p>
-                <p class="frg">Получаваме Pipeline stall с чудовищни размери</p>
-                <ul class="frg">
+                <p class="fragment">Създадохме нов проблем</p>
+                <p class="fragment">... когато имаме branching</p>
+                <p class="fragment">... инвестираме прекалено много</p>
+                <p class="fragment">Получаваме Pipeline stall с чудовищни размери</p>
+                <ul class="fragment">
                     <li>Чакаме да приключат всички заредени инструкции</li>
                     <li>Правим roll-back до предишно състояние</li>
                     <li>Рестартираме целия pipeline на новото място</li>
                 </ul>
-                <p class="frg">Когато имаме сто (или повече) инструкции, заредени в pipeline-a, това е неприемливо</p>
+                <p class="fragment">Когато имаме сто (или повече) инструкции, заредени в pipeline-a, това е неприемливо</p>
             </section>
 
             <section class="slide">
@@ -288,10 +288,10 @@
                 <br/>
                 <p>Отговорът на нашия проблем</p>
                 <ul>
-                    <li class="frg">При branch изпълняваме всичките му разклонения</li>
-                    <li class="frg">Когато разберем кое разклонение е правилното, изхвърляме резултатите от другото на боклука</li>
-                    <li class="frg">Да, има разхищение, но многократно по-малко</li>
-                    <li class="frg">Можем да поскажем на процесора кой branch да избере (__builtin_expect)</li>
+                    <li class="fragment">При branch изпълняваме всичките му разклонения</li>
+                    <li class="fragment">Когато разберем кое разклонение е правилното, изхвърляме резултатите от другото на боклука</li>
+                    <li class="fragment">Да, има разхищение, но многократно по-малко</li>
+                    <li class="fragment">Можем да поскажем на процесора кой branch да избере (__builtin_expect)</li>
                 </ul>
             </section>
 
@@ -310,7 +310,7 @@
             <section class="slide">
                 <h3>Бонус</h3>
                 <p>Как работи Hyper-Threading?</p>
-                <p class="frg" style="text-align:center"><img class="diagram" src="ooo_core_hyper.png" /></p>
+                <p style="text-align:center"><img class="diagram" src="ooo_core_hyper.png" /></p>
             </section>
 
         </div>
