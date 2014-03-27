@@ -671,9 +671,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.41033407"
-     inkscape:cx="3432.0179"
-     inkscape:cy="468.19276"
+     inkscape:zoom="1.6413363"
+     inkscape:cx="1815.3784"
+     inkscape:cy="308.08745"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -698,6 +698,11 @@
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <path
+       style="fill:none;stroke:#1b429e;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="m 1860.257,684.0507 64.9827,-64.01759"
+       id="path13510-7"
+       inkscape:connector-curvature="0" />
     <path
        style="fill:#00ffff;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1"
        d="m 4764.4106,725.799 165.7187,-2.43704 -4.8741,-59.70745 -159.626,0 -34.1186,25.58891 z"
@@ -793,11 +798,6 @@
        id="path13648"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccccccccccc" />
-    <path
-       style="fill:none;stroke:#1b429e;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 1860.257,684.0507 64.9827,-64.01759"
-       id="path13510-7"
-       inkscape:connector-curvature="0" />
     <path
        style="fill:none;stroke:#1b429e;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="m 2016.9863,491.72206 17.4247,-13.79347 c 0,0 -4.8967,-3.50705 -9.174,-3.04468 -3.8644,0.41785 -8.7188,4.50245 -9.9417,8.19202 -1.3399,4.04284 1.691,8.64613 1.691,8.64613 z"
@@ -13984,7 +13984,10 @@
        width="674.07635"
        height="468.36209"
        x="3182.4614"
-       y="565.78259" />
+       y="565.78259"
+       inkscape:export-filename="C:\Work\Projects\ibob.github.com\slides\cpupbg\work\plc_rs2.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:type="arc"
        style="fill:url(#radialGradient14606-1);fill-opacity:1;stroke:#1b429e;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -14395,7 +14398,10 @@
        width="674.07635"
        height="468.36209"
        x="3942.8093"
-       y="29.547541" />
+       y="29.547541"
+       inkscape:export-filename="C:\Work\Projects\ibob.github.com\slides\cpupbg\work\plc_rs3.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:type="arc"
        style="fill:url(#radialGradient14606-1-4);fill-opacity:1;stroke:#1b429e;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -14770,7 +14776,10 @@
        width="674.07635"
        height="468.36209"
        x="3943.8242"
-       y="559.72925" />
+       y="559.72925"
+       inkscape:export-filename="C:\Work\Projects\ibob.github.com\slides\cpupbg\work\plc_rs4.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:type="arc"
        style="fill:url(#radialGradient14606-1-4-5);fill-opacity:1;stroke:#1b429e;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
@@ -15089,7 +15098,10 @@
        width="674.07635"
        height="468.36209"
        x="4716.5776"
-       y="28.137613" />
+       y="28.137613"
+       inkscape:export-filename="C:\Work\Projects\ibob.github.com\slides\cpupbg\work\plc_rs_exit.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        transform="translate(1712.4354,45.251509)"
        sodipodi:type="arc"
@@ -15468,7 +15480,10 @@
        width="674.07635"
        height="468.36209"
        x="4727.5835"
-       y="552.80115" />
+       y="552.80115"
+       inkscape:export-filename="C:\Work\Projects\ibob.github.com\slides\cpupbg\work\plc_retire.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
     <path
        sodipodi:type="arc"
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
