@@ -41,6 +41,9 @@
             <section>
                 <h2>Разходка през съвременния CPU pipeline</h2>
                 <p>
+                    <strong>Rouge... Roge... Wrong... r... абе нещо-си-Conf 2014</strong>
+                </p>
+                <p>
                     Автор <a href="http://ibob.github.io">Борислав Станимиров</a>
                 </p>
                 <p>
@@ -127,7 +130,7 @@
                     <p>С тези разлики:</p>
                     <ul>
                         <li>Различни имена за практически еднакви неща</li>
-                        <li>Дъъ... instruction set. MISC пести ток.</li>
+                        <li>Дъъ... instruction set. RISC пести ток.</li>
                         <li>Load/Store и Register Memory</li>
                         <li>Други дреболии</li>
                     </ul>
@@ -230,7 +233,7 @@
 
             <section class="islide">
                 <img class="diagram" src="ooo_core_fetch.png" />
-                <p>Хитро взимаме до 24 инструкции от instruction cache</p>
+                <p>Хитро взимаме до 32 инструкции от instruction cache</p>
             </section>
 
             <section class="islide">
@@ -296,10 +299,125 @@
             </section>
 
             <section>
+            <h2>Разходка през съвременния CPU pipeline</h2>
+            </section>
+
+            <section>
+                <p>За програмата светът изглежда така, както е изглеждал в 8086</p>
+                <p class="fragment">Но за инструкцията...</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_begin.png" />
+                <p>Да вземем една инструкция, чиято програма върви</p>
+                <p>Животът е спокоен</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_prefetch.png" />
+                <p>В един момент хитрият prefetch я пъха в instruction cache</p>
+                <p>Може би на около 1500 инструкции от нея</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_ic1.png" />
+                <p>Instruction pointer наближава</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_ic2.png" />
+                <p>На около 24 инструкции от нея, тя бива пъхната заедно с 5 свои съседи във fetch buffer</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_decoder.png" />
+                <p>Идва и реда да влезе в декодера</p>
+                <p>Той я разглобява на (примерно) 5 &#181;-ops</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_decoder2.png" />
+                <p>Декодера разбира че тя има нужда от допълнителни данни</p>
+                <p>На другия край на света, данните се напъхват в data cache</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rat.png" />
+                <p>&#181;-op-овете и влизат в register alias table</p>
+                <p>За тях се разпределят нужните "фалшиви" регистри</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rob.png" />
+                <p>&#181;-op-овете и влизат в reorder buffer</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rs1.png" />
+                <p>При първа възможност се пращат в reservation station</p>
+                <p>Някои от тях веднага се изпълняват. Тя не знае защо</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rs2.png" />
+                <p>Други от &#181;-op-овете и чакат, докато най-различни &#181;-op-ове от други инструкции се изпълняват</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rs3.png" />
+                <p>... и чакат</p>
+                <p class="fragment">... и чакат още</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rs4.png" />
+                <p>Най сетне даните им са заредени</p>
+                <p>Те се изпълняват</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_rs_exit.png" />
+                <p>Вече изцяло изпълнената инструкция се сглобява на излизане от reservation station и резултатите и са готови</p>
+            </section>
+
+            <section class="zislide">
+                <img src="plc_retire.png" />
+                <p>На края, в последната фаза, тя се озовава в опашка със съседите си от самото начало, за да напусне процесора</p>
+            </section>
+
+            <section class="slide">
+                <h3>Поуки</h3>
+                <br/>
+                <p>...които важат само за native компилираните програми</p>
+                <p class="fragment">...и които може би знаехте преди (но сега знаете защо)</p>
+                <ul>
+                    <li class="fragment">Ако програмата ни няма branching, ще работи по-бързо</li>
+                    <li class="fragment">Добре е данните са в гъсто пакетирани масиви (поредни в паметта)</li>
+                    <li class="fragment">Не можем току-така да кажем колко време ще отнеме изпълнението на дадена инструкция</li>
+                    <li class="fragment">По-простият код обикновено работи по-бързо</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Още матрял</h3>
+                <br/><br/>
+                <ul>
+                    <li><a href="http://www.lighterra.com/papers/modernmicroprocessors/">Modern Microprocessors - John Sladek</a></li>
+                    <li><a href="http://www.buthowdoitknow.com/">But How Do It Know? - J. Clark Scott</a></li>
+                    <li>Wikipedia!</li>
+                </ul>
+            </section>
+
+            <section>
                 <h1>Край</h1>
+                <br/>
                 <br/>
                 <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/natcbb">@natcbb</a></p>
                 <p>
+                    <br />
+                    <small>
+                    Тази презентация е тук: <a href="http://ibob.github.io/slides/cpupbg/">http://ibob.github.io/slides/cpupbg/</a>
+                    </small>
                     <br />
                     <small>
                     Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>

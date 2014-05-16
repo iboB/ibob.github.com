@@ -43,6 +43,11 @@
 	box-shadow: none;
 }
 
+.reveal section img
+{
+	background-color: white;
+}
+
 .reveal section span.fetch
 {
 	font-weight: bold;
