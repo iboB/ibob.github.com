@@ -1,0 +1,674 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="744.09448819"
+   height="1052.3622047"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="state_machine.svg">
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="306.70161"
+     inkscape:cy="471.09433"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="895"
+     inkscape:window-height="590"
+     inkscape:window-x="114"
+     inkscape:window-y="42"
+     inkscape:window-maximized="0" />
+  <defs
+     id="defs4">
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstart"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstart">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path4050" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lend"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path4053" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstartl"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstartl">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6509" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1LstartY"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1LstartY">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6512" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1LendU"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1LendU">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6515" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lend2"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lend2">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6518" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1Lstartv"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lstartv">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6521" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lendm"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lendm">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6524" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lendn"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lendn">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6527" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lende"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lende">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6530" />
+    </marker>
+    <marker
+       style="overflow:visible;"
+       id="Arrow1Lendi"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1Lendi">
+      <path
+         transform="scale(0.8) rotate(180) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6533" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1LstartR"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1LstartR">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path6536" />
+    </marker>
+    <marker
+       style="overflow:visible"
+       id="Arrow1LstartE"
+       refX="0.0"
+       refY="0.0"
+       orient="auto"
+       inkscape:stockid="Arrow1LstartE">
+      <path
+         transform="scale(0.8) translate(12.5,0)"
+         style="stroke:#eee8d5;stroke-width:1.0pt;fill:#eee8d5;fill-rule:evenodd"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         id="path7268" />
+    </marker>
+  </defs>
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <rect
+       y="158.07646"
+       x="17.142857"
+       height="731.42853"
+       width="1118.7775"
+       id="rect2985"
+       style="fill:#000080;fill-opacity:1" />
+    <path
+       transform="translate(-15.714286,-82.857143)"
+       d="m 408.85859,386.64789 a 78.858589,78.858589 0 1 1 -157.71718,0 78.858589,78.858589 0 1 1 157.71718,0 z"
+       sodipodi:ry="78.858589"
+       sodipodi:rx="78.858589"
+       sodipodi:cy="386.64789"
+       sodipodi:cx="330"
+       id="path2987"
+       style="fill:none;stroke:#eee8d5;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="translate(-193.24583,147.9797)"
+       d="m 408.85859,386.64789 a 78.858589,78.858589 0 1 1 -157.71718,0 78.858589,78.858589 0 1 1 157.71718,0 z"
+       sodipodi:ry="78.858589"
+       sodipodi:rx="78.858589"
+       sodipodi:cy="386.64789"
+       sodipodi:cx="330"
+       id="path2987-1"
+       style="fill:none;stroke:#eee8d5;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="translate(206.16243,146.89776)"
+       d="m 408.85859,386.64789 a 78.858589,78.858589 0 1 1 -157.71718,0 78.858589,78.858589 0 1 1 157.71718,0 z"
+       sodipodi:ry="78.858589"
+       sodipodi:rx="78.858589"
+       sodipodi:cy="386.64789"
+       sodipodi:cx="330"
+       id="path2987-7"
+       style="fill:none;stroke:#eee8d5;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       transform="translate(-0.77736534,379.7549)"
+       d="m 408.85859,386.64789 a 78.858589,78.858589 0 1 1 -157.71718,0 78.858589,78.858589 0 1 1 157.71718,0 z"
+       sodipodi:ry="78.858589"
+       sodipodi:rx="78.858589"
+       sodipodi:cy="386.64789"
+       sodipodi:cx="330"
+       id="path2987-4"
+       style="fill:none;stroke:#eee8d5;stroke-width:3;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       sodipodi:type="arc"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <flowRoot
+       transform="translate(-7.0710678,0)"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#eee8d5;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3789"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3791"><rect
+           style="fill:#eee8d5;fill-opacity:1"
+           y="251.31122"
+           x="268.70059"
+           height="71.720833"
+           width="160.61426"
+           id="rect3793" /></flowRegion><flowPara
+         id="flowPara3795">Атака</flowPara></flowRoot>    <flowRoot
+       transform="translate(-196.0946,239.25687)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#eee8d5;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3789-0"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3791-9"><rect
+           style="font-size:32px;fill:#eee8d5;fill-opacity:1"
+           y="251.31122"
+           x="268.70059"
+           height="72.730988"
+           width="195.9696"
+           id="rect3793-4" /></flowRegion><flowPara
+         id="flowPara3795-8">Бродене</flowPara></flowRoot>    <flowRoot
+       transform="translate(212.85971,235.08208)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#eee8d5;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3789-0-8"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3791-9-2"><rect
+           style="font-size:32px;fill:#eee8d5;fill-opacity:1"
+           y="251.31122"
+           x="268.70059"
+           height="72.730988"
+           width="195.9696"
+           id="rect3793-4-4" /></flowRegion><flowPara
+         id="flowPara3795-8-5">Гонене</flowPara></flowRoot>    <flowRoot
+       transform="translate(-5.1480383,475.46013)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#eee8d5;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3789-0-8-5"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3791-9-2-1"><rect
+           style="font-size:32px;fill:#eee8d5;fill-opacity:1"
+           y="251.31122"
+           x="268.70059"
+           height="72.730988"
+           width="195.9696"
+           id="rect3793-4-4-7" /></flowRegion><flowPara
+         id="flowPara3795-8-5-1">Раждане</flowPara></flowRoot>    <flowRoot
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3880"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3882"><rect
+           style="fill:#93a1a1;fill-opacity:1"
+           y="252.32137"
+           x="723.26923"
+           height="294.96454"
+           width="499.01535"
+           id="rect3884" /></flowRegion><flowPara
+         id="flowPara3886">Състояние:</flowPara><flowPara
+         id="flowPara3890">В = вижда врага</flowPara><flowPara
+         id="flowPara3894">Ч = чува нещо</flowPara><flowPara
+         id="flowPara3898">Ж = жив е той жив е</flowPara><flowPara
+         id="flowPara3900">там във играта</flowPara></flowRoot>    <flowRoot
+       transform="translate(16.652649,-6.0609153)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3908"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3910"><rect
+           style="font-size:32px;fill:#93a1a1;fill-opacity:1"
+           y="316.97113"
+           x="260.61935"
+           height="105.05586"
+           width="208.09143"
+           id="rect3912" /></flowRegion><flowPara
+         id="flowPara3914">В, Ж</flowPara></flowRoot>    <flowRoot
+       transform="translate(-188.24415,225.38763)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3908-1"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3910-5"><rect
+           style="font-size:32px;fill:#93a1a1;fill-opacity:1"
+           y="316.97113"
+           x="260.61935"
+           height="131.31982"
+           width="305.06607"
+           id="rect3912-2" /></flowRegion><flowPara
+         id="flowPara3914-7">-В, -Ч, Ж</flowPara></flowRoot>    <flowRoot
+       transform="translate(214.375,223.56468)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3908-1-3"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3910-5-2"><rect
+           style="font-size:32px;fill:#93a1a1;fill-opacity:1"
+           y="316.97113"
+           x="260.61935"
+           height="131.31982"
+           width="305.06607"
+           id="rect3912-2-2" /></flowRegion><flowPara
+         id="flowPara3914-7-1">В, -Ч, Ж</flowPara></flowRoot>    <flowRoot
+       transform="translate(37.232143,469.27897)"
+       style="font-size:32px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       id="flowRoot3908-1-6"
+       xml:space="preserve"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion3910-5-8"><rect
+           style="font-size:32px;fill:#93a1a1;fill-opacity:1"
+           y="316.97113"
+           x="260.61935"
+           height="131.31982"
+           width="305.06607"
+           id="rect3912-2-5" /></flowRegion><flowPara
+         id="flowPara3914-7-7">-Ж</flowPara></flowRoot>    <path
+       inkscape:connector-curvature="0"
+       id="path3996"
+       d="m 138.57143,445.21933 94.28571,-97.14286"
+       style="stroke-linejoin:miter;marker-end:url(#Arrow1Lend2);stroke-opacity:1;stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3998"
+       d="m 201.42857,460.93361 50,-87.14286"
+       style="fill:none;stroke:#eee8d5;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1LstartY)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4000"
+       d="m 240,530.93361 201.42857,-1.42857"
+       style="stroke-linejoin:miter;marker-end:url(#Arrow1LendU);stroke-opacity:1;stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4002"
+       d="M 224.28572,560.93361 440,558.07647"
+       style="fill:none;stroke:#eee8d5;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1LstartE)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4004"
+       d="m 258.57143,705.21933 -50,-102.85715"
+       style="stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1Lstartv);stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4006"
+       d="M 238.57143,752.36218 175.71429,616.6479"
+       style="stroke-linejoin:miter;marker-end:url(#Arrow1Lendm);stroke-opacity:1;stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4008"
+       d="m 412.85714,716.6479 78.57143,-94.28572"
+       style="fill:none;stroke:#eee8d5;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow1Lstartl)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4010"
+       d="M 435.71428,748.07647 521.42857,633.79075"
+       style="fill:none;stroke:#eee8d5;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-end:url(#Arrow1Lendi)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4014"
+       d="M 501.42858,448.07647 400,339.50504"
+       style="stroke-linejoin:miter;marker-end:url(#Arrow1Lende);stroke-opacity:1;stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4016"
+       d="m 311.42857,668.07647 0,-264.28572"
+       style="stroke-linejoin:miter;marker-end:url(#Arrow1Lendn);stroke-opacity:1;stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path4018"
+       d="M 347.14286,668.07647 338.57143,402.36218"
+       style="stroke-linejoin:miter;stroke-opacity:1;marker-start:url(#Arrow1LstartR);stroke:#eee8d5;stroke-linecap:butt;stroke-miterlimit:4;stroke-dasharray:none;stroke-width:2;fill:none"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(1.4285724,48.571428)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682"><rect
+           id="rect6684"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686">В</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-6"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(124.70033,45.170827)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-1"><rect
+           id="rect6684-8"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-9">-В</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-2"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(168.98605,246.5994)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-7"><rect
+           id="rect6684-9"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-5">Ч</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-4"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(230.41462,56.599401)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-3"><rect
+           id="rect6684-1"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-2">-Ж</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-3"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(274.70034,218.02797)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-34"><rect
+           id="rect6684-11"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-3">-Ч</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-8"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(114.70033,140.88512)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-74"><rect
+           id="rect6684-2"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-7">-В</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-7"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(71.843192,385.17083)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-9"><rect
+           id="rect6684-3"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-1">-В</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-9"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(103.27176,245.17082)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-8"><rect
+           id="rect6684-6"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-50">-Ж</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-28"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(303.27177,269.45655)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-6"><rect
+           id="rect6684-0"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-24">-Ж</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-86"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(356.12892,345.17083)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-5"><rect
+           id="rect6684-09"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-0">Ч</flowPara></flowRoot>    <flowRoot
+       xml:space="preserve"
+       id="flowRoot6680-0"
+       style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#93a1a1;fill-opacity:1;stroke:none;font-family:Sans"
+       transform="translate(377.55748,50.885114)"
+       inkscape:export-filename="X:\slides\gdintrobg\work\path2987.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
+         id="flowRegion6682-61"><rect
+           id="rect6684-38"
+           width="82.85714"
+           height="88.571426"
+           x="114.28571"
+           y="346.64789"
+           style="fill:#93a1a1;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara6686-93">В</flowPara></flowRoot>  </g>
+</svg>
