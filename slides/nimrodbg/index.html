@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Метапрограмиране с Nimrod</title>
+
+    <meta name="description" content="Лекция за Soft Uni Conf 2014">
+    <meta name="author" content="Захари Караджов, Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h2>Метапрограмиране с Nimrod</h2>
+                <p>
+                    Varna Conf, Юли 2014
+                </p>
+                <p>
+                    <small>
+                        Автори <a href="https://github.com/zah">Захари Караджов</a>, <a href="http://ibob.github.io">Борислав Станимиров</a>
+                    </small>
+                </p>
+            </section>
+
+            <section>
+                <h3>Какво сме ние?<h3>
+            </section>
+
+            <section class="slide">
+                <h3>Захари</h3>
+                <br/>
+                <ul>
+                    <li>Президент на Даркиум - прави браузър</li>
+                    <li>Програмира професионално от 10 години</li>
+                    <li>Знае езици за програмиране</li>
+                    <li>Да, този също го знае</li>
+                    <li>Е, този вече само Бойко Банчев го знае</li>
+                    <li>Вторият по количество код в Нимрод, след автора - Андреас Румпф</li>
+                    <li>Като цяло пич</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Снимка на Захари<h3>
+            </section>
+
+            <section class="slide">
+                <h3>Боби</h3>
+                <br/>
+                <ul>
+                    <li>Президент на това да си безработен</li>
+                    <li>Програмира професионално от 12 години</li>
+                    <li>Най-вече игри</li>
+                    <li>Пише open source</li>
+                    <li>Води курсове</li>
+                    <li>Иска С++ да умре най-сетне</li>
+                    <li>Като цяло, също така пич</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Снимка на Боби<h3>
+            </section>
+
+            <section class="slide">
+                <h3>Ордьовър</h3>
+                <br/>
+                <h4>Текущото състояние на света</h4>
+                <ul>
+                    <li>Силно типизирани срещу слабо типизирани</li>
+                    <li>---Картинка на зъл С++ срещу зъл Руби---</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Сензационна теза</h3>
+                <br/>
+                <p>Представете си любимия си език, любимата си библиотека, любимия си код.</p>
+                <p>Всички преимущества, които виждате в тях, могат успешно да се постигнат Nimrod.
+                А също така и голяма част от недостатъците им да изчезнат.</p>
+            </section>
+
+            <section class="slide">
+                <h3>Сензационна теза две</h3>
+                <br/>
+                <p>Nimrod има потенциала да стане най-използваният език на света.</p>
+            </section>
+
+            <section class="slide">
+                <h3>Nimrod</h3>
+                <br/>
+                <ul>
+                    <li>Силно типизиран</li>
+                    <li>Компилиращ се</li>
+                    <li>Closures</li>
+                    <li>Итератори</li>
+                    <li>CTFE</li>
+                    <li>Type inference</li>
+                    <li>RAII</li>
+                    <li>Resumable functions - Concurrency, Async IO</li>
+                    <li>(нещо като) ООП</li>
+                    <li>flow-dependent typing???</li>
+                    <li>strong typedefs???</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>А сега: Примери</h3>
+                <p>картинка</p>
+            </section>
+
+            <section>
+                <p>Markaby.nim</p>
+            </section>
+
+            <section>
+                <p>RubyIntegration.nim</p>
+            </section>
+
+            <section>
+                <p>DBIntegration.nim</p>
+            </section>
+
+            <section>
+                <p>UnitTest.nim</p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'moon', // available themes are in /css/theme
+            transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
