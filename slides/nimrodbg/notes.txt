@@ -1,0 +1,83 @@
+* current state of the world: C++ vs Ruby (Clay, XL)
+
+* Everything you expect in a modern language
+  - closures
+  - iterators
+  - CTFE
+  - type inference
+  - RAII (Destructors)
+  - resumable functions
+  - flow-dependent typing
+  - OOP
+  - Fork/Join Concurrency and Async I/O with resumable functions
+  - strong typedefs
+
+* effects
+  - non-blocking
+  - safe code for sandboxes
+  - I/O
+  - memory allocations, etc
+
+* macros
+  - the best examples?
+  - all values can be passed at compile-time (types, values, etc)
+  ? cool examples (draw inspiration form lisp)
+
+* term rewriting
+ - Markaby-like HTML tempalte engine
+ - Matrices, etc; where are expression templates used?
+
+* AOP with term rewriting
+ - automatic includes
+ - profiling/authentication
+ - AOP with pragma push
+ ? collect more examples
+
+* DSLs
+  - unit tests; no need for assertEquals
+  - boost.mixin implemented in 300 lines of clean code
+
+* every proc is generic
+	proc boyer_moore_search(pile, needle: string) =
+		var l = pile.len
+
+	{.mimic: QtString is string .}
+
+	proc len(x: QtString) = x.size
+
+    #
+	proc sum(a, b) = a + b
+
+* method missing
+  - swizzle
+  - interfacing with scripting languages and JSON/XML
+
+* compile-time differentiation
+
+* compile-time execution of external processes / compile-time reading of files
+  - verification that the model in the code matches the database
+  - vim, LightTable, Atom
+  - Sublime Text
+
+--
+
+Slides:
+	* Why Nimrod
+	  (current state of the world and our goal)
+	  (current state of Nimrod - all kind of features - lacks tools support, but has a debugger)
+	    - compiles to C, fast performance;
+
+	* Markaby - a good benchmark for program generation
+
+
+Examples:
+	markaby.nim
+	unit test library
+	language integration
+	  - language binding using compile time reflection
+	? DB integration
+	? command-line parsing
+	? look for DSLs in other languages, books, etc
+
+
+
