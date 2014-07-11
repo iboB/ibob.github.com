@@ -48,3 +48,12 @@
 {
     background-color: #11314F;
 }
+
+      /* Better styles for embedding GitHub Gists */
+.reveal .gist{font-size:18px;line-height:18px;margin-bottom:20px;width:100%}
+.reveal .gist pre{font-family:Menlo,Monaco,'Bitstream Vera Sans Mono','Courier New',monospace !important}
+.reveal .gist table, .reveal .gist .line-pre {width: 100%;}
+.reveal .gist-meta{font-family:Helvetica,Arial,sans-serif;font-size:13px !important}
+.reveal .gist-meta a{color:#26a !important;text-decoration:none}
+.reveal .gist-meta a:hover{color:#0e4071 !important}
+
