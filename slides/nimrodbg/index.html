@@ -116,10 +116,9 @@
                 <h3>Ордьовър</h3>
                 <br/>
                 <ul>
+                    <li class="fragment">Текущото състояние на света</li>
                     <li class="fragment">Ако искаме бързодействие - плачем със С++</li>
                     <li class="fragment">Ако можем да си позволим лопати хардуер - сме щастливи с Руби</li>
-                    <li class="fragment">Текущото състояние на света</li>
-                    <li class="fragment">Силно типизирани срещу слабо типизирани</li>
                 </ul>
                 <br/>
                 <br/>
@@ -150,7 +149,7 @@
                     <li class="fragment">Итератори</li>
                     <li class="fragment">CTFE</li>
                     <li class="fragment">Type inference</li>
-                    <li class="fragment">RAII</li>
+                    <li class="fragment">Garbage collection<span class="fragment">, но и RAII</span></li>
                     <li class="fragment">Resumable functions - Concurrency, Async IO</li>
                     <li class="fragment">(нещо като) ООП</li>
                 </ul>
@@ -189,8 +188,32 @@
                 <script src="https://gist.github.com/iboB/26c8e3043ff32eb66e79.js"></script>
             </section>
 
+            <section class="slide" data-transition="none">
+                <h3>...да погледнем кода отново...</h3>
+                <br/>
+                <script src="https://gist.github.com/iboB/5c8168fd0852e46bdfcf.js"></script>
+            </section>
+
+            <section class="slide" data-transition="none">
+                <h3>...след прилагане на първото правило...</h3>
+                <br/>
+                <script src="https://gist.github.com/iboB/753e36da69fbfeb19ffa.js"></script>
+            </section>
+
+            <section class="slide" data-transition="none">
+                <h3>...и още веднъж...</h3>
+                <br/>
+                <script src="https://gist.github.com/iboB/9afc13c1682e925b1142.js"></script>
+            </section>
+
+            <section class="slide" data-transition="none">
+                <h3>...и така натататататък...</h3>
+                <br/>
+                <p class="fragment">...и така нататък казах!</p>
+            </section>
+
             <section class="slide">
-                <h3>И на С++...</h3>
+                <h3> Докато стигнем до този код на С++...</h3>
                 <br/>
                 <script src="https://gist.github.com/iboB/012091ee9c3f6dcc2f6c.js"></script>
             </section>
@@ -245,7 +268,9 @@ Kiro: Aaaarghhhhh
                 <h4 class="fragment">.() функцията майка</h4>
                 <ul>
                     <li class="fragment">swizzle</li>
+                    <pre class="fragment">a.zyx = b.xxy</pre>
                     <li class="fragment">Директно свързване с JSON или гаден XML</li>
+                    <pre class="fragment"s>jsonRequest("http://search.twitter.com/search.json?q=#VarnaConf").tweets[0].author</pre>
                 </ul>
             </section>
 
