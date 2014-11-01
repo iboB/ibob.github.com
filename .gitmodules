@@ -1,3 +1,6 @@
 [submodule "third_party/reveal"]
 	path = third_party/reveal
 	url = https://github.com/hakimel/reveal.js.git
+[submodule "third_party/mathgp"]
+	path = third_party/mathgp
+	url = https://github.com/iboB/mathgp
