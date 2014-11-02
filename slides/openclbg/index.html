@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>OpenCL</title>
+
+    <meta name="description" content="Лекция за OpenFest 2014">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h2>Как програмата ми стана 1500 пъти по-бърза</h2>
+                <p>
+                <small>… а другата ми програма три пъти по-бавна</small>
+                </p>
+                <p>
+                    <strong>OpenFest 2014</strong>
+                </p>
+                <p>
+                    Автор <a href="http://ibob.github.io">Борислав Станимиров</a>
+                </p>
+                <p>
+                    <a href="https://twitter.com/natcbb">@natcbb</a>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>Аз?</h3>
+                <br/>
+                <ul>
+                    <li>Програмист предимно на С++</li>
+                    <li>Програмист на игри</li>
+                    <li>... и разни "low-level" работи</li>
+                    <li>Пиша разни open source проектчета</li>
+                    <li>Обичам всичко да работи супермегаултрабързо</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е тази лекция?</h3>
+                <br/>
+                <ul>
+                    <li>Дъъ. Увод в OpenCL</li>
+                    <li>Ще видим какво е</li>
+                    <li>Ще видим какво прави добре</li>
+                    <li class="fragment">... и какво прави зле</li>
+                    <li class="fragment">Няма да ни е страх от него</li>
+                    <li class="fragment">Това може би би работело като лекция от курс</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е OpenCL?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Open Computing Language</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3 class="fragment">Какво наистина е OpenCL?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Език за хетерогенни платформи</li>
+                    <ul>
+                        <li class="fragment">Сиреч състоящи се от различни видове процесори</li>
+                        <li class="fragment">Сиреч 99% от вашите компютри</li>
+                        <li class="fragment">.. и 48.13% от вашите телефони</li>
+                    </ul>
+                    <li class="fragment">Хетерогенността е в различните процесори</li>
+                    <ul>
+                        <li class="fragment" style="width:20%;float:left">CPU xN</li>
+                        <li class="fragment" style="width:30%;float:left">GPU xN</li>
+                        <li class="fragment">Други боклици xN</li>
+                        <li class="fragment">OpenCL ни дава унифициран поглед върху тях</li>
+                        <p class="fragment"><img align="right" class="diagram" src="thesame.png" /></p>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Защо ми е това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Законът на Мур умира</li>
+                    <li class="fragment">Спасението ни е паралелизацията</li>
+                    <li class="fragment">Всички компютри имат многоядрени процесори</li>
+                    <li class="fragment">Повечето компютри имат програмируеми видеокарти</li>
+                    <li class="fragment">Някои компютри имат друг екзотичен хардуер</li>
+                    <li class="fragment">OpenCL ни дава да цоцаме цялата тая изчислителна мощ, без да ни пука какво точно е отдолу</li>
+                    <p class="fragment"><img align="right" class="diagram" src="mmmm.png" /></p>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Други благинки</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Като OpenGL има интеграция с практически всеки език за програмиране</li>
+                    <li class="fragment">Като OpenGL е мултиплатформен</li>
+                    <li class="fragment">Като OpenGL е отворен стандарт</li>
+                    <li class="fragment">Самият език прилича много на С</li>
+                    <li class="fragment">...или даже на С++ (чрез нестандартни разширения)</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>И по-конкретно</h3>
+                <br/>
+                <p class="fragment">Помага ни да работим с паралелизъм по данни</p>
+                </br>
+                <p class="fragment" align="center"><img align="center" class="diagram" src="parallelism_types.png" /></p>
+                </br></br>
+                <p class="fragment">Вметка: за съжаление хората не са добри в това</p>
+                <p class="fragment"><img align="right" class="diagram" src="sad.png" /></p>
+            </section>
+
+            <section>
+                <h2>Да изплакнем очи</h2>
+                <img align="center" class="diagram" src="ashamed.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Как работи това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">OpenCL за нашата програма е като шейдър за OpenGL</li>
+                    <li class="fragment">Имаме код на нашия любим език за програмиране</li>
+                    <li class="fragment">Пием Red Bull</li>
+                    <li class="fragment">Попълваме входни буфери от данни</li>
+                    <li class="fragment">Извикваме OpenCL код</li>
+                    <li class="fragment">Той работи върху данните</li>
+                    <li class="fragment">Пием бира</li>
+                    <li class="fragment">Получаваме изхода</li>
+                    <li class="fragment">Пием шампанско</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Как по-точно работи това?</h3>
+                <br/>
+                <p>NDRange - интервалът в който нашата OpenCL програма работи</p>
+                <pre><code class="language-cpp" data-trim>
+__kernel void sum(__global float* result, __global float* a, __global float* b)
+{
+    uint i = get_global_id(0);
+    result[i] = a[i] + b[i]
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>__kernel</h3>
+                <br/>
+                <ul>
+                    <li>Функцията, която ще викаме от нашата програма</li>
+                    <li>...с параметри, които ние и даваме</li>
+                    <li>Можем да мислим за него като за нишка</li>
+                    <li>В нашата програма се нарича work-item</li>
+                    <li>Може да има не-kernel функции</li>
+                </ul>
+                <br/><br/>
+                <p align="center"><img class="diagram" src="ndrange.png" /></p>
+            </section>
+
+            <section class="slide">
+                <h3>2D данни</h3>
+                <p>NDRange може да е с повече измерения (е... за сега 2 или 3)</p>
+                <br/>
+                <p align="center"><img class="diagram" src="ndrangeND.png" /></p>
+            </section>
+
+            <section class="slide">
+                <h3>Устройства</h3>
+                <p align="center"><img class="diagram" src="device.png" /></p>
+            </section>
+
+            <section class="slide">
+                <h3>Бригади</h3>
+                <p align="center"><img class="diagram" src="work-group.png" /></p>
+                <ul>
+                    <li>Една група минава през един unit</li>
+                    <li>Споделят локална памет</li>
+                    <li>Размерностите им ТРЯБВА да са кратни на NDRange</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Малко по-гъзарски пример</h3>
+                <br/>
+                <p>Тъп среден "blur"</p>
+                <pre><code class="language-cpp" data-trim>
+__kernel void avg_blur(__global float* result, __global float* input)
+{
+    uint x = get_global_id(0), y = get_global_id(1);
+    uint n = y*get_global_size(0) + x;
+
+    uint local_size = get_local_size(1) * get_local_size(0);
+    uint ln = get_local_id(1)*get_local_size(0) + get_local_id(0)
+
+    __local accum[local_size];
+    accum[ln] = input[n];
+    barrier(CLK_LOCAL_MEM_FENCE); // --------------------
+
+    result[i] = 0;
+    for(uint i=0; i&lt;local_size; ++i)
+        result[i] += accum[i];
+    result[i] /= local_size;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Други неща за споменаване</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Входните данни на kernel могат да бъдат изображения</li>
+                    <li class="fragment">Поддържат се векторни типове и swizzle</li>
+                    <li class="fragment">Последните се закръгляват до следващата степен на двойката</li>
+                    <li class="fragment">Ползвайте степени на двойката! Те са ваши приятели</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Кога OpenCL работи зле?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Естествено, когато имаме непаралелизируеми алгоритми</li>
+                    <li class="fragment">Изчисления, които постоянно преджуркват данните</li>
+                    <li class="fragment">Изчисления, които имат нужда от много синхронизиране</li>
+                    <li class="fragment">Понякога имаме ограничения от самите устройства - например трансфер</li>
+                    <li class="fragment">И понякога имаме (на пръв поглед) абсурдни случаи като този...</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>(На пръв поглед) Абсурден случай като този</h2>
+                <img align="center" class="diagram" src="WTF.png" />
+            </section>
+
+            <section>
+                <h2>Но всичко това е OK</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Още за OpenGL</h3>
+                <br/>
+                <ul>
+                    <li>Интегрира се перфектно</li>
+                    <li>Споделя данни</li>
+                    <li>Няма овърхед при съвместна работа</li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+                <p class="fragment" align="center"><img align="center" class="diagram" src="clgl-love.png" /></p>
+            </section>
+
+            <section class="slide">
+                <h3>CUDA</h3>
+                <br/>
+                <ul>
+                    <img style="float:right" class="diagram" src="cuda.png" />
+                    <li class="fragment">Решава горе-долу същите проблеми</li>
+                    <li class="fragment">...но само за NVIDIA</li>
+                    <li class="fragment">...и само за видеокарти</li>
+                    <li class="fragment">...и не е отворен стандарт</li>
+                    <li class="fragment">...но се интегрира по-гъзарски с кода</li>
+                    <li class="fragment">...и понякога е по-бърза</li>
+                    <li class="fragment">...но като цяло е същата работа</li>
+                    <li class="fragment">Основните разлики са различни имена за еднакви неща</li>
+                    <li class="fragment">Ако инвестираме в едното, ще минем лесно на другото</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Заключителни думи</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Ако искате number crunching ползвайте OpenCL</li>
+                    <li class="fragment">Лесни неща се пишат лесно</li>
+                    <li class="fragment">Интернет е пълен до козирката с уроци и обяснения</li>
+                    <li class="fragment">Експериментирайте</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Край</h1>
+                <br/>
+                <br/>
+                <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/natcbb">@natcbb</a></p>
+                <p>
+                    <br />
+                    <small>
+                    Тази презентация е тук: <a href="http://ibob.github.io/slides/openclbg/">http://ibob.github.io/slides/openclbg/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'simple', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>

@@ -12,7 +12,7 @@
 using namespace std;
 using namespace mathgp;
 
-const unsigned A_LOT = 100000;
+const unsigned A_LOT = 200000;
 
 // simple timer
 class timer

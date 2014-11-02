@@ -29,7 +29,7 @@ __kernel void sobel(__global uchar4* inputImage, __global uchar4* outputImage)
 
 	int c = x + y * width;
 
-	/* Read each texel component and calculate the filtered value using neighbouring texel components */
+	// Read each texel component and calculate the filtered value using neighbouring texel components
 	if( x >= 1 && x < (width-1) && y >= 1 && y < height - 1)
 	{
 		float4 i00 = convert_float4(inputImage[c - 1 - width]);
@@ -46,7 +46,7 @@ __kernel void sobel(__global uchar4* inputImage, __global uchar4* outputImage)
 
 		Gy =   i00 - i20  + (float4)(2)*i01 - (float4)(2)*i21 + i02  -  i22;
 
-		/* taking root of sums of squares of Gx and Gy */
+		// taking root of sums of squares of Gx and Gy
 		outputImage[c] = convert_uchar4(hypot(Gx, Gy)/(float4)(2));
 	}
 }
