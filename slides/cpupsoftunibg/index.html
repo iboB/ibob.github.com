@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Разходка през съвременния CPU pipeline</title>
+    <title>Как работи микропроцесорът: Pipeline</title>
 
     <meta name="description" content="Лекция за Rogue Conf 2014">
     <meta name="author" content="Борислав Станимиров">
@@ -39,7 +39,7 @@
         <div class="slides">
 
             <section>
-                <h2>Разходка през съвременния CPU pipeline</h2>
+                <h2>Как работи микропроцесорът: Pipeline</h2>
                 <p>
                     <strong>SoftUniConf II 2014</strong>
                 </p>
@@ -88,6 +88,44 @@
                         <li>Работи супермегабързо</li>
                     <ul>
                 </div>
+            </section>
+
+            <section class="slide">
+            <h3>Как програмата стига до процесора?</h3>
+            <br/>
+            <ul>
+                <li class="fragment">Език за програмиране</li>
+                <li class="fragment">Компилиране</li>
+                <li class="fragment">Асемблер</li>
+            <ul>
+
+            </section>
+
+            <section class="slide">
+                <h3>Лек пример</h3>
+                <br/>
+                <p>(идеализирано) събираме числата от 1 до 10</p>
+                <pre class="fragment"><code>
+        MOV ax, 1  ; записваме стойности
+        MOV bx, 0
+бира:   ADD bx, ax ; извършваме самото събиране
+        INC ax     ; увеличаваме с едно
+        CMP ax, 11 ; сравняваме като резултата се запомня в някой регистър
+        JNE бира   ; скачаме в зависимост от резултата
+        PUSH bx    ; викаме функция
+        CALL MessageBox
+                </code></pre>
+
+                <div class="fragment">
+
+                <p>или</p>
+                <pre><code class="language-cpp" data-trim>
+int bx = 0;
+for(int ax=1; ax!=11; ++ax)
+    bx += ax;
+
+MessageBox(bx);
+                </code></pre>
             </section>
 
             <section class="slide">
@@ -360,7 +398,7 @@
 
             <section class="zislide">
                 <img src="../cpupbg/plc_rs2.png" />
-                <p>Други от &#181;-op-овете и чакат, докато най-различни &#181;-op-ове от други инструкции се изпълняват</p>
+                <p>Други от &#181;-op-овете ѝ чакат, докато най-различни &#181;-op-ове от други инструкции се изпълняват</p>
             </section>
 
             <section class="zislide">
@@ -410,13 +448,13 @@
 
             <section>
                 <h1>Край</h1>
-                <br/>
+                <h2>Въпроси?</h2>
                 <br/>
                 <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/natcbb">@natcbb</a></p>
                 <p>
                     <br />
                     <small>
-                    Тази презентация е тук: <a href="http://ibob.github.io/slides/cpupbg/">http://ibob.github.io/slides/cpupbg/</a>
+                    Тази презентация е тук: <a href="http://ibob.github.io/slides/cpupbg/">http://ibob.github.io/slides/cpupsoftunibg/</a>
                     </small>
                     <br />
                     <small>
