@@ -12,7 +12,7 @@
 using namespace std;
 using namespace mathgp;
 
-const unsigned A_LOT = 200000;
+const unsigned A_LOT = 100000;
 
 // simple timer
 class timer
@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
     t.start("Working");
     auto inputBufferA = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, A_LOT * sizeof(matrix), inputA.front().as_array(), nullptr);
     auto inputBufferB = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, A_LOT * sizeof(matrix), inputB.front().as_array(), nullptr);
-    auto outputBuffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, A_LOT * sizeof(matrix), outputCL.front().as_array(), nullptr);
+    auto outputBuffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY, A_LOT * sizeof(matrix), nullptr, nullptr);
 
     auto kernel = clCreateKernel(program, "matrix_mul", nullptr);
 
@@ -201,8 +201,10 @@ int main(int argc, char* argv[])
     clFlush(commandQueue);
     clWaitForEvents(1, &ndrEvent);
     clReleaseEvent(ndrEvent);
-    t.report();
     
+    clEnqueueReadBuffer(commandQueue, outputBuffer, CL_TRUE, 0, A_LOT * sizeof(matrix), outputCL.front().as_array(), 0, nullptr, nullptr);
+
+    t.report();
     ///////////////////////////////////////////////////////////////////////////////////////
     // check output
     t.start("Checking output");

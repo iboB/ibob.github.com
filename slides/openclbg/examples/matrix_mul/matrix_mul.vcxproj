@@ -55,12 +55,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;BOOST_ALL_DYN_LINK;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(AMDAPPSDKROOT)/include;C:/Libraries/boost_1_55_0;C:\Libraries\jpeg-9;../../../../third_party/mathgp</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(AMDAPPSDKROOT)/include;C:/Libraries/boost_1_55_0;C:\Libraries\jpeg-9;../../../../third_party/mathgp;$(CUDA_PATH)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(AMDAPPSDKROOT)\lib\x86\;C:\Libraries\jpeg-9\Release;C:\Libraries\boost_1_55_0\lib32-msvc-12.0</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(AMDAPPSDKROOT)\lib\x86\;C:\Libraries\jpeg-9\Release;C:\Libraries\boost_1_55_0\lib32-msvc-12.0;$(CUDA_PATH)\lib\Win32</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -73,14 +73,14 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;BOOST_ALL_DYN_LINK;_SCL_SECURE_NO_WARNINGS;_CRT_SECURE_NO_DEPRECATE;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(AMDAPPSDKROOT)/include;C:/Libraries/boost_1_55_0;C:\Libraries\jpeg-9;../../../../third_party/mathgp</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(AMDAPPSDKROOT)/include;C:/Libraries/boost_1_55_0;C:\Libraries\jpeg-9;../../../../third_party/mathgp;$(CUDA_PATH)/include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(AMDAPPSDKROOT)\lib\x86\;C:\Libraries\jpeg-9\Release;C:\Libraries\boost_1_55_0\lib32-msvc-12.0</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(AMDAPPSDKROOT)\lib\x86\;C:\Libraries\jpeg-9\Release;C:\Libraries\boost_1_55_0\lib32-msvc-12.0;$(CUDA_PATH)\lib\Win32</AdditionalLibraryDirectories>
       <AdditionalDependencies>OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

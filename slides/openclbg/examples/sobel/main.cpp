@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
     // prepare input for the cl program
     t.start("Working");
     auto inputBuffer = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR, pixels.size(), &pixels.front(), nullptr);
-    auto outputBuffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR, output.size(), &output.front(), nullptr);
+    auto outputBuffer = clCreateBuffer(context, CL_MEM_WRITE_ONLY, output.size(), nullptr, nullptr);
 
     auto kernel = clCreateKernel(program, "sobel", nullptr);
 
@@ -198,6 +198,9 @@ int main(int argc, char* argv[])
     clFlush(commandQueue);
     clWaitForEvents(1, &ndrEvent);
     clReleaseEvent(ndrEvent);
+
+    clEnqueueReadBuffer(commandQueue, outputBuffer, CL_TRUE, 0, output.size(), &output.front(), 0, nullptr, nullptr);
+
     t.report();
     
     ///////////////////////////////////////////////////////////////////////////////////////
