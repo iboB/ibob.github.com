@@ -189,7 +189,7 @@ int main(int argc, char* argv[])
 
     ///////////////////////////////////////////////////////////////////////////////////////
     // execution
-    size_t globalWorkItems = A_LOT * 16;
+    size_t globalWorkItems = (A_LOT * 16)/10000;
     cl_event ndrEvent;
     clEnqueueNDRangeKernel(commandQueue, kernel, 1, nullptr, &globalWorkItems, nullptr, 0, nullptr, &ndrEvent);
 
