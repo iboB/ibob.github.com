@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.40629.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CacheLocality", "CacheLocality\CacheLocality.vcxproj", "{D6F23ABD-E0CA-4B95-8D04-0F91F22A4DA3}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BranchPrediction", "BranchPrediction\BranchPrediction.vcxproj", "{A4C47BEF-D9D4-4722-8642-27D449D17884}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D6F23ABD-E0CA-4B95-8D04-0F91F22A4DA3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{D6F23ABD-E0CA-4B95-8D04-0F91F22A4DA3}.Debug|Win32.Build.0 = Debug|Win32
+		{D6F23ABD-E0CA-4B95-8D04-0F91F22A4DA3}.Release|Win32.ActiveCfg = Release|Win32
+		{D6F23ABD-E0CA-4B95-8D04-0F91F22A4DA3}.Release|Win32.Build.0 = Release|Win32
+		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Debug|Win32.Build.0 = Debug|Win32
+		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Release|Win32.ActiveCfg = Release|Win32
+		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
