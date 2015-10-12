@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CacheLocality", "CacheLocal
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BranchPrediction", "BranchPrediction\BranchPrediction.vcxproj", "{A4C47BEF-D9D4-4722-8642-27D449D17884}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Allocations", "Allocations\Allocations.vcxproj", "{2483B9D2-F282-4075-8014-7A1CE51CB9B5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -21,6 +23,10 @@ Global
 		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Debug|Win32.Build.0 = Debug|Win32
 		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Release|Win32.ActiveCfg = Release|Win32
 		{A4C47BEF-D9D4-4722-8642-27D449D17884}.Release|Win32.Build.0 = Release|Win32
+		{2483B9D2-F282-4075-8014-7A1CE51CB9B5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{2483B9D2-F282-4075-8014-7A1CE51CB9B5}.Debug|Win32.Build.0 = Debug|Win32
+		{2483B9D2-F282-4075-8014-7A1CE51CB9B5}.Release|Win32.ActiveCfg = Release|Win32
+		{2483B9D2-F282-4075-8014-7A1CE51CB9B5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

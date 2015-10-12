@@ -1,0 +1,59 @@
+/* fixes for cyrillic */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: Impact, sans-serif;
+    letter-spacing: 0em;
+}
+
+.reveal section.slide
+{
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal section.islide
+{
+	height: 100%;
+	display: table;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	text-align: left;
+	border-bottom: 1px solid #EEE8D5;
+}
+
+.reveal section.slide li {
+	margin-left: 1em;
+}
+
+.reveal section.slide h4
+{
+	margin-top: 0.5em;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+.reveal code
+{
+    background-color: #11314F;
+}
+
+      /* Better styles for embedding GitHub Gists */
+.reveal .gist{font-size:18px;line-height:18px;margin-bottom:20px;width:100%}
+.reveal .gist pre{font-family:Menlo,Monaco,'Bitstream Vera Sans Mono','Courier New',monospace !important}
+.reveal .gist table, .reveal .gist .line-pre {width: 100%;}
+.reveal .gist-meta{font-family:Helvetica,Arial,sans-serif;font-size:13px !important}
+.reveal .gist-meta a{color:#26a !important;text-decoration:none}
+.reveal .gist-meta a:hover{color:#0e4071 !important}
+
