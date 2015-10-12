@@ -44,6 +44,9 @@
                 <small>… а другата ми програма три пъти по-бавна</small>
                 </p>
                 <p>
+                <small>… и (не на последно място) други лични драми</small>
+                </p>
+                <p>
                     <strong>OpenFest 2014</strong>
                 </p>
                 <p>
@@ -75,7 +78,7 @@
                     <li>Ще видим какво прави добре</li>
                     <li class="fragment">... и какво прави зле</li>
                     <li class="fragment">Няма да ни е страх от него</li>
-                    <li class="fragment">Това може би би работело като лекция от курс</li>
+                    <li class="fragment">Това може би би работело като първа лекция от курс</li>
                 </ul>
             </section>
 
@@ -170,7 +173,8 @@
                 <h3>Как по-точно работи това?</h3>
                 <br/>
                 <p>NDRange - интервалът в който нашата OpenCL програма работи</p>
-                <pre><code class="language-cpp" data-trim>
+                <h4 class="fragment">БАМ! Код</h4>
+                <pre class="fragment"><code class="language-cpp" data-trim>
 __kernel void sum(__global float* result, __global float* a, __global float* b)
 {
     uint i = get_global_id(0);
@@ -266,6 +270,17 @@ __kernel void avg_blur(__global float* result, __global float* input)
             <section>
                 <h2>(На пръв поглед) Абсурден случай като този</h2>
                 <img align="center" class="diagram" src="WTF.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Други неприятности</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Трудничък е за дебъгване</li>
+                    <li class="fragment">Кара ни да мислим по малко по-различен начин</li>
+                    <li class="fragment">Множество ограничения от специфичните хардуери</li>
+                    <li class="fragment">Понякога просто няма да имате идея какво става...</li>
+                </ul>
             </section>
 
             <section>
