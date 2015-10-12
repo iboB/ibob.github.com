@@ -39,7 +39,7 @@
         <div class="slides">
 
             <section>
-                <h2>CPU Friendly Code 101</h2>
+                <h2>CPU-Friendly Code 101</h2>
                 <p>
                     Game Dev Meetup, 13 Октомври 2015
                 </p>
@@ -51,16 +51,178 @@
             </section>
 
             <section class="slide">
-                <h3>101?</h3>
+                <h3>Какво значи заглавието?</h3>
                 <br/>
                 <ul>
-                    <li>Фундаментални работи</li>
+                    <li class="fragment">CPU-Friendly code?</li>
                     <ul>
-                        <li>... които вероятно вече знаете :)</li>
+                        <li class="fragment">С какви работи хардуерът се справя добре</li>
+                        <li class="fragment">Неща извън <em>О</em>-нотацията</li>
+                        <li class="fragment">Неща, за които не всеки се замисля</li>
+                    </ul>
+                    <li class="fragment">101?</li>
+                    <ul>
+                        <li class="fragment">Фундаментални работи</li>
+                        <ul>
+                            <li class="fragment">... които са лесни за прилагане</li>
+                            <li class="fragment">...и които вероятно вече знаете :)</li>
+                            <li class="fragment">...и които могат да се покрият за 15 минути</li>
+                        </ul>
                     </ul>
                 </ul>
             </section>
 
+            <section>
+                <h2>1. Алокации на памет</h2>
+                <p class="fragment">Те са бавни</p>
+            </section>
+
+            <section class="slide">
+                <h3>А защо са бавни?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Явна цена</li>
+                    <ul>
+                        <li class="fragment">Операционната система трябва да извърши една камара неща.</li>
+                        <li class="fragment">Физическата памет: Commit Size, страници</li>
+                        <li class="fragment">Свободно парче поредни страници</li>
+                        <li class="fragment">Синхронизация между различни процеси и нишки</li>
+                    </ul>
+                    <li class="fragment">Скрита цена</li>
+                    <ul>
+                        <li class="fragment">Нулиране на памет</li>
+                        <li class="fragment">Фрагментация</li>
+                        <li class="fragment">Garbage collection</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Какво да направим?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Билярди и басейни <span class="fragment">(сиреч pools)</span></li>
+                    <li class="fragment">Преизползване на обекти</li>
+                    <li class="fragment">Code it like it's 1969. Масиви с фиксиран размер</li>
+                    <li class="fragment">Reserve (например <code>std::vector::reserve</code>)</li>
+                    <li class="fragment">Примери от игрите:</li>
+                    <ul>
+                        <li class="fragment">Projectile/Particle pools</li>
+                        <li class="fragment">Per-frame pools</li>
+                        <li class="fragment">Целта ни е <em>нула</em> алокации за обекти, които живеят само един фрейм.</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Demo</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Какво ни коства това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Повече памет</li>
+                    <li class="fragment">По-сложен и труден за четене код</li>
+                    <li class="fragment">По-дълго време за зареждане</li>
+                    <li class="fragment">В краен случай malloc-lite: Да решаваме проблемите, които операционната система решава</li>
+                    <li class="fragment">За щастие в 90% от ситуациите можем да минем с 10% от усилията</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>2. Cache-locality</h2>
+                <p class="fragment">То е бързо</p>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Процесорът има кеш <span class="fragment">(но не пари в брой, а cache)</span></li>
+                    <li class="fragment">Това е памет, която е близко до него</li>
+                    <li class="fragment">Той обича да работи с нея</li>
+                    <li class="fragment">Cache is so cash (levels, TLB)</li>
+                    <li class="fragment">Щом барнем парче памет, то отива в кеша</li>
+                    <li class="fragment">Cache-hit vs Cache-miss</li>
+                    <li class="fragment">Кешът е космически бърз</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Какво да направим?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Value types</li>
+                    <li class="fragment">Линейни структури от данни</li>
+                    <li class="fragment">Не всеки език ни дава такива</li>
+                    <li class="fragment">... но някои езици ни дават такива неявно</li>
+                    <li class="fragment">Ха! Отново memory pools</li>
+                    <li class="fragment">Примери от игрите:</li>
+                    <ul>
+                        <li class="fragment">Entity-component-system</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Demo</h2>
+                <p class="fragment">...или как <em>O(n)</em> може да е по-бързо от <em>O(log(n))</em></p>
+            </section>
+
+            <section class="slide">
+                <h3>Какво ни коства това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Без полиморфизъм</li>
+                    <li class="fragment">Потенциално копиране на данни</li>
+                    <li class="fragment">Неудобни за ползване структури</li>
+                    <li class="fragment">Не всеки език за програмиране може да ни помогне</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>3. Branch prediction</h2>
+                <p class="fragment">То е... хм...</p>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Инструкции, register aliasing и CPU pipeline</li>
+                    <li class="fragment">CPU branch predictor</li>
+                    <li class="fragment">Pipeline stall</li>
+                    <li class="fragment">На човешки език: ако нещо се случва много често по един и същи начин, това е добре за процесора</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Demo</h2>
+            </section>
+
+            <section class="slide">
+                <h3>И какво от това?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Ми... нищо?...</li>
+                    <li class="fragment"><code>if</code> не бива да е толкова страшен</li>
+                    <li class="fragment">Dense is better than sparse</li>
+                    <li class="fragment">Conficius say, order is better than chaos</li>
+                    <li class="fragment">Експериментирайте</li>
+                </ul>
+            </section>
+
+            <section>
+                <h1>Край</h1>
+                <br/>
+                <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/natcbb">@natcbb</a></p>
+                <p>
+                    <small>
+                    Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
         </div>
     </div>
 
