@@ -1,0 +1,1 @@
+emcc slidedemo.cpp -o slidedemo_cpp.js -O2 -s EXPORTED_FUNCTIONS="['_slide_demo']"
