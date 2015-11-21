@@ -6,7 +6,7 @@
 
     <title>Emscripten: C++ към JavaScript</title>
 
-    <meta name="description" content="Лекция за Open Fest 2015">
+    <meta name="description" content="Лекция за js.talks() 2015">
     <meta name="author" content="Борислав Станимиров">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -489,9 +489,27 @@ void ensure_path_exists(string path) { // Our sad solution to this problem
                 </ul>
                 <br/>
                 <br/>
-                <p class="fragment" align="center"><strong>И да оплакнем малко очи</strong></p>
+                <p class="fragment" align="center"><strong><a href="https://github.com/kripken/emscripten/wiki/Porting-Examples-and-Demos">И да оплакнем малко очи</a></strong></p>
             </section>
 
+            <section class="slide">
+                <h3>Недостатъци</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Големи js файлове</li>
+                    <ul>
+                        <li class="fragment">20-100 MB debug binary</li>
+                        <li class="fragment">1-10 MB release binary</li>
+                        <li class="fragment">Което само звучи страшно...</li>
+                        <li class="fragment">Обикновено ресурсите са много повече</li>
+                    <ul>
+                    <li class="fragment">Не е много приятно за дебъгване</li>
+                    <ul>
+                        <li class="fragment">Node.js?</li>
+                        <li class="fragment">Ще трябва да работите с native билдове</li>
+                    <ul>
+                </ul>
+            </section>
 
             <section>
                 <h1>Край</h1>
@@ -502,7 +520,7 @@ void ensure_path_exists(string path) { // Our sad solution to this problem
                 <p>
                     <br />
                     <small>
-                    Тази презентация е тук: <a href="http://ibob.github.io/slides/emscripten/">http://ibob.github.io/slides/emscripten/</a>
+                    Тази презентация е тук: <a href="http://ibob.github.io/slides/emscripten_js/">http://ibob.github.io/slides/emscripten_js/</a>
                     </small>
                     <br />
                     <small>
