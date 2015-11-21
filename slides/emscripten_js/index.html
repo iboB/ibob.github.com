@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Emscripten: C++ към JavaScript</title>
+
+    <meta name="description" content="Лекция за Open Fest 2015">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <script type='text/javascript'>
+        var Module = {
+            memoryInitializerPrefixURL: 'demo/slidedemo/'
+        };
+    </script>
+
+    <script type="text/javascript" src="demo/slidedemo/slidedemo_cpp.js"></script>
+    <script type="text/javascript" src="demo/slidedemo/slidedemo.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section class="slide">
+                <p class="cod1">
+                    <span class="codkw">var</span> title = <span class="codstr">&quot;C++ към JavaScript с Emscripten&quot;</span>;
+                </p>
+                <br/>
+                <br/>
+                <p class="cod1"><span class="codkw">var</span> info = {</p>
+                <p class="cod1">&nbsp;&nbsp;name: <span class="codstr">&quot;Борислав Станимиров&quot;</span>,</p>
+                <p class="cod1">&nbsp;&nbsp;event: <span class="codstr">&quot;js.talks(\&quot;Bulgaria\&quot;)&quot;</span>,</p>
+                <p class="cod1">&nbsp;&nbsp;authorURL: <span class="codstr">&quot;https://github.com/iboB/&quot;</span></p>
+                <p class="cod1">};</p>
+            </section>
+
+            <section>
+            <img class="diagram" src="../emscripten/omg.jpg" />
+            <p>C++ към JavaScript?!?!?!?!</p>
+            </section>
+
+            <section>
+            <img class="diagram" src="../emscripten/mind-blown.gif" />
+            <p>C++ към JavaScript.</p>
+            </section>
+
+            <section class="slide">
+                <h3>Няколко думи за мен</h3>
+                <ul>
+                    <li class="fragment"><span class="myem">Борислав</span> aka <span class="myem">Боби</span> aka <span class="myem">iboB<span></li>
+                    <li class="fragment">Предимно <span class="myem">С++</span> програмист</li>
+                    <li class="fragment">Предимно програмист на <span class="myem">игри</span></li>
+                    <li class="fragment">Занимавам се с <span class="myem">open source</span></li>
+                    <li class="fragment">Работя в <a href="http://www.chobolabs.com/">Chobolabs</a></li>
+                </ul>
+                <img  class="fragment" style="position: absolute; top: 40%; left: 60%; width: 35%; z-index: -1;" src="../emscripten/bobi.jpg"/>
+            </section>
+
+            <section class="slide">
+                <h3>Малко общи приказки</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Интро лекция</li>
+                    <li class="fragment">През погледа на предимно С++ програмист</li>
+                    <li class="fragment">... за съжаление?</li>
+                    <li class="fragment">А вие какви сте?</li>
+                </ul>
+            </section>
+
+            <section>
+            <h2>И към същинската част...</h2>
+            </section>
+
+            <section>
+            <img class="diagram" src="../emscripten/nelson.png" />
+            <p class="fragment">Още не...</p>
+            </section>
+
+            <section>
+            <h2>Още общи приказки...</h2>
+            </section>
+
+            <section class="slide">
+                <h3>JavaScript</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><span class="myem">Единственият</span> език, който върви във всички браузъри</li>
+                    <li class="fragment">Можем да изпълняваме <span class="myem">само</span> JS в браузъра, но можем да <span class="myem">пишем</span> на всеки език, стига да го компилираме до JS</li>
+                    <li class="fragment">...което не е новост</li>
+                    <ul class="fragment">
+                        <li>2006: <span class="myem">Google Web Toolkit (GWT)</span> - Java към JS</li>
+                        <li>2007: <span class="myem">pyjamas</span> - Python към JS</li>
+                        <li>2009: <span class="myem">CoffeScript</span> - ъъммм... CoffeScript към JS</li>
+                        <li>... и други повече и по-малко незначителни боклици</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>asm.js</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Тъй като JS е много фьешън, авторите на браузъри искат да го оптимизират <span class="fragment">...с <span class="myem">хиляди</span> човекочасове</span></li>
+                    <li class="fragment">Още през 2000-те се заражда идеята за подмножество на JS, което работи добре с оптимизациите</li>
+                </ul>
+                <br/>
+                <br/>
+                <div class="fragment">
+                    <p style="text-align:center">And thus, asm js was born</p>
+                    <p style="text-align:center"><img class="diagram" src="../emscripten/ppg.jpg"/></p>
+                </div>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е asm.js?</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Не е асемблер!</li>
+                    <li class="fragment">(Асемблер е <span class="myem">WebAssembly</span>, но за него друг път)</li>
+                    <li class="fragment">Той е (work-in-progress) спецификация за използване на подмножество от JS</li>
+                    <li class="fragment">Основни положения</li>
+                    <ul>
+                        <li class="fragment">Всички integer променливи са силно типизирани</li>
+                        <ul>
+                            <li class="fragment">Как? С <span class="myem">type inferrence</span>: <code>var|0</code></li>
+                        </ul>
+                        <li class="fragment">Няма заделяне на памет</li>
+                        <ul>
+                            <li class="fragment">Как? С <span class="myem">typed array heap</span> и <span class="myem">views</span></li>
+                        </ul>
+                    </ul>
+                    <li class="fragment">И някои яки браузъри като FireFox и IE имат специални оптимизации за него. Още те чакаме, Chrome</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>asm.js код</h3>
+                <br/>
+                <p><span class="myem">C</span> функцията <code>strlen</code>:</p>
+                <pre>
+                <code class="javascript">
+  function strlen(ptr) {
+    ptr = ptr|0;
+    var curr = 0;
+    curr = ptr;
+    while (MEM8[curr]|0 != 0) {
+      curr = (curr + 1)|0;
+    }
+    return (curr - ptr)|0;
+  }
+                </code>
+                </pre>
+            </section>
+
+            <section class="slide">
+                <h3>LLVM</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Това е компилаторна инфраструктура</li>
+                    <li class="fragment">Front end</li>
+                    <ul>
+                        <li class="fragment">Компилатор от даден език до <span class="myem">Intermediate Form</span></li>
+                        <li class="fragment">Такива има за <span class="myem">C</span>, <span class="myem">C++</span>, <span class="myem">Fortran</span>, <span class="myem">Go</span>, <span class="myem">Rust</span> и др.</li>
+                    </ul>
+                    <li class="fragment">LLVM</li>
+                    <ul>
+                        <li class="fragment">Превежда <span class="myem">IF</span> на оптмизиран гъзарски <span class="myem">IF</span></li>
+                    </ul>
+                    <li class="fragment">Back end</li>
+                    <ul>
+                        <li class="fragment">Превежда <span class="myem">IF</span> до желан краен формат</li>
+                        <li class="fragment">... например binaries за дадена платформа</li>
+                        <li class="fragment">И един back end превежда до <span class="myem">asm.js</span>...</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+            <img height="20%" alt="emscripten" class="diagram" src="../emscripten/Emscripten_logo_full.png" />
+            <p class="fragment">... най-сетне</p>
+            </section>
+
+            <section class="slide">
+                <h3>Emscripten</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Формално това е llvm back end <span class="myem">към asm.js</span></li>
+                    <li class="fragment">И... <span class="myem">уж...</span> би могло да работи за всеки език, който има front end за llvm</li>
+                    <li class="fragment">...но</li>
+                    <ul>
+                        <li class="fragment">Езиците се нуждаят от рънтайм библитоека</li>
+                        <li class="fragment">...a, Emscripten дава такава <span class="myem">само</span> за С и С++</li>
+                    </ul>
+                    <li class="fragment">Реално е С/С++ компилатор до asm.js</li>
+                </ul>
+            </section>
+
+            <section>
+                <blockquote>
+                Бързодействието на JavaScript с удобството на C++. Kой не би искал това?
+                </blockquote>
+            </section>
+
+            <section class="slide">
+                <h3>Реални данни</h3>
+                <br/>
+                &nbsp;<img src="../emscripten/alon-zakai-bench.png" />
+                <p align="right">- Таблица от <a href="https://github.com/kripken">Алон Закай</a>, &copy; 2014</p>
+            </section>
+
+            <section class="slide">
+                <h3>Наш пример</h3>
+                <table width="50%">
+                    <tr>
+                        <td>JS</td><td><div id="js-output"></div></td><td>for</td><td><div id="js-time"></div></td><td>ms</td>
+                    </tr>
+                    <tr>
+                        <td>CPP</td><td><div id="cpp-output"></div></td><td>for</td><td><div id="cpp-time"></div></td><td>ms</td>
+                    </tr>
+                </table>
+                </br>
+                </br>
+                <button onclick="callJS()">Жабаскрипт</button>
+                </br>
+                </br>
+                <button onclick="callCPP()">Ц++</button>
+            </section>
+
+            <section class="slide">
+                <h3>Getting started</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Инсталиране</li>
+                    <ul>
+                        <li class="fragment">Свалете си нова версия от <a href="http://emscripten.org">emscripten.org</a></li>
+                        <li class="fragment">Или ползвайте любимия си <span class="myem">пакетен мениджър</span></li>
+                        <li class="fragment">Или си направете собствен билд от <a href="https://github.com/kripken/emscripten">последната версия от джитхюб</a></li>
+                    </ul>
+                    <li class="fragment">Компилиране на програми</li>
+                    <ul>
+                        <li class="fragment">Абсолютно същото, което бихте направили, за да билдвате с <span class="myem">clang<span></li>
+                        <li class="fragment"><code>$ clang</code> => <code>$ emcc</code></li>
+                        <li class="fragment"><span class="myem">makefiles</span> работят</li>
+                        <li class="fragment"><span class="myem">CMake</span> работи</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <p><strong>Hello world demo</strong></p>
+            </section>
+
+            <section>
+                <h2>Смесване на C++ и JS</h2>
+            </section>
+
+            <section class="slide">
+                <h3>C/C++ погледнат през JS</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><code>Module</code> е нашият <span class="myem">С/C++</span> свят, погледнат през JS</li>
+                    <li class="fragment">Дава ни елементарен контрол върху програмата</li>
+                    <ul>
+                        <li class="fragment">Позволява ни да зададем console I/O</li>
+                        <li class="fragment">Command-line arguments</li>
+                        <li class="fragment">Стартираме ли със зареждането на страницата и т.н.</li>
+                    </ul>
+                    <li class="fragment"><code>Module.cwrap / Module.ccall</code> ни позволяват да викаме <span class="myem">С</span> функции от нашата програма</li>
+                    <li class="fragment"><span class="myem">Embind</span></li>
+                    <ul>
+                        <li class="fragment">Boost.Python или luabind <span class="myem">за JS</span> през Emscripten</li>
+                        <li class="fragment">Нещата показани през embind отиват в <code>Module</code></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>JS погледнат от С</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Наблягам на <span class="myem">С, а не С++</span></li>
+                    <li class="fragment"><code>emscripten.h</code></li>
+                    <li class="fragment"><code>emscripten_run_script</code> - изпълнява стринг</li>
+                    <li class="fragment"><code>EM_ASM...</code> - макроси за улеснено ползване</li>
+                    <li class="fragment"><span class="myem">Всяка</span> глобална JS функция е достъпна в С
+                    <ul>
+                        <li class="fragment">...и в С++ с &nbsp;&nbsp;<code>extern "C"</code></li>
+                    </ul>
+                    <li class="fragment">JS exceptions директно прелитат през нашите C/C++ функции. Няма начин да ги видим</li>
+                    <li class="fragment">И като става дума за това. Обратното също е вярно - C++ exceptions са невидими за JS</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Браузърът като платформа</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Константен хийп</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Ако си спомняте как работи asm.js...</li>
+                    <li class="fragment">Размерът трябва да е ясен <span class="myem">по време на компилиране</span> (16 MB или <code>-s TOTAL_MEMORY=12345</code>)</li>
+                    <li class="fragment"><code>-s ALLOW_MEMORY_GROWTH=1</code> - работи в крайни случаи, но е непрактично, бавно и <span class="myem">не-asm.js-но</span></li>
+                    <li class="fragment">Скрити любопитни факти за emscripten heap-а</li>
+                    <ul>
+                        <li class="fragment">memory corruption на стероиди</li>
+                        <li class="fragment">null pointer dereference не е грешка</li>
+                        <li class="fragment">edge case, в който emscripten build е по-бърз от native build - много заделяния на памет</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>File I/O</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Като цяло, работи отлично с <span class="myem">local storage</span></li>
+                    <li class="fragment">Като цяло, обаче, ресурсите, които искаме да ползваме <span class="myem">ги няма</span> на local storage</li>
+                    <li class="fragment">preload и embed - <span class="myem">може би</span> приемливи решения</li>
+                    <li class="fragment"><code>emscripten_async_wget</code> - може би наложително решение</li>
+                    <li class="fragment"><code>emscripten_wget</code> - може би неработещо решение</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Directory I/O</h3>
+                <ul>
+                    <li class="fragment">Всички С и С++ функции за работа с директории работят на 100% без проблеми</li>
+                    <li class="fragment">За съжаление такива функции не съществуват</li>
+                </ul>
+                <pre class="fragment">
+                <code class="cpp" data-trim>
+void ensure_path_exists(string path) { // Our sad solution to this problem
+    auto pos = path.rfind('/');
+    if (pos != string::npos) {
+        path.erase(pos);
+        if(path.empty()) return;
+        ensure_path_exists(path); // Recurse for parent directories
+        static string format =
+            "try {\n"
+            "var path = '%s';\n"
+            "FS.mkdir(path);\n"
+            "} catch(e) {}"; // Ignore exception that it exists
+        size_t len = format.length() + path.length();
+        char* js = new char[len];
+        sprintf(js, format.c_str(), path.c_str());
+        emscripten_run_script(js);
+        delete[] js;
+    }
+}
+                </code>
+                </pre>
+            </section>
+
+            <section class="slide">
+                <h3>Multi-threading</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Късият отговор е: <span class="myem">Не</span></li>
+                    <li class="fragment">Дългият отговор е: Еми-и-и... не съвсе-ем...</li>
+                    <li class="fragment"><span class="myem">Worker threads</span> с <code>emscripten_call_worker</code></li>
+                    <ul>
+                        <li class="fragment">100% същите <span class="myem">ограничения</span> като worker през JS</li>
+                    </ul>
+                    <li class="fragment"><span class="myem">Хак</span> през Worker threads с SharedArrayBuffer</li>
+                    <ul>
+                        <li class="fragment">"Работи" и за pthreads и за <code>std::thread</code></li>
+                        <li class="fragment">Не всеки браузър го поддържа (още)</li>
+                        <li class="fragment">Единственото "споделено" нещо е С++ памет</li>
+                        <li class="fragment">Съответно опити да правите друго в thread-a ще водят до <span class="myem">краш</span></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Силно платформени неща</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><code>html5.h</code> + <code>emscripten.h</code></li>
+                    <ul>
+                        <li class="fragment">Дават ни emscripten-specific C++ интерфейс към повечето неща, които браузърът може да прави</li>
+                        <li class="fragment">Достъп до елементи от страницата</li>
+                        <li class="fragment">Вход от устройства като клавиатура и мишка</li>
+                        <li class="fragment">Звуци</li>
+                        <li class="fragment">HTTP заявки <span class="fragment">(с малко бъгове)</span></li>
+                    </ul>
+                    <li class="fragment">И това е за платформата...</li>
+                </ul>
+            </section>
+
+            <section>
+                <blockquote>
+                Ама мрън мрън мрън! Това значи, че за повечето мулти-платформени приложения, които искам да правя, трябва да добавя един тон emscripten-specific код?
+                </blockquote>
+                <p align="right">-- анонимен писач на мулти-платформени приложения</p>
+                <br/>
+                <br/>
+                <br/>
+                <p class="fragment">За щастие, не, анонимни писачо. Някой вече го е направил.</p>
+            </section>
+
+            <section class="slide">
+                <h3>Библиотеки</h3>
+                <ul>
+                    <li>Множество добри хора, са се усетили че това, което браузърът ни дава, много прилича на съществуващи мулти-платформени библиотеки</li>
+                </ul>
+                <br/>
+                <br/>
+                <blockquote class="fragment">
+                Да, аз мога да компилирам libpng с emscripten, но браузърът ми МОЖЕ да борави с png. Не може ли да се възползвам от това?
+                </blockquote>
+                <blockquote class="fragment">
+                Да, аз мога да напиша WebGL рисуване за моята игра, но WebGL толкова прилича на OpenGL. Не може ли кодът да ми е един?
+                </blockquote>
+                <p class="fragment" align="center"><span class="myem">Enter Emscripten Ports</span></p>
+            </section>
+
+            <section class="slide">
+                <h3>Emscripten ports</h3>
+                <ul>
+                    <li class="fragment">Библиотеки, които официално имат поддръжка или версия специално за emscripten</li>
+                    <li class="fragment">В момента това са:</li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment">OpenGL, SDL, SDL2, SDL2_image, SDL2_net, SDL2_mixer, SDL2_ttf, FreeType, Vorbis, Ogg, Bullet, zlib, libpng</p>
+                <br/>
+                <p class="fragment"><small>Учудващо libjpeg, JsonCpp, curl, OpenSSL още не са в горния списък</small></p>
+                <p class="fragment">Това значи, че, ако софтуерът ви ползва само от тези библиотеки, ще можете да го компилирате за emscripten (почти) без промени</p>
+            </section>
+
+            <section>
+                <p><strong>3D Tetris demo</strong></p>
+            </section>
+
+            <section class="slide">
+                <h3>Дебъгване</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Ако имате опит с TypeScript, CoffeeScript и подобни, знаете че браузърите поддържат source map файлове</li>
+                    <li class="fragment">С компилационна настройка <code>-g4</code>, същото важи и тук</li>
+                    <li class="fragment">За съжаление, обаче не можем да гледаме стойностите на променливите</li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment" align="center"><strong>Debugging demo</strong></p>
+            </section>
+
+            <section>
+                <h2>И защо ни е цялата тази гавра?</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Приложения</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><span class="myem">Number crunching</span> при клиента</li>
+                    <li class="fragment">Игри</li>
+                    <li class="fragment">Аудио и видео</li>
+                    <li class="fragment">Node.js?</li>
+                    <li class="fragment">???</li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment" align="center"><strong>И да оплакнем малко очи</strong></p>
+            </section>
+
+
+            <section>
+                <h1>Край</h1>
+                <br/>
+                <h2>Въпроси?</h2>
+                <br/>
+                <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/natcbb">@natcbb</a></p>
+                <p>
+                    <br />
+                    <small>
+                    Тази презентация е тук: <a href="http://ibob.github.io/slides/emscripten/">http://ibob.github.io/slides/emscripten/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+            <section>
+                <h3>Да благодарим и на спонсорите</h3>
+                <img class="diagram" src="sponsors.png"/>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'solarized', // available themes are in /css/theme
+            transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>

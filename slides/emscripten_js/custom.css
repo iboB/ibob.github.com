@@ -1,0 +1,100 @@
+/* fixes for cyrillic */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: Segoe UI, sans-serif;
+  color: #363636;
+  text-transform: none;
+}
+
+body
+{
+    background: radial-gradient(#fff, #dadada);
+    background-image: url("jstalks.png"), radial-gradient(#fff, #dadada);
+    background-repeat: no-repeat;
+    background-position: 90% 95%;
+}
+
+.reveal section
+{
+    color: #363636;
+}
+
+.reveal section.slide
+{
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal section.islide
+{
+	height: 100%;
+	display: table;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	text-align: center;
+    background-image: url("title.png");
+    background-repeat: no-repeat;
+    background-size: contain;
+    padding: 10px;
+}
+
+.reveal section.slide li {
+	margin-left: 1em;
+}
+
+.reveal section.slide h4
+{
+	margin-top: 0.5em;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+.reveal section img
+{
+	background-color: white;
+}
+
+.reveal section span.myem
+{
+    color: #DF7000;
+    font-weight: bold;
+}
+
+.reveal section p.cod1
+{
+    color: #606060;
+    font-family: Consolas, monospace;
+}
+
+.reveal section span.codstr
+{
+    color: #202020;
+}
+
+.reveal section span.codkw
+{
+    color: #903E00;
+}
+
+
+.reveal blockquote
+{
+    width: 80%;
+}
+
+.reveal button
+{
+    font-size: 1.5em;
+}
