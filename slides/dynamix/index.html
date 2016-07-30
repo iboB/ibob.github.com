@@ -1,0 +1,542 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>DynaMix</title>
+
+    <meta name="description" content="C++ библиотека за динамично композиране и мутиране на типове">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/reveal/lib/css/zenburn.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1>DynaMix</h1>
+                <h4>Динамично композиране и мутиране на типове в С++</h4>
+                <p>
+                    <small>Автор <a href="http://ibob.github.io">Борислав Станимиров</a></small>
+                </p>
+            </section>
+
+            <section>
+                <h2>Какво става тук?</h2>
+                <ul>
+                    <li>Представяне на библиотека - DynaMix</li>
+                    <li>Времето е недостатъчно за всичко</li>
+                    <ul>
+                        <li>Повече "какво"</li>
+                        <li>По-малко "защо"</li>
+                        <li>...но не нула "защо"</li>
+                        <li>почти нула "как"</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Какво трябва да знаете?</h2>
+                <ul>
+                    <li>Поне малко С++</li>
+                    <ul>
+                        <li>Няма да се занимаваме с имплементация</li>
+                    </ul>
+                    <li>Обектно-ориентирано програмиране</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>DynaMix: Приложение</h2>
+                <ul>
+                    <li>За какво служи?</li>
+                    <li>Организация на сложни обекти</li>
+                    <ul>
+                        <li>Ама наистина сложни</li>
+                        <li>В различни подсистеми</li>
+                    </ul>
+                    <li>Чрез позволяването на динамични типове</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Какво ни дава?</h2>
+                <ul>
+                    <li>Нов поглед върху полиморфизма</li>
+                    <li>Какво представлява</li>
+                    <ul>
+                        <li>Клас "торба" <code>dynamix::object</code></li>
+                        <li>Динамично се сглобява от компоненти, наречени миксини</li>
+                    </ul>
+                    <li>"Аз знам какво значи Mixin и не е това"</li>
+                    <li>DynaMix = Dynamic Mixins</li>
+                </ul>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Може да не се справя със защитаването ѝ, но...</li>
+                    <li>История.</li>
+                    <ul>
+                        <li>Masthead Studios и Захари Караджов. Идея. Интерфейс</li>
+                        <li>Аз. Boost.Mixin. Пренаписване. Подобряване?</li>
+                        <li>Epic Devs</li>
+                        <li>Gameloft</li>
+                        <li>Чао, Boost. DynaMix</li>
+                    </ul>
+                    <li>Има 158☆ в GitHub</li>
+                    <li>Не е просто използваема, но и използвана</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Какво точно прави?</h2>
+                <ul>
+                    <li>Няма прости примери</li>
+                    <ul>
+                        <li>Или ще са твърде глупави</li>
+                        <li>...или твърде дълги</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>"Прост" пример</h2>
+                <a href="basic_example.png"><img src="basic_example.png" /></a>
+            </section>
+
+            <section>
+                <h2>Основни функции</h2>
+                <ul>
+                    <li>Композиране</li>
+                    <ul>
+                        <li>Композиране vs Наследяване</li>
+                        <li>Редовен проблем в ООП</li>
+                        <li>Класически динамичен полиморфизъм</li>
+                    </ul>
+                    <li>Модифициране (Мутация)</li>
+                    <ul>
+                        <li>Динамичен динамичен полиморфизъм</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Защо?</h2>
+            </section>
+
+            <section>
+                <img class="diagram" src="taxonomy.png" />
+            </section>
+
+            <section>
+                <p>Реалните случаи са по-тежки: Обекти в игра</p>
+                <img class="diagram" src="venn.png" />
+            </section>
+
+            <section>
+                <ul>
+                    <li>Таксономия срещу тагове</li>
+                    <ul>
+                        <li>Йерархиите често не работят</li>
+                        <li>В някои езици йерархиите винаги не работят</li>
+                        <li>Блоговете ни научиха, че таговете са нещо яко</li>
+                    </ul>
+                    <li>Отново - сложни обекти</li>
+                    <ul>
+                        <li>Срещат се често в игрите</li>
+                        <li>...и не само игрите</li>
+                        <li>Особено, където има подсистеми</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Конкретен пример</h2>
+                <p>...най-сетне</p>
+            </section>
+
+            <section>
+                <h2>Композиране</h2>
+                <ul>
+                    <li><code>flying_creature</code></li>
+                    <li><code>two_legged_creature</code></li>
+                    <li><code>monster_ai</code></li>
+                    <li><code>animated_model</code></li>
+                    <li><code>directx_rendering</code></li>
+                </ul>
+            </section>
+
+            <section>
+                <img class="diagram" src="dragon.png" />
+            </section>
+
+            <section>
+                <h2>Мутиране</h2>
+                <ul>
+                <li>Подменяме <code>monster_ai</code> с <code>player_control</code> и ставаме шофьор на дракон</li>
+                <li>Подменяме <code>directx_rendering</code> с <code>opengl_rendering</code> - имаме игра за Линукс</li>
+                <li>Махаме <code>flying_creature</code> - (двукрак) гущер</li>
+                <li>Добавяме <code>fire_breather</code> - става страшно</li>
+            </section>
+
+            <section>
+                <h2>Подходи</h2>
+            </section>
+
+            <section>
+                <h2>Oppan C++ Style</h2>
+                <ul>
+                    <li>Mножествено наследяване</li>
+                    <li>CRTP Миксини</li>
+                    <ul>
+                        <li>Като трейтовете в Scala, PHP или Self</li>
+                        <li>...или ролите в Perl 6</li>
+                        <li>...или наследяването в Eiffel</li>
+                        <li>...или миксините в Ruby</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <img class="diagram" src="inheritance.png" />
+            </section>
+
+            <section>
+                <ul>
+                    <li>Mножествено наследяване</li>
+                    <ul>
+                        <li>Няма лесен начин за комуникация</li>
+                        <li>side cast</li>
+                    </ul>
+                    <li>CRTP Миксини, трейтове и т.н. - комуникация</li>
+                    <li>Комбинаторна експлозия от типове</li>
+                    <li>Колекции в силно типизирани езици. Нямаме общ тип.</li>
+                    <ul>
+                        <li>Виртуално множествено наследяване?</li>
+                    </ul>
+                    <li>Ами мутацията?</li>
+                    <ul>
+                        <li>Само Ruby е готин</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Алтернатива: ECS</h2>
+                <p>Entity-component system</p>
+                <p>(в случая некласическа полиморфна система)</p>
+                <ul>
+                    <li>Две думи за Класически ECS</li>
+                    <li>Базов обект (entity) съдържа компоненти</li>
+                    <li>Интерфейси към компоненти</li>
+                    <li>Базов клас за компоненти</li>
+                </ul>
+            </section>
+
+            <section>
+            <p>Entity</p>
+            <pre><code class="language-cpp" data-trim>
+class game_entity
+{
+    control* m_control;
+    physical_data* m_physical_data;
+    rendering* rendering;
+    vector&lt;type*&gt; m_types; // ??
+    ...
+};
+
+game_entity dragon;
+dragon.set_control(new monster_ai);
+dragon.set_physical_data(new animated_model("dragon.model"));
+dragon.add_type(new flying_creature);
+...
+
+dragon.set_ai(new player_control);
+            </code></pre>
+            </section>
+
+            <section>
+            <p>Component</p>
+            <pre><code class="language-cpp" data-trim>
+class component
+{
+    entity* self;
+};
+
+class monster_ai : public control, public component
+{
+    void simulation_tick() override
+    {
+        ...
+        self->get_physical_data()->move_to(enemy);
+        self->get_physical_data()->animate("flying"); // ??
+    }
+};
+            </code></pre>
+            </section>
+
+            <section>
+                <h2>Ползвайте ECS</h2>
+                <ul>
+                    <li>Entity-component системите не са зло</li>
+                    <li>Ползват се много. Особено в игрите</li>
+                    <li>Лесни са за разбиране</li>
+                    <li>В крайна сметка решават споменатите проблеми</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Най сетне: DynaMix</h2>
+                <p>Полиморфен entity-component-system на стероиди</p>
+            </section>
+
+            <section>
+                <p>DynaMix дракон</p>
+                <pre><code class="language-cpp" data-trim>
+object dragon; // just an empty object
+
+mutate(dragon)
+    .add&lt;flying_creature&gt;().add&lt;two_legged_creature&gt;()
+    .add&lt;monster_ai&gt;().add&lt;animated_model&gt;().add&lt;directx_rendering&gt;();
+
+set_model(dragon, "dragon.model"); // handled by animated_model
+...
+mutate(dragon).remove&lt;monster_ai&gt;().add&lt;player_control&gt;();
+                </code></pre>
+                <ul>
+                    <li>Миксин тук = компонент в ECS</li>
+                    <li>C++ няма extension методи :(</li>
+                    <li>Няма нужда да предвиждаме всичко в базовия обект</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>DynaMix Миксин</p>
+                <pre><code class="language-cpp" data-trim>
+class monster_ai
+{
+    void simulate_tick()
+    {
+        ...
+        move_to(dm_this, enemy);
+        animate(dm_this, "flying");
+    }
+};
+                </code></pre>
+                <ul>
+                    <li>Да. Не наследява нищо. Библиотеката не е интрузивна.</li>
+                    <li><code>dm_this = self = </code>обектът, от който миксинът е част</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Не може да бъде!</h2>
+                <ul>
+                    <li>Да. Не може. Трябва още малко</li>
+                    <li>В някой хедър:</li>
+                    <pre><code class="language-cpp" data-trim>
+DYNAMIX_DECLARE_MIXIN(monster_ai);
+                    </code></pre>
+                    <li>Хедър? C++ sucks. Трябват хедъри</li>
+                    <li>Това е достатъчно за мутации на обекти</li>
+                    <li>В някой .cpp файл:</li>
+                    <pre><code class="language-cpp" data-trim>
+DYNAMIX_DEFINE_MIXIN(monster_ai, simulate_tick_msg &amp; get_info_msg);
+                    </code></pre>
+                    <li>Месиджи? Методи? Smalltalk (тайна: едно и също са)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Ин / тер / ф / ей / с</h2>
+                <ul>
+                    <li>Разбиване на класическите интерфейси</li>
+                    <li>Месиджите в DynaMix. Как?</li>
+                    <pre><code class="language-cpp" data-trim>
+DYNAMIX_MESSAGE_0(void, simulate_tick);
+DYNAMIX_MESSAGE_1(void, move_to, object*, target);
+DYNAMIX_MESSAGE_2(rt, foo, arg1_t, arg1, arg2_t, arg2);
+                    </code></pre>
+                    <pre><code class="language-cpp" data-trim>
+DYNAMIX_DEFINE_MESSAGE(simulate_tick);
+DYNAMIX_DEFINE_MESSAGE(move_to);
+DYNAMIX_DEFINE_MESSAGE(foo);
+                    </code></pre>
+                    <li>Mixin feature list</li>
+                    <li>Функциите на обекта = обединението на миксините</li>
+                    <li>Резултат. Истински decoupling</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Други приятности</h2>
+            </section>
+
+            <section>
+                <h2>Мултикаст</h2>
+                <pre><code class="language-cpp" data-trim>
+DYNAMIX_MULTICAST_MESSAGE_1(void, get_info, ostream&amp;, out);
+...
+get_info(obj, cout);
+                </code></pre>
+
+                <ul>
+                    <li>Повече от един клиент на месидж</li>
+                    <li>Мултикаст комбинатори</li>
+                    <li><code>get_rendering_elements</code></li>
+                    <li>Приоритет</li>
+                    <code>... &amp; foo_msg &amp; priority(5, bar_msg));</code>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Уникаст приоритет</h2>
+                <ul>
+                    <li>Най добрият печели.</li>
+                    <li>Скриване на миксини. Не точно както в Ruby</li>
+                </ul>
+                <pre><code class="language-cpp" data-trim>
+mutate(monster).add&lt;berserk_ai&gt;();
+... // do berserk stuff
+mutate(monster).remove&lt;berserk_ai&gt;();
+... // do regular stuff
+                </code></pre>
+            </section>
+
+            <section>
+                <h2>Плъгини</h2>
+                <ul>
+                    <li>Пълна абстракция между интерфейс и имплементация</li>
+                    <li>Плъгин динамична библиотека - няма проблем</li>
+                    <li>Външно обогатяване на обекти</li>
+                    <li>Пример: Архитектурна CAD система</li>
+                    <ul>
+                        <li>Плъгин за водопроводни/електриджийски екстри</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Потребителски алокатори</li>
+                    <li>Thread safety</li>
+                    <li>Debugging визуализатори за Visual Studio</li>
+                    <li>Бъдеще</li>
+                    <ul>
+                        <li>Reflection. Интеграция със скриптови езици</li>
+                        <li>Open Source игрица</li>
+                        <li>Roadmap</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Неприятности</h2>
+                <ul>
+                    <li>Освен тези, които видяхме...</li>
+                    <li>Харчи малко повече памет - пренебрежимо (?)</li>
+                    <ul>
+                        <li>Допълнителна памет на уникален тип</li>
+                        <li>Допълнителна памет за обект</li>
+                    </ul>
+                    <li>Message call overhead - пренебрежим (?)</li>
+                    <ul>
+                        <li>Малко по-бавно от виртуална функция.</li>
+                        <li>Основният проблем е cache-locality</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Кога е DynaMix e добра идея?</h2>
+                <ul>
+                    <li>Когато имате сложни обекти - поне ECS</li>
+                    <li>Когато имате подсистеми</li>
+                    <li>Когато имате плъгини</li>
+                </ul>
+            </section>
+
+            <section>
+            <h2>Do you want to know more?</h2>
+            <p>РТФМ @ <a href="http://ibob.github.io/dynamix/">ibob.github.io/dynamix/</a></p>
+            <p>
+                <br />
+                <small>
+                Документацията не е съвсем пълна :(
+                </small>
+            </p>
+            </section>
+
+            <section>
+            <h1>Край</h1>
+            <h2>Въпроси?</h2>
+            <br/>
+            <h4>От Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a></h4>
+            <p>
+                DynaMix е тук: <a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a>
+            </p>
+            <p>
+                <br />
+                <small>
+                Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                </small>
+            </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+            transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                { src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
