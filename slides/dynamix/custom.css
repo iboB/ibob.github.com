@@ -1,0 +1,17 @@
+/* fixes for cyrillic */
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  font-family: Impact, sans-serif;
+}
+
+.reveal section img.diagram
+{
+	/*height: 100%;*/
+	border: none;
+	background: none;
+	box-shadow: none;
+}
