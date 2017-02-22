@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>DynaMix: A new take on polymorphism in C++</title>
+
+    <meta name="description" content="Slides for a talk about DynaMix">
+    <meta name="author" content="Borislav Stanimirov">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight/css/default.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1>DynaMix</h1>
+                <h3>A New Take on Polymorphism in C++</h3>
+                <p>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>What is this?</h3>
+                <br/>
+                <ul>
+                    <li>Bla bla</li>
+                    <li>Ooga buga</li>
+                    <li>Lorem ipsum dolor sit amet</li>
+                </ul>
+                <pre><code class="cpp hljs">
+    int main()
+    {
+        class foo
+        {
+            float x;
+        };
+        // comment
+        int zz + 23;
+    }
+                </code></pre>
+            </section>
+
+            <section>
+                <h1>End</h1>
+                <h2>Questions?</h2>
+                <br/>
+                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a></p>
+                <p>
+                    <br />
+                    <small>
+                    Link to these slides: <a href="http://ibob.github.io/slides/dynamix/">http://ibob.github.io/slides/dynamix/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Slides license <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons By 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'solarized', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
