@@ -13,6 +13,7 @@
 .reveal section
 {
     color: #363636;
+    font-family: Verdana, sans-serif;
 }
 
 .reveal section.slide
@@ -55,3 +56,18 @@
 	background-color: white;
 }
 
+.reveal section span.fancy
+{
+	font-weight: bold;
+	color: #616100;
+}
+
+.reveal section code.inline
+{
+	color: #616100;
+}
+
+.reveal pre code
+{
+    max-height: 80%;
+}

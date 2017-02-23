@@ -49,23 +49,112 @@
             <section class="slide">
                 <h3>About</h3>
                 <ul>
-                    <li>DynaMix is a C++ library</li>
-                    <li>Usage: </li>
-                    <li>Lorem ipsum dolor sit amet</li>
+                    <li>Hi. I'm Borislav.</li>
+                    <li><span class="fancy">DynaMix</span> is a C++ library</li>
+                    <ul>
+                        <li><a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a></li>
+                    </ul>
+                    <li>History</li>
+                    <ul>
+                        <li>2007: Interface. Zahary Karadjov</li>
+                        <li>2013: Rebirth as <span class="fancy">Boost.Mixin</span>. Me</li>
+                        <li>2016: Bye, Boost. Hello, <span class="fancy">DynaMix</span></li>
+                    </ul>
+                    <li>Spread <em>(to my knowledge)</em></li>
+                    <ul>
+                        <li>One PC MMORPG</li>
+                        <li>One released mobile game</li>
+                        <li>Two mobile games in development</li>
+                    </ul>
                 </ul>
-                <pre><code class="cpp hljs" data-trim>
-int main()
-{
-    class foo
-    {
-        float x;
-    };
-    // comment
-    int zz + 23;
-}
-                </code></pre>
             </section>
 
+
+            <section class="slide">
+                <h3>The Gist</h3>
+                <ul>
+                    <li>Building blocks</li>
+                    <ul>
+                        <li><code class="inline">dynamix::object</code> - just an empty object</li>
+                        <li><span class="fancy">Messages</span> - function-like pieces of interface, that an object might implement</li>
+                        <li><span class="fancy">Mixins</span> - classes that you've written which actually implement messages</li>
+                    </ul>
+                    <li>Usage</li>
+                    <ul>
+                        <li><span class="fancy">Mutation</span> - the process of adding and removing mixins from objects</li>
+                        <li><span class="fancy">Calling messages</span> - like calling methods, this is where the actual business logic lies</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Why don't we see some code?</h2>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class wood_frame
+{
+public:
+    strength get_strength() const {
+        return strength(83);
+    }
+    // other wood-frame-y stuff
+};
+
+class titanium_frame
+{
+public:
+    strength get_strength() const {
+        return strength(9001);
+    }
+    // other titanium-frame-y stuff
+};
+
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class has_drawers
+{
+public:
+    void open(int element) {
+        _drawers[element].roll_out();
+    }
+    // ...
+};
+
+class has_doors
+{
+public:
+    void open(int element) {
+        _doors[i].open();
+    }
+    // ...
+};
+
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+    dynamix::object o;
+    mutate(o)
+        .add&lt;wood_frame&gt;()
+        .add&lt;has_dors&gt;();
+
+    ::get_strength(o); // -> strength 83
+    ::open(o, 1); // -> right door opens
+
+    mutate(o)
+        .remove&lt;wood_frame&gt;()
+        .add&lt;titanium_frame&gt;();
+
+    ::get_strength(o); // -> strength 9001
+
+</code></pre>
+            </section>
             <section>
                 <h1>End</h1>
                 <h2>Questions?</h2>
