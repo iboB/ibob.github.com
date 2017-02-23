@@ -139,19 +139,23 @@ public:
 
             <section>
 <pre><code class="cpp hljs">
-    dynamix::object o;
-    mutate(o)
-        .add&lt;wood_frame&gt;()
-        .add&lt;has_dors&gt;();
+// ... after some library-specific code
+// in which we "tell" it what mixins and messages
+// there are out there
 
-    ::get_strength(o); // -> strength 83
-    ::open(o, 1); // -> right door opens
+dynamix::object o;
+mutate(o)
+    .add&lt;wood_frame&gt;()
+    .add&lt;has_dors&gt;();
 
-    mutate(o)
-        .remove&lt;wood_frame&gt;()
-        .add&lt;titanium_frame&gt;();
+::get_strength(o); // -> strength 83
+::open(o, 1); // -> right door opens
 
-    ::get_strength(o); // -> strength 9001
+mutate(o)
+    .remove&lt;wood_frame&gt;()
+    .add&lt;titanium_frame&gt;();
+
+::get_strength(o); // -> strength 9001
 
 </code></pre>
             </section>
