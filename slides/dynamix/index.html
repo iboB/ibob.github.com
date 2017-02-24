@@ -279,7 +279,7 @@ class horse : public walking_creature,
             </section>
 
             <section>
-            <p class="evil">OK. This time using <span class="fancy">real</span> mixins</p>
+                <p class="evil">OK. This time using <span class="fancy">real</span> mixins</p>
 <pre><code class="cpp hljs">
 template &lt;typename object_type&gt;
 class flying_creature
@@ -326,7 +326,7 @@ std::vector&lt;game_object*&gt; objects;
             </section>
 
             <section>
-            <p class="evil">Fine. I'm rolling-up my sleeves</p>
+                <p class="evil">Fine. I'm rolling-up my sleeves</p>
 <pre><code class="cpp hljs">
 class flying_creature : public virtual game_object
 {
@@ -349,12 +349,12 @@ class dragon : public flying_creature,
             </section>
 
             <section class="slide">
-            <br/>
-            <p>So, all, <span class="fancy">ALL</span> possible methods will exist as pure virtual in <code class="inline">game_object</code></p>
-            <p>Also, walking creature cannot fly. You can never instantiate <code class="inline">dragon</code> since it's abstract.</p>
-            <br/>
-            <br/>
-            <p class="evil">Having separate methods for flying and walking was a bad idea, anyway. There should be a single method: <code class="inline">move</code>. In fact how about this:</p>
+                <br/>
+                <p>So, all, <span class="fancy">ALL</span> possible methods will exist as pure virtual in <code class="inline">game_object</code></p>
+                <p>Also, walking creature cannot fly. You can never instantiate <code class="inline">dragon</code> since it's abstract.</p>
+                <br/>
+                <br/>
+                <p class="evil">Having separate methods for flying and walking was a bad idea, anyway. There should be a single method: <code class="inline">move</code>. In fact how about this:</p>
             </section>
 
             <section>
@@ -382,17 +382,17 @@ class dragon : public flying_creature,
             </section>
 
             <section class="slide">
-            <p>This will work.</p>
-            <p class="evil">Aww, yiss!</p>
-            <p>But...</p>
-            <br/>
-            <ul>
-                <li>It's impractical</li>
-                <li>Every new type of object, needs to be explicity added to the code</li>
-                <li>Combinatorial explosion of types</li>
-                <li><code class="inline">game_object</code> is a coupling focal point</li>
-                <li>As a result no software is written like this (except probably some beginner projects)</li>
-            </ul>
+                <p>This will work.</p>
+                <p class="evil">Aww, yiss!</p>
+                <p>But...</p>
+                <br/>
+                <ul>
+                    <li>It's impractical</li>
+                    <li>Every new type of object, needs to be explicity added to the code</li>
+                    <li>Combinatorial explosion of types</li>
+                    <li><code class="inline">game_object</code> is a coupling focal point</li>
+                    <li>As a result no software is written like this (except probably some beginner projects)</li>
+                </ul>
             </section>
 
             <section class="slide">
@@ -457,17 +457,178 @@ class monster_ai
             </section>
 
             <section class="slide">
-            <p>This is, actually, a pretty decent solution.</p>
+                <p>This is, actually, a pretty decent solution.</p>
+                <br/>
+                <ul>
+                    <li>This is the <span class="fancy">interface to component</span> pattern</li>
+                    <li>There are <span class="fancy">games</span> and <span class="fancy">CAD systems</span> which use it</li>
+                    <li>In fact (although not immediately  obvious), using this as a base, you can recreate almost all features of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
+                </ul>
+                <p>But...</p>
+                <ul>
+                    <li>Every new type of interface needs to be explicitly added to the <span class="fancy">huge</span> object class</li>
+                    <li>More importantly: <span class="fancy">Interface classes are limiting</span></li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Pushing The Limits</h3>
+<pre><code class="cpp hljs" data-trim>
+struct mobility
+{
+    virtual void move_to(target t) = 0;
+    virtual bool can_move_to(target t) const = 0;
+};
+</code></pre>
+                <p>What if we want to override only <code class="inline">can_move_to</code>?</li>
+                <br/>
+                <br/>
+                <p class="evil">OK. I give up. In such cases people just don't use C++. You want to embed a scripting language like Python, or Lua, or JavaScript.</p>
+                <br/>
+                <p>That's a decent solution too.</li>
+            </section>
+
+            <section>
+<pre><code class="ruby hljs" data-trim>
+module FlyingCreature
+  def move_to(target)
+      puts can_move_to?(target) ?
+        "flying to #{target}"
+        : "can't fly to #{target}"
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+
+module AfraidOfEvens
+  def can_move_to?(target)
+    return target%2 != 0
+  end
+end
+
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10)
+a.extend(AfraidOfEvens)
+a.move_to(10)
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>The Same in C++</h3>
+                <br/>
+                <ul>
+                    <li>Composition over inheritance</li>
+                    <li>Late binding</li>
+                    <li>"Messages" over "methods"</li>
+                    <li>Messages separate from classes</li>
+                    <li>...and more</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>DynaMix Solution</h2>
+                <p>Finally</p>
+            </section>
+
+            <section>
+            <p>DynaMix Dragon</p>
+<pre><code class="cpp hljs" data-trim>
+object dragon; // just an empty object
+
+mutate(dragon)
+    .add&lt;flying_creature&gt;()
+    .add&lt;two_legged_creature&gt;()
+    .add&lt;monster_ai&gt;()
+    .add&lt;animated_model&gt;()
+    .add&lt;directx_rendering&gt;();
+
+::set_model(dragon, "dragon.x");
+//...
+::decide_action(dragon); // attack player
+
+mutate(dragon)
+    .remove&lt;monster_ai&gt;()
+    .add&lt;player_control&gt;();
+
+::decide_action(dragon); // read keyboard
+</code></pre>
+            </section>
+
+            <section>
+            <p>DynaMix Mixin</p>
+            <br/>
+<pre><code class="cpp hljs" data-trim>
+class monster_ai
+{
+    void decide_action()
+    {
+        ...
+        ::move_to(dm_this, good_guy);
+    }
+};
+</code></pre>
             <ul>
-                <li>This is the <span class="fancy">interface to component</span> pattern</li>
-                <li>There are <span class="fancy">games</span> and <span class="fancy">CAD systems</span> which use it</li>
-                <li>In fact (although not immediately  obvious), using this as a base, you can recreate almost all features of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
+                <li>Yup. No inheritance. The libary is non-intrusive.</li>
+                <li><code class="inline">dm_this</code> is like <code class="inline">self</code>: the object we're a part of</li>
             </ul>
-            <p>But...</p>
+            </section>
+
+            <section class="slide">
+                <h3>This Is Impossible!</h3>
+                <br/>
+                <ul>
+                    <li>Yes it is.</li>
+                    <li>In a header file we need:</li>
+                </ul>
+                <pre><code class="cpp hljs" data-trim>DYNAMIX_DECLARE_MIXIN(monster_ai);</code></pre>
+                <ul>
+                    <li>This is enough to mutate objects</li>
+                    <li>Also in a .cpp file we need:</li>
+                </ul>
+                <pre><code class="cpp hljs" data-trim>DYNAMIX_DEFINE_MIXIN(monster_ai, decide_actions_msg);</code></pre>
+                <ul>
+                    <li>This is how we "tell" the library which messages will be added to the object's interface, when this mixin is mutated-in</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Messages</h3>
+                <br/>
+<pre><code class="cpp hljs" data-trim>
+DYNAMIX_MESSAGE_0(void, simulate_tick);
+DYNAMIX_MESSAGE_1(void, move_to, object*, target);
+DYNAMIX_MESSAGE_2(rt, foo, arg1_t, arg1, arg2_t, arg2);
+</code></pre>
+<pre><code class="cpp hljs" data-trim>
+DYNAMIX_DEFINE_MESSAGE(simulate_tick);
+DYNAMIX_DEFINE_MESSAGE(move_to);
+DYNAMIX_DEFINE_MESSAGE(foo);
+</code></pre>
             <ul>
-                <li>Every new type of interface needs to be explicitly added to the <span class="fancy">huge</span> object class</li>
-                <li></li>
-            </ul>
+                <br/>
+                <p>And that's how we truly separate the interface from the implementation.</p>
+            </section>
+
+            <section style="background-color: green;">
+                <h2 style="color: pink;">Eye candy time!</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Recap</h3>
+                <ul>
+                    <li>Compose and mutate objects from mixins</li>
+                    <li>Have uni- and multicast messages</li>
+                    <li>Manager message execution with priorities</li>
+                    <li>Easily have hot-swappable or ever releaseble plugins</li>
+                    <li>There was no time for:</li>
+                    <ul>
+                        <li>Custom allocators</li>
+                        <li>Multicast result combinators</li>
+                        <li>Implementation details</li>
+                    </ul>
+                </ul>
             </section>
 
             <section>
