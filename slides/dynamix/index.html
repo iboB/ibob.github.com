@@ -275,7 +275,7 @@ class horse : public walking_creature,
             </section>
 
             <section>
-                <p>That, in a way, is even worse, because <code class="inline">flying_creature</code> has no way ot telling <code class="inline">animated_model</code> which animation to play.</p>
+                <p>That, in a way, is even worse, because <code class="inline">flying_creature</code> has no way of telling <code class="inline">animated_model</code> which animation to play.</p>
             </section>
 
             <section>
@@ -404,7 +404,7 @@ class dragon : public flying_creature,
                         <li>To sometimes manually control the dragon</li>
                         <li>To cut the wings off of the dragon and have a plain (well two-legged) lizzard</li>
                         <li>To optionally have add fire-breathing powers to our dragon</li>
-                        <li>To be able to choose the rendering API, say to switch to DirectX</li>
+                        <li>To be able to choose the rendering API, say to switch to OpenGL</li>
                     </ul>
                 </ul>
                 <br/>
@@ -462,7 +462,7 @@ class monster_ai
                 <ul>
                     <li>This is the <span class="fancy">interface to component</span> pattern</li>
                     <li>There are <span class="fancy">games</span> and <span class="fancy">CAD systems</span> which use it</li>
-                    <li>In fact (although not immediately  obvious), using this as a base, you can recreate almost all features of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
+                    <li>In fact (although not immediately  obvious), using this as a base, you can recreate almost every feature of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
                 </ul>
                 <p>But...</p>
                 <ul>
@@ -621,7 +621,7 @@ DYNAMIX_DEFINE_MESSAGE(foo);
                     <li>Compose and mutate objects from mixins</li>
                     <li>Have uni- and multicast messages</li>
                     <li>Manager message execution with priorities</li>
-                    <li>Easily have hot-swappable or ever releaseble plugins</li>
+                    <li>Easily have hot-swappable or even releaseble plugins</li>
                     <li>There was no time for:</li>
                     <ul>
                         <li>Custom allocators</li>
