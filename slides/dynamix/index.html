@@ -69,6 +69,23 @@
                 </ul>
             </section>
 
+            <section class="slide">
+                <h3>About 2.0</h3>
+                <ul>
+                    <li>What will be in this talk?</li>
+                    <ul>
+                        <li>Introducing the <span class="fancy">DynaMix</span> library</li>
+                        <li>We will focus on the <span class="fancy">"what"</span> and the <span class="fancy">"why"</span></li>
+                        <li>We will hardly even mention the "how"</li>
+                    </ul>
+                    <li>So, what does this library do?</li>
+                    <ul>
+                        <li>A means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose</li>
+                        <li>Management of <span class="fancy">complex objects</span> in potentially <span class="fancy">multiple subsystems</span></li>
+                        <li>Enforces OOP practices like <span class="fancy">composition over inheritance</span>, <span class="fancy">loose coupling</span>, and <span class="fancy">separation of interface and implementation</span></li>
+                    </ul>
+                </ul>
+            </section>
 
             <section class="slide">
                 <h3>The Gist</h3>
@@ -83,6 +100,10 @@
                     <ul>
                         <li><span class="fancy">Mutation</span> - the process of adding and removing mixins from objects</li>
                         <li><span class="fancy">Calling messages</span> - like calling methods, this is where the actual business logic lies</li>
+                    </ul>
+                    <li><em>I know what a mixin is and it's not this</em></li>
+                    <ul>
+                        <li>DynaMix = <span class="fancy">dynamic mixins</span></li>
                     </ul>
                 </ul>
             </section>
@@ -139,25 +160,206 @@ public:
 
             <section>
 <pre><code class="cpp hljs">
-// ... after some library-specific code
-// in which we "tell" it what mixins and messages
-// there are out there
+// ...after some library-specific code in which we "tell"
+// it what mixins and messages there are out there
 
 dynamix::object o;
-mutate(o)
+mutate(o) // composition
     .add&lt;wood_frame&gt;()
     .add&lt;has_doors&gt;();
 
+// message calls
 ::get_strength(o); // -> strength 83
 ::open(o, 1); // -> right door opens
 
-mutate(o)
+mutate(o) // mutation
     .remove&lt;wood_frame&gt;()
     .add&lt;titanium_frame&gt;();
 
 ::get_strength(o); // -> strength 9001
 
 </code></pre>
+            </section>
+
+            <section>
+                <h2>An Actual Basic Example</h2>
+                <img src="basic_example.png" />
+            </section>
+
+            <section>
+                <h2>But why?</h2>
+            </section>
+
+            <section class="slide">
+                <h3>OOP and Polymorphism</h3>
+                <ul>
+                    <li>OOP has come to imply dynamic polymorphism</li>
+                    <ul>
+                        <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
+                        <li>It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
+                        <li>Totally anti modern C++</li>
+                    </ul>
+                    <li>OOP has been critized a lot</li>
+                    <li>C++ is, among other things, an <span class="fancy">OOP language</span></li>
+                    <li>Out of the box in an OOP context C++ only gives us <span class="fancy">virtual functions</span> for polymorphism</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>An Example Problem</h3>
+                <br/>
+                <ul>
+                    <li>Suppose we want to have an object which is:</li>
+                    <ul>
+                        <li>A flying creature</li>
+                        <li>A two-legged creature</li>
+                        <li>Is controlled by a hostile AI</li>
+                        <li>Has an associated animated model</li>
+                        <li>Has DirectX rendering code</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <img class="diagram" src="dragon.png" />
+            </section>
+
+            <section>
+            <p><em>That's easy</em></p>
+<pre><code class="cpp hljs">
+class dragon
+{
+public:
+    void fly();
+    void walk_on_two_legs();
+    void ai_take_the_wheel();
+    const model& get_model() const;
+    void render_with_directx() const;
+// ...
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Implied Conditions</h3>
+                <br/>
+                <ul>
+                    <li>We will have other objects in our game</li>
+                    <li>Different subsystems of the game care about different aspects of those objects</li>
+                    <li>Different parts of the object may rely on others to work</li>
+                </ul>
+                <br/>
+                <br/>
+                <p style="text-align:center">What if we also have a horse or a human character?</p>
+            </section>
+
+            <section>
+                <img class="diagram" src="inheritance.png" />
+            </section>
+
+            <section>
+            <p><em>Still easy</em></p>
+<pre><code class="cpp hljs">
+class dragon : public flying_creature,
+    public two_legged_creature, public monster_ai,
+    public animated_model, public directx_rendering
+{};
+
+class horse : public walking_creature,
+    public four_legged_creature, public neutral_ai,
+    public animated_model, public direcx_rendering
+{};
+
+// ... you get the point
+</code></pre>
+            </section>
+
+            <section>
+                <p>That, in a way, is even worse, because <code class="inline">flying_creature</code> has no way ot telling <code class="inline">animated_model</code> which animation to play.</p>
+            </section>
+
+            <section>
+            <p><em>OK. This time using <span class="fancy">real</span> mixins</em></p>
+<pre><code class="cpp hljs">
+template &lt;typename object_type&gt;
+class flying_creature
+{
+public:
+    void fly()
+    {
+        flap_wings();
+        static_cast&lt;object_type*&gt;(this)
+            ->set_animation("flying");
+    }
+// ...
+};
+
+class dragon : public flying_creature&lt;dragon&gt;,
+    public two_legged_creature&lt;dragon&gt;,
+    public monster_ai&lt;dragon&gt;,
+    public animated_model&lt;dragon&gt;,
+    public directx_rendering&lt;dragon&gt;
+{};
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <br/>
+                <br/>
+                <ul>
+                    <li><span class="fancy">ALL</span> of my code is in headers</li>
+                    <li>How can I have an array of objects?</li>
+                </ul>
+                <br/>
+                <br/>
+<pre><code class="cpp hljs" data-trim>
+template &lt;typename object_type&gt;
+class flying_creature : public virtual game_object
+{ /* ... */ };
+
+std::vector&lt;game_object*&gt; objects;
+</code></pre>
+                <br/>
+                <p>This is identical to <code class="inline">vector&lt;void*&gt;</code>.<br/>I have no way of using the objects in this array.</li>
+                </ul>
+            </section>
+
+            <section>
+            <p><em>Fine. I'm rolling-up my sleeves</em></p>
+<pre><code class="cpp hljs">
+class flying_creature : public virtual game_object
+{
+public:
+    virtual void fly() override
+    {
+        this->flap_wings();
+        this->set_animation("flying");
+    }
+// ...
+};
+
+class dragon : public flying_creature,
+    public two_legged_creature, public monster_ai,
+    public animated_model, public directx_rendering
+{
+};
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>An Example Problem Cont.</h3>
+                <br/>
+                <ul>
+                    <li>Suppose that we also want</li>
+                    <ul>
+                        <li>To sometimes manually control the dragon</li>
+                        <li>To cut the wings off of the dragon and have a plain (well two-legged) lizzard</li>
+                        <li>To optionally have add fire-breathing powers to our dragon</li>
+                        <li>To be able to choose the rendering API, say to switch to DirectX</li>
+                    </ul>
+                </ul>
             </section>
 
             <section>
