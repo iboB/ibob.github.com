@@ -49,22 +49,22 @@
             <section class="slide">
                 <h3>About</h3>
                 <ul>
-                    <li>Hi. I'm Borislav.</li>
-                    <li><span class="fancy">DynaMix</span> is a C++ library</li>
+                    <li class="fragment">Hi. I'm Borislav.</li>
+                    <li class="fragment"><span class="fancy">DynaMix</span> is a C++ library</li>
                     <ul>
-                        <li><a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a></li>
+                        <li class="fragment"><a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a></li>
                     </ul>
-                    <li>History</li>
+                    <li class="fragment">History</li>
                     <ul>
-                        <li>2007: Interface. Zahary Karadjov</li>
-                        <li>2013: Rebirth as <span class="fancy">Boost.Mixin</span>. Me</li>
-                        <li>2016: Bye, Boost. Hello, <span class="fancy">DynaMix</span></li>
+                        <li class="fragment">2007: Interface. Zahary Karadjov</li>
+                        <li class="fragment">2013: Rebirth as <span class="fancy">Boost.Mixin</span>. Me</li>
+                        <li class="fragment">2016: Bye, Boost. Hello, <span class="fancy">DynaMix</span></li>
                     </ul>
-                    <li>Spread <em>(to my knowledge)</em></li>
+                    <li class="fragment">Spread <em>(to my knowledge)</em></li>
                     <ul>
-                        <li>One PC MMORPG</li>
-                        <li>One released mobile game</li>
-                        <li>Two mobile games in development</li>
+                        <li class="fragment">One PC MMORPG</li>
+                        <li class="fragment">One released mobile game</li>
+                        <li class="fragment">Two mobile games in development</li>
                     </ul>
                 </ul>
             </section>
@@ -72,17 +72,17 @@
             <section class="slide">
                 <h3>About 2.0</h3>
                 <ul>
-                    <li>What will be in this talk?</li>
+                    <li class="fragment">What will be in this talk?</li>
                     <ul>
-                        <li>Introducing the <span class="fancy">DynaMix</span> library</li>
-                        <li>We will focus on the <span class="fancy">"what"</span> and the <span class="fancy">"why"</span></li>
-                        <li>We will hardly even mention the "how"</li>
+                        <li class="fragment">Introducing the <span class="fancy">DynaMix</span> library</li>
+                        <li class="fragment">We will focus on the <span class="fancy">"what"</span> and the <span class="fancy">"why"</span></li>
+                        <li class="fragment">We will hardly even mention the "how"</li>
                     </ul>
-                    <li>So, what does this library do?</li>
+                    <li class="fragment">So, what does this library do?</li>
                     <ul>
-                        <li>A means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose</li>
-                        <li>Management of <span class="fancy">complex objects</span> in potentially <span class="fancy">multiple subsystems</span></li>
-                        <li>Enforces OOP practices like <span class="fancy">composition over inheritance</span>, <span class="fancy">loose coupling</span>, and <span class="fancy">separation of interface and implementation</span></li>
+                        <li class="fragment">A means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose</li>
+                        <li class="fragment">Management of <span class="fancy">complex objects</span> in potentially <span class="fancy">multiple subsystems</span></li>
+                        <li class="fragment">Enforces OOP practices like <span class="fancy">composition over inheritance</span>, <span class="fancy">loose coupling</span>, and <span class="fancy">separation of interface and implementation</span></li>
                     </ul>
                 </ul>
             </section>
@@ -90,20 +90,20 @@
             <section class="slide">
                 <h3>The Gist</h3>
                 <ul>
-                    <li>Building blocks</li>
+                    <li class="fragment">Building blocks</li>
                     <ul>
-                        <li><code class="inline">dynamix::object</code> - just an empty object</li>
-                        <li><span class="fancy">Messages</span> - function-like pieces of interface, that an object might implement</li>
-                        <li><span class="fancy">Mixins</span> - classes that you've written which actually implement messages</li>
+                        <li class="fragment"><code class="inline">dynamix::object</code> - just an empty object</li>
+                        <li class="fragment"><span class="fancy">Messages</span> - function-like pieces of interface, that an object might implement</li>
+                        <li class="fragment"><span class="fancy">Mixins</span> - classes that you've written which actually implement messages</li>
                     </ul>
-                    <li>Usage</li>
+                    <li class="fragment">Usage</li>
                     <ul>
-                        <li><span class="fancy">Mutation</span> - the process of adding and removing mixins from objects</li>
-                        <li><span class="fancy">Calling messages</span> - like calling methods, this is where the actual business logic lies</li>
+                        <li class="fragment"><span class="fancy">Mutation</span> - the process of adding and removing mixins from objects</li>
+                        <li class="fragment"><span class="fancy">Calling messages</span> - like calling methods, this is where the actual business logic lies</li>
                     </ul>
-                    <li class="evil">I know what a mixin is and it's not this</li>
+                    <li class="fragment evil">I know what a mixin is and it's not this</li>
                     <ul>
-                        <li>DynaMix = <span class="fancy">dynamic mixins</span></li>
+                        <li class="fragment">DynaMix = <span class="fancy">dynamic mixins</span></li>
                     </ul>
                 </ul>
             </section>
@@ -193,15 +193,15 @@ mutate(o) // mutation
             <section class="slide">
                 <h3>OOP and Polymorphism</h3>
                 <ul>
-                    <li>OOP has come to imply dynamic polymorphism</li>
+                    <li class="fragment">OOP has come to imply dynamic polymorphism</li>
                     <ul>
-                        <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
-                        <li>It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
-                        <li>Totally anti modern C++</li>
+                        <li class="fragment">Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
+                        <li class="fragment">It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
+                        <li class="fragment">Totally anti modern C++</li>
                     </ul>
-                    <li>OOP has been critized a lot</li>
-                    <li>C++ is, among other things, an <span class="fancy">OOP language</span></li>
-                    <li>Out of the box in an OOP context C++ only gives us <span class="fancy">virtual functions</span> for polymorphism</li>
+                    <li class="fragment">OOP has been critized a lot</li>
+                    <li class="fragment">C++ is, among other things, an <span class="fancy">OOP language</span></li>
+                    <li class="fragment">Out of the box in an OOP context C++ only gives us <span class="fancy">virtual functions</span> for polymorphism</li>
                 </ul>
             </section>
 
@@ -233,7 +233,7 @@ public:
     void fly();
     void walk_on_two_legs();
     void ai_take_the_wheel();
-    const model& get_model() const;
+    const model&amp; get_model() const;
     void render_with_directx() const;
 // ...
 }
@@ -250,7 +250,7 @@ public:
                 </ul>
                 <br/>
                 <br/>
-                <p style="text-align:center">What if we also have a horse or a human character?</p>
+                <p  class="fragment" style="text-align:center">What if we also have a horse or a human character?</p>
             </section>
 
             <section>
@@ -313,7 +313,7 @@ class dragon : public flying_creature&lt;dragon&gt;,
                 </ul>
                 <br/>
                 <br/>
-<pre><code class="cpp hljs" data-trim>
+<pre class="fragment"><code class="cpp hljs" data-trim>
 template &lt;typename object_type&gt;
 class flying_creature : public virtual game_object
 { /* ... */ };
@@ -321,7 +321,7 @@ class flying_creature : public virtual game_object
 std::vector&lt;game_object*&gt; objects;
 </code></pre>
                 <br/>
-                <p>This is identical to <code class="inline">vector&lt;void*&gt;</code>.<br/>I have no way of using the objects in this array.</li>
+                <p class="fragment">This is identical to <code class="inline">vector&lt;void*&gt;</code>.<br/>I have no way of using the objects in this array.</li>
                 </ul>
             </section>
 
@@ -354,7 +354,7 @@ class dragon : public flying_creature,
                 <p>Also, a walking creature cannot fly. You can never instantiate <code class="inline">dragon</code> since it's abstract.</p>
                 <br/>
                 <br/>
-                <p class="evil">Having separate methods for flying and walking was a bad idea, anyway. There should be a single method: <code class="inline">move</code>. In fact how about this:</p>
+                <p class="fragment evil">Having separate methods for flying and walking was a bad idea, anyway. There should be a single method: <code class="inline">move</code>. In fact how about this:</p>
             </section>
 
             <section>
@@ -383,15 +383,15 @@ class dragon : public flying_creature,
 
             <section class="slide">
                 <p>This will work.</p>
-                <p class="evil">Aww, yiss!</p>
-                <p>But...</p>
+                <p class="fragment evil">Aww, yiss!</p>
+                <p class="fragment">But...</p>
                 <br/>
                 <ul>
-                    <li>It's impractical</li>
-                    <li>Every new type of object, needs to be explicity added to the code</li>
-                    <li>Combinatorial explosion of types</li>
-                    <li><code class="inline">game_object</code> is a coupling focal point</li>
-                    <li>As a result no software is written like this (except probably some beginner projects)</li>
+                    <li class="fragment">It's impractical</li>
+                    <li class="fragment">Every new type of object, needs to be explicity added to the code</li>
+                    <li class="fragment">Combinatorial explosion of types</li>
+                    <li class="fragment"><code class="inline">game_object</code> is a coupling focal point</li>
+                    <li class="fragment">As a result no software is written like this (except probably some beginner projects)</li>
                 </ul>
             </section>
 
@@ -409,7 +409,7 @@ class dragon : public flying_creature,
                 </ul>
                 <br/>
                 <br/>
-                <p class="evil">I could add such if-checks to all my methods, but I suppose you won't like this</p>
+                <p class="fragment evil">I could add such if-checks to all my methods, but I suppose you won't like this</p>
             </section>
 
             <section>
@@ -460,14 +460,14 @@ class monster_ai
                 <p>This is, actually, a pretty decent solution.</p>
                 <br/>
                 <ul>
-                    <li>This is the <span class="fancy">interface to component</span> pattern</li>
-                    <li>There are <span class="fancy">games</span> and <span class="fancy">CAD systems</span> which use it</li>
-                    <li>In fact (although not immediately  obvious), using this as a base, you can recreate almost every feature of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
+                    <li class="fragment">This is the <span class="fancy">interface to component</span> pattern</li>
+                    <li class="fragment">There are <span class="fancy">games</span> and <span class="fancy">CAD systems</span> which use it</li>
+                    <li class="fragment">In fact (although not immediately  obvious), using this as a base, you can recreate almost every feature of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
                 </ul>
-                <p>But...</p>
+                <p class="fragment">But...</p>
                 <ul>
-                    <li>Every new type of interface needs to be explicitly added to the <span class="fancy">huge</span> object class</li>
-                    <li>More importantly: <span class="fancy">Interface classes are limiting</span></li>
+                    <li class="fragment">Every new type of interface needs to be explicitly added to the <span class="fancy">huge</span> object class</li>
+                    <li class="fragment">More importantly: <span class="fancy">Interface classes are limiting</span></li>
                 </ul>
             </section>
 
@@ -483,9 +483,9 @@ struct mobility
                 <p>What if we want to override only <code class="inline">can_move_to</code>?</li>
                 <br/>
                 <br/>
-                <p class="evil">OK. I give up. In such cases people just don't use C++. You want to embed a scripting language like Python, or Lua, or JavaScript.</p>
+                <p class="fragment evil">OK. I give up. In such cases people just don't use C++. You want to embed a scripting language like Python, or Lua, or JavaScript.</p>
                 <br/>
-                <p>That's a decent solution too.</li>
+                <p class="fragment">That's a decent solution too.</li>
             </section>
 
             <section>
@@ -518,23 +518,23 @@ a.move_to(10)
             <section class="slide">
                 <h3>The Same in C++</h3>
                 <ul>
-                    <li>Composition over inheritance</li>
-                    <li>Late binding</li>
-                    <li>"Messages" over "methods"</li>
-                    <li>Messages separate from classes</li>
-                    <li class="evil">Wait... Do we even want this in C++?</li>
+                    <li class="fragment">Composition over inheritance</li>
+                    <li class="fragment">Late binding</li>
+                    <li class="fragment">"Messages" over "methods"</li>
+                    <li class="fragment">Messages separate from classes</li>
+                    <li class="fragment evil">Wait... Do we even want this in C++?</li>
                     <ul>
-                        <li>It has a better performance than scripting languages, even ones with JIT compilation</li>
-                        <li>It's less complex since it lacks a binding layer</li>
-                        <li>It's lets you write more C++</li>
-                        <li>It is compatible with scripting languages</li>
+                        <li class="fragment">It has a better performance than scripting languages, even ones with JIT compilation</li>
+                        <li class="fragment">It's less complex since it lacks a binding layer</li>
+                        <li class="fragment">It's lets you write more C++</li>
+                        <li class="fragment">It is compatible with scripting languages</li>
                     </ul>
                 </ul>
             </section>
 
             <section>
                 <h2>DynaMix Solution</h2>
-                <p>Finally</p>
+                <p class="fragment">Finally</p>
             </section>
 
             <section>
@@ -575,8 +575,8 @@ class monster_ai
 };
 </code></pre>
             <ul>
-                <li>Yup. No inheritance. The libary is non-intrusive.</li>
-                <li><code class="inline">dm_this</code> is like <code class="inline">self</code>: the object we're a part of</li>
+                <li class="fragment">Yup. No inheritance. The libary is non-intrusive.</li>
+                <li class="fragment"><code class="inline">dm_this</code> is like <code class="inline">self</code>: the object we're a part of</li>
             </ul>
             </section>
 
@@ -584,17 +584,17 @@ class monster_ai
                 <h3>This Is Impossible!</h3>
                 <br/>
                 <ul>
-                    <li>Yes it is.</li>
-                    <li>In a header file we need:</li>
+                    <li class="fragment">Yes it is.</li>
+                    <li class="fragment">In a header file we need:</li>
                 </ul>
-                <pre><code class="cpp hljs" data-trim>DYNAMIX_DECLARE_MIXIN(monster_ai);</code></pre>
+                <pre class="fragment"><code class="cpp hljs" data-trim>DYNAMIX_DECLARE_MIXIN(monster_ai);</code></pre>
                 <ul>
-                    <li>This is enough to mutate objects</li>
-                    <li>Also in a .cpp file we need:</li>
+                    <li class="fragment">This is enough to mutate objects</li>
+                    <li class="fragment">Also in a .cpp file we need:</li>
                 </ul>
-                <pre><code class="cpp hljs" data-trim>DYNAMIX_DEFINE_MIXIN(monster_ai, decide_actions_msg);</code></pre>
+                <pre class="fragment"><code class="cpp hljs" data-trim>DYNAMIX_DEFINE_MIXIN(monster_ai, decide_actions_msg);</code></pre>
                 <ul>
-                    <li>This is how we "tell" the library which messages will be added to the object's interface, when this mixin is mutated-in</li>
+                    <li class="fragment">This is how we "tell" the library which messages will be added to the object's interface, when this mixin is mutated-in</li>
                 </ul>
             </section>
 
@@ -618,16 +618,17 @@ DYNAMIX_DEFINE_MESSAGE(foo);
 
             <section style="background-color: green;">
                 <h2 style="color: pink;">Eye candy time!</h2>
+                <p style="color: orange;">MixQuest</p>
             </section>
 
             <section class="slide">
                 <h3>When to Use DynaMix?</h3>
                 <ul>
-                    <li>When you're writing software with <span class="fancy">complex polymorphic objects</span></li>
-                    <li>When you have <span class="fancy">subsystems</span> which care about <span class="fancy">interface</span> (rather than data)</li>
-                    <li>When you want <span class="fancy">plugins</span> which enable various aspects of your objects</li>
-                    <li>Such types of projects include</li>
-                    <ul>
+                    <li class="fragment">When you're writing software with <span class="fancy">complex polymorphic objects</span></li>
+                    <li class="fragment">When you have <span class="fancy">subsystems</span> which care about <span class="fancy">interface</span> (rather than data)</li>
+                    <li class="fragment">When you want <span class="fancy">plugins</span> which enable various aspects of your objects</li>
+                    <li class="fragment">Such types of projects include</li>
+                    <ul class="fragment">
                         <li>Most CAD systems</li>
                         <li>Some games: especially RPGs and strategies</li>
                         <li>Some enterprise systems</li>
@@ -639,28 +640,29 @@ DYNAMIX_DEFINE_MESSAGE(foo);
                 <h3>When Not to Use DynaMix?</h3>
                 <br/>
                 <ul>
-                    <li>Small scale projects</li>
-                    <li>Projects which have little use of polymorphism</li>
-                    <li>Existing large projects</li>
-                    <li>In performance critical code</li>
+                    <li class="fragment">Small scale projects</li>
+                    <li class="fragment">Projects which have little use of polymorphism</li>
+                    <li class="fragment">Existing large projects</li>
+                    <li class="fragment">In performance critical code</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Performance</h3>
                 <ul>
-                    <li>Message calls are comparable to <code class="inline">std::function</code></li>
-                    <li>Mutations can be fairly slow. Internal types</li>
-                    <li>Memory overhead</li>
+                    <li class="fragment">Message calls, as any polymorphic call, are slower than function calls</li>
+                    <li class="fragment">They are comparable to <code class="inline">std::function</code></li>
+                    <li class="fragment">Mutations can be fairly slow. Internal types</li>
+                    <li class="fragment">Memory overhead</li>
                     <ul>
-                        <li>For objects: pointers but mainly size of mixins</li>
-                        <li>For unique types: sparse arrays of mixins</li>
+                        <li class="fragment">For objects: pointers but mainly size of mixins</li>
+                        <li class="fragment">For unique types: sparse arrays of mixins</li>
                     </ul>
-                    <li>Thread safety</li>
+                    <li class="fragment">Thread safety</li>
                     <ul>
-                        <li>Calling messages is safe</li>
-                        <li>Mutating an object in one thread and calling messages on it in another is not safe</li>
-                        <li>Mutating two objects in two threads is safe</li>
+                        <li class="fragment">Calling messages is safe</li>
+                        <li class="fragment">Mutating an object in one thread and calling messages on it in another is not safe</li>
+                        <li class="fragment">Mutating two objects in two threads is safe</li>
                     </ul>
                 </ul>
             </section>
@@ -668,12 +670,12 @@ DYNAMIX_DEFINE_MESSAGE(foo);
             <section class="slide">
                 <h3>Recap</h3>
                 <ul>
-                    <li>Compose and mutate objects from mixins</li>
-                    <li>Have uni- and multicast messages</li>
-                    <li>Manager message execution with priorities</li>
-                    <li>Easily have hot-swappable or even releaseble plugins</li>
-                    <li>There was no time for:</li>
-                    <ul>
+                    <li class="fragment">Compose and mutate objects from mixins</li>
+                    <li class="fragment">Have uni- and multicast messages</li>
+                    <li class="fragment">Manager message execution with priorities</li>
+                    <li class="fragment">Easily have hot-swappable or even releaseble plugins</li>
+                    <li class="fragment">There was no time for:</li>
+                    <ul class="fragment">
                         <li>Custom allocators</li>
                         <li>Multicast result combinators</li>
                         <li>Implementation details</li>
