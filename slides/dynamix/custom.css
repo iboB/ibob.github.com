@@ -72,6 +72,12 @@
 	color: #616100;
 }
 
+.reveal .evil
+{
+	color: #901021;
+	font-style: italic;
+}
+
 .reveal pre code
 {
     max-height: 80%;

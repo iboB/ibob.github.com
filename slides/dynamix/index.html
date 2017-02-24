@@ -101,7 +101,7 @@
                         <li><span class="fancy">Mutation</span> - the process of adding and removing mixins from objects</li>
                         <li><span class="fancy">Calling messages</span> - like calling methods, this is where the actual business logic lies</li>
                     </ul>
-                    <li><em>I know what a mixin is and it's not this</em></li>
+                    <li class="evil">I know what a mixin is and it's not this</li>
                     <ul>
                         <li>DynaMix = <span class="fancy">dynamic mixins</span></li>
                     </ul>
@@ -225,7 +225,7 @@ mutate(o) // mutation
             </section>
 
             <section>
-            <p><em>That's easy</em></p>
+            <p class="evil">That's easy</p>
 <pre><code class="cpp hljs">
 class dragon
 {
@@ -258,7 +258,7 @@ public:
             </section>
 
             <section>
-            <p><em>Still easy</em></p>
+            <p class="evil">Still easy</p>
 <pre><code class="cpp hljs">
 class dragon : public flying_creature,
     public two_legged_creature, public monster_ai,
@@ -279,13 +279,13 @@ class horse : public walking_creature,
             </section>
 
             <section>
-            <p><em>OK. This time using <span class="fancy">real</span> mixins</em></p>
+            <p class="evil">OK. This time using <span class="fancy">real</span> mixins</p>
 <pre><code class="cpp hljs">
 template &lt;typename object_type&gt;
 class flying_creature
 {
 public:
-    void fly()
+    void move()
     {
         flap_wings();
         static_cast&lt;object_type*&gt;(this)
@@ -326,7 +326,7 @@ std::vector&lt;game_object*&gt; objects;
             </section>
 
             <section>
-            <p><em>Fine. I'm rolling-up my sleeves</em></p>
+            <p class="evil">Fine. I'm rolling-up my sleeves</p>
 <pre><code class="cpp hljs">
 class flying_creature : public virtual game_object
 {
@@ -349,6 +349,53 @@ class dragon : public flying_creature,
             </section>
 
             <section class="slide">
+            <br/>
+            <p>So, all, <span class="fancy">ALL</span> possible methods will exist as pure virtual in <code class="inline">game_object</code></p>
+            <p>Also, walking creature cannot fly. You can never instantiate <code class="inline">dragon</code> since it's abstract.</p>
+            <br/>
+            <br/>
+            <p class="evil">Having separate methods for flying and walking was a bad idea, anyway. There should be a single method: <code class="inline">move</code>. In fact how about this:</p>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class game_object
+{
+    virtual void move() = 0; // flying, walking, vehicles
+    // enemy/neutral ai, keyboard control
+    virtual void decide_action() = 0;
+    //...
+};
+
+class dragon : public flying_creature,
+    public two_legged_creature, public monster_ai,
+    public animated_model, public directx_rendering
+{
+    // there still might be invalid actions for the object
+    // list them here
+    virtual void use(item*) override {
+        throw bad_call();
+    }
+};
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <p>This will work.</p>
+            <p class="evil">Aww, yiss!</p>
+            <p>But...</p>
+            <br/>
+            <ul>
+                <li>It's impractical</li>
+                <li>Every new type of object, needs to be explicity added to the code</li>
+                <li>Combinatorial explosion of types</li>
+                <li><code class="inline">game_object</code> is a coupling focal point</li>
+                <li>As a result no software is written like this (except probably some beginner projects)</li>
+            </ul>
+            </section>
+
+            <section class="slide">
                 <h3>An Example Problem Cont.</h3>
                 <br/>
                 <ul>
@@ -360,6 +407,67 @@ class dragon : public flying_creature,
                         <li>To be able to choose the rendering API, say to switch to DirectX</li>
                     </ul>
                 </ul>
+                <br/>
+                <br/>
+                <p class="evil">I could add such if-checks to all my methods, but I suppose you won't like this</p>
+            </section>
+
+            <section>
+            <p class="evil">Object</p>
+<pre><code class="cpp hljs">
+class game_object
+{
+    control* m_control;
+    physical_data* m_physical_data;
+    rendering* m_rendering;
+    mobility* m_mobility;
+    ...
+};
+// compose
+game_entity dragon;
+dragon.set_control(new monster_ai);
+dragon.set_physical_data(new animated_model("dragon.x"));
+dragon.set_mobility(new flyer);
+...
+// modify
+dragon.set_control(new player_control);
+
+</code></pre>
+            </section>
+
+            <section>
+            <p class="evil">Component</p>
+<pre><code class="cpp hljs">
+class component
+{
+    game_object* self;
+};
+
+class monster_ai
+    : public control, public component
+{
+    virtual void decide_action() override
+    {
+        ...
+        self->get_mobility()->move_to(good_guy);
+    }
+};
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <p>This is, actually, a pretty decent solution.</p>
+            <ul>
+                <li>This is the <span class="fancy">interface to component</span> pattern</li>
+                <li>There are <span class="fancy">games</span> and <span class="fancy">CAD systems</span> which use it</li>
+                <li>In fact (although not immediately  obvious), using this as a base, you can recreate almost all features of DynaMix (in a concrete and <span class="fancy">unreusable</span> way)</li>
+            </ul>
+            <p>But...</p>
+            <ul>
+                <li>Every new type of interface needs to be explicitly added to the <span class="fancy">huge</span> object class</li>
+                <li></li>
+            </ul>
             </section>
 
             <section>
