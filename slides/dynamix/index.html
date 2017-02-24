@@ -285,7 +285,7 @@ template &lt;typename object_type&gt;
 class flying_creature
 {
 public:
-    void move()
+    void fly()
     {
         flap_wings();
         static_cast&lt;object_type*&gt;(this)
@@ -351,7 +351,7 @@ class dragon : public flying_creature,
             <section class="slide">
                 <br/>
                 <p>So, all, <span class="fancy">ALL</span> possible methods will exist as pure virtual in <code class="inline">game_object</code></p>
-                <p>Also, walking creature cannot fly. You can never instantiate <code class="inline">dragon</code> since it's abstract.</p>
+                <p>Also, a walking creature cannot fly. You can never instantiate <code class="inline">dragon</code> since it's abstract.</p>
                 <br/>
                 <br/>
                 <p class="evil">Having separate methods for flying and walking was a bad idea, anyway. There should be a single method: <code class="inline">move</code>. In fact how about this:</p>
@@ -403,7 +403,7 @@ class dragon : public flying_creature,
                     <ul>
                         <li>To sometimes manually control the dragon</li>
                         <li>To cut the wings off of the dragon and have a plain (well two-legged) lizzard</li>
-                        <li>To optionally have add fire-breathing powers to our dragon</li>
+                        <li>To optionally add fire-breathing powers to our dragon</li>
                         <li>To be able to choose the rendering API, say to switch to OpenGL</li>
                     </ul>
                 </ul>
@@ -517,13 +517,18 @@ a.move_to(10)
 
             <section class="slide">
                 <h3>The Same in C++</h3>
-                <br/>
                 <ul>
                     <li>Composition over inheritance</li>
                     <li>Late binding</li>
                     <li>"Messages" over "methods"</li>
                     <li>Messages separate from classes</li>
-                    <li>...and more</li>
+                    <li class="evil">Wait... Do we even want this in C++?</li>
+                    <ul>
+                        <li>It has a better performance than scripting languages, even ones with JIT compilation</li>
+                        <li>It's less complex since it lacks a binding layer</li>
+                        <li>It's lets you write more C++</li>
+                        <li>It is compatible with scripting languages</li>
+                    </ul>
                 </ul>
             </section>
 
@@ -616,6 +621,51 @@ DYNAMIX_DEFINE_MESSAGE(foo);
             </section>
 
             <section class="slide">
+                <h3>When to Use DynaMix?</h3>
+                <ul>
+                    <li>When you're writing software with <span class="fancy">complex polymorphic objects</span></li>
+                    <li>When you have <span class="fancy">subsystems</span> which care about <span class="fancy">interface</span> (rather than data)</li>
+                    <li>When you want <span class="fancy">plugins</span> which enable various aspects of your objects</li>
+                    <li>Such types of projects include</li>
+                    <ul>
+                        <li>Most CAD systems</li>
+                        <li>Some games: especially RPGs and strategies</li>
+                        <li>Some enterprise systems</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>When Not to Use DynaMix?</h3>
+                <br/>
+                <ul>
+                    <li>Small scale projects</li>
+                    <li>Projects which have little use of polymorphism</li>
+                    <li>Existing large projects</li>
+                    <li>In performance critical code</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Performance</h3>
+                <ul>
+                    <li>Message calls are comparable to <code class="inline">std::function</code></li>
+                    <li>Mutations can be fairly slow. Internal types</li>
+                    <li>Memory overhead</li>
+                    <ul>
+                        <li>For objects: pointers but mainly size of mixins</li>
+                        <li>For unique types: sparse arrays of mixins</li>
+                    </ul>
+                    <li>Thread safety</li>
+                    <ul>
+                        <li>Calling messages is safe</li>
+                        <li>Mutating an object in one thread and calling messages on it in another is not safe</li>
+                        <li>Mutating two objects in two threads is safe</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
                 <h3>Recap</h3>
                 <ul>
                     <li>Compose and mutate objects from mixins</li>
@@ -637,6 +687,10 @@ DYNAMIX_DEFINE_MESSAGE(foo);
                 <br/>
                 <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a></p>
                 <p>
+                    <br />
+                    <small>
+                    DynaMix is here: <a href="https://github.com/ibob/dynamix/">github.com/ibob/dynamix/</a>
+                    </small>
                     <br />
                     <small>
                     Link to these slides: <a href="http://ibob.github.io/slides/dynamix/">http://ibob.github.io/slides/dynamix/</a>
