@@ -129,7 +129,7 @@ class has_doors
 {
 public:
     void open(int element) {
-        _doors[i].open();
+        _doors[element].open();
     }
     // ...
 };
@@ -146,7 +146,7 @@ public:
 dynamix::object o;
 mutate(o)
     .add&lt;wood_frame&gt;()
-    .add&lt;has_dors&gt;();
+    .add&lt;has_doors&gt;();
 
 ::get_strength(o); // -> strength 83
 ::open(o, 1); // -> right door opens
@@ -159,6 +159,7 @@ mutate(o)
 
 </code></pre>
             </section>
+
             <section>
                 <h1>End</h1>
                 <h2>Questions?</h2>
