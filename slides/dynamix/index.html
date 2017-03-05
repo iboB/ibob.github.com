@@ -109,81 +109,8 @@
             </section>
 
             <section>
-                <h2>Why don't we see some code?</h2>
-            </section>
-
-            <section>
-<pre><code class="cpp hljs">
-class wood_frame
-{
-public:
-    strength get_strength() const {
-        return strength(83);
-    }
-    // other wood-frame-y stuff
-};
-
-class titanium_frame
-{
-public:
-    strength get_strength() const {
-        return strength(9001);
-    }
-    // other titanium-frame-y stuff
-};
-
-</code></pre>
-            </section>
-
-            <section>
-<pre><code class="cpp hljs">
-class has_drawers
-{
-public:
-    void open(int element) {
-        _drawers[element].roll_out();
-    }
-    // ...
-};
-
-class has_doors
-{
-public:
-    void open(int element) {
-        _doors[element].open();
-    }
-    // ...
-};
-
-</code></pre>
-            </section>
-
-            <section>
-<pre><code class="cpp hljs">
-// ...after some library-specific code in which we "tell"
-// it what mixins and messages there are out there
-
-dynamix::object o;
-mutate(o) // composition
-    .add&lt;wood_frame&gt;()
-    .add&lt;has_doors&gt;();
-
-// message calls
-::get_strength(o); // -> strength 83
-::open(o, 1); // -> right door opens
-
-mutate(o) // mutation
-    .remove&lt;wood_frame&gt;()
-    .add&lt;titanium_frame&gt;();
-
-::get_strength(o); // -> strength 9001
-
-</code></pre>
-            </section>
-
-            <section>
-                <h2>An Actual Basic Example</h2>
-                <img src="basic_example.png" />
+                <h2>A Basic Example</h2>
+                <img class="fragment" src="basic_example.png" />
             </section>
 
             <section>
@@ -602,12 +529,12 @@ class monster_ai
                 <h3>Messages</h3>
                 <br/>
 <pre><code class="cpp hljs" data-trim>
-DYNAMIX_MESSAGE_0(void, simulate_tick);
+DYNAMIX_MESSAGE_0(void, decide_action);
 DYNAMIX_MESSAGE_1(void, move_to, object*, target);
 DYNAMIX_MESSAGE_2(rt, foo, arg1_t, arg1, arg2_t, arg2);
 </code></pre>
 <pre><code class="cpp hljs" data-trim>
-DYNAMIX_DEFINE_MESSAGE(simulate_tick);
+DYNAMIX_DEFINE_MESSAGE(decide_action);
 DYNAMIX_DEFINE_MESSAGE(move_to);
 DYNAMIX_DEFINE_MESSAGE(foo);
 </code></pre>
