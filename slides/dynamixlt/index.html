@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>DynaMix: A new take on polymorphism in C++</title>
+
+    <meta name="description" content="Slides for a lightning talk about DynaMix">
+    <meta name="author" content="Borislav Stanimirov">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight/css/default.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1>DynaMix</h1>
+                <h3>A New Take on Polymorphism in C++</h3>
+            </section>
+
+            <section>
+                <h2>What is DynaMix?</h2>
+                <ul>
+                    <li>A C++ library, duh...</li>
+                    <li>Open-source. MIT license</li>
+                    <li>Compose and modify objects <em>at run time</em></li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Bam! Code!</h3>
+<pre><code class="cpp hljs">
+class hostile_ai
+{
+public:
+    void decide_actiondecide_action()
+    {
+        auto guys = find_good_guys();
+        move_to(guys);
+        attack(guys);
+    }
+    ...
+}
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class friendly_ai
+{
+public:
+    void decide_action()
+    {
+        auto guys = find_good_guys();
+        move_to(guys);
+        dont_attack(guys);
+    }
+    ...
+}
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class keyboard_controlled
+{
+public:
+    void decide_action()
+    {
+        auto key = read_keyboad();
+        if (key == left_arrow)
+            move_left();
+        else
+            dont_move_left();
+    }
+    ...
+}
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class flying_creature
+{
+public:
+    void move_to(target t)
+    {
+        flap_wings();
+        my_pos += norm(t.pos() - my_pos) * my_speed;
+    }
+    ...
+}
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class walking_creature
+{
+public:
+    void move_to(target t)
+    {
+        flap_legs();
+        auto new_pos += norm(t.pos() - my_pos) * my_speed;
+        if (has_obstacle_between(my_pos, new_pos))
+            scratch_head();
+        else
+            my_pos = new_pos;
+    }
+    ...
+}
+</code></pre>
+            </section>
+
+            <section>
+            <h3>Composing, the old-fashioned way</h3>
+<pre><code class="cpp hljs">
+class dragon : public hostile_ai
+             , public flying_creature
+{};
+
+class buddy : public friendly_ai
+            , public walking_creature
+{};
+
+class hero : public keyboard_controlled
+           , public walking_creature
+{};
+</code></pre>
+            </section>
+
+            <section>
+            <h3>Modifying, the old-fashioned way</h3>
+            <p>Well... open your editor/IDE and do it</p>
+            <p>
+            <img src="dragon-h-1.png"/>
+            <img src="dragon-h-2.png"/>
+            </p>
+            </section>
+
+            <section>
+            <h3>Composing, the DynaMix way</h3>
+<pre><code class="cpp hljs">
+object dragon;
+mutate(dragon)
+    .add&lt;hostile_ai&gt;()
+    .add&lt;flying_creature&gt;();
+
+...
+
+// somewhere in actor_system.cpp this works
+for (object&amp; actor : actors)
+    decide_actions(actor);
+</code></pre>
+            </section>
+
+            <section>
+            <h3>Modifying, the DynaMix way</h3>
+<pre><code class="cpp hljs">
+
+mutate(dragon)
+    .remove&lt;hostile_ai&gt;()
+    .add&lt;keyboard_controlled&gt;();
+
+...
+
+// the same for loop continues to work
+for (object&amp; actor : actors)
+    decide_actions(actor);
+</code></pre>
+            </section>
+
+            <section>
+            <p>Then some game-designer is all like: </p>
+            <p><em>"Guys, guys, we totally need a berserk mechanic!"</em></p>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+class berserk {
+public:
+    void decide_action()
+    {
+        act_crazy();
+        auto gary_busey = find_random_actor();
+        attack(gary_busey);
+    }
+};
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+void add_berserk(object&amp; obj) {
+    mutate(obj)
+        // overriding whatever's there
+        .add&lt;berserk&gt;();
+}
+...
+
+// the loop still works
+for (object&amp; actor : actors)
+    decide_actions(actor);
+</code></pre>
+            </section>
+
+            <section>
+<pre><code class="cpp hljs">
+void remove_berserk(object&amp; obj) {
+    mutate(obj)
+        // restoring the previous functionality
+        .remove&lt;berserk&gt;();
+}
+...
+
+// the loop works yet again
+for (object&amp; actor : actors)
+    decide_actions(actor);
+</code></pre>
+            </section>
+
+
+            <section>
+                <h1>End</h1>
+                <p>
+                    <br />
+                    <small>
+                    DynaMix is here: <a href="https://github.com/ibob/dynamix/">github.com/ibob/dynamix/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Link to these slides: <a href="http://ibob.github.io/slides/dynamixlt/">http://ibob.github.io/slides/dynamixlt/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Slides license <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons By 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'solarized', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
