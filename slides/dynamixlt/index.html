@@ -58,7 +58,7 @@
 class hostile_ai
 {
 public:
-    void decide_actiondecide_action()
+    void decide_action()
     {
         auto guys = find_good_guys();
         move_to(guys);
@@ -156,11 +156,11 @@ class hero : public keyboard_controlled
 
             <section>
             <h3>Modifying, the old-fashioned way</h3>
-            <p>Well... open your editor/IDE and do it</p>
-            <p>
-            <img src="dragon-h-1.png"/>
-            <img src="dragon-h-2.png"/>
-            </p>
+                <p class="fragment">Well... open your editor/IDE and do it</p>
+                <p class="fragment">
+                <img src="dragon-h-1.png"/>
+                <img src="dragon-h-2.png"/>
+                </p>
             </section>
 
             <section>
@@ -207,7 +207,7 @@ public:
     void decide_action()
     {
         act_crazy();
-        auto gary_busey = find_random_actor();
+        auto&amp; gary_busey = find_random_actor();
         attack(gary_busey);
     }
 };
@@ -242,6 +242,19 @@ void remove_berserk(object&amp; obj) {
 for (object&amp; actor : actors)
     decide_actions(actor);
 </code></pre>
+            </section>
+
+            <section>
+                <h2>DynaMix</h2>
+                <ul>
+                    <li>Introduces the class <code class="inline">dynamix::object</code></li>
+                    <li>Objects can composed and modified with user-defined building blocks called mixins</li>
+                    <ul>
+                        <li>Not to be confused by CRTP mixins</li>
+                        <li>DynaMix stands for <span class="fancy">dynamic mixins</span></li>
+                    </ul>
+                    <li>This gives us access to a powerful style of OOP programming, usually encountered only in dynamix scripting languages</li>
+                </ul>
             </section>
 
 
