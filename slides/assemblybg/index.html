@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Първи стъпки в четенето на асемблерен език</title>
+
+    <meta name="description" content="Слайдове за лекция на OpenFest 2017">
+    <meta name="author" content="Борислав Станимиров">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight/css/default.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h2>Първи стъпки в четенето на асемблерен език</h2>
+                <p>
+                    <strong><a href="https://twitter.com/hashtag/OpenFest2017">хащак OpenFest2017</a></strong>
+                </p>
+                <small>
+                    от <a href="http://ibob.github.io">Борислав Станимиров</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+                </small>
+            </section>
+
+            <section class="slide">
+                <h3>Няколко думи за мен</h3>
+                <br/>
+                <ul>
+                    <li><span class="fancy">Борислав</span> aka <span class="fancy">Боби</span> aka <span class="fancy">iboB<span></li>
+                    <li>Предимно <span class="fancy">С++</span> програмист</li>
+                    <li>Предимно програмист на <span class="fancy">игри</span></li>
+                    <li>Занимавам се с <span class="fancy">open source</span></li>
+                    <li>Работя в <a href="http://www.chobolabs.com/">Chobolabs</a></li>
+                </ul>
+                <img style="position: absolute; top: 40%; left: 70%; width: 30%; z-index: -1;" src="bobi.jpg"/>
+            </section>
+
+            <section>
+                <h1>Край</h1>
+                <br/>
+                <h2>Въпроси?</h2>
+                <br/>
+                <p>Борислав Станимиров / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+                <p><span class="grey">
+                    <br />
+                    <small>
+                    Тази презентация е тук: <a href="http://ibob.github.io/slides/assemblybg/">http://ibob.github.io/slides/assemblybg/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </span></p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'moon', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
