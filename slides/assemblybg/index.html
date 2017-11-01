@@ -67,6 +67,7 @@
                     <li>Предимно <span class="fancy">С++</span> програмист</li>
                     <li>Предимно програмист на <span class="fancy">игри</span></li>
                     <li>Занимавам се с <span class="fancy">open source</span></li>
+                    <li>Gib &star; to <a href="https://github.com/iboB/dynamix">DynaMix</a></li>
                     <li>Работя в <a href="http://www.chobolabs.com/">Chobolabs</a></li>
                 </ul>
                 <img style="position: absolute; top: 40%; left: 70%; width: 30%; z-index: -1;" src="bobi.jpg"/>
@@ -86,26 +87,32 @@
                     </ul>
                     <li>Компилатори</li>
                     <li>Disassembly и disassembler</li>
-                    <ul>
-                        <li>...и хаксори и краксори</li>
-                    </ul>
                 </ul>
             </section>
 
             <section>
+            <img src="cavemen.jpg"/>
             <p>Пещерният човек програмира бинари</p>
             </section>
 
             <section>
+            <img src="bin-keyboard.jpg"/>
             <p>... с такава клавиатура</p>
             </section>
 
             <section>
+            <img style="height: 15em;" src="je600-2.jpg"/>
+            <p>... но реалистично с такава</p>
+            </section>
+
+            <section>
+            <img class="diagram" style="height: 15em;" src="stanley.jpg"/>
             <p>Викторианският джентъплмен пише на (парен) асемблер</p>
             </section>
 
             <section>
-            <p>Съвременният глезльо ползва компилатор</p>
+            <img src="sexy-bill.jpg"/>
+            <p>Съвременният програмист ползва компилатор</p>
             </section>
 
             <section>
@@ -113,17 +120,8 @@
             </section>
 
             <section>
+            <img src="stefi.jpg"/>
             <p>За хората на бъдещето, няма да говорим</p>
-            </section>
-
-            <section class="slide">
-                <h3>Писане на асемблер</h3>
-                <br/>
-                <ul>
-                    <li>Коренно различно от четенето</li>
-                    <li>Почти като писане на С</li>
-                    <li>Никога няма да пишете на асемблер</li>
-                </ul>
             </section>
 
             <section class="slide">
@@ -131,29 +129,82 @@
                 <br/>
                 <ul>
                     <li>Реално... четене на дисасембли</li>
-                    <li>Компилаторите са асемблер-програмисти, чисти като момина сълза</li>
+                    <li>But... <span class="fancy">why?</span></li>
+                    <ul>
+                        <li>Микроптимизациии</li>
+                        <li>Хаксори и краксори</li>
+                    </ul>
+                    <li>Компилаторите са идеални асемблер-програмисти</li>
+                    <ul>
+                        <li>Хитри като стадо гладни лисици</li>
+                        <li><span class="fancy">чисти като момина сълза</span></li>
+                    </ul>
                 </ul>
             </section>
 
             <section class="slide">
-                <h3>Godbolt</h3>
+                <h3>Писане на асемблер</h3>
+                <br/>
+                <ul>
+                    <li>Коренно различно от четенето</li>
+                    <li>Почти като <span class="fancy">писане на С</span></li>
+                    <li><span class="fancy">Никога</span> няма да пишете на асемблер</li>
+                    <li><span class="fancy">Недейте</span> да пишете на асемблер</li>
+                </ul>
             </section>
 
             <section>
                 <h3>...и най-сетне...</h3>
+                <h2>Първи стъпки в четенето на assembly</h2>
             </section>
 
             <section class="slide">
                 <h3>Инструкции и регистри</h3>
+                <br/>
                 <ul>
                     <li>RISC &amp; CISC</li>
-                    <li>x86 x64</li>
+                    <li>Архитектури: x86 x64 arm</li>
                     <li>Intel vs AT&amp;T syntax</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Някои интересни инструкции</h3>
+                <br/>
+            </section>
+
+            <section class="slide">
+            <h3>Къде го този асемблер?</h3>
+            <br/>
+            <ul>
+                <li>За краксори</li>
+                <ul>
+                    <li><a href="https://www.hex-rays.com/products/ida/index.shtml">IDA</a> &ndash; $$$$$</li>
+                    <li><a href="http://radare.org/r/">radare</a> &ndash; free and open source</li>
+                    <li><a href="https://www.hopperapp.com/">hopper</a> ($), <a href="https://x64dbg.com">x64dbg</a> (FOSS Win), ...</li>
+                </ul>
+                <li>За прости програмисти</li>
+                <ul>
+                    <li><code class="inline">cl /Fa</code></li>
+                    <li><code class="inline">g++ -S -masm=intel</code></li>
+                </ul>
+            </ul>
+            <p style="text-align: center;"><img class="diagram" src="clint.jpg" /></p>
+            </section>
+
+            <section>
+            <h3>Godbolt</h3>
+            <a href="https://godbolt.org/"><img class="diagram" src="godbolt.png"/></a>
+            </section>
+
+            <section class="slide">
+                <h3>Смисълът на информацията</h3>
+                <br/>
+                <ul>
+                    <li>Гледате и разсъждавате</li>
+                    <li>Не подценявайте компилатора</li>
+                    <li>Винаги бенчмарквайте!</li>
+                </ul>
             </section>
 
             <section class="slide">
@@ -162,6 +213,7 @@
 
             <section class="slide">
                 <h3>Calling конвенции</h3>
+                <br/>
                 <ul>
                     <li>extern &quot;C&quot;</li>
                     <li>fastcall</li>
@@ -170,6 +222,7 @@
 
             <section class="slide">
                 <h3>Мизерии и страхотии</h3>
+                <br/>
                 <ul>
                     <li>shadow memory</li>
                     <li>scratch and non-scratch registers</li>
