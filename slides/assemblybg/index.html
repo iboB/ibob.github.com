@@ -17,11 +17,11 @@
     <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
     <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
 
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight-new/styles/railscasts.css">
+
     <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
     <link rel="stylesheet" href="custom.css">
-
-    <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="/third_party/highlight/css/default.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -31,6 +31,8 @@
     <!--[if lt IE 9]>
     <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
     <![endif]-->
+
+    <base target="_blank">
 </head>
 
 <body>
@@ -57,6 +59,19 @@
                     <li>Слабо засяга JVM и .NET програмистите</li>
                     <li>Извинявам се на останалите 95% от залата</li>
                 </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Какво е лекцията?</h3>
+                <br/>
+                <ul>
+                    <li><span class="fancy">Какво</span> е асемблерен език</li>
+                    <li><span class="fancy">Защо</span> не е страшен</li>
+                    <li>Малко <span class="fancy">примери</span></li>
+                    <li>По-скоро <span class="fancy">окуражаване</span> от обучение</li>
+                </ul>
+                <br/><br/>
+                <p style="text-align: center;"><img src="rosie.jpg" /></p>
             </section>
 
             <section class="slide">
@@ -150,6 +165,7 @@
                     <li>Почти като <span class="fancy">писане на С</span></li>
                     <li><span class="fancy">Никога</span> няма да пишете на асемблер</li>
                     <li><span class="fancy">Недейте</span> да пишете на асемблер</li>
+                    <li><span class="fancy">Компилаторът е</span> (почти) <span class="fancy">винаги по-умен от нас</span></li>
                 </ul>
             </section>
 
@@ -159,18 +175,92 @@
             </section>
 
             <section class="slide">
-                <h3>Инструкции и регистри</h3>
+                <h3>Какво е асемблер?</h3>
                 <br/>
                 <ul>
-                    <li>RISC &amp; CISC</li>
-                    <li>Архитектури: x86 x64 arm</li>
-                    <li>Intel vs AT&amp;T syntax</li>
+                    <li><span class="fancy">Инструкции към процесора</span></li>
+                    <li>А какво е процесорът?</li>
+                    <li>Пътечки по <span class="fancy">транзистори</span>, които джуркат <span class="fancy">регѝстри</span></li>
+                    <li>Видове процесори</li>
+                    <ul>
+                        <li><span class="fancy">Instruction set</span>: CISC, RISC</li>
+                        <li><span class="fancy">Arch</span>: x86, x86_64, ARM, PowerPC</li>
+                        <li><span class="fancy">Arch</span>: i486, Haswell, ARMv7/NEON, ARM64</li>
+                    </ul>
+                    <li>Нещата са <span class="fancy">горе-долу</span> еднакви</li>
                 </ul>
             </section>
 
             <section class="slide">
-                <h3>Някои интересни инструкции</h3>
+                <h3>Какво е асемблер? 2.0</h3>
+                <ul>
+                    <li>Поредица от инструкции към процесора на... хмм... човешки(?) език</li>
+                </ul>
+                <pre><code class="x86asm hljs">
+    ret             ; коментар
+    call func
+    jmp  done
+    mov  rax, 0
+    imul esi, edi, 25
+done:
+    nop
+                </code></pre>
+                <ul>
+                    <li>Intel vs AT&amp;T syntax</li>
+                </ul>
+                <pre><code class="hljs">
+    mov 0, %rax
+    34 leal -6(,%eax) # този ред е (почти) шега
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Асемблер е лесен</h3>
                 <br/>
+                <p>(с x86 memory references)</p>
+                <div style="width: 100%; position: relative;">
+                <div style="width: 56%; display: inline-block;">
+<pre><code class="x86asm hljs">
+
+mov eax, DWORD PTR [r14]
+add rax, rdi
+add eax, DWORD PTR [r14+4]
+sub eax, DWORD PTR [r14+4*rbx]
+lea rax, [r14+4*rbx]
+xor edx, edx
+
+</code></pre>
+                </div><div style="width: 44%; display: inline-block;">
+<pre><code class="cpp hljs">
+ // int* r14
+ int eax = *r14;
+ rax += rdi;
+ eax += r14[1];
+ eax -= r14[rbx];
+ int* rax = r14 + rbx;
+ edx = 0;
+
+</code></pre></div></div>
+            <br/>
+            <p>Малко дрън-дрън за BYTE, WORD, DWORD, QWORD</p>
+            </section>
+
+            <section class="slide">
+                <h3>Регистри</h3>
+                <ul>
+                    <li>Тайни регистри: <code class="inline">ip, flags, NSA-spy</code></li>
+                    <li>x86_64: a, b, c, d, si, di, bp, sp, r8-r15, xmm0-15</li>
+                    <ul>
+                        <li>8-бита <code class="inline">reg-h/l</code>: <code class="inline">ah, bl, bpl, r13b</code> (hurr-durr)</li>
+                        <li>16-бита <code class="inline">reg-x</code>: <code class="inline">ax, bx, spx, r14w</code></li>
+                        <li>32-бита <code class="inline">e-reg-x</code>: <code class="inline">eax, ebx, esix, r9d</code></li>
+                        <li>64-бита <code class="inline">r-reg-x</code>: <code class="inline">rax, rbx, rbpx, r10</code></li>
+                        <li>r8-r15-<code class="inline">bwd</code>
+                        <li>xmm0-xmm15 - <span class="fancy">SIMD</span></li>
+                    </ul>
+                    <li>arm: <code class="inline">r0-r15</code> (sp, lr, pc), <code class="inline">s0-s31/d0-d31/q0-q15</code></li>
+                    <li>arm64: <code class="inline">x0-x30, w0-w30</code> - 32-бита (и други маймунджилъци), <code class="inline">v0-v16</code> - SIMD</li>
+                </ul>
             </section>
 
             <section class="slide">
@@ -197,40 +287,78 @@
             <a href="https://godbolt.org/"><img class="diagram" src="godbolt.png"/></a>
             </section>
 
+            <section>
+            <h3>Godbolt</h3>
+            <a href="https://godbolt.org/"><img class="diagram" src="godbolt-legend.png"/></a>
+            </section>
+
             <section class="slide">
+                <h3>Compiler disassembly 101</h3>
+                <br/>
+                <ul>
+                    <li>Избирате си компилатор</li>
+                    <li>Компилационни настройки (не забравяйте <span class="fancy">-O2</span>)</li>
+                    <li>Изшляпвате код</li>
+                    <li>Внимавате за нежелани оптимизации</li>
+                    <ul>
+                        <li><span class="fancy">Константи</span></li>
+                        <li><span class="fancy">Дефинирани placeholder функции</span></li>
+                    </ul>
+                    <li>Мarvel as you ascend into your planar form.</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <section>
                 <h3>Смисълът на информацията</h3>
                 <br/>
                 <ul>
                     <li>Гледате и разсъждавате</li>
-                    <li>Не подценявайте компилатора</li>
+                    <li>Компилаторът е животно! Не го подценявайте</li>
+                    <li>Процесорът е още по-голямо животно! &darr;</li>
                     <li>Винаги бенчмарквайте!</li>
+                    <ul>
+                        <li><code class="inline">std::high_resolution_clock</code></li>
+                        <li><a href="https://github.com/google/benchmark">Google Benchmark</a></li>
+                        <li><a href="http://quick-bench.com/">Quick bench</a></li>
+                    </ul>
+                    <li>Принципно добри неща:</li>
+                    <ul>
+                        <li>По-малко <span class="fancy">conditions</span></li>
+                        <li>По-малко <span class="fancy">jumps</span></li>
+                        <li>По-малко <span class="fancy">заявки към паметта</span></li>
+                        <li>По-малко <span class="fancy">инструкции</span></li>
+                    </ul>
                 </ul>
+                </section>
+                <section>
+                        <h3>CPU Pipeline</h3>
+						<p style="text-align: center;"><img style="padding: 20px;" src="../cpupbg/ooo_core.png"/></p>
+				</section>
             </section>
 
             <section class="slide">
                 <h3>Let's godbolt this</h3>
-            </section>
-
-            <section class="slide">
-                <h3>Calling конвенции</h3>
                 <br/>
                 <ul>
-                    <li>extern &quot;C&quot;</li>
-                    <li>fastcall</li>
-                </ul>
+                    <li><a href="https://godbolt.org/g/pJSjWP">Статична променлива във функция</a></li>
+                    <li><a href="https://godbolt.org/g/1Nk2a2">Пропусната оптимизация</a></li>
+                    <li><a href="https://godbolt.org/g/npwWRW">Прекалена оптимизация</a></li>
+                <ul>
             </section>
 
             <section class="slide">
                 <h3>Мизерии и страхотии</h3>
                 <br/>
                 <ul>
+                    <li>Calling конвенции</li>
+                    <ul>
+                        <li>extern &quot;C&quot;</li>
+                        <li>fastcall</li>
+                    </ul>
                     <li>shadow memory</li>
                     <li>scratch and non-scratch registers</li>
                 </ul>
-            </section>
-
-            <section class="slide">
-                <h3>Още примери</h3>
             </section>
 
             <section>
@@ -272,7 +400,7 @@
                 { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
                 //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                 //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: '/third_party/highlight-new/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                 //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
                 //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
             ]
