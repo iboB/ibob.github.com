@@ -43,7 +43,7 @@
             <section>
                 <h2>Първи стъпки в четенето на асемблерен език</h2>
                 <p>
-                    <strong><a href="https://twitter.com/hashtag/OpenFest2017">хащак OpenFest2017</a></strong>
+                    <strong><a href="https://twitter.com/hashtag/openfestbg">хащак openfestbg</a></strong>
                 </p>
                 <small>
                     от <a href="http://ibob.github.io">Борислав Станимиров</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
@@ -54,10 +54,10 @@
                 <h3>За кого е лекцията?</h3>
                 <br/>
                 <ul>
-                    <li>Програмисти на езици, които се компилират до <span class="fancy">native binary</span></li>
-                    <li>... и, на които може да се случи да правят <span class="fancy">микрооптимизации</span></li>
-                    <li>Слабо засяга JVM и .NET програмистите</li>
-                    <li>Извинявам се на останалите 95% от залата</li>
+                    <li class="fragment">Програмисти на езици, които се компилират до <span class="fancy">native binary</span></li>
+                    <li class="fragment">... и, на които може да се случи да правят <span class="fancy">микрооптимизации</span></li>
+                    <li class="fragment">Слабо засяга JVM и .NET програмистите</li>
+                    <li class="fragment">Извинявам се на останалите 95% от залата</li>
                 </ul>
             </section>
 
@@ -65,13 +65,13 @@
                 <h3>Какво е лекцията?</h3>
                 <br/>
                 <ul>
-                    <li><span class="fancy">Какво</span> е асемблерен език</li>
-                    <li><span class="fancy">Защо</span> не е страшен</li>
-                    <li>Малко <span class="fancy">примери</span></li>
-                    <li>По-скоро <span class="fancy">окуражаване</span> от обучение</li>
+                    <li class="fragment"><span class="fancy">Какво</span> е асемблерен език</li>
+                    <li class="fragment"><span class="fancy">Защо</span> не е страшен</li>
+                    <li class="fragment">Малко <span class="fancy">примери</span></li>
+                    <li class="fragment">По-скоро <span class="fancy">окуражаване</span> от обучение</li>
                 </ul>
                 <br/><br/>
-                <p style="text-align: center;"><img src="rosie.jpg" /></p>
+                <p  class="fragment" style="text-align: center;"><img src="rosie.jpg" /></p>
             </section>
 
             <section class="slide">
@@ -85,23 +85,23 @@
                     <li>Gib &star; to <a href="https://github.com/iboB/dynamix">DynaMix</a></li>
                     <li>Работя в <a href="http://www.chobolabs.com/">Chobolabs</a></li>
                 </ul>
-                <img style="position: absolute; top: 40%; left: 70%; width: 30%; z-index: -1;" src="bobi.jpg"/>
+                <img  class="fragment" style="position: absolute; top: 40%; left: 70%; width: 30%; z-index: -1;" src="bobi.jpg"/>
             </section>
 
             <section class="slide">
                 <h3>Малко фундаменти</h3>
                 <br/>
                 <ul>
-                    <li>Executable и binary</li>
-                    <li>Assembly и assembler (и асемблерен език)</li>
+                    <li class="fragment">Executable и binary</li>
+                    <li class="fragment">Assembly и assembler (и асемблерен език)</li>
                     <ul>
-                        <li>Българският език е зле</li>
-                        <li>Булгар-булгар - <span class="fancy">всичко е асемблер!</span></li>
-                        <li>...освен, когато е асембли</li>
-                        <li>Ще говоря, както си искам!</li>
+                        <li class="fragment">Българският език е зле</li>
+                        <li class="fragment">Булгар-булгар - <span class="fancy">всичко е асемблер!</span></li>
+                        <li class="fragment">...освен, когато е асембли</li>
+                        <li class="fragment">Ще говоря, както си искам!</li>
                     </ul>
-                    <li>Компилатори</li>
-                    <li>Disassembly и disassembler</li>
+                    <li class="fragment">Компилатори</li>
+                    <li class="fragment">Disassembly и disassembler</li>
                 </ul>
             </section>
 
@@ -143,16 +143,16 @@
                 <h3>Четене на асемблер</h3>
                 <br/>
                 <ul>
-                    <li>Реално... четене на дисасембли</li>
-                    <li>But... <span class="fancy">why?</span></li>
+                    <li class="fragment">Реално... четене на дисасембли</li>
+                    <li class="fragment">But... <span class="fancy">why?</span></li>
                     <ul>
-                        <li>Микроптимизациии</li>
-                        <li>Хаксори и краксори</li>
+                        <li class="fragment">Микроптимизациии</li>
+                        <li class="fragment">Хаксори и краксори</li>
                     </ul>
-                    <li>Компилаторите са идеални асемблер-програмисти</li>
+                    <li class="fragment">Компилаторите са идеални асемблер-програмисти</li>
                     <ul>
-                        <li>Хитри като стадо гладни лисици</li>
-                        <li><span class="fancy">чисти като момина сълза</span></li>
+                        <li class="fragment">Хитри като стадо гладни лисици</li>
+                        <li class="fragment"><span class="fancy">чисти като момина сълза</span></li>
                     </ul>
                 </ul>
             </section>
@@ -161,11 +161,11 @@
                 <h3>Писане на асемблер</h3>
                 <br/>
                 <ul>
-                    <li>Коренно различно от четенето</li>
-                    <li>Почти като <span class="fancy">писане на С</span></li>
-                    <li><span class="fancy">Никога</span> няма да пишете на асемблер</li>
-                    <li><span class="fancy">Недейте</span> да пишете на асемблер</li>
-                    <li><span class="fancy">Компилаторът е</span> (почти) <span class="fancy">винаги по-умен от нас</span></li>
+                    <li class="fragment">Коренно различно от четенето</li>
+                    <li class="fragment">Почти като <span class="fancy">писане на С</span></li>
+                    <li class="fragment"><span class="fancy">Никога</span> няма да пишете на асемблер</li>
+                    <li class="fragment"><span class="fancy">Недейте</span> да пишете на асемблер</li>
+                    <li class="fragment"><span class="fancy">Компилаторът е</span> (почти) <span class="fancy">винаги по-умен от нас</span></li>
                 </ul>
             </section>
 
@@ -178,25 +178,25 @@
                 <h3>Какво е асемблер?</h3>
                 <br/>
                 <ul>
-                    <li><span class="fancy">Инструкции към процесора</span></li>
-                    <li>А какво е процесорът?</li>
-                    <li>Пътечки по <span class="fancy">транзистори</span>, които джуркат <span class="fancy">регѝстри</span></li>
-                    <li>Видове процесори</li>
+                    <li class="fragment"><span class="fancy">Инструкции към процесора</span></li>
+                    <li class="fragment">А какво е процесорът?</li>
+                    <li class="fragment">Пътечки по <span class="fancy">транзистори</span>, които джуркат <span class="fancy">регѝстри</span></li>
+                    <li class="fragment">Видове процесори</li>
                     <ul>
-                        <li><span class="fancy">Instruction set</span>: CISC, RISC</li>
-                        <li><span class="fancy">Arch</span>: x86, x86_64, ARM, PowerPC</li>
-                        <li><span class="fancy">Arch</span>: i486, Haswell, ARMv7/NEON, ARM64</li>
+                        <li class="fragment"><span class="fancy">Instruction set</span>: CISC, RISC</li>
+                        <li class="fragment"><span class="fancy">Arch</span>: x86, x86_64, ARM, PowerPC</li>
+                        <li class="fragment"><span class="fancy">Arch</span>: i486, Haswell, ARMv7/NEON, ARM64</li>
                     </ul>
-                    <li>Нещата са <span class="fancy">горе-долу</span> еднакви</li>
+                    <li class="fragment">Нещата са <span class="fancy">горе-долу</span> еднакви</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Какво е асемблер? 2.0</h3>
-                <ul>
+                <ul class="fragment">
                     <li>Поредица от инструкции към процесора на... хмм... човешки(?) език</li>
                 </ul>
-                <pre><code class="x86asm hljs">
+                <pre class="fragment"><code class="x86asm hljs">
     ret             ; коментар
     call func
     jmp  done
@@ -205,12 +205,12 @@
 done:
     nop
                 </code></pre>
-                <ul>
-                    <li>Intel vs AT&amp;T syntax</li>
+                <ul class="fragment">
+                    <li>Intel &uarr; vs AT&amp;T &darr; syntax</li>
                 </ul>
-                <pre><code class="hljs">
+                <pre class="fragment"><code class="hljs">
     mov 0, %rax
-    34 leal -6(,%eax) # този ред е (почти) шега
+    $34 leal -6(,%eax) # този ред е (почти) шега
                 </code></pre>
             </section>
 
@@ -230,7 +230,7 @@ lea rax, [r14+4*rbx]
 xor edx, edx
 
 </code></pre>
-                </div><div style="width: 44%; display: inline-block;">
+                </div><div class="fragment" class="fragment" style="width: 44%; display: inline-block;">
 <pre><code class="cpp hljs">
  // int* r14
  int eax = *r14;
@@ -242,15 +242,15 @@ xor edx, edx
 
 </code></pre></div></div>
             <br/>
-            <p>Малко дрън-дрън за BYTE, WORD, DWORD, QWORD</p>
+            <p class="fragment">Малко дрън-дрън за BYTE, WORD, DWORD, QWORD</p>
             </section>
 
             <section class="slide">
                 <h3>Регистри</h3>
                 <ul>
-                    <li>Тайни регистри: <code class="inline">ip, flags, NSA-spy</code></li>
-                    <li>x86_64: a, b, c, d, si, di, bp, sp, r8-r15, xmm0-15</li>
-                    <ul>
+                    <li class="fragment">Тайни регистри: <code class="inline">ip, flags, NSA-spy</code></li>
+                    <li class="fragment">x86_64: a, b, c, d, si, di, bp, sp, r8-r15, xmm0-15</li>
+                    <ul class="fragment">
                         <li>8-бита <code class="inline">reg-h/l</code>: <code class="inline">ah, bl, bpl, r13b</code> (hurr-durr)</li>
                         <li>16-бита <code class="inline">reg-x</code>: <code class="inline">ax, bx, spx, r14w</code></li>
                         <li>32-бита <code class="inline">e-reg-x</code>: <code class="inline">eax, ebx, esix, r9d</code></li>
@@ -258,8 +258,8 @@ xor edx, edx
                         <li>r8-r15-<code class="inline">bwd</code>
                         <li>xmm0-xmm15 - <span class="fancy">SIMD</span></li>
                     </ul>
-                    <li>arm: <code class="inline">r0-r15</code> (sp, lr, pc), <code class="inline">s0-s31/d0-d31/q0-q15</code></li>
-                    <li>arm64: <code class="inline">x0-x30, w0-w30</code> - 32-бита (и други маймунджилъци), <code class="inline">v0-v16</code> - SIMD</li>
+                    <li class="fragment">arm: <code class="inline">r0-r15</code> (sp, lr, pc), <code class="inline">s0-s31/d0-d31/q0-q15</code></li>
+                    <li class="fragment">arm64: <code class="inline">x0-x30, w0-w30</code> - 32-бита (и други маймунджилъци), <code class="inline">v0-v16</code> - SIMD</li>
                 </ul>
             </section>
 
@@ -267,19 +267,19 @@ xor edx, edx
             <h3>Къде го този асемблер?</h3>
             <br/>
             <ul>
-                <li>За краксори</li>
-                <ul>
+                <li class="fragment">За краксори</li>
+                <ul class="fragment">
                     <li><a href="https://www.hex-rays.com/products/ida/index.shtml">IDA</a> &ndash; $$$$$</li>
                     <li><a href="http://radare.org/r/">radare</a> &ndash; free and open source</li>
                     <li><a href="https://www.hopperapp.com/">hopper</a> ($), <a href="https://x64dbg.com">x64dbg</a> (FOSS Win), ...</li>
                 </ul>
-                <li>За прости програмисти</li>
-                <ul>
+                <li class="fragment">За прости програмисти</li>
+                <ul class="fragment">
                     <li><code class="inline">cl /Fa</code></li>
                     <li><code class="inline">g++ -S -masm=intel</code></li>
                 </ul>
             </ul>
-            <p style="text-align: center;"><img class="diagram" src="clint.jpg" /></p>
+            <p class="fragment" style="text-align: center;"><img class="diagram" src="clint.jpg" /></p>
             </section>
 
             <section>
@@ -289,7 +289,7 @@ xor edx, edx
 
             <section>
             <h3>Godbolt</h3>
-            <a href="https://godbolt.org/"><img class="diagram" src="godbolt-legend.png"/></a>
+            <a href="https://godbolt.org/g/zAL7Ky"><img class="diagram" src="godbolt-legend.png"/></a>
             </section>
 
             <section class="slide">
@@ -303,8 +303,9 @@ xor edx, edx
                     <ul>
                         <li><span class="fancy">Константи</span></li>
                         <li><span class="fancy">Дефинирани placeholder функции</span></li>
+                        <li><span class="fancy">C++ Темплейти</span></li>
                     </ul>
-                    <li>Мarvel as you ascend into your planar form.</li>
+                    <li class="fragment">Мarvel as you ascend into your planar form.</li>
                 </ul>
             </section>
 
@@ -313,17 +314,17 @@ xor edx, edx
                 <h3>Смисълът на информацията</h3>
                 <br/>
                 <ul>
-                    <li>Гледате и разсъждавате</li>
-                    <li>Компилаторът е животно! Не го подценявайте</li>
-                    <li>Процесорът е още по-голямо животно! &darr;</li>
-                    <li>Винаги бенчмарквайте!</li>
-                    <ul>
+                    <li class="fragment">Гледате и разсъждавате</li>
+                    <li class="fragment">Компилаторът е животно! Не го подценявайте</li>
+                    <li class="fragment">Процесорът е още по-голямо животно! &darr;</li>
+                    <li class="fragment">Винаги бенчмарквайте!</li>
+                    <ul class="fragment">
                         <li><code class="inline">std::high_resolution_clock</code></li>
                         <li><a href="https://github.com/google/benchmark">Google Benchmark</a></li>
                         <li><a href="http://quick-bench.com/">Quick bench</a></li>
                     </ul>
-                    <li>Принципно добри неща:</li>
-                    <ul>
+                    <li class="fragment">Принципно добри неща:</li>
+                    <ul class="fragment">
                         <li>По-малко <span class="fancy">conditions</span></li>
                         <li>По-малко <span class="fancy">jumps</span></li>
                         <li>По-малко <span class="fancy">заявки към паметта</span></li>
@@ -341,9 +342,11 @@ xor edx, edx
                 <h3>Let's godbolt this</h3>
                 <br/>
                 <ul>
-                    <li><a href="https://godbolt.org/g/pJSjWP">Статична променлива във функция</a></li>
-                    <li><a href="https://godbolt.org/g/1Nk2a2">Пропусната оптимизация</a></li>
-                    <li><a href="https://godbolt.org/g/npwWRW">Прекалена оптимизация</a></li>
+                    <li class="fragment"><a href="https://godbolt.org/g/pJSjWP">Статична променлива във функция</a></li>
+                    <li class="fragment"><a href="https://godbolt.org/g/1Nk2a2">Пропусната оптимизация</a></li>
+                    <li class="fragment"><a href="https://godbolt.org/g/npwWRW">Прекалена оптимизация</a></li>
+                    <li class="fragment"><a href="https://godbolt.org/g/jc2Xji">SIMD в компилаторите</a></li>
+                    <li class="fragment"><a href="https://godbolt.org/g/hg6YWR">Гавра с труп</a></li>
                 <ul>
             </section>
 
@@ -351,13 +354,15 @@ xor edx, edx
                 <h3>Мизерии и страхотии</h3>
                 <br/>
                 <ul>
-                    <li>Calling конвенции</li>
-                    <ul>
-                        <li>extern &quot;C&quot;</li>
-                        <li>fastcall</li>
+                    <li class="fragment"><code class="inline">push/pop</code> - слагаме неща на стека</li>
+                    <li class="fragment">Calling конвенции - как се викат функциите</li>
+                    <ul class="fragment">
+                        <li><code class="inline">extern &quot;C&quot;</code></li>
+                        <li><code class="inline">stdcall</code></li>
+                        <li><code class="inline">fastcall</code></li>
                     </ul>
-                    <li>shadow memory</li>
-                    <li>scratch and non-scratch registers</li>
+                    <li class="fragment">Shadow memory - странни скокове из стека</li>
+                    <li class="fragment">Scratch and non-scratch registers - нещо се push-ва, друго &ndash; не</li>
                 </ul>
             </section>
 
