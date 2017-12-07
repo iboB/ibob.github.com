@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>DynaMix: A new take on polymorphism in C++</title>
+
+    <meta name="description" content="Slides for a talk about DynaMix">
+    <meta name="author" content="Borislav Stanimirov">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight/css/default.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h1>DynaMix</h1>
+                <h3>A New Take on Polymorphism in C++</h3>
+                <p>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>Hello, World</h3>
+<pre><code class="cpp hljs">
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hello, I'm Borislav.\n";
+    return 0;
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Bulgaria</h3>
+                <img src="europe.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Borislav Stanimirov</h3>
+                <br/>
+                <ul>
+                    <li>Mostly a <span class="fancy">C++</span> programmer</li>
+                    <li>Mostly a <span class="fancy">game</span> programmer since 2006</li>
+                    <li><span class="fancy">Open-source</span> programmer</li>
+                    <li>Currently employed at <a href="http://www.chobolabs.com/">Chobolabs</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <p>DynaMix: A New Take on Polymorphism</p>
+            </section>
+
+            <section>
+                <p>DynaMix: A New Take on <span class="fancy">Polymorphism</span></p>
+            </section>
+
+            <section class="slide">
+                <h3>Polymorphism</h3>
+                <br/>
+                <ul>
+                    <li>Polymorphism means "many forms"</li>
+                    <li>The same code does multiple things</li>
+                    <li>Static polymorphism</li>
+                    <ul>
+                        <li>Functon overloads</li>
+                        <li>Templates</li>
+                        <li>The compiler generates different binaries for the same code</li>
+                        <li><span class="fancy">Modern C++</span></li>
+                    </ul>
+                    <li>Dynamic polymorphism and Object oriented programming (OOP)</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>OOP and Polymorphism</h3>
+                <ul>
+                    <li>OOP has come to imply dynamic polymorphism</li>
+                    <ul>
+                        <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
+                        <li>It's in the category of things which are slower and <span class="fancy">can't have good compilation errors</span></li>
+                    </ul>
+                    <li>Totally anti modern C++</li>
+                    <li>OOP has been criticized a lot</li>
+                    <li>People forget that C++ is an <span class="fancy">OOP language</li>
+                    <li>Out of the box in an OOP context C++ only gives us <span class="fancy">virtual functions</span> for polymorphism</li>
+                    <li>OOP can be useful for <span class="fancy">business logic</span> (gameplay)</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>C++ and Business Logic</h3>
+                <ul>
+                    <li>Is C++ is a <span class="fancy">bad choice</span> for business logic?</li>
+                    <li>Many projects have chosen <span class="fancy">other languages</span>: Lua, Python, JavaScript, Ruby…</li>
+                    <ul>
+                        <li>C++ has <span class="fancy">poor OOP capabilities</span></li>
+                        <li>You can <span class="fancy">hotswap</span></li>
+                        <li>You can <span class="fancy">delegate to non-programmers</span></li>
+                    </ul>
+                    <li>However:</li>
+                    <ul>
+                        <li>The code is <span class="fancy">slower</span></li>
+                        <li>There is <span class="fancy">more complexity</span> in the binding layer</li>
+                        <li>There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs)</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <p>DynaMix: A New Take on Polymorphism</p>
+            </section>
+
+            <section>
+                <p>DynaMix: A <span class="fancy">New Take</span> on Polymorphism</p>
+            </section>
+
+            <section class="slide">
+                <h3>Polymorphism in Modern C++</h3>
+                <ul>
+                    <li>Polymorphic type-erasure wrappers</li>
+                    <ul>
+                        <li><a href="http://www.boost.org/doc/libs/1_65_1/doc/html/boost_typeerasure.html">Boost.TypeErasure</a>,
+                            <a href="https://github.com/ldionne/dyno">Dyno</a>,
+                            <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a></li>
+                    </ul>
+                </ul>
+<pre><code class="cpp hljs">
+using Drawable = Library_Magic(void, draw, (ostream&amp;));
+struct Square {
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
+};
+struct Circle {
+    void draw(ostream&amp; out) const { out &lt; &quot;Circle\n&quot;; }
+};
+void f(const Drawable&amp; d) {
+    d.draw(cout);
+}
+int main() {
+    f(Square{});
+    f(Circle{});
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Polymorphic Wrappers</h3>
+                <ul>
+                    <li><span class="fancy">Better</span> than classic virtual functions</li>
+                    <ul>
+                        <li>Information hiding (PIMPL)</li>
+                        <li>Non-intrusive</li>
+                        <li>More extensible</li>
+                        <li>Potentially faster</li>
+                    </ul>
+                    </br>
+                    <li>… but more or less <span class="fancy">the same</span></li>
+                    <ul>
+                        <li>Interface types</li>
+                        <li>Implementation types</li>
+                        <li>Basically improved virtual functions</li>
+                        <li>Don’t seem compelling enough to ditch scripting languages</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Other C++ polymorphism</h3>
+                <ul>
+                    <li>Signals/slots (Multicasts)</li>
+                    <ul>
+                        <li>Very popular</li>
+                        <li>Especially in GUI libraries (say Qt)</li>
+                        <li><a href="http://www.boost.org/doc/libs/1_64_0/doc/html/signals2.html">Boost.Signals2</a>, <a href="https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a>, …</li>
+                    </ul>
+                    </br>
+                    <li>Multiple dispatch</li>
+                    <ul>
+                        <li><code class="inline">collide(obj1, obj2);</code></li>
+                        <li>Obscure feature</li>
+                        <li>Relatively easy to mimic</li>
+                        <li><a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>, <a href="https://github.com/jll63/yomm11">yomm11</a></li>
+                    </ul>
+                    </br>
+                    <li>Functional programming libraries</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>DynaMix: A New Take on Polymorphism</p>
+            </section>
+
+            <section>
+                <p><span class="fancy">DynaMix</span>: A New Take on Polymorphism</p>
+            </section>
+
+            <section class="slide">
+                <h3>DynaMix</h3>
+                <ul>
+                    <li>Open source, <span class="fancy">MIT license</span>, C++ library</li>
+                    <ul>
+                        <li><a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a></li>
+                    </ul>
+                    </br>
+                    <li>This talk is an introduction to the library</li>
+                    <ul>
+                        <li>Focus on the <span class="fancy">what</span> and <span class="fancy">why</span></li>
+                        <li>Hardly even mention the “how”</li>
+                        <li>There will also be a small <span class="fancy">demo</span></li>
+                    </ul>
+                    </br>
+                    <li>History</li>
+                    <ul>
+                        <li>2007: Interface. Zahary Karadjov</li>
+                        <li>2013: Rebirth as <span class="fancy">Boost.Mixin</span></li>
+                        <li>2016: Bye, Boost. Hello, <span class="fancy">DynaMix</span></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Earthrirse</h3>
+                <img src="earthrise.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Epic Pirate Story</h3>
+                <img style="width: 100%" src="epic-pirate-story.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Blitz Brigade: Rival Tactics</h3>
+                <img src="blitz-brigade-rt.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>War Planet Online</h3>
+                <img src="war-planet-online.jpg" />
+            </section>
+
+            <section>
+                <p>Two more mobile games in development</p>
+            </section>
+
+            <section class="slide">
+                <h3>What is DynaMix?</h3>
+                <ul>
+                    <li>Not a physics library</li>
+                    <li>Not even a game library</li>
+                    <li>A new take on polymorphism</li>
+                </ul>
+                <br/><br/><br/>
+                <p style="text-align: center"><span class="fancy">Compose and modify polymorphic objects at run time</span></p>
+            </section>
+
+            <section class="slide">
+            <h3>Some Inspirational Ruby</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    return target%2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+            <section>
+                <p>DynaMix means <span class="fancy">"Dynamic Mixins"</span></p>
+            </section>
+
+            <section class="slide">
+            <h3>Static (CRTP) Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+struct cd_reader {
+    string get_sound() const {
+        return cd.empty() ? &quot;silence&quot; : (&quot;cd: &quot; + cd);
+    }
+    string cd;
+};
+template &lt;typename Self&gt;
+struct headphones {
+    const Self* self() const {
+        return static_cast&lt;const Self*&gt;(this);
+    }
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; self()-&gt;get_sound()
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
+</code></pre>
+            </section>
+
+
+            <section class="slide">
+            <h3>Static Polymorphism with Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+template &lt;typename Player&gt;
+void use_player(Player&amp; player) {
+    player.play();
+}
+
+int main() {
+    diskman dm;
+    dm.cd = &quot;Led Zeppelin IV (1971)&quot;;
+    use_player(dm); // -&gt; Playing &quot;Led Zeppelin IV (1971)&quot;
+
+    ipod ip;
+    ip.mp3 = &quot;Led Zeppelin - Black Dog.mp3&quot;;
+    use_player(ip); // -&gt; Playing &quot;Led Zeppelin - Black Dog.mp3&quot;
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix: The Gist</h3>
+                <ul>
+                <li>Building blocks</li>
+                <ul>
+                <li><code class="inline">dynamix::object</code> – just an empty object</li>
+                <li><span class="fancy">Mixins</span> – classes that you've written which actually implement messages</li>
+                <li><span class="fancy">Messages</span> – function-like pieces of interface, that an object might implement</li>
+                </ul>
+                <br/>
+                <li>Usage</li>
+                <ul>
+                    <li><span class="fancy">Mutation</span> – the process of adding and removing mixins from objects</li>
+                    <li><span class="fancy">Calling messages</span> – like calling methods, this is where the actual business logic lies</li>
+                </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix Sound Player</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+dynamix::object sound_player; // just an empty dynamix::object
+
+dynamix::mutate(sound_player)
+    .add&lt;cd_reader&gt;()
+    .add&lt;headphones_output&gt;();
+
+sound_player.get&lt;cd_reader&gt;()-&gt;insert(&quot;Led Zeppelin IV (1971)&quot;);
+
+// play is a message
+play(sound_player); // cant have sound_player.play() :(
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; through headphones
+
+dynamix::mutate(sound_player)
+    .remove&lt;headphones_output&gt;()
+    .add&lt;speakers_output&gt;();
+
+play(sound_player);
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Inevitable Boilerplate</h3>
+            <p>Messages:</p>
+<pre><code class="cpp hljs" data-trim>
+DYNAMIX_MESSAGE_0(string, get_sound);
+DYNAMIX_MESSAGE_1(void, play);
+DYNAMIX_MESSAGE_2(int, foo, float, arg1, string, arg2);
+</code></pre>
+<pre><code class="cpp hljs" data-trim>
+DYNAMIX_DEFINE_MESSAGE(get_sound);
+DYNAMIX_DEFINE_MESSAGE(play);
+DYNAMIX_DEFINE_MESSAGE(foo);
+</code></pre>
+                <br/>
+                <p>We <span class="fancy">fully</span> separate the interface from the implementation.</p>
+            </section>
+
+            <section>
+            <p><span class="fancy">Message</span> vs <span class="fancy">Method</span></p>
+            <p>Late binding and Smalltalk</p>
+            <br/>
+<pre><code class="cpp hljs" data-trim>
+struct Foo {
+    void bar();
+};
+Foo foo;
+
+foo.bar(); // message
+void Foo::bar() {} // method
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Boilerplate Continued</h3>
+            <p>Mixins:</p>
+<pre><code class="cpp hljs" data-trim>
+DYNAMIX_DECLARE_MIXIN(cd_reader);
+DYNAMIX_DECLARE_MIXIN(headphones_output);
+// That’s all we need to mutate
+</code></pre>
+<pre><code class="cpp hljs" data-trim>
+class cd_reader {
+public:
+    string get_sound() {
+        return cd.empty() ? &quot;silence&quot; : (&quot;CD &quot; + cd);
+    }
+    void insert(const string&amp; cd) {
+        _cd = cd;
+    }
+    string _cd;
+};
+DYNAMIX_DEFINE_MIXIN(cd_reader, get_sound_msg);
+// ...
+DYNAMIX_DEFINE_MIXIN(mp3_reader, get_sound_msg);
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Referring to the Owning Object</h3>
+<pre><code class="cpp hljs" data-trim>
+class headphones_output {
+public:
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; get_sound(dm_this)
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+
+DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
+</code></pre>
+                <br/>
+                <ul>
+                <li><code class="inline">dm_this</code> is like <code class="inline">self</code>: the owning object</li>
+                <li>No inheritance. The library is non-intrusive</li>
+                </ul>
+            </section>
+
+            <section style="background-color: green;">
+                <h2 style="color: pink;">Eye candy time!</h2>
+                <p style="color: orange;">MixQuest</p>
+            </section>
+
+            <section class="slide">
+                <h3>DynaMix vs Scripts</h3>
+                <ul>
+                    <li>Cons of using a scripting language</li>
+                    <ul>
+                        <li>The code is <span class="fancy">slower</span> <span class="yes">V</span></li>
+                        <li><span class="fancy">More complexity</span> in the binding layer <span class="yes">V</span></li>
+                        <li>There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs) <span class="yes">V</span></li>
+                    </ul>
+                    <li>Pros of using a scripting language</li>
+                    <ul>
+                        <li>C++ has <span class="fancy">poor OOP</span> capabilities <span class="yes">V</span></li>
+                        <li>You can <span class="fancy">hotswap</span> <span class="yes">V</span></li>
+                        <li>You can <span class="fancy">delegate to non-programmers</span> <span class="no">X</span></li>
+                        <li>Not yet. But you can mix.</li>
+                    </ul>
+                    <li>The library has found niche in <span class="fancy">mobile games</span>, which are less likely to sacrifice performance</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>When to Use DynaMix?</h3>
+                <ul>
+                    <li>When you're writing software with <span class="fancy">complex polymorphic objects</span></li>
+                    <li>When you have <span class="fancy">subsystems</span> which care about <span class="fancy">interface</span> (rather than data)</li>
+                    <li>When you want <span class="fancy">plugins</span> which enable various aspects of your objects</li>
+                    <li>Such types of projects include</li>
+                    <ul>
+                        <li>Most CAD systems</li>
+                        <li>Some games: especially RPGs and strategies</li>
+                        <li>Some enterprise systems</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>When Not to Use DynaMix?</h3>
+                <br/>
+                <ul>
+                    <li>DynaMix is a means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose</li>
+                    <li>Small scale projects</li>
+                    <li>Projects which have little use of polymorphism</li>
+                    <li>Existing large projects</li>
+                    <li>In performance critical code. As any other dynamic polymorphism.</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Performance</h3>
+                <ul>
+                    <li>Message calls, as any polymorphic call, are slower than function calls</li>
+                    <li>They are comparable to <code class="inline">std::function</code></li>
+                    <li>Mutations can be fairly slow. Internal types</li>
+                    <li>Memory overhead</li>
+                    <ul>
+                        <li>For objects: pointers but mainly size of mixins</li>
+                        <li>For unique types: sparse arrays of mixins</li>
+                    </ul>
+                    <li>Thread safety</li>
+                    <ul>
+                        <li>Calling messages is safe</li>
+                        <li>Mutating an object in one thread and calling messages on it in another is not safe</li>
+                        <li>Mutating two objects in two threads is safe</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Recap</h3>
+                <ul>
+                    <li>Compose and mutate objects from mixins</li>
+                    <li>Have uni- and multicast messages</li>
+                    <li>Manage message execution with priorities</li>
+                    <li>Easily have hot-swappable or even releaseble plugins</li>
+                    <li>There was no time for:</li>
+                    <ul>
+                        <li>Custom allocators</li>
+                        <li>Message bids</li>
+                        <li>Multicast result combinators</li>
+                        <li>Implementation details</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h1>End</h1>
+                <h2>Questions?</h2>
+                <br/>
+                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a></p>
+                <p>
+                    <br />
+                    <small>
+                    DynaMix is here: <a href="https://github.com/ibob/dynamix/">github.com/ibob/dynamix/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Link to these slides: <a href="http://ibob.github.io/slides/dynamix/">http://ibob.github.io/slides/dynamixv2/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Slides license <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons By 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'solarized', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+    </script>
+
+</body>
+</html>
