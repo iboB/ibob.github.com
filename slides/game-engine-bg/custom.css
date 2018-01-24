@@ -1,0 +1,119 @@
+/* fixes for cyrillic */
+body {
+  background: #445; /* For browsers that do not support gradients */
+  background: -webkit-radial-gradient(#445, #334); /* Safari 5.1 to 6.0 */
+  background: -o-radial-gradient(#445, #334); /* For Opera 11.6 to 12.0 */
+  background: -moz-radial-gradient(#445, #334); /* For Firefox 3.6 to 15 */
+  background: radial-gradient(#445, #334); /* Standard syntax */
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  color: #fff0e0;
+  font-family: Segoe UI, sans-serif;
+  text-transform: none;
+}
+
+::selection {
+  color: white;
+  background: #deeeff;
+  text-shadow: none; }
+
+.reveal a:not(.image) {
+  color: #D98917;
+  text-decoration: none;
+}
+
+.reveal a:not(.image):hover {
+  color: #E5B269;
+  text-shadow: none;
+  border: none;
+}
+
+.reveal section
+{
+    font-family: Verdana, sans-serif;
+    color: #d0c0c0;
+}
+
+.reveal section.slide
+{
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal .progress span {
+  background: #D98917;
+}
+
+.reveal section.islide
+{
+	height: 100%;
+	display: table;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	text-align: left;
+	border-top: 1px solid #D98917;
+}
+
+.reveal section.slide li {
+	margin-left: 1em;
+}
+
+.reveal section.slide h4
+{
+	margin-top: 0.5em;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+.reveal section img
+{
+	background-color: white;
+}
+
+.reveal section span.fancy
+{
+	font-style: italic;
+    color: #fff0e0;
+}
+
+.reveal section span.grey
+{
+    color: #93a1a1;
+}
+
+.reveal code
+{
+	font-family: Consolas, monaco, monospace;
+}
+
+.reveal section code.inline
+{
+	color: #fff0e0;
+}
+
+.reveal pre
+{
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.reveal pre code
+{
+    max-height: 80%;
+	font-size: 1.5em;
+	line-height: 1em;
+}
