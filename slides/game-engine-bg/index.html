@@ -65,7 +65,361 @@
 
             <section>
             <h3>А какво е игрови енджин?</h3>
-            <p>Гейм енджин. Game engine</p>
+            <p>Гейм енджин. Game engine. Двигател?</p>
+            </section>
+
+            <section>
+            <ul>
+                <li>Вашата игра</li>
+                <li>Енджин</li>
+                <li>Операционна система</li>
+                <li>Хардуер</li>
+                <li>АЕЦ Козлодуй</li>
+            </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Как се прави енджин?</h3>
+                <br/>
+                <ul>
+                    <li><span class="fancy">Производителността</span> е първостепенна</li>
+                    <li>Език: <span class="fancy">С++</span></li>
+                    <ul>
+                        <li>C</li>
+                        <li>Rust, Nim</li>
+                        <li>Други...</li>
+                    </ul>
+                    <li>Отнема <span class="fancy">мноооооо...</span></li>
+                </ul>
+            </section>
+
+            <section>
+            <p><span class="fancy">...ооооооооооооооо...</span></p>
+            </section>
+
+            <section class="slide">
+                <h3>Как се прави енджин?</h3>
+                <br/>
+                <ul>
+                    <li><span class="fancy">Производителността</span> е първостепенна</li>
+                    <li>Език: <span class="fancy">С++</span></li>
+                    <ul>
+                        <li>C</li>
+                        <li>Rust, Nim</li>
+                        <li>Други...</li>
+                    </ul>
+                    <li><span class="fancy">...го</span> време</li>
+                    <li><span class="fancy">Не го правете</span> ...в повечето случаи</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Видове енджини</h3>
+                <br/>
+                <ul>
+                    <li>Платформа за правене на игри - <a href="https://www.yoyogames.com/gamemaker">GameMaker</a>, <a href="https://unity3d.com/">Unity</a>, <a href="https://www.unrealengine.com/en-US/what-is-unreal-engine-4">Unreal</a>, <a href="https://godotengine.org">Godot</a></li>
+                    <li>Фреймуърк за игри - <a href="https://www.cryengine.com/">CryEngine</a>/<a href="https://aws.amazon.com/lumberyard/">Lumberyard</a>, <a href="https://www.ogre3d.org/">Ogre3D</a>, <a href="https://developer.valvesoftware.com/wiki/Source_Engine_Features">Source</a> и пак Unreal</li>
+                    <li>Торба с бибилиотеки</li>
+                    <li>Специфични за игра - по-често срещани, отколкото изглежда</li>
+                </ul>
+            </section>
+
+            <section>
+            <h3>И какво има в еднжините?</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Връзка с "външния" свят</h3>
+                <br/>
+                <ul>
+                    <li>Графична платформа: DirectX, OpenGL, Vulkan</li>
+                    <li>Мрежова платформа: Sockets: TCP/HTTP, UDP </li>
+                    <li>Звукова платформа</li>
+                    <li>Файлова система и асинхронно зареждане</li>
+                    <li>Контролна платформа: Мишка, Джойстик</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Дебъгване и профилиране</h3>
+                <br/>
+                <ul>
+                    <li>Logging система</li>
+                    <li>Performance profiling</li>
+                    <li>Assertions</li>
+                    <li>Unit testing</li>
+                    <li>Crash handling</li>
+                    <li>Събиране на статистики</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>"Помощни" инструменти</h3>
+                <br/>
+                <ul>
+                    <li>Редактор(и)</li>
+                    <li>Експортери</li>
+                    <li>Дебъгери</li>
+                    <li>Build/Deploy система</li>
+                </ul>
+            </section>
+
+            <section>
+            <h3>Godot Editor</h3>
+            <img src="https://godotengine.org/themes/godotengine/assets/features/design.png"/>
+            </section>
+
+            <section>
+            <h3>Lumberyard Editor</h3>
+            <img src="https://docs.aws.amazon.com/lumberyard/latest/userguide/images/lumberyard-editor-intro.png"/>
+            </section>
+
+            <section>
+            <h3>Ogre Exporter</h3>
+            <img src="https://smugglergame.files.wordpress.com/2012/06/04.jpg"/>
+            </section>
+
+            <section class="slide">
+                <h3>Други "дреболии"</h3>
+                <br/>
+                <ul>
+                    <li>Математическа билиотека</li>
+                    <li>Менажиране на памет</li>
+                    <li>Система за модули</li>
+                    <li>Конфигурационна система</li>
+                    <li>Графични/Аудио/Видео формати</li>
+                    <li>Формати за други ресурси</li>
+                    <li>Crash handling</li>
+                    <li>Локализация</li>
+                    <li>Генератор на произволни числа</li>
+                    <li>Сериализация</li>
+                    <li>...</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Основни подсистеми</h3>
+                <br/>
+                <ul>
+                    <li>Ресурсна</li>
+                    <li>Звукова</li>
+                    <li>Графична*</li>
+                    <li>Физична</li>
+                    <li>Мрежова</li>
+                    <li>Контролна</li>
+                    <li>Скриптова**</li>
+                    <li>Игрова**</li>
+                </ul>
+                <br/>
+                <br/>
+                <p style="text-align: right"><small>* Специална работа</small></p>
+                <p style="text-align: right"><small>** Не винаги</small></p>
+            </section>
+
+            <section class="slide">
+                <h3>Ресурси (Assets)</h3>
+                <br/>
+                <ul>
+                    <li>Формати &rarr; удобен за енджина вид</li>
+                    <li>Версии и обовяване</li>
+                    <li>Платформено-зависими ресурси (PVRTC)</li>
+                    <li>Асинхронно зареждане</li>
+                    <li>"Жизнен цикъл" на ресурсите</li>
+                    <li>Кохерентност и счупени ресурси</li>
+                    <li>Скриване/криптиране (very 2002)</li>
+                    <li>Asset pipeline</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Интересна asset история</p>
+                <h3>Asset Easter Eggs Horrors</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Звуци и музика</h3>
+                <br/>
+                <ul>
+                    <li>Миксер</li>
+                    <li>Ефекти</li>
+                    <li>2D и 3D звуци</li>
+                    <li>Звуци според събития</li>
+                    <li>Параметризиране на звуци</li>
+                    <ul>
+                        <li>Material-based effects</li>
+                        <li>Environment-based effects</li>
+                    </ul>
+                    <li>Звук &#8800; файл</li>
+                    <li>Плейлисти. Музика според събития</li>
+                    <li>Процедурни звуци?</li>
+                </ul>
+            </section>
+
+            <section>
+            <h3>FMOD Studio</h3>
+            <img src="http://i1-mac.softpedia-static.com/screenshots/FMOD-Studio_1.jpg"/>
+            </section>
+
+            <section>
+                <p>Интересна звукова история</p>
+                <h3>Игри за глухи</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Физична</h3>
+                <br/>
+                <ul>
+                    <li>Механика на непрекъснатите среди</li>
+                    <li>Колизии</li>
+                    <li>Репрезентация на сцената</li>
+                    <li>Физични заявки</li>
+                    <li>Флуиди</li>
+                    <li>Пружини и cloth</li>
+                    <li>Машини и превозни средства</li>
+                    <li>Чупещи се и деформиращи се обекти</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Интересна фзиична история</p>
+                <h3>Най-забавните бъгове на света</h3>
+            </section>
+
+            <section>
+            <iframe src='https://gfycat.com/ifr/AfraidRepentantAdeliepenguin' frameborder='0' scrolling='no' width='634' height='346' allowfullscreen></iframe>
+            </section>
+
+            <section class="slide">
+                <h3>Мрежа</h3>
+                <br/>
+                <ul>
+                    <li>Протоколи и ниско ниво</li>
+                    <li>Сериализация, Protobuf, RPC</li>
+                    <li>Синхронизация и prediction</li>
+                    <li>Авторитет. Сървъри и клиенти</li>
+                    <li>Предсказуемост на физиката</li>
+                    <li>Чат и глас</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Интересна мрежова история</p>
+                <h3>Discord</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Контроли</h3>
+                <br/>
+                <ul>
+                    <li>Устройства за вход</li>
+                    <li>Физически и логически събития</li>
+                    <li>Мрежови данни като устройство за контрол</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Интересна контрол история</p>
+                <img src="http://mysound.bg/upload/articles/590/5324.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Скриптове</h3>
+                <br/>
+                <ul>
+                    <li>... и понякога не-скриптове, но идеята е същата</li>
+                    <li>Понякога единственият начин да се пише игра</li>
+                    <li>Конфигурация и настройки</li>
+                    <li>Свързващ слой</li>
+                    <li>Често срещани езици</li>
+                    <ul>
+                        <li>Lua</li>
+                        <li>JS</li>
+                        <li>Custom language</li>
+                        <li>Python и т.н.</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <p>Интересна скриптинг история</p>
+                <h3>Програмистите се увличат</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Gameplay</h3>
+                <br/>
+                <ul>
+                    <li>Обектна система. Компоненти</li>
+                    <ul>
+                        <li>Entity-component-system</li>
+                        <li>Interface to component</li>
+                    </ul>
+                    <li>Изкуствен интелект</li>
+                    <ul>
+                        <li>Сензори</li>
+                        <li>Behavior trees</li>
+                        <li>Pathfinding и групови механики</li>
+                        <li>"Истински" ИИ?</li>
+                    </ul>
+                    <li>Hotswap and rapid development</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Интересна геймплей история</p>
+                <h3>Истински ИИ е опасен</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Графика</h3>
+                <br/>
+                <ul>
+                    <li>Най-разработваното нещо</li>
+                    <li>По дрехите посрещат</li>
+                    <li>60 fps = 16 ms на фрейм</li>
+                    <li>1920 х 1080 = 2 073 600</li>
+                    <li>Пикселни/Фрагментни Шейдъри</li>
+                </ul>
+            </section>
+
+            <section>
+            <h3>Normal Mapping</h3>
+            <img width="80%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Normal_map_example_with_scene_and_result.png/400px-Normal_map_example_with_scene_and_result.png" />
+            </section>
+
+            <section>
+            <h3>Cool Normal Mapping</h3>
+            <img src="http://www.3dkingdoms.com/nmap.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Геометрия</h3>
+                <br/>
+                <ul>
+                    <li>Скелетни анимации</li>
+                    <li>Мофринг</li>
+                    <li>Обратна кинематика</li>
+                    <li>Вертексни шейдъри</li>
+                    <li>Frustum Culling</li>
+                    <li>Bounding boxes</li>
+                </ul>
+            </section>
+
+            <section>
+            <h3>Frustum Culling</h3>
+            <img src="https://4.bp.blogspot.com/-aEj494GokOg/VvG7kQoY1uI/AAAAAAAAAD8/XF9f7fmXMT0QUoPSKbgab7IIeSLiqgTDQ/s1600/3.jpg" />
+            </section>
+
+            <section>
+                <h3>И всичко това е върха на айсберга</h3>
+            </section>
+
+            <section>
+                <h3>... а даже още нямаме игра</h3>
+            </section>
+
+            <section>
+                <h3>Stepping on the shoulders of giants</h3>
             </section>
 
             <section>
