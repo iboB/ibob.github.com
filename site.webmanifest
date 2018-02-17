@@ -1,6 +1,7 @@
 {
-    "name": "",
-    "short_name": "",
+    "name": "Borislav Stanimirov",
+    "short_name": "iboB",
+    "description": "Personal website of Borislav Stanimirov.",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
