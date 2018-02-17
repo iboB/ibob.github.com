@@ -16,6 +16,12 @@ header {
 	height: 20vh;
 }
 
+@media only screen and (orientation: portrait) {
+    header {
+        height: 10vh;
+    }
+}
+
 .homepage-content {
 	width: 100%;
 	background: linear-gradient(to right, #030711, #1b1c1f);
