@@ -16,6 +16,10 @@ header {
 	height: 20vh;
 }
 
+header h1 {
+    display: none;
+}
+
 @media only screen and (orientation: portrait) {
     header {
         height: 10vh;
