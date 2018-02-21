@@ -4,6 +4,12 @@
     <p>{{site.author}}</p>
   </div>
   <nav>
-    {% include main-nav-ul.html %}
+    <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+    <label for="nav-trigger">
+      <i class="icon icon-list"></i>
+    </label>
+    <div class="trigger">
+      {% include main-nav-ul.html %}
+    </div>
   </nav>
 </header>
