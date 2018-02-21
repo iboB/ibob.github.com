@@ -1,0 +1,14 @@
+{
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "vendor/**": true,
+        "_site/**": true,
+        ".bundle/**": true,
+        ".sass-cache/**": true,
+        "Gemfile.lock": true
+    }
+}

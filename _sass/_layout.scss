@@ -1,0 +1,179 @@
+body {
+  line-height: 1.5;
+}
+
+header, main, section, footer {
+  display: block;
+}
+
+.wrapper {
+  background-color: #dedede;
+  color: #444;
+}
+
+header {
+  background: #{$bg-header};
+  border-radius: $bradius $bradius 0 0;
+  padding: 15px 20px;
+  color: $color-link;
+  border-bottom: 1px solid $bg-border-col;
+  clear: both;
+
+  .logo {
+    float: left;
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 24px;
+      font-weight: bold;
+      line-height: 1.2;
+      text-shadow: #{$shadow-nav};
+    }
+
+    p {
+      margin:0;
+      font-size:14px;
+    }
+  }
+
+  ul {
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1.2;
+    text-align: right;
+  }
+
+  ul:after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  li {
+    padding-left: 10px;
+    display: inline-block;
+  }
+
+  li:before {
+    content: ".";
+  }
+}
+
+section {
+  padding: 15px 20px;
+  border-top: 1px solid white;
+  font-size: 15px;
+  background: linear-gradient(#fafafa, #dedede 700px);
+  position: relative;
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #222;
+    padding: 0;
+    margin: 0 0 20px;
+    line-height: 1.2;
+  }
+
+  p, ul, ol, table, pre, dl {
+    margin: 0 0 20px;
+  }
+
+  ul, ol, dd {
+    margin-left: 40px;
+  }
+
+  li {
+    > ul,
+    > ol {
+      margin-bottom: 0;
+    }
+  }
+
+  h1, h2, h3 {
+    line-height: 1.1;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  h2 {
+    color: #393939;
+  }
+
+  h3, h4, h5, h6 {
+    color: #494949;
+  }
+
+  footer {
+    border-radius: 0 0 $bradius $bradius;
+  }
+
+  blockquote {
+    margin: 0 -20px 20px;
+    padding: 15px 20px 1px 40px;
+    font-style: italic;
+    background: #ccc;
+    background: rgba(#000, 0.06);
+    color: #222;
+  }
+
+  img {
+    max-width:100%;
+  }
+
+  code, pre {
+    font-family: Consolas, Menlo, Monaco, "Lucida Console", "Liberation Mono", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", "Courier New", monospace;
+    color: #333;
+    font-size: 12px;
+    overflow-x: auto;
+  }
+
+  pre {
+    padding: 20px;
+    background: #3a3c42;
+    color: #f8f8f2;
+    margin: 0 -20px 20px;
+
+    code {
+      color: #f8f8f2;
+    }
+
+    li & {
+      margin-left: -60px;
+      padding-left: 60px;
+    }
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    text-align: left;
+    padding: 5px 10px;
+    border-bottom: 1px solid #aaa;
+  }
+
+  dt {
+    color: #222;
+    font-weight: 700;
+  }
+
+  th {
+    color: #222;
+  }
+
+  small {
+    font-size: 11px;
+  }
+
+  hr {
+    border: 0;
+    background: #aaa;
+    height: 1px;
+    margin: 0 0 20px;
+  }
+}
+
+

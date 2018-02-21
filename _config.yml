@@ -1,0 +1,23 @@
+title: iboB
+author: Borislav Stanimirov
+email: b.stanimirov@abv.bg
+description: >-
+  Homepage of Borislav Stanimirov (aka iboB). Programmer.
+baseurl: ""
+url: ""  # do I need this?
+twitter_username: stanimirovb
+github_username:  iboB
+
+# Build settings
+markdown: kramdown
+
+plugins:
+  - jekyll-feed
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - README.md
+  - LICENSE.txt

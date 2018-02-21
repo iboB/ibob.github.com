@@ -1,21 +1,4 @@
-# jekyll:
-_site/
-
-# Windows and VC specific
-
-*.exe
-*.dll
-*.ilk
-*.pdb
-*.exp
-*.lib
-
-*.opensdf
-*.sdf
-*.suo
-
-ipch/
-
-Debug/
-Release/
-
+_site
+.sass-cache
+.jekyll-metadata
+vendor/

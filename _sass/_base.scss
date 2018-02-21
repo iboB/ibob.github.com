@@ -1,0 +1,82 @@
+// colors
+$color-light  : #696969;
+$color-dark   : #393939;
+$color-darker : #272727;
+$color-link   : #069;
+$bg-border-col: #b2d2e1;
+
+// fonts
+$lato: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+// others
+$bradius: 8px;
+
+// media queries
+$media-narrow : "print, screen and (max-width: 740px)";
+$media-short  : "only screen and(max-height: 450px)";
+
+// other macros
+$bg-header: "linear-gradient(#ddfbdc, #c6eafa)";
+$shadow-nav: "rgba(#fff, 0.9) 0 1px 0";
+
+@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+
+// Reset some basic elements
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+}
+
+body {
+  background: url(../assets/background.jpg) no-repeat center top fixed;
+  background-size: cover;
+}
+
+a {
+  text-decoration: none;
+  color: $color-link;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.toppad {
+  height: 100px;
+  background: none;
+
+  @media #{$media-narrow} {
+    height: 70px;
+  }
+
+  @media #{$media-short} {
+    height: 70px;
+  }
+}
+
+.wrapper {
+  width: 640px;
+  margin: 0 auto;
+  border-radius: $bradius;
+  box-shadow: rgba(#000, 0.2) 0 0 0 1px, rgba(#000, 0.45) 0 3px 10px;
+
+  font-family: $lato;
+
+  @media #{$media-narrow} {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+.nav-trigger {
+  display: none;
+}
+
+@import "foundation-icons"

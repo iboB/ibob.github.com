@@ -1,0 +1,31 @@
+---
+layout: base
+---
+
+<nav class="main-nav-mobile">
+  <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+  <label for="nav-trigger">
+    <i class="icon icon-list"></i>
+  </label>
+  <div class="trigger">
+    {% include main-nav-ul.html %}
+  </div>
+</nav>
+<div class="toppad"></div>
+<div class="wrapper">
+  <header>
+    <h1>{{ page.title }}</h1>
+  </header>
+  <main>
+    <img class="portrait" src="{{ site.baseurl }}/assets/portrait-circle-gradient.png" />
+    <div class="hello">
+      <p>Hello, World.</p>
+      <p>I'm Borislav.</p>
+      <p>Programmer.</p>
+    </div>
+    {% include my-social.html %}
+    <nav class="main-nav">
+      {% include main-nav-ul.html %}
+    </nav>
+  </main>
+</div>

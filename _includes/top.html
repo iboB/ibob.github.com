@@ -1,0 +1,34 @@
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1{% comment %}, user-scalable=no {% endcomment %}">
+  <meta name="generator" content="Jekyll v{{ jekyll.version }}">
+
+  <link rel="stylesheet" href="{{ site.baseurl }}/assets/{{ page.stylesheet | default: "main" }}.css">
+
+  <!-- Favicon stuff -->
+  {% if jekyll.environment == 'production' %}
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#ffc40d">
+  <meta name="theme-color" content="#d0d0d0">
+  {% else %}
+  <link rel="icon" type="image/x-icon" href="{{ site.baseurl }}/favicon.ico">
+  {% endif %}
+
+  {% if jekyll.environment == 'production' %}
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114354211-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-114354211-1');
+  </script>
+  {% endif %}
+
+  {% seo %}
+</head>

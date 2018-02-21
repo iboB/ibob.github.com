@@ -1,0 +1,156 @@
+.wrapper {
+  background: rgba(#fff, 0.9);
+}
+
+header {
+  h1 {
+    display: none;
+  }
+}
+
+main {
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+.portrait {
+  margin-top: -50px;
+  margin-left: -85px;
+  margin-right: 30px;
+  height: 200px;
+  display: inline-block;
+  border: 1px solid $bg-border-col;
+  border-radius: 100%;
+
+  @media #{$media-narrow} {
+    margin-left: 0;
+  }
+}
+
+.hello {
+  padding-top: 40px;
+  color: $color-darker;
+  font-size: 40px;
+  display: inline-block;
+  text-align: left;
+  font-weight: bold;
+}
+
+nav {
+  margin-top: 20px;
+}
+
+nav.social-icons {
+  font-family: serif; // hacky way of forcing rounder borders :)
+  font-size: 30px;
+  li {
+    display: inline-block;
+    a {
+      padding: 2px 7px 1px 6px;
+      display: block;
+      color: $color-darker;
+      border: 2px solid $color-darker;
+      border-radius: 100%;
+    }
+    a:hover {
+      border-color: $color-light;
+      color: $color-light;
+    }
+  }
+  .label {
+    display: none;
+  }
+}
+
+nav.main-nav {
+  background: #{$bg-header};
+  border-bottom: 1px solid $bg-border-col;
+  border-top: 1px solid $bg-border-col;
+  padding: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  text-shadow: #{$shadow-nav};
+
+  li {
+    display: inline-block;
+    padding-left: 20px;
+  }
+
+  @media #{$media-narrow} {
+    display: none;
+  }
+
+  @media #{$media-short} {
+    display: none;
+  }
+}
+
+nav.main-nav-mobile {
+  display: none;
+  font-size: 30px;
+  position: absolute;
+  z-index: 1;
+  color: $color-link;
+  width: 100%;
+  text-align: right;
+  label {
+    background-color: #fff;
+    border: 2px solid $color-link;
+    border-radius: 12px;
+    padding: 3px 7px 1px 7px;
+    margin-right: 20px;
+  }
+
+  input ~ .trigger {
+    visibility: hidden;
+    margin-top: -500px;
+  }
+
+  input:checked ~ .trigger {
+    visibility: visible;
+    margin-top: -70px;
+  }
+
+  .trigger {
+    display: block;
+    text-align: left;
+    font-weight: bold;
+    background-color: rgba(#fff, 0.9);
+    padding-top: 80px;
+    padding-bottom: 60px;
+    //margin-top: -70px;
+
+    transition: margin-top 0.5s;
+    transition-timing-function: ease-out;
+
+    ul {
+      background: #{$bg-header};
+      border-bottom: 1px solid $bg-border-col;
+      border-top: 1px solid $bg-border-col;
+      text-shadow: #{$shadow-nav};
+      font-family: $lato;
+    }
+
+    li {
+      padding-left: 30%;
+      padding-top: 10px;
+      padding-bottom: 10px;
+
+      a {
+        display: block;
+      }
+    }
+
+    @media #{$media-short} {
+      padding-bottom: 10px;
+    }
+  }
+
+  @media #{$media-narrow} {
+    display: inline;
+  }
+
+  @media #{$media-short} {
+    display: inline;
+  }
+}
