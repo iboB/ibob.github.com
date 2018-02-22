@@ -4,6 +4,27 @@ title: About
 permalink: /about/
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a nulla maximus, facilisis mi et, pharetra massa. Pellentesque ultricies tincidunt ante, efficitur ultricies nunc pharetra vitae. Fusce nec risus elit. Cras eget mattis ligula. Etiam porttitor tortor non venenatis feugiat. Curabitur commodo urna velit, vel efficitur quam ullamcorper quis. Cras sollicitudin semper pellentesque. Cras eget lectus non est placerat lacinia. Suspendisse potenti. Aliquam eget tellus sed nisi maximus venenatis vehicula vel tellus. Nulla scelerisque scelerisque arcu. Sed non sagittis felis.
+*Click [here](cv-borislav-stanimirov.html) for my professional CV.*
 
-Proin volutpat semper lacus, gravida dapibus sem fringilla eget. Cras ante tortor, tincidunt ac justo a, dictum fermentum nibh. Pellentesque eu dignissim mauris. Curabitur tincidunt felis vel dapibus rhoncus. Nam congue sapien eu ex lacinia, ut sollicitudin dolor facilisis. Sed viverra nec tellus in venenatis. Suspendisse convallis libero sit amet gravida molestie. Proin aliquam dui nisl, ac imperdiet orci venenatis sit amet. Vivamus iaculis dolor id urna tempor hendrerit.
+Hello. I'm Borislav Stanimirov and I'm a programmer from Bulgaria.
+
+This is a website and blog which I'll use to collect my existing writings and share interesting new things that I learn.
+
+I'm mainly a C++ programmer but I enjoy learning new langauges. I have written a lot of Ruby and I like playing with Nim, D, lua, MoonScript, Haskell, Lisp, Mathematica, and many more. The languages I dislike include Java, perl, PHP, Pascal, and Basic.
+
+I'm also a game programmer. I've been one professionally since 2006 and I've worked mainly on mobile games since 2012. I love how diverse and challenging game programming is.
+
+I enjoy playing games, too. And not only video games. There are many card, board and party games that I like, bridge taking lead there. I've been playing bridge recreationally since 1999, back when I was in high-school.
+
+Some other preferences and opinions I have:
+
+* **OS:** I use Windows and Ubuntu equally. I don't dislike macOS but I haven't used it that much.
+* **Editor/IDE:** I prefer Visual Studio, Visual Studio Code, and SciTE. I tried learning vim, but I gave up. If I have to use a terminal editor, I use JOE.
+* **Version Control:** I prefer git or Mercurial. I've grown to dislike SVN, CVS, and anything not distributed.
+* **C++ standard:** Modern. I write mostly in C++11 because some mobile compilers are a bit behind but I use C++14 and 17 when I can.
+* **C++ build toolset:** I've been using CMake exclusively for the past 6 years. I like premake, but unfrotunately, it simply lacks features. I dislike SCons.
+* **Open-source licenses:** I mostly use MIT and CC-By. I'm not a fan of copyleft licenses and I try to avoid them.
+* **Bridge bidding system:** I play a modified version of Modern Acol with my regular partner but I'm OK with SAYC and Precision too. I like Blue Club, but there are very few people that still play it. I find fourth major openers particularly appealing.
+* **Video Games:** Some of my favorites are BroodWar, TitanQuest, TLJ, NWN, Baldur's Gate, and recently Pillars of Eternity.
+* **Non-video Games:** Besides bridge, I enjoy pen and paper RPGs, The Resistance, charades, and many more.
+* **Fiction:** I prefer sci-fi, but there are many other genres that I like. The Hyperion Cantos are amongst of my all-time favourites.
