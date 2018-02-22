@@ -3,7 +3,7 @@
   projects:
   - name: DynaMix
     desc: >-
-      A libary which allows the cmposition and modification of polymorphic
+      A library which allows the composition and modification of polymorphic
       objects at runtime.
     github: https://github.com/iboB/dynamix
     docs: https://ibob.github.io/dynamix/
@@ -29,7 +29,7 @@
     desc: A simple library for 3D mathematics
     github: https://github.com/iboB/yama
     docsd: I mean to write docs... but, you know ;)
-  - name: spince-cpp
+  - name: spine-cpp
     desc: A C++ runtime for skeletal animation from Spine by Esoteric Software
     github: https://github.com/Chobolabs/spine-cpp
     docsd: Follows Esoteric's C API
