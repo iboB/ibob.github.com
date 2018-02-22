@@ -9,6 +9,7 @@
         "_site/**": true,
         ".bundle/**": true,
         ".sass-cache/**": true,
-        "Gemfile.lock": true
+        "Gemfile.lock": true,
+        "third_party": true
     }
 }

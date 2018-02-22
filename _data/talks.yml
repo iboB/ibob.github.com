@@ -1,0 +1,69 @@
+- language: English
+  talks:
+  - title: CHUSHKOPEK
+    desc: >-
+      A 3 minute standup comedy piece given as a lightning talk at
+      [OpenFest](http://www.openfest.org) 2017. (First 5 seconds are in
+      Bulgarian)
+    video: https://www.youtube.com/watch?v=UJGItZDLYPo
+
+- language: Bulgarian
+  talks:
+  - title: Какво има в един игрови енджин?
+    desc: >-
+      A talk for Global Game Jam 2018 Bulgaria about game engines.
+    slides: /slides/game-engine-bg/
+  - title: Първи стъпки в четенето на асемблерен език
+    desc: >-
+      An introduction to reading disassembly given at
+      [OpenFest](http://www.openfest.org) 2017.
+    slides: /slides/assemblybg/
+    video: https://www.youtube.com/watch?v=HUuf6I2Nccs
+  - title: Динамични библиотеки
+    desc: >-
+      A talk about shared libraries given at the October 2017 C++ User Group
+      Sofia meeting.
+    slides: http://slides.com/ibob/dynlibsbg#/
+  - title: DynaMix
+    desc: >-
+      A talk about [DynaMix](https://github.com/iboB/dynamix) given at the
+      February 2017 C++ User Group Sofia meeting
+    slides: /slides/dynamixbg/
+  - title: "Emscripten: C++ към JavaScript"
+    desc: >-
+      A talk about Emscripten given at [OpenFest](http://www.openfest.org) 2015.
+    slides: /slides/emscripten/
+    video: https://www.youtube.com/watch?v=fSVCxC4sA14
+  - title: CPU Friendly Code 101
+    desc: >-
+      A short talk given at the Sofia Game Dev Meetup on 12 Oct 2015.
+    slides: /slides/cpu_friendly_code/
+  - title: OpenCL
+    desc: >-
+      A talk about OpenCL given at [OpenFest](http://www.openfest.org) 2014.
+    slides: /slides/openclbg/
+    video: https://www.youtube.com/watch?v=ZF3A5HHmc6o
+  - title: Метапрограмиране с Nimrod
+    desc: >-
+      A talk given with [Zahary Karadjov](https://github.com/zah) introducing
+      the [Nim programming language](https://nim-lang.org/) at Varna Conf 2014.
+    slides: /slides/nimrodbg/
+    video: https://www.youtube.com/watch?v=dTNMqfo-p5A
+  - title: Разходка през съвременния CPU pipeline
+    desc: >-
+      A talk given at Rogue Conf 2014 about the moden CPU pipeline.
+    slides: /slides/cpupbg/
+    video: https://www.youtube.com/watch?v=UmsOVjcGUXs
+  - title: Как работят компютърните игри?
+    desc: >-
+      An intro to game development for beginners. Given at
+      [Soft Uni](https://softuni.bg/) Conf 2014.
+    slides: /slides/gdintrobg/
+    video: https://www.youtube.com/watch?v=YgluhvKzHwE
+  - title: Boost.Mixin
+    desc: >-
+      A talk at [OpenFest](http://www.openfest.org) 2013 about
+      [DynaMix](https://github.com/iboB/dynamix). Boost.Mixin was the old name
+      of the library.
+    slides: /slides/mixinbg/
+    video: https://www.youtube.com/watch?v=3sTX8lUdp1c
