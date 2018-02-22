@@ -1,0 +1,56 @@
+- category: C++
+  id: cpp
+  projects:
+  - name: DynaMix
+    desc: >-
+      A libary which allows the cmposition and modification of polymorphic
+      objects at runtime.
+    github: https://github.com/iboB/dynamix
+    docs: https://ibob.github.io/dynamix/
+  - name: picobench
+    desc: >-
+      A micobenchmarking library and CLI tool. Less powerful than existing
+      libraries but much more easier to integrate and faster to build.
+    github: https://github.com/iboB/picobench
+    docs: https://github.com/iboB/picobench/blob/master/README.md
+  - name: chobo-shl
+    desc: A collection of single-header container classes and helpers.
+    github: https://github.com/Chobolabs/chobo-shl
+    docsd: Embedded in each header.
+  - name: chobo-profiling
+    desc: A call-graph intrusive C++ performance profiling library
+    github: https://github.com/Chobolabs/chobo-profiling
+    docsd: TODO
+  - name: chobo-log
+    desc: A high-performance and compiler-friendly logging library
+    github: https://github.com/Chobolabs/chobo-log
+    docsd: TODO
+  - name: yama
+    desc: A simple library for 3D mathematics
+    github: https://github.com/iboB/yama
+    docsd: I mean to write docs... but, you know ;)
+  - name: spince-cpp
+    desc: A C++ runtime for skeletal animation from Spine by Esoteric Software
+    github: https://github.com/Chobolabs/spine-cpp
+    docsd: Follows Esoteric's C API
+
+- category: Other
+  id: other
+  projects:
+    - name: mtime_cache
+      desc: >-
+        A Ruby CLI tool which helps make use of build artefacts cache in a CI
+        system
+      github: https://github.com/iboB/mtime_cache
+      docs: https://github.com/iboB/mtime_cache/blob/master/README.md
+    - name: This very website.
+      desc: Contains my experiments with HTML5.
+      github: https://github.com/iboB/ibob.github.com
+      docsd: none
+    - name: CRake
+      desc: An abandoned project. A Ruby DSL which generates CMake files.
+      github: https://github.com/iboB/CRake
+      docsd: none
+
+
+
