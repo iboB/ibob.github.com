@@ -30,12 +30,14 @@
     github: https://github.com/iboB/yama
     docsd: I mean to write docs... but, you know ;)
   - name: spine-cpp
-    desc: A C++ runtime for skeletal animation from Spine by Esoteric Software
+    desc: >-
+      A C++ runtime for skeletal animation from
+      [Spine by Esoteric Software](http://esotericsoftware.com/)
     github: https://github.com/Chobolabs/spine-cpp
     docsd: Follows Esoteric's C API
 
-- category: Other
-  id: other
+- category: Other languages
+  id: other-lang
   projects:
     - name: mtime_cache
       desc: >-
