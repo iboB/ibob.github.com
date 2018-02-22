@@ -79,4 +79,9 @@ a:hover {
   display: none;
 }
 
+.clearfix {
+  display: block;
+  clear: both;
+}
+
 @import "foundation-icons"

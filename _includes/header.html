@@ -3,7 +3,10 @@
     <h1><a href="/">{{site.title}}</a></h1>
     <p>{{site.author}}</p>
   </div>
-  <nav>
+  <nav class="main-nav">
+    {% include main-nav-ul.html %}
+  </nav>
+  <nav class="main-nav-mobile">
     <input type="checkbox" id="nav-trigger" class="nav-trigger" />
     <label for="nav-trigger">
       <i class="icon icon-list"></i>
@@ -12,4 +15,5 @@
       {% include main-nav-ul.html %}
     </div>
   </nav>
+  <div class="clearfix"></div>
 </header>

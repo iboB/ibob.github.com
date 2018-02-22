@@ -44,7 +44,7 @@ nav.social-icons {
   font-family: serif; // hacky way of forcing rounder borders :)
   font-size: 30px;
   li {
-    display: inline-block;
+    float: right;
     a {
       padding: 2px 7px 1px 6px;
       display: block;
