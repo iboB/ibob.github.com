@@ -1,6 +1,12 @@
 // Much of the style here is copied from GitHub's Modernist theme:
 // https://github.com/pages-themes/modernist/tree/master/_sass
 
+
+html {
+  background: url(../assets/white_carbon.png), linear-gradient(#6C7989, #434B55) fixed;
+  background-blend-mode: multiply;
+}
+
 body {
   line-height: 1.5;
 }
