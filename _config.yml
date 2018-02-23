@@ -8,6 +8,9 @@ url: "ibob.github.io"  # do I need this?
 twitter_username: stanimirovb
 github_username:  iboB
 
+# page settings
+permalink: /blog/:year/:month/:day/:title/
+
 # Build settings
 markdown: kramdown
 
@@ -21,3 +24,5 @@ exclude:
   - vendor
   - README.md
   - LICENSE.txt
+
+future: true # allow the publishing of posts in the future

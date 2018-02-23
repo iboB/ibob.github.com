@@ -1,7 +1,5 @@
 ---
-layout: page
+layout: blog-home
 title: Blog
 permalink: /blog/
 ---
-
-Coming soon...
