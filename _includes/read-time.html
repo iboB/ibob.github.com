@@ -1,0 +1,9 @@
+{% assign words_per_minute = site.words_per_minute | default: 150 %}
+
+{% assign words = include.content | strip_html | number_of_words %}
+
+{% if words < words_per_minute %}
+  less than 1 minute read
+{% else %}
+  {{ words | divided_by:words_per_minute }} minute read
+{% endif %}

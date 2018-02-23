@@ -4,12 +4,12 @@ layout: site-base
 
 <main>
 <section {% if page.bulgarian %} class="bulgarian"{% endif %}>
-    <h1>{{page.title}}</h1>
-    {{content}}
+  <h1>{{page.title}}</h1>
+  {{content}}
 </section>
 {% if jekyll.environment == 'production' or page.forcecomments %}
-    {% if page.comments %}
-    {% include comments.html %}
-    {% endif %}
+  {% if page.comments %}
+  {% include comments.html %}
+  {% endif %}
 {% endif %}
 </main>
