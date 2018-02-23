@@ -2,7 +2,12 @@
 layout: page
 title: Test 1
 permalink: test.html
+comments: true
 ---
+
+* url: {{page.url}}
+* id: {{page.id}}
+* path: {{page.path}}
 
 Text can be **bold**, _italic_, or ~~strikethrough~~.
 

@@ -5,11 +5,27 @@ layout: base
 <div class="toppad"></div>
 <div class="wrapper">
   {% include header.html %}
-  <main>
+  <main{% if page.bulgarian %} class="bulgarian"{% endif %}>
     <section>
       <h1>{{page.title}}</h1>
       {{content}}
     </section>
+    {% if page.comments %}
+    <!-- <div id="disqus_thread"></div>
+<script>
+var disqus_config = function () {
+this.page.url = {{page.url}};  // Replace PAGE_URL with your page's canonical URL variable
+this.page.identifier = {{page.id}}; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+};
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://ibob-gh.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript> -->
+    {% endif %}
   </main>
   {% include footer.html %}
 </div>
