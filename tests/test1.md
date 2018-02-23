@@ -3,6 +3,7 @@ layout: page
 title: Test 1
 permalink: test.html
 comments: true
+forcecomments: true
 ---
 
 * url: {{page.url}}

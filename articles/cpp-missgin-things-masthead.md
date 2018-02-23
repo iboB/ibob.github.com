@@ -9,7 +9,7 @@ date: 2007-09-18
 >
 > Published in Bulgarian on the defunct SourceCore in 2004.
 
-These are a few of the things that we mused would be (if not practical, then at least interesting) to have.
+These are a few of the things that we mused would be, if not practical, then at least interesting to have.
 
 `dont` - keyword, doesn't do what's in its block:
 
