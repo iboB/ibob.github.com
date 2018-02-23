@@ -101,6 +101,7 @@ header {
 
       transition: width 0.25s;
       transition-timing-function: ease-out;
+      -webkit-transform: translate3d(0, 0, 0);
 
       ul {
         border-bottom: 1px solid $bg-border-col;
