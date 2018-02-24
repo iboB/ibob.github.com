@@ -16,7 +16,7 @@ header, main, section, footer {
 }
 
 .wrapper {
-  color: #222;
+  color: $color-text;
 }
 
 header {
@@ -183,7 +183,7 @@ main {
     font-style: italic;
     background: #ccc;
     background: rgba(#000, 0.06);
-    color: #222;
+    color: $color-text;
   }
 
   img {
@@ -225,12 +225,12 @@ main {
   }
 
   dt {
-    color: #222;
+    color: $color-text;
     font-weight: 700;
   }
 
   th {
-    color: #222;
+    color: $color-text;
   }
 
   small {
@@ -275,6 +275,15 @@ main {
     display: inline-block;
   }
 
+  .category {
+    color: #666;
+    display: inline-block;
+  }
+
+  .category:before {
+    content: "· "
+  }
+
   .read-time {
     color: #666;
     display: inline-block;
@@ -304,6 +313,52 @@ main {
     font-size: 13px;
     color: #666;
     margin-bottom: 20px;
+  }
+
+  .next {
+    text-align: right;
+    margin-bottom: 20px;
+  }
+
+  section {
+    margin-bottom: 40px;
+  }
+
+  .share {
+    margin-bottom: 20px;
+  }
+
+  .tags {
+    a {
+      text-decoration: none;
+      color: $color-text;
+      padding: 2px 3px;
+      border: 1px solid #666;
+    }
+
+    a:hover {
+      background-color: $color-text;
+      color: #dedede;
+    }
+
+    margin-bottom: 5px;
+  }
+
+  .share {
+    a {
+      margin: 0;
+      text-decoration: none;
+      color: $color-text;
+      padding: 2px 15px;
+      border: 1px solid #666;
+      display: inline-block;
+      line-height: 1;
+    }
+
+    a:hover {
+      background-color: $color-text;
+      color: #dedede;
+    }
   }
 }
 
