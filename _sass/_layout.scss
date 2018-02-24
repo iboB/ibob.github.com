@@ -285,11 +285,11 @@ main {
     content: "·"
   }
 
-  .excerpt {
-    @media #{$media-narrow} {
-       display: none;
-    }
-  }
+  // .excerpt {
+  //   @media #{$media-narrow} {
+  //      display: none;
+  //   }
+  // }
 
   .excerpt:after {
     content: ""
