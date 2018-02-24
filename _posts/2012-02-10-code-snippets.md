@@ -2,6 +2,7 @@
 layout: post
 title: Code Snippets
 category: Design
+tags: ['design', 'sample']
 
 lastrev: 2015-11-11
 

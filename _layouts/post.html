@@ -12,6 +12,27 @@ layout: site-base
     {% endif %}</div>
   {{content}}
 </section>
+<div class="tags"><i class="icon icon-pricetag-multiple"></i> Tags:
+    {% for tag in page.tags %}
+      <a href="/blog/tags/#{{ tag }}">{{ tag }}</a>
+    {% endfor %}
+  </ul>
+</div>
+<div class="share"><i class="icon icon-share"></i> Share:
+  <a href="https://twitter.com/intent/tweet?via=stanimirovb&text={{ page.title }} {{ page.url | absolute_url }}" class="twitter" title="Share on Twitter"><i class="icon icon-social-twitter"></i><span> Twitter</span></a>
+
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absolute_url }}" class="facebook" title="Share on Facebook"><i class="icon icon-social-facebook"></i><span> Facebook</span></a>
+
+  <a href="https://plus.google.com/share?url={{ page.url | absolute_url }}" class="google-plus" title="Share on Google Plus"><i class="icon icon-social-google-plus"></i><span> Google+</span></a>
+
+  <a href="https://www.linkedin.com/shareArticle?mini=true&url={{ page.url | absolute_url }}" class="btn btn--linkedin" title="Share on LinkedIn"><i class="icon icon-social-linkedin"></i><span> LinkedIn</span></a>
+</div>
+{% if page.previous %}
+<div class="previous"><a href="{{ page.previous.url }}">&larr; {{ page.previous.title }}</a></div>
+{% endif %}
+{% if page.next %}
+<div class="next"><a href="{{ page.next.url }}">{{ page.next.title }} &rarr;</a></div>
+{% endif %}
 {% if jekyll.environment == 'production' or page.forcecomments %}
   {% unless page.nocomments %}
   {% include comments.html %}
