@@ -246,19 +246,38 @@ main {
   }
 }
 
+.blog-nav {
+  text-align: right;
+  font-weight: bold;
+  ul {
+    margin: 0;
+  }
+  li {
+    display: inline-block;
+    margin-left: 10px;
+  }
+}
+
 .blog {
   h2 {
-    font-size: 20px;
+    font-size: 18px;
     line-height: 1;
     margin-bottom: 0;
     margin-top: 10px;
   }
 
+  section {
+    border-top: 1px solid #aaa;
+    padding-left: 20px;
+  }
+
   .date {
+    color: #666;
     display: inline-block;
   }
 
   .read-time {
+    color: #666;
     display: inline-block;
   }
 
@@ -267,7 +286,25 @@ main {
   }
 
   .excerpt {
-    display: none;
+    @media #{$media-narrow} {
+       display: none;
+    }
+  }
+
+  .excerpt:after {
+    content: ""
+  }
+}
+
+.post {
+  h1 {
+    margin-bottom: 0;
+  }
+
+  .date {
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
   }
 }
 
