@@ -3,12 +3,13 @@ layout: post
 title: Using the Web Icons
 category: Design
 
-excerpt: Quick overview on how to use the Typicon web font icons included with this template. 
+excerpt: Quick overview on how to use the Typicon web font icons included with this template.
 
+forcecomments: true
 ---
 
 This template uses [Typicons][ty] web font, provided by [Fontello][fo] font bundling service. It allows you to quickly
-add nice icons into your pages by using css tags. 
+add nice icons into your pages by using css tags.
 
 To add an icon somewhere in the template simply do:
 
@@ -17,8 +18,6 @@ To add an icon somewhere in the template simply do:
 {% endhighlight %}
 
 This will insert a home icon, just as the one seen in the sidebar. The available class names you can use are as follows:
-
-![Available Icons][icons]
 
 These should work in all the browsers, all the way down to and including IE7, but not IE6.
 

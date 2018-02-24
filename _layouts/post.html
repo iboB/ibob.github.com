@@ -2,9 +2,14 @@
 layout: site-base
 ---
 
-<main>
+<main class="post">
+{% include blog-nav.html %}
 <section {% if page.bulgarian %} class="bulgarian"{% endif %}>
   <h1>{{page.title}}</h1>
+  <div class="date">Published on {{ page.date | date: "%b %d, %Y"}}.
+    {% if page.lastrev %}
+      Last revision on {{ page.lastrev | date: "%b %d, %Y"}}
+    {% endif %}</div>
   {{content}}
 </section>
 {% if jekyll.environment == 'production' or page.forcecomments %}
