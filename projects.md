@@ -17,7 +17,8 @@ Categories: {% for cat in site.data.projects %}**[{{ cat.category }}](#{{ cat.id
 ## Non-software {#non-soft}
 
 {% for proj in site.data.projects-non-soft %}
-**{% if proj.url %}[{{proj.name}}]({{proj.url}}){% else %}{{proj.name}}{% endif %}**<br/>
+### {% if proj.url %}[{{proj.name}}]({{proj.url}}){% else %}{{proj.name}}{% endif %}
 {{proj.desc}}
 
+---
 {% endfor %}
