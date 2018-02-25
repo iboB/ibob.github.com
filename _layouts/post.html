@@ -14,7 +14,7 @@ layout: site-base
 </section>
 <div class="tags"><i class="icon icon-pricetag-multiple"></i> Tags:
     {% for tag in page.tags %}
-      <a href="/blog/tags/#{{ tag }}">{{ tag }}</a>
+      <a href="/blog/tags/#{% include noss.html str=tag %}">{{ tag }}</a>
     {% endfor %}
   </ul>
 </div>
