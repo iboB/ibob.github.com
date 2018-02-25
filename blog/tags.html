@@ -1,8 +1,23 @@
 ---
 layout: site-base
 permalink: /blog/tags/
+title: Blog Tags
 ---
 
 <main class="tags">
   <h1>Tags</h1>
+  <div class="tags-list">
+    <ul>
+    {% for tag in site.tags %}
+    <li>
+      <a href="#{% include noss.html str=tag.first %}">{{ tag.first }} ({{ tag.last.size }} {% if tag.last.size == 1 %}post{% else %}posts{% endif %})</a>
+    </li>
+    {% endfor %}
+    </ul>
+  </div>
+  <h1>Posts by tag</h1>
+  {% for tag in site.tags %}
+    <h2 id="{% include noss.html str=tag.first %}">{{ tag.first }}</h2>
+    {% include list-posts.html posts=tag.last %}
+  {% endfor %}
 </main>

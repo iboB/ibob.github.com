@@ -258,7 +258,7 @@ main {
   }
 }
 
-.blog {
+.blog, .tags {
   h2 {
     font-size: 18px;
     line-height: 1;
@@ -360,6 +360,13 @@ main {
       background-color: $color-text;
       color: #dedede;
     }
+  }
+}
+
+.tags {
+  ul {
+    columns: 3;
+    list-style-type: none;
   }
 }
 
