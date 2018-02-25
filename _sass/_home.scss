@@ -101,12 +101,12 @@ nav.main-nav-mobile {
   font-size: 30px;
   position: absolute;
   z-index: 1;
-  color: $color-link;
+  color: $color-dark;
   width: 100%;
   text-align: right;
   label {
-    background-color: #fff;
-    border: 2px solid $color-link;
+    background-color: #eee;
+    border: 2px solid $color-dark;
     border-radius: 12px;
     padding: 3px 7px 1px 7px;
     margin-right: 20px;
@@ -126,7 +126,7 @@ nav.main-nav-mobile {
     display: block;
     text-align: left;
     font-weight: bold;
-    background-color: rgba(#fff, 0.9);
+    background-color: $color-dark;
     padding-top: 80px;
     padding-bottom: 60px;
     color: $color-link;
@@ -135,20 +135,24 @@ nav.main-nav-mobile {
     transition-timing-function: ease-out;
 
     ul {
-      background: #{$bg-header};
-      border-bottom: 1px solid $bg-border-col;
-      border-top: 1px solid $bg-border-col;
       text-shadow: #{$shadow-nav};
       font-family: $lato;
     }
 
     li {
+      border-bottom: 1px solid $color-light;
+    }
+
+    a {
+      text-shadow: none;
+      color: #dedede;
       padding-left: 30%;
       padding-top: 10px;
       padding-bottom: 10px;
+      display: block;
     }
 
-    li:before {
+    a:before {
       content: ".";
     }
 
