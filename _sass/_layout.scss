@@ -109,14 +109,14 @@ header {
         font-family: $lato;
       }
 
-      li {
+      a {
         display: block;
         padding-left: 30%;
         padding-top: 10px;
         padding-bottom: 10px;
       }
 
-      li:before {
+      a:before {
         content: ".";
       }
     }
