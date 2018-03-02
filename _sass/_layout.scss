@@ -390,6 +390,10 @@ main {
   ul {
     columns: 3;
     list-style-type: none;
+
+    @media #{$media-narrow} {
+      columns: 2;
+    }
   }
 }
 
