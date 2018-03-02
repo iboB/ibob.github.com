@@ -5,7 +5,19 @@ html {
 }
 
 .wrapper {
-  background: rgba(#fff, 0.9);
+  width: 700px;
+  margin: 0 auto;
+  background: rgba($color-lighter, 0.9);
+  border-radius: $bradius;
+  box-shadow: rgba(#000, 0.2) 0 0 0 1px, rgba(#000, 0.45) 0 3px 10px;
+
+  font-family: $lato;
+
+  @media #{$media-narrow} {
+    width: 100%;
+    border-radius: 0;
+    box-shadow: none;
+  }
 }
 
 header {
@@ -25,7 +37,6 @@ main {
   margin-right: 30px;
   height: 200px;
   display: inline-block;
-  border: 1px solid $bg-border-col;
   border-radius: 100%;
 
   @media #{$media-narrow} {
@@ -69,13 +80,10 @@ nav.social-icons {
 }
 
 nav.main-nav {
-  background: #{$bg-header};
-  border-bottom: 1px solid $bg-border-col;
-  border-top: 1px solid $bg-border-col;
+  background-color: $color-dark;
   padding: 10px;
   font-size: 20px;
   font-weight: bold;
-  text-shadow: #{$shadow-nav};
   color: $color-link;
 
   li {
@@ -83,7 +91,11 @@ nav.main-nav {
     padding-left: 20px;
   }
 
-  li:before {
+  a {
+    color: $color-lighter;
+  }
+
+  a:before {
     content: ".";
   }
 
@@ -105,7 +117,7 @@ nav.main-nav-mobile {
   width: 100%;
   text-align: right;
   label {
-    background-color: #eee;
+    background-color: $color-lighter;
     border: 2px solid $color-dark;
     border-radius: 12px;
     padding: 3px 7px 1px 7px;
@@ -137,7 +149,6 @@ nav.main-nav-mobile {
     //-webkit-transform: translate3d(0, 0, 0);
 
     ul {
-      text-shadow: #{$shadow-nav};
       font-family: $lato;
     }
 
@@ -146,8 +157,7 @@ nav.main-nav-mobile {
     }
 
     a {
-      text-shadow: none;
-      color: #dedede;
+      color: $color-lighter;
       padding-left: 30%;
       padding-top: 10px;
       padding-bottom: 10px;

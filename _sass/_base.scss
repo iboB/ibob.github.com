@@ -1,4 +1,5 @@
 // colors
+$color-lighter: #dedede;
 $color-light  : #696969;
 $color-dark   : #393939;
 $color-darker : #272727;
@@ -17,7 +18,6 @@ $media-narrow : "print, screen and (max-width: 740px)";
 $media-short  : "only screen and(max-height: 450px)";
 
 // other macros
-$bg-header: "linear-gradient(#ddfbdc, #c6eafa)";
 $shadow-nav: "0 1px 0 rgba(255, 255, 255, 0.9)";
 
 @import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
@@ -56,21 +56,6 @@ a:hover {
 
   @media #{$media-short} {
     height: 70px;
-  }
-}
-
-.wrapper {
-  width: 660px;
-  margin: 0 auto;
-  border-radius: $bradius;
-  box-shadow: rgba(#000, 0.2) 0 0 0 1px, rgba(#000, 0.45) 0 3px 10px;
-
-  font-family: $lato;
-
-  @media #{$media-narrow} {
-    width: 100%;
-    border-radius: 0;
-    box-shadow: none;
   }
 }
 

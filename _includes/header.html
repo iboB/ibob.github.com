@@ -1,19 +1,16 @@
-<header>
-  <div class="logo">
-    <h1><a title="Home" href="/">{{site.title}}</a></h1>
-    <p>{{site.author}}</p>
-  </div>
-  <nav class="main-nav">
-    {% include main-nav-ul.html %}
-  </nav>
-  <nav class="main-nav-mobile">
-    <input type="checkbox" id="nav-trigger" class="nav-trigger" />
-    <label for="nav-trigger">
-      <i class="icon icon-list"></i>
-    </label>
-    <div class="trigger">
-      {% include main-nav-ul.html %}
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger">
+<i class="icon icon-list"></i>
+</label>
+<header class="trigger">
+  <div class="hcontent">
+    <div class="logo">
+      <h1><a title="Home" href="/">{{site.title}}</a></h1>
+      <p>{{site.description}}</p>
     </div>
-  </nav>
-  <div class="clearfix"></div>
+    <nav class="main-nav">
+      {% include main-nav-ul.html %}
+    </nav>
+    {% include my-social.html %}
+  </div>
 </header>
