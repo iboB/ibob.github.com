@@ -1,5 +1,10 @@
 - language: English
   talks:
+  - title: "DynaMix: A New Take on Polymorphism"
+    desc: >-
+      A talk at
+      [C++ and System Software Summit - China](http://cpp-summit.org/en) 2017
+      about [DynaMix](https://github.com/iboB/dynamix).
   - title: CHUSHKOPEK
     desc: >-
       A 3 minute standup comedy piece given as a lightning talk at
@@ -67,3 +72,6 @@
       of the library.
     slides: /slides/mixinbg/
     video: https://www.youtube.com/watch?v=3sTX8lUdp1c
+  - title: Разходка през съвременния графичен pipeline
+    video: https://www.youtube.com/watch?v=9G1b7O8NKCM
+    desc: A talk about the GPU pipeline for Game Dev Summit Bulgaria 2012

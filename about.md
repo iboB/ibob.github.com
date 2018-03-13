@@ -19,7 +19,7 @@ I enjoy playing games, too. And not only video games. There are many card, board
 Some other preferences and opinions I have:
 
 * **OS:** I use Windows and Ubuntu equally. I don't dislike macOS but I haven't used it that much.
-* **Editor/IDE:** I prefer Visual Studio, Visual Studio Code, and SciTE. I tried learning vim, but I gave up. If I have to use a terminal editor, I use JOE.
+* **Editor/IDE:** I prefer Visual Studio, Visual Studio Code, and SciTE. I've tried learning vim several times, with no success. If I have to use a terminal editor, I use JOE.
 * **Version Control:** I prefer git or Mercurial. I've grown to dislike SVN, CVS, and anything not distributed.
 * **C++ standard:** Modern. I write mostly in C++11 because some mobile compilers are a bit behind but I use C++14 and 17 when I can.
 * **C++ build toolset:** I've been using CMake exclusively for the past 6 years. I like premake, but unfrotunately, it simply lacks features. I dislike SCons.
