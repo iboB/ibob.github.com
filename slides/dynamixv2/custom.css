@@ -1,19 +1,13 @@
-/* fixes for cyrillic */
-.reveal h1,
-.reveal h2,
-.reveal h3,
-.reveal h4,
-.reveal h5,
-.reveal h6 {
-  font-family: Impact, sans-serif;
-  color: #363636;
-  text-transform: none;
-}
-
 .reveal section
 {
-    color: #363636;
-    font-family: Verdana, sans-serif;
+    font-family: Verdana, "DejaVu Sans", sans-serif;
+	font-size: 36px;
+}
+
+.reveal section.title
+{
+	width: 100%;
+	background: rgba(17, 17, 17, 0.9);
 }
 
 .reveal section.slide
@@ -32,8 +26,9 @@
 .reveal section.slide h3 {
 	width: 100%;
 	text-align: left;
-	border-bottom: 1px solid #000;
+	border-bottom: 1px solid #e42;
 }
+
 
 .reveal section.slide li {
 	margin-left: 1em;
@@ -51,15 +46,15 @@
 	box-shadow: none;
 }
 
-.reveal section img
+/*.reveal section img
 {
 	background-color: white;
-}
+}*/
 
 .reveal section span.fancy
 {
-	font-weight: bold;
-	color: #616100;
+	font-weight: 600;
+	color: #e42;
 }
 
 .reveal section span.yes
@@ -81,13 +76,12 @@
 
 .reveal section code.inline
 {
-	color: #616100;
+	color: #e42;
 }
 
-.reveal .evil
+.reveal pre
 {
-	color: #901021;
-	font-style: italic;
+	font-size: 0.75em;
 }
 
 .reveal pre code

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
 
-    <title>DynaMix: A new take on polymorphism in C++</title>
+    <title>DynaMix: A new take on polymorphism</title>
 
     <meta name="description" content="Slides for a talk about DynaMix">
     <meta name="author" content="Borislav Stanimirov">
@@ -17,11 +17,10 @@
     <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
     <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
 
-    <!-- The default heading font doesn't work well with Cyrillic. Change it here -->
     <link rel="stylesheet" href="custom.css">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="/third_party/highlight/css/default.css">
+    <link rel="stylesheet" href="/third_party/highlight-new/styles/railscasts.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -38,9 +37,9 @@
     <div class="reveal">
         <div class="slides">
 
-            <section>
+            <section class="title" data-background-image="/assets/background.jpg">
                 <h1>DynaMix</h1>
-                <h3>A New Take on Polymorphism in C++</h3>
+                <h3>A New Take on Polymorphism</h3>
                 <p>
                     by <a href="http://ibob.github.io">Borislav Stanimirov</a>
                 </p>
@@ -61,7 +60,7 @@ int main()
 
             <section class="slide">
                 <h3>Bulgaria</h3>
-                <img src="europe.png" />
+                <p align="center"><img src="europe.png" /></p>
             </section>
 
             <section class="slide">
@@ -248,22 +247,22 @@ int main() {
 
             <section class="slide">
                 <h3>Earthrirse</h3>
-                <img src="earthrise.jpg" />
+                <p align="center"><img src="earthrise.jpg" /></p>
             </section>
 
             <section class="slide">
                 <h3>Epic Pirate Story</h3>
-                <img style="width: 100%" src="epic-pirate-story.jpg" />
+                <p align="center"><img style="width: 100%" src="epic-pirate-story.jpg" /></p>
             </section>
 
             <section class="slide">
                 <h3>Blitz Brigade: Rival Tactics</h3>
-                <img src="blitz-brigade-rt.jpg" />
+                <p align="center"><img src="blitz-brigade-rt.jpg" /></p>
             </section>
 
             <section class="slide">
                 <h3>War Planet Online</h3>
-                <img src="war-planet-online.jpg" />
+                <p align="center"><img src="war-planet-online.jpg" /></p>
             </section>
 
             <section>
@@ -568,7 +567,7 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                 <h1>End</h1>
                 <h2>Questions?</h2>
                 <br/>
-                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a></p>
+                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
                 <p>
                     <br />
                     <small>
@@ -593,12 +592,15 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
 
     <script>
         Reveal.initialize({
+        	width: 1280,
+            height: 720,
+
             controls: true,
             progress: true,
             history: true,
             center: true,
 
-            theme: 'solarized', // available themes are in /css/theme
+            theme: 'night', // available themes are in /css/theme
             transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
 
             // Optional libraries used to extend on reveal.js
@@ -606,7 +608,7 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                 { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
                 //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
                 //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-                { src: '/third_party/reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                { src: '/third_party/highlight-new/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
                 //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
                 //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
             ]
