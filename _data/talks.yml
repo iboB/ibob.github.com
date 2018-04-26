@@ -2,6 +2,12 @@
   talks:
   - title: "DynaMix: A New Take on Polymorphism"
     desc: >-
+      A talk at [C++ Russia](http://cppconf.ru/) 2018 about
+      [DynaMix](https://github.com/iboB/dynamix). An improved version of the
+      talk from 2017 in China.
+    slides: /slides/dynamixv2/
+  - title: "DynaMix: A New Take on Polymorphism"
+    desc: >-
       A talk at
       [C++ and System Software Summit - China](http://cpp-summit.org/en) 2017
       about [DynaMix](https://github.com/iboB/dynamix).
