@@ -10,17 +10,40 @@
   text-transform: none;
 }
 
-.title h1 {
-	font-size: 2.8em;
-	line-height: 1.2em;
+.title {
+	text-align: left;
+	height: 100%;
 }
 
-/*
-::selection {
-  color: white;
-  background: #deeeff;
-  text-shadow: none; }
-*/
+.title .content {
+	background-color: white;
+	width: 140%;
+	margin-left: -20%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding-top: 30px;
+	padding-left: 20%;
+}
+
+.title h1 {
+	padding-top: 10px;
+	font-size: 1.6em;
+}
+.title h2 {
+	margin-top: 40px;
+	font-size: 1.2em;
+}
+
+.title .logo {
+	border: none;
+	border-right: 8px solid #8BC741;
+	float: left;
+	box-shadow: none;
+	margin: 0;
+	margin-right: 12px;
+}
+
 
 .reveal a:not(.image) {
   text-decoration: none;
@@ -33,6 +56,8 @@
 
 .reveal section
 {
+	color: #434343;
+	font-size: 1.2em;
     font-family: Comfortaa, cursive;
 }
 
@@ -41,6 +66,8 @@
 	height: 100%;
 	display: table;
 	text-align: left;
+	padding-left: 10%;
+	line-height: 1.6em;
 }
 
 .reveal section.islide
@@ -52,16 +79,26 @@
 .reveal section.slide h3 {
 	width: 100%;
 	text-align: left;
-	border-top: 1px solid #D98917;
+	border-left: 8px solid #8BC741;
+	padding-left: 30px;
+	padding-top: 10px;
+	font-weight: bold;
+	margin-bottom: 1em;
 }
 
-.reveal section.slide li {
-	margin-left: 1em;
+.reveal section.slide ul {
+	list-style-type: none;
 }
 
 .reveal section.slide h4
 {
 	margin-top: 0.5em;
+}
+
+.reveal .portrait
+{
+	position: absolute;
+	bottom: 2em;
 }
 
 .reveal section img.diagram
@@ -78,11 +115,9 @@
 
 .reveal section span.fancy
 {
-	font-style: italic;
-}
-
-.reveal section span.grey
-{
+	/*font-style: italic;*/
+	font-weight: bold;
+	color: #509EA2;
 }
 
 .reveal code
@@ -105,4 +140,29 @@
     max-height: 80%;
 	font-size: 1.5em;
 	line-height: 1em;
+}
+
+.reveal .fin
+{
+	padding-top: 3em;
+	color: white;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.reveal .fin h1
+{
+	color: white;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.reveal .fin a
+{
+	color: #333;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+
+.reveal .fin a:hover
+{
+	color: #999;
+	text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
 }
