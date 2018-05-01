@@ -1,1 +1,6 @@
 work/
+bin/
+*.sdf
+*.suo
+Debug/
+Release/
