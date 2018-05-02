@@ -105,12 +105,22 @@
 {
 	border: none;
 	background: none;
+	display: block;
 	box-shadow: none;
+	margin-left: 150px;
 }
 
 .reveal section img
 {
 	background-color: white;
+}
+
+.reveal section img.showcase
+{
+	height: 100vh;
+	width: auto;
+	border: none;
+	box-shadow: none;
 }
 
 .reveal section span.fancy
@@ -141,6 +151,14 @@
 	font-size: 1.5em;
 	line-height: 1em;
 }
+
+.reveal .inter h2
+{
+	color: white;
+	font-size: 4em;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
 
 .reveal .fin
 {
