@@ -193,3 +193,8 @@
 	height: 768px;
 	margin-left: 150px;
 }
+
+.reveal .cue
+{
+	display: none;
+}

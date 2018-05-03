@@ -180,7 +180,18 @@
 
             <section class="slide">
                 <h3>Fixed Pipeline</h3>
-                <canvas id="test" class="webgl"></canvas>
+                <div id="webgl-canvas"></div>
+                <div class="cue fragment">asd1</div>
+                <div class="cue fragment">asd2</div>
+                <div class="cue fragment">asd3</div>
+            </section>
+
+            <section class="slide">
+                <h3>Flexible Pipeline</h3>
+                <div id="webgl-canvas"></div>
+                <div class="cue fragment">asd1</div>
+                <div class="cue fragment">asd2</div>
+                <div class="cue fragment">asd3</div>
             </section>
 
             <section class="slide">
@@ -242,6 +253,7 @@
 
     <script src="/third_party/reveal/lib/js/head.min.js"></script>
     <script src="/third_party/reveal/js/reveal.js"></script>
+    <script src="js/demo.js"></script>
 
     <script>
         Reveal.initialize({
@@ -267,6 +279,21 @@
             ]
         });
 
+        Reveal.addEventListener('slidechanged', function (event) {
+            WebGLDemo.onNewSlide(event.currentSlide.children);
+        }, false);
+
+        Reveal.addEventListener('ready', function (event) {
+            WebGLDemo.onNewSlide(event.currentSlide.children);
+        });
+
+        Reveal.addEventListener('fragmentshown', function (event) {
+            WebGLDemo.onNewFragment(event.fragment);
+        });
+
+        Reveal.addEventListener('fragmenthidden', function (event) {
+            WebGLDemo.onFragmentHidden(event.fragment);
+        });
     </script>
 
 </body>
