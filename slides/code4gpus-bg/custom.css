@@ -168,6 +168,7 @@
 }
 
 .reveal .fin h1
+
 {
 	color: white;
 	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
@@ -183,4 +184,12 @@
 {
 	color: #999;
 	text-shadow: 1px 1px 2px rgba(0, 0, 0, 1);
+}
+
+.reveal canvas.webgl
+{
+	background-color: #ccf;
+	width: 1200px;
+	height: 768px;
+	margin-left: 150px;
 }
