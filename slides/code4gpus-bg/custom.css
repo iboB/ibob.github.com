@@ -188,7 +188,7 @@
 
 .reveal canvas.webgl
 {
-	background-color: #ccf;
+	/*background-color: #ccf;*/
 	width: 1200px;
 	height: 768px;
 	margin-left: 150px;

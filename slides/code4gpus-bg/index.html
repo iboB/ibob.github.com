@@ -252,7 +252,8 @@
     </div>
 
     <script src="/third_party/reveal/lib/js/head.min.js"></script>
-    <script src="/third_party/reveal/js/reveal.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+    <script src="/third_party/gl-matrix/gl-matrix-min.js"></script>
     <script src="js/demo.js"></script>
 
     <script>
@@ -285,15 +286,15 @@
 
         Reveal.addEventListener('ready', function (event) {
             WebGLDemo.onNewSlide(event.currentSlide.children);
-        });
+        }, false);
 
         Reveal.addEventListener('fragmentshown', function (event) {
             WebGLDemo.onNewFragment(event.fragment);
-        });
+        }, false);
 
         Reveal.addEventListener('fragmenthidden', function (event) {
             WebGLDemo.onFragmentHidden(event.fragment);
-        });
+        }, false);
     </script>
 
 </body>
