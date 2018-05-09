@@ -10,6 +10,10 @@
   text-transform: none;
 }
 
+body {
+	background: url(media/footer.jpg) no-repeat left bottom fixed;
+}
+
 .title {
 	text-align: left;
 	height: 100%;
