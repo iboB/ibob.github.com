@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="custom.css">
 
     <!-- For syntax highlighting -->
-    <link rel="stylesheet" href="/third_party/highlight-new/styles/railscasts.css">
+    <link rel="stylesheet" href="/third_party/highlight-new/styles/arduino-light.css">
 
     <!-- If the query includes 'print-pdf', use the PDF print sheet -->
     <script>
@@ -157,50 +157,233 @@
             <section class="slide">
                 <h3>Програмиране за GPU</h3>
                 <ul>
-                    <li>API/SDK</li>
-                    <ul>
-                        <li><span class="fancy">OpenGL</span> - върви просто навсякъде (kinda)</li>
-                        <li><span class="fancy">Direct3D</span> - подмножество на DirectX. Windows only.</li>
-                        <li><span class="fancy">Vulkan</span> - тънък слой</li>
-                        <li>Други...</li>
-                    </ul>
-                    <li>Метод</li>
-                    <ul>
-                        <li>Конфигурируем / Фиксиран / Fixed</li>
-                        <li>Програмируем / Гъвкав / <span class="fancy">Flexible</span> / Съвременен</li>
-                    </ul>
-                    <li>Понятия</li>
-                    <ul>
-                        <li>Vertex - връх</li>
-                        <li>Примитиви - триъгълници, отсечки, точки</li>
-                        <li>Текстури - изображения</li>
-                    </ul>
+                    <li>API/SDK:</li>
+                    <li><span class="fancy">OpenGL</span> - върви просто навсякъде <span>(kinda)</span></li>
+                    <li><span class="fancy">Direct3D</span> - подмножество на DirectX. Windows only.</li>
+                    <li><span class="fancy">Vulkan</span> - тънък слой</li>
+                    <li>Други...</li>
+                    <li>Пишат се предимно от производителите на хардуер</li>
                 </ul>
             </section>
 
             <section class="slide">
-                <h3>Fixed Pipeline</h3>
+                <h3>Проста графика</h3>
                 <div id="webgl-canvas"></div>
-                <div class="cue fragment">asd1</div>
-                <div class="cue fragment">asd2</div>
-                <div class="cue fragment">asd3</div>
+                <div class="cue fragment">colorCube</div>
+                <div class="cue fragment">rotateColorCube</div>
+                <div class="cue fragment">rotateWireCube</div>
+                <div class="cue fragment">rotateColorCube</div>
+                <div class="cue fragment">rotateTextureCube</div>
+                <div class="cue fragment">rotateLambertCube</div>
+                <div class="cue fragment">rotateLambertNormSphere</div>
+                <div class="cue fragment">rotateLambertNormWireSphere</div>
+                <div class="cue fragment">rotateLambertNormSphere</div>
             </section>
 
             <section class="slide">
-                <h3>Flexible Pipeline</h3>
+                <h3>Прости термини</h3>
+                <ul>
+                    <li>Vertex - връх</li>
+                    <ul>
+                        <li>Атрибути: позиция, текстурни координати, нормали...</li>
+                        <li>Вертексни буфери</li>
+                    </ul>
+                    <li>Примитиви - триъгълници, отсечки, точки</li>
+                    <li>Индексни буфери</li>
+                    <li>Текстури - изображения</li>
+                </ul>
+                <img class="diagram" width="1000" src="media/texcoord.gif" />
+            </section>
+
+            <section class="slide">
+                <h3>Прости хитрости</h3>
+                <img class="diagram" width="600" src="media/normal-face.png" />
+                <img class="diagram" width="700" src="media/normal-vertex.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Проста графика</h3>
                 <div id="webgl-canvas"></div>
-                <div class="cue fragment">asd1</div>
-                <div class="cue fragment">asd2</div>
-                <div class="cue fragment">asd3</div>
+                <div class="cue fragment">rotateLambertNormSphere</div>
+                <div class="cue fragment">rotateLambertSphere</div>
+                <div class="cue fragment">rotateLambertWireSphere</div>
+                <div class="cue fragment">rotateLambertSphere</div>
+            </section>
+
+            <section class="slide">
+                <h3>Предишното с псевдокод</h3>
+                <pre><code class="cpp">vertices = {
+    0, 0, 0, // позиция
+    1, 1, // текстурни координати
+    0, 1, 0, // нормала
+    ...
+};
+SetVertexBuffer(vertices, vertices.size() * 8 * sizeof(float));
+SetVertexFormat(POSITION | TEXCOORD | NORMAL);
+SetIndexBuffer({0,1,2,0,2,3...});
+SetLightPos({2,4,7});
+SetEyePos({sin(t),0,cos(t)}); // върти камера
+SetTexture(someTexture);
+Draw(TRIANGLES);
+                </code></pre>
+                <p>Fixed pipeline: функция за всичко <span>:(</span></p>
             </section>
 
             <section class="slide">
                 <h3>Flexible Pipeline</h3>
                 <ul>
+                    <li>...или програмируем</li>
+                    <li>Код за видеокартата</li>
+                    <ul>
+                        <li><span class="fancy">Асемблер</span> (всичко започва от там)</li>
+                        <li>OpenGL: <span class="fancy">GLSL</span></li>
+                        <li>Direct3D: <span class="fancy">HLSL</span></li>
+                        <li><span class="fancy">Cg</span>, <span class="fancy">Fx</span>, Много други...</li>
+                    </ul>
                     <li>Шейдъри</li>
                     <ul>
                         <li>Вертексен</li>
                         <li>Фрагментен / Пикселен</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Flexible pipeline псевдокод</h3>
+                <pre><code class="glsl">vertices = {0, 0, 0, 1, 1, 0, 1, 0, ...};
+auto stride = 8*sizeof(float);
+SetVertexBuffer(vertices, vertices.size() * stride);
+SetAttribPointer("aPosition", 0, FLOAT3, stride);
+SetAttribPointer("aTC", 3*sizeof(float), FLOAT2, stride);
+SetAttribPointer("aNormal", 5*sizeof(float), FLOAT3, stride);
+UseVertexShader(vsCode);
+UseFragmentShader(fsCode);
+SetUniform("uView", viewMatrix);
+SetUnirorm("uTexture", someTexture);
+SetUniform("uLightPos", {2,4,7});
+SetIndexBuffer({0,1,2,0,2,3...});
+Draw(TRIANGLES);
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Simple Vertex Shader</h3>
+                <pre><code class="cpp">
+attribute vec4 aPos;
+
+uniform mat4 uCam;
+
+void main() {
+    gl_Position = uCam * aPos;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Color Fragment Shader</h3>
+                <pre><code class="cpp">
+void main() {
+    gl_FragColor = vec4(0, 0.9, 0.3, 1);
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Uniform Color Fragment Shader</h3>
+                <pre><code class="cpp">
+uniform vec4 uColor;
+
+void main() {
+    gl_FragColor = uColor;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Lambert Vertex Shader</h3>
+                <pre><code class="cpp">attribute vec4 aPos;
+attribute vec2 aTexCoord;
+attribute vec3 aNormal;
+
+uniform mat4 uCam;
+uniform vec3 uLightPos;
+
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vLightDir;
+
+void main() {
+    vTexCoord = aTexCoord;
+    vNormal = aNormal;
+    vLightDir = uLightPos - aPos.xyz;
+    gl_Position = uCam * aPos;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Lambert Fragment Shader</h3>
+                <pre><code class="cpp">attribute vec4 aPos;
+varying vec2 vTexCoord;
+varying vec3 vNormal;
+varying vec3 vLightDir;
+
+uniform sampler2D uDiffuse;
+
+void main() {
+    float shade = dot(normalize(vNormal), normalize(vLightDir));
+    shade = saturate(shade);
+
+    vec4 color = texture2D(uDiffuse, vTexCoord);
+    gl_FragColor = vec4(color.xyz * shade, 1);
+}
+                </code></pre>
+            </section>
+
+            <section>
+                <img class="showcase" src="media/tex-granite-color.png" />
+            </section>
+
+            <section>
+                <img class="showcase" src="media/tex-granite-normal.png" />
+            </section>
+
+            <section>
+                <img class="showcase" src="media/tbn.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Хитра графика</h3>
+                <div id="webgl-canvas"></div>
+                <div class="cue fragment">rotateLambertGraniteCube</div>
+                <div class="cue fragment">angleLambertGraniteCube</div>
+                <div class="cue fragment">rotateLightGraniteCube</div>
+                <div class="cue fragment">rotateLightNormalGraniteCube</div>
+                <div class="cue fragment">rotateLightNormalSpecularGraniteCube</div>
+                <div class="cue fragment">rotateLightNormalSpecularBrickCube</div>
+            </section>
+
+
+            <section class="slide">
+                <h3>Още гаври</h3>
+                <ul>
+                    <li>Пикселни</li>
+                    <ul>
+                        <li>Пречупване на светлината</li>
+                        <li>Отражения и environment mapping</li>
+                        <li>Ambient occlusion</li>
+                        <li>Сенки</li>
+                    </ul>
+                    <li>Вертексни</li>
+                    <ul>
+                        <li>Morphing</li>
+                        <li>Скелетни анимации</li>
+                    </ul>
+                    <li>Други шейдъри</li>
+                    <ul>
+                        <li>Hull shader</li>
+                        <li>Domain shader</li>
+                        <li>Geometry shader</li>
                     </ul>
                 </ul>
             </section>
@@ -213,9 +396,15 @@
                 <h3>Не само графика</h3>
                 <ul>
                     <li>Видеокартата е много мощно животно</li>
+                    <ul>
+                        <li>1920x1080</li>
+                        <li>= 2 073 600</li>
+                        <li>@ 60fps</li>
+                    </ul>
                     <li>General Purpose GPU</li>
                     <li>Текстура към текстура</li>
                 </ul>
+                <img class="diagram" height="400" src="media/gpgpu.png" />
             </section>
 
             <section class="slide">
@@ -242,6 +431,10 @@
                     <br />
                     <small>
                     Презентацията е лицензирана с <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons Признание 3.0</a><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"></a>
+                    </small>
+                    <br />
+                    <small>
+                    Лицензи на допълнителните материали <a rel="license" href="https://github.com/iboB/ibob.github.com/blob/master/slides/code4gpus-bg/media/copyright.md">Виж тук</a>
                     </small>
                 </p>
                 <div>

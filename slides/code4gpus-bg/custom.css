@@ -202,3 +202,14 @@ body {
 {
 	display: none;
 }
+
+.reveal pre
+{
+	box-shadow: none;
+}
+
+.reveal pre code
+{
+	font-size: 1.8em;
+	line-height: 1.2em;
+}

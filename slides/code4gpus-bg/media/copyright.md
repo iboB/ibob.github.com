@@ -19,5 +19,12 @@
 * `elephant-stack.jpg` - Roylaty-free use of image from [dreamstime](https://www.dreamstime.com/stock-image-elephant-stack-elephant-balancing-act-image22931041)
 * `gpus.jpg` - Copyright [TechSpot.com](https://www.techspot.com/guides/912-best-graphics-cards-2014/)
 * `ants.jpg` - Public domain
-
+* `tex-test.png` - Public domain
+* `tex-granite-color.png` - Public domain
+* `tex-granite-normal.png` - Public domain
+* `texcoord.gif` - Copyright [MobileFish Tutorials](https://www.mobilefish.com/developer/xith3d/xith3d_quickguide_faq.html)
+* `normal-face.png`, `normal-vertex.png` - Copyright [ScratchPixel tutorials](https://www.scratchapixel.com/lessons/3d-basic-rendering/introduction-to-shading/shading-normals)
+* `tex-bricks.jpg`, `tex-bricks-normal.jpg` - Public domain
+* `tbn.png` - Public domain
+* `gpgpu.png` - Public domain
 
