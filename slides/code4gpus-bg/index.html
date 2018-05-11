@@ -53,7 +53,7 @@
                     <li>Предимно програмист на <span class="fancy">игри</span></li>
                     <li>Занимавам се с <span class="fancy">open source</span></li>
                 </ul>
-                <img class="portrait" src="media/bobi.jpg"/>
+                <img class="portrait fragment" src="media/bobi.jpg"/>
             </section>
 
             <section class="inter" data-background-image="media/bg.jpg">
@@ -131,16 +131,16 @@
             <section class="slide">
                 <h3>Графичен ускорител</h3>
                 <ul>
-                    <li>Също така наричан <span class="fancy">GPU</span></li>
-                    <li>По идея е устройство за <span class="fancy">растеризация</span> на триъгълници</li>
+                    <li class="fragment">Също така наричан <span class="fancy">GPU</span></li>
+                    <li class="fragment">По идея е устройство за <span class="fancy">растеризация</span> на триъгълници</li>
                 </ul>
-                <img class="diagram" src="media/raster.png" />
+                <img class="diagram fragment" src="media/raster.png" />
                 <ul>
-                    <li>По дизайн е <span class="fancy">ray caster</span> (а не ray tracer)</li>
+                    <li class="fragment">По дизайн е <span class="fancy">ray caster</span> (а не ray tracer)</li>
                 </ul>
-                <img class="diagram" style="margin-left:300px" src="media/ray-trace.png" />
+                <img class="diagram fragment" style="margin-left:300px" src="media/ray-trace.png" />
                 <ul>
-                    <li>По имплементация е <span class="fancy">много</span> процесори</li>
+                    <li class="fragment">По имплементация е <span class="fancy">много</span> процесори</li>
                 </ul>
             </section>
 
@@ -157,12 +157,12 @@
             <section class="slide">
                 <h3>Програмиране за GPU</h3>
                 <ul>
-                    <li>API/SDK:</li>
-                    <li><span class="fancy">OpenGL</span> - върви просто навсякъде <span>(kinda)</span></li>
-                    <li><span class="fancy">Direct3D</span> - подмножество на DirectX. Windows only.</li>
-                    <li><span class="fancy">Vulkan</span> - тънък слой</li>
-                    <li>Други...</li>
-                    <li>Пишат се предимно от производителите на хардуер</li>
+                    <li class="fragment">API/SDK:</li>
+                    <li class="fragment"><span class="fancy">OpenGL</span> - върви просто навсякъде <span class="fragment">(kinda)</span></li>
+                    <li class="fragment"><span class="fancy">Direct3D</span> - подмножество на DirectX. Windows only.</li>
+                    <li class="fragment"><span class="fancy">Vulkan</span> - тънък слой</li>
+                    <li class="fragment">Други...</li>
+                    <li class="fragment">Пишат се предимно от производителите на хардуер</li>
                 </ul>
             </section>
 
@@ -183,22 +183,22 @@
             <section class="slide">
                 <h3>Прости термини</h3>
                 <ul>
-                    <li>Vertex - връх</li>
+                    <li class="fragment">Vertex - връх</li>
                     <ul>
-                        <li>Атрибути: позиция, текстурни координати, нормали...</li>
-                        <li>Вертексни буфери</li>
+                        <li class="fragment">Атрибути: позиция, текстурни координати, нормали...</li>
+                        <li class="fragment">Вертексни буфери</li>
                     </ul>
-                    <li>Примитиви - триъгълници, отсечки, точки</li>
-                    <li>Индексни буфери</li>
-                    <li>Текстури - изображения</li>
+                    <li class="fragment">Примитиви - триъгълници, отсечки, точки</li>
+                    <li class="fragment">Индексни буфери</li>
+                    <li class="fragment">Текстури - изображения</li>
                 </ul>
-                <img class="diagram" width="1000" src="media/texcoord.gif" />
+                <img class="diagram fragment" width="1000" src="media/texcoord.gif" />
             </section>
 
             <section class="slide">
                 <h3>Прости хитрости</h3>
-                <img class="diagram" width="600" src="media/normal-face.png" />
-                <img class="diagram" width="700" src="media/normal-vertex.png" />
+                <img class="diagram fragment" width="600" src="media/normal-face.png" />
+                <img class="diagram fragment" width="700" src="media/normal-vertex.png" />
             </section>
 
             <section class="slide">
@@ -232,18 +232,18 @@ Draw(TRIANGLES);
             <section class="slide">
                 <h3>Flexible Pipeline</h3>
                 <ul>
-                    <li>...или програмируем</li>
-                    <li>Код за видеокартата</li>
+                    <li class="fragment">...или програмируем</li>
+                    <li class="fragment">Код за видеокартата</li>
                     <ul>
-                        <li><span class="fancy">Асемблер</span> (всичко започва от там)</li>
-                        <li>OpenGL: <span class="fancy">GLSL</span></li>
-                        <li>Direct3D: <span class="fancy">HLSL</span></li>
-                        <li><span class="fancy">Cg</span>, <span class="fancy">Fx</span>, Много други...</li>
+                        <li class="fragment"><span class="fancy">Асемблер</span> (всичко започва от там)</li>
+                        <li class="fragment">OpenGL: <span class="fancy">GLSL</span></li>
+                        <li class="fragment">Direct3D: <span class="fancy">HLSL</span></li>
+                        <li class="fragment"><span class="fancy">Cg</span>, <span class="fancy">Fx</span>, Много други...</li>
                     </ul>
-                    <li>Шейдъри</li>
+                    <li class="fragment">Шейдъри</li>
                     <ul>
-                        <li>Вертексен</li>
-                        <li>Фрагментен / Пикселен</li>
+                        <li class="fragment">Вертексен</li>
+                        <li class="fragment">Фрагментен / Пикселен</li>
                     </ul>
                 </ul>
             </section>
@@ -395,26 +395,26 @@ void main() {
             <section class="slide">
                 <h3>Не само графика</h3>
                 <ul>
-                    <li>Видеокартата е много мощно животно</li>
+                    <li class="fragment">Видеокартата е много мощно животно</li>
                     <ul>
-                        <li>1920x1080</li>
-                        <li>= 2 073 600</li>
-                        <li>@ 60fps</li>
+                        <li class="fragment">1920x1080</li>
+                        <li class="fragment">= 2 073 600</li>
+                        <li class="fragment">@ 60fps</li>
                     </ul>
-                    <li>General Purpose GPU</li>
-                    <li>Текстура към текстура</li>
+                    <li class="fragment">General Purpose GPU</li>
+                    <li class="fragment">Текстура към текстура</li>
                 </ul>
-                <img class="diagram" height="400" src="media/gpgpu.png" />
+                <img class="diagram fragment" height="400" src="media/gpgpu.png" />
             </section>
 
             <section class="slide">
                 <h3>Ерата на GPGPU</h3>
                 <ul>
-                    <li>Compute shaders</li>
-                    <li>OpenCL</li>
-                    <li>CUDA</li>
-                    <li>CYCL</li>
-                    <li>Близкото бъдеще - WebCL</li>
+                    <li class="fragment">Compute shaders</li>
+                    <li class="fragment">OpenCL</li>
+                    <li class="fragment">CUDA</li>
+                    <li class="fragment">CYCL</li>
+                    <li class="fragment">Близкото бъдеще - WebCL</li>
                 </ul>
             </section>
 
