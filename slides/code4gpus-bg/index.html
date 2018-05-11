@@ -160,7 +160,7 @@
                     <li class="fragment">API/SDK:</li>
                     <li class="fragment"><span class="fancy">OpenGL</span> - върви просто навсякъде <span class="fragment">(kinda)</span></li>
                     <li class="fragment"><span class="fancy">Direct3D</span> - подмножество на DirectX. Windows only.</li>
-                    <li class="fragment"><span class="fancy">Vulkan</span> - тънък слой</li>
+                    <li class="fragment"><span class="fancy">Vulkan и D3D12</span> - тънък слой</li>
                     <li class="fragment">Други...</li>
                     <li class="fragment">Пишат се предимно от производителите на хардуер</li>
                 </ul>
@@ -341,15 +341,54 @@ void main() {
             </section>
 
             <section>
+                <p>Хм... цветове и вектори са едно и също?</p>
+            </section>
+
+            <section>
+                <h3>Текстура с цвят</h3>
                 <img class="showcase" src="media/tex-granite-color.png" />
             </section>
 
             <section>
+                <h3>Текстура с нормали</h3>
                 <img class="showcase" src="media/tex-granite-normal.png" />
             </section>
 
             <section>
                 <img class="showcase" src="media/tbn.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Normal Mapping Vertex</h3>
+                <pre><code class="cpp">//...
+attribute vec3 aNormal;
+attribute vec3 aTangent;
+attribute vec3 aBitangent; // optional
+
+uniform vec3 uLightPos;
+varying vec3 vSSLightDir; // SS = surface space
+
+void main() {
+    mat3 tbn = mat3(
+        aTangent,
+        aBitangent /* cross(aNormal, aTangent) */,
+        aNormal);
+    vec3 lightDir = uLightPos - aPos.xyz;
+    vSSLightDir = lightDir * tbn;
+    //...
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Normal Mapping Pixel</h3>
+                <pre><code class="cpp">
+// ...
+vec3 ssNormal = normalize(2.0 * texture2D(uNormalMap, vTexCoord).xyz - 1.0);
+float shade = dot(ssNormal, normalize(vSSLightDir));
+// и всичко е както преди
+// ...
+                </code></pre>
             </section>
 
             <section class="slide">
@@ -362,7 +401,6 @@ void main() {
                 <div class="cue fragment">rotateLightNormalSpecularGraniteCube</div>
                 <div class="cue fragment">rotateLightNormalSpecularBrickCube</div>
             </section>
-
 
             <section class="slide">
                 <h3>Още гаври</h3>
@@ -395,13 +433,13 @@ void main() {
             <section class="slide">
                 <h3>Не само графика</h3>
                 <ul>
-                    <li class="fragment">Видеокартата е много мощно животно</li>
+                    <li class="fragment">Видеокартата е <span class="fancy">много мощно</span> животно</li>
                     <ul>
                         <li class="fragment">1920x1080</li>
                         <li class="fragment">= 2 073 600</li>
                         <li class="fragment">@ 60fps</li>
                     </ul>
-                    <li class="fragment">General Purpose GPU</li>
+                    <li class="fragment"><span class="fancy">General Purpose GPU</span></li>
                     <li class="fragment">Текстура към текстура</li>
                 </ul>
                 <img class="diagram fragment" height="400" src="media/gpgpu.png" />
@@ -413,10 +451,44 @@ void main() {
                     <li class="fragment">Compute shaders</li>
                     <li class="fragment">OpenCL</li>
                     <li class="fragment">CUDA</li>
-                    <li class="fragment">CYCL</li>
+                    <li class="fragment">CYCL и хетерогенно програмиране</li>
                     <li class="fragment">Близкото бъдеще - WebCL</li>
                 </ul>
             </section>
+
+            <section class="slide">
+                <h3>OpenCL Blur</h3>
+                <pre><code class="cpp">__kernel void avg_blur(__global float* result, __global float* input)
+{
+    int x = get_global_id(0), y = get_global_id(1);
+    int n = y*get_global_size(0) + x;
+
+    int local_size = get_local_size(1) * get_local_size(0);
+    int ln = get_local_id(1)*get_local_size(0) + get_local_id(0)
+
+    __local accum[local_size];
+    accum[ln] = input[n];
+    barrier(CLK_LOCAL_MEM_FENCE); // --------------------
+
+    result[i] = 0;
+    for(int i=0; i&lt;local_size; ++i)
+        result[i] += accum[i];
+    result[i] /= local_size;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>GPGPU не е панацея</h3>
+                <ul>
+                    <li class="fragment">Трансферът на данни не е безплатен</li>
+                    <li class="fragment">Някои алгоритми не са паралелизируеми</li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment">Но ако имаме еднакви операции върху голямо количество данни,<br/>най-вероятно ще спечелим!</p>
+            </section>
+
 
             <section data-background-image="media/bg.jpg">
                 <div class="fin">
