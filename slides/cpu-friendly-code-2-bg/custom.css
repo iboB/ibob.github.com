@@ -1,0 +1,62 @@
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-transform: none;
+}
+
+.reveal section.slide
+{
+	text-align: left;
+}
+
+.reveal section.slide h3 {
+	text-align: left;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	display: block;
+	box-shadow: none;
+	margin-left: 150px;
+}
+
+.reveal section img
+{
+	background-color: white;
+}
+
+.reveal section span.fancy
+{
+	/*font-style: italic;*/
+	font-weight: bold;
+	color: #509EA2;
+}
+
+.reveal code
+{
+	font-family: Consolas, monaco, monospace;
+}
+
+.reveal section code.inline
+{
+}
+
+.reveal pre
+{
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.reveal pre code
+{
+    max-height: 80%;
+	font-size: 1.5em;
+	line-height: 1em;
+}
+
+
