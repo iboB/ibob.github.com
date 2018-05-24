@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+
 .reveal h1,
 .reveal h2,
 .reveal h3,
@@ -5,15 +7,49 @@
 .reveal h5,
 .reveal h6 {
   text-transform: none;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+body {
+  background: #fff; /* For browsers that do not support gradients */
+  background: linear-gradient(#fff, #fff, #eee); /* Standard syntax */
+}
+
+
+.reveal {
+	font-family: 'Fira Sans', sans-serif;
+}
+
+.title h1 {
+	font-size: 3em;
+}
+
+.title img {
+	padding-left: 50px;
 }
 
 .reveal section.slide
 {
+	height: 100%;
+	display: table;
 	text-align: left;
 }
 
+.reveal a:not(.image)
+{
+	color: #448E45;
+}
+
+.reveal a:not(.image):hover
+{
+	color: #6c6;
+}
+
 .reveal section.slide h3 {
+	width: 100%;
 	text-align: left;
+	border-bottom: 1px solid #EF4136;
+	margin-bottom: 40px;
 }
 
 .reveal section img.diagram
@@ -33,8 +69,8 @@
 .reveal section span.fancy
 {
 	/*font-style: italic;*/
-	font-weight: bold;
-	color: #509EA2;
+	/*font-weight: bold;*/
+	color: #EF4136;
 }
 
 .reveal code
