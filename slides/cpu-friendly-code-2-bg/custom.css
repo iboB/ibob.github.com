@@ -95,4 +95,33 @@ body {
 	line-height: 1em;
 }
 
+.reveal .quote
+{
+	width: 100%;
+	text-align: left;
+	display: flex;
+}
 
+.quote .qportrait
+{
+	display: inline-block;
+	border: none;
+	background: none;
+	box-shadow: none;
+	align-self: center;
+}
+
+.quote .qcontent
+{
+	margin-left: 50px;
+}
+
+.quote .qtext
+{
+	font-style: italic;
+}
+
+.quote .qauthor
+{
+	text-align: right;
+}
