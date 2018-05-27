@@ -99,6 +99,8 @@ body {
 {
 	width: 100%;
 	text-align: left;
+	display: -webkit-box;
+	display: -ms-flexbox;
 	display: flex;
 }
 
