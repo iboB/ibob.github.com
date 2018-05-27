@@ -165,8 +165,72 @@
                     <li>Θ-нотация, Ω-нотация, и т.н.</li>
                     <li>Оценява се <span class="fancy">нарастването на сложността</span> спрямо нарастването на входа</li>
                     <li>Оценка с малките букви (о, θ,  ω) - често прекалява</li>
-                    <li>Съвременният хардуер прави реалната сложност <span class="fancy">практически неизчислима</span></li>
+                    <li><span class="fancy">Реалната сложност</span> все пак съществува</li>
                 </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Пример: О(1)</h3>
+                <p>Да се вземе шестия елемент от контейнер.</p>
+                <br/>
+                <pre><code>  std::vector&lt;int&gt; v;
+  ...
+  int sixth = v[6]; // !</code></pre>
+                <p>Теоритична реална сложност: 1</p>
+                <br/>
+                <pre><code>  std::list&lt;int&gt; l;
+  ...
+  auto isixth = l.begin();
+  for(int i=0; i&lt;6; ++i) ++isixth;
+  int sixth = *isixth; // !</code></pre>
+                <p>Теоритична реална сложност: 6</p>
+            </section>
+
+            <section class="slide">
+                <h3>Пример: О(n)</h3>
+                <p>Да съберат елементите от списък.</p>
+                <br/>
+                <pre><code>  int sum = 0;
+  for(auto elem : container) sum += elem;</code></pre>
+                <p>Теоритична реална сложност: n</p>
+                <br/>
+                <pre><code>  point3 sum = {0, 0, 0};
+  for (const auto&amp; elem : container) {
+      sum.x += elem.x;
+      sum.y += elem.y;
+      sum.z += elem.z;
+  }</code></pre>
+                <p>Теоритична реална сложност: 3n</p>
+            </section>
+
+            <section class="slide">
+                <h3>Хакване на О-нотацията</h3>
+                <p>Константна сложност<span>: 1000.</span></p>
+                <ul>
+                    <li>Линейна за по-малко от 1000 елемента е по-бърза</li>
+                    <li>Квадратна за по-малко от 32 е по-бърза</li>
+                    <li>Кубична за по-малко от 10 е по-бърза</li>
+                </ul>
+                <br/><br/>
+                <p>Линейна сложност: 100n.</p>
+                <ul>
+                    <li>Квадратна за по-малко от 100 е по-бърза</li>
+                    <li>Кубична за по-малко от 10 е по-бърза</li>
+                </ul>
+                <br/><br/>
+                <p>...</p>
+            </section>
+
+            <section>
+                <p>Полезно да е имаме представа за реалната сложност и за размера на входа</p>
+            </section>
+
+            <section>
+                <h3>Демо 1</h3>
+            </section>
+
+            <section>
+                <p>Съвременният хардуер прави реалната сложност <span class="fancy">практически неизчислима</span></p>
             </section>
 
             <section>

@@ -110,12 +110,24 @@ body {
 	border: none;
 	background: none;
 	box-shadow: none;
+	margin: 0;
 	align-self: center;
 }
 
 .quote .qcontent
 {
 	margin-left: 50px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+		flex-direction: column;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+		justify-content: center;
+	flex: 1 1 0%;
 }
 
 .quote .qtext
@@ -125,5 +137,6 @@ body {
 
 .quote .qauthor
 {
+	margin-top: 15px;
 	text-align: right;
 }
