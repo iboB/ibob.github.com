@@ -248,6 +248,61 @@
             </section>
 
             <section>
+                <img class="diagram" src="mobo-comic.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Cache</h3>
+                <p>Кешът е памет <span class="fancy">близко до процесора</span></p>
+                <p>Cache levels - <span class="fancy">колкото по-близко, толкова по-бързо</span></p>
+                <img class="diagram" src="cache-diagram.png" />
+                <p>RAM (&rarr; L4?) &rarr; L3 &rarr; L2 &rarr; L1</p>
+            </section>
+
+            <section class="slide">
+                <h3>Как работи това?</h3>
+                <ul>
+                <p>От "Дай памет на адрес Х!" следват потенциално различни стратегии. Например:</p>
+                <p>&nbsp;&nbsp;<span class="fancy">4KB на L3</span> &rarr; <span class="fancy">256B на L2</span> &rarr; <span class="fancy">64B на L1</span></p>
+                <ul>
+                    <li>Ако паметта е в кеша - <span class="fancy">cache hit</span></li>
+                    <li>Ако я няма - <span class="fancy">cache miss</span></li>
+                </ul>
+                <br/>
+                <p>Колко ни струва това?</p>
+                <ul>
+                    <li>L1: ~<span class="fancy">4</span> цикъла</li>
+                    <li>L2: ~<span class="fancy">10</span> цикъла</li>
+                    <li>L3: ~<span class="fancy">20</span> цикъла</li>
+                    <li>RAM: ~<span class="fancy">100</span> цикъла</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Какво значи това?</h3>
+                <ul>
+                <li>Бързи работи:</li>
+                    <ul>
+                    <li><span class="fancy">Value types / PODs</span></li>
+                    <li><span class="fancy">Contiguous memory</span></li>
+                    </ul>
+                <li>Бавни работи:</li>
+                    <ul>
+                    <li>Индирекции</li>
+                    <li>Включително динамичен полиморфизъм</li>
+                    </ul>
+                </ul>
+                <br/><br/>
+                <div class="quote">
+                    <img class="qportrait" src="bg-people.jpg" />
+                    <div class="qcontent">
+                        <div class="qtext">По-малко кеш мисове, по-щастлив процесор</div>
+                        <div class="qauthor">Българска народна поговорка</p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
                 <h2>Branch prediction</h2>
             </section>
 
