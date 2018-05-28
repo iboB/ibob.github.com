@@ -11,5 +11,11 @@
         ".sass-cache/**": true,
         "Gemfile.lock": true,
         "third_party": true
+    },
+    "files.associations": {
+        "array": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "vector": "cpp"
     }
 }

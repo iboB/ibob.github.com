@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <list>
+#include <cstddef>
 
 struct ivec
 {
@@ -63,7 +64,6 @@ class pool_alloc
 {
 public:
     static std::vector<std::vector<T>> pool;
-    //static constexpr size_t PAGE_SIZE = 2048;
     static constexpr size_t PAGE_SIZE = 2048;
 
     typedef T value_type;
@@ -80,6 +80,12 @@ public:
         pool.back().reserve(PAGE_SIZE);
     }
 
+    ~pool_alloc()
+    {
+        pool.resize(1);
+        pool.back().clear();
+    }
+
     pool_alloc(const pool_alloc& other)
     {
     }
@@ -88,16 +94,16 @@ public:
     pool_alloc(const pool_alloc<Other>& other)
     {
     }
-    
+
     pointer allocate(size_type size, const void* = nullptr)
     {
         if (!pool.back().empty() && pool.back().size() + size > PAGE_SIZE) {
             pool.emplace_back();
-            pool.back().reserve(max(PAGE_SIZE, size));
+            pool.back().reserve(std::max(PAGE_SIZE, size));
         }
 
         auto os = pool.back().size();
-        pool.back().resize(pool.back().size() + size);        
+        pool.back().resize(pool.back().size() + size);
         return pool.back().data() + os;
     }
 

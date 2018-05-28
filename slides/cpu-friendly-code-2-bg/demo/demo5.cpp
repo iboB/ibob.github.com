@@ -6,64 +6,48 @@
 
 void unsorted(picobench::state& s)
 {
-    std::vector<int> v;
+    std::vector<double> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        v.push_back(rand());
+        v.push_back(double(rand()) / RAND_MAX);
     }
 
-    int sum = 0;
+    double prod = 1;
 
     {
         picobench::scope scope(s);
         for (auto elem : v) {
-            if (elem % 2 && elem < 2000) sum += elem;
+            if (elem < 0.5) prod *= elem;
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), prod);
 }
 
 void sorted(picobench::state& s)
 {
-    std::vector<int> v;
+    std::vector<double> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        v.push_back(rand());
+        v.push_back(double(rand()) / RAND_MAX);
     }
 
-    std::sort(v.begin(), v.end(), [](int a, int b)
-    {
-        int am2 = a % 2;
-        int bm2 = b % 2;
+    std::sort(v.begin(), v.end());
 
-        if (am2 == bm2)
-        {
-            return a < b;
-        }
-
-        if (am2)
-        {
-            return true;
-        }
-
-        return false;
-    });
-
-    int sum = 0;
+    double prod = 1;
 
     {
         picobench::scope scope(s);
         for (auto elem : v) {
-            if (elem % 2 && elem < 2000) sum += elem;
+            if (elem < 0.5) prod *= elem;
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), prod);
 }
 
 #define ITERATIONS .iterations({ 100000, 200000 })

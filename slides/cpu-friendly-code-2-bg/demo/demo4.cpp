@@ -4,75 +4,53 @@
 #include <list>
 #include <algorithm>
 
-struct ivec
+void unsorted(picobench::state& s)
 {
-    int x, y;
-    int manhattan_length() const {
-        return x + y;
-    }
-};
-
-int isort(const void* p, const void* q) {
-    int x = *(const int *)p;
-    int y = *(const int *)q;
-    if (x > y) return -1;
-    else if (x < y) return 1;
-    return 0;
-}
-
-void check(picobench::state& s)
-{
-    std::vector<ivec> v;
+    std::vector<double> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        v.push_back({ rand(), rand() });
+        v.push_back(double(rand()) / RAND_MAX);
     }
 
-    int sum = 0;
+    double prod = 1;
 
     {
         picobench::scope scope(s);
-        for (auto& elem : v) {
-            if (elem.x > elem.y) {
-                qsort(&elem, 2, sizeof(int), isort);
-                sum += elem.x;
-            }
-            else {
-                sum += elem.y;
-            }
+        for (auto elem : v) {
+            if (elem < 0.5) prod *= elem;
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), prod);
 }
 
-
-void nocheck(picobench::state& s)
+void sorted(picobench::state& s)
 {
-    std::vector<ivec> v;
+    std::vector<double> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        v.push_back({ rand(), rand() });
+        v.push_back(double(rand()) / RAND_MAX);
     }
 
-    int sum = 0;
+    std::sort(v.begin(), v.end());
+
+    double prod = 1;
 
     {
         picobench::scope scope(s);
-        for (auto& elem : v) {
-            qsort(&elem, 2, sizeof(int), isort);
-            sum += elem.x;
+        for (auto elem : v) {
+            if (elem < 0.5) prod *= elem;
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), prod);
 }
 
 #define ITERATIONS .iterations({ 100000, 200000 })
 
-PICOBENCH(check) ITERATIONS;
-PICOBENCH(nocheck) ITERATIONS;
+PICOBENCH(unsorted) ITERATIONS;
+PICOBENCH(sorted) ITERATIONS;
