@@ -22,11 +22,8 @@ void vector(picobench::state& s)
     std::vector<int> v;
     srand(s.iterations());
 
-    {
-        picobench::scope scope(s);
-        for (int i=0; i<s.iterations(); ++i) {
-            add_elem(v, rand());
-        }
+    for(auto _ : s) {
+        add_elem(v, rand());
     }
 
     int sum = 0;
@@ -39,11 +36,8 @@ void list(picobench::state& s)
     std::list<int> l;
     srand(s.iterations());
 
-    {
-        picobench::scope scope(s);
-        for (int i=0; i<s.iterations(); ++i) {
-            add_elem(l, rand());
-        }
+    for (auto _ : s) {
+        add_elem(l, rand());
     }
 
     int sum = 0;

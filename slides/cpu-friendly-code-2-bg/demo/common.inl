@@ -10,7 +10,7 @@ int main()
     runner.set_default_samples(10);
 #else
     runner.set_default_state_iterations({ 100, 1000 });
-    runner.set_default_samples(5);
+    runner.set_default_samples(3);
 #endif
 
     auto report = runner.run_benchmarks(123);
