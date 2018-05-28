@@ -4,62 +4,68 @@
 #include <list>
 #include <algorithm>
 
-void unsorted(picobench::state& s)
+struct ivec
 {
-    std::vector<int> v;
+    int x, y;
+    int manhattan_length() const {
+        return x + y;
+    }
+};
+
+int isort(const void* p, const void* q) {
+    int x = *(const int *)p;
+    int y = *(const int *)q;
+    if (x > y) return -1;
+    else if (x < y) return 1;
+    return 0;
+}
+
+void check(picobench::state& s)
+{
+    std::vector<ivec> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        v.push_back(rand());
+        v.push_back({ rand(), rand() });
     }
 
     int sum = 0;
 
     {
         picobench::scope scope(s);
-        for (auto elem : v) {
-            if (elem % 2) sum += elem;
+        for (auto& elem : v) {
+            if (elem.x > elem.y) {
+                qsort(&elem, 2, sizeof(int), isort);
+                sum += elem.x;
+            }
+            else {
+                sum += elem.y;
+            }
         }
     }
 
     sanity_check(s.iterations(), sum);
 }
 
-void sorted(picobench::state& s)
+
+void nocheck(picobench::state& s)
 {
-    std::vector<int> v;
+    std::vector<ivec> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        v.push_back(rand());
+        v.push_back({ rand(), rand() });
     }
-
-    std::sort(v.begin(), v.end(), [](int a, int b)
-    {
-        int am2 = a % 2;
-        int bm2 = b % 2;
-
-        if (am2 == bm2)
-        {
-            return a < b;
-        }
-
-        if (am2)
-        {
-            return true;
-        }
-
-        return false;
-    });
 
     int sum = 0;
 
     {
         picobench::scope scope(s);
-        for (auto elem : v) {
-            if (elem % 2) sum += elem;
+        for (auto& elem : v) {
+            qsort(&elem, 2, sizeof(int), isort);
+            sum += elem.x;
         }
     }
 
@@ -68,5 +74,5 @@ void sorted(picobench::state& s)
 
 #define ITERATIONS .iterations({ 100000, 200000 })
 
-PICOBENCH(unsorted) ITERATIONS;
-PICOBENCH(sorted) ITERATIONS;
+PICOBENCH(check) ITERATIONS;
+PICOBENCH(nocheck) ITERATIONS;
