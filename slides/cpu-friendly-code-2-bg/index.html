@@ -47,12 +47,12 @@
             <section class="slide">
                 <h3>Hello, World</h3>
                 <ul>
-                    <li><span class="fancy">Борислав</span> aka <span class="fancy">Боби</span> aka <span class="fancy">iboB<span></li>
+                    <li><span class="fancy">Борислав</span> aka <span class="fancy">Боби</span> aka <span class="fancy">iboB</span></li>
                     <li>Предимно <span class="fancy">С++</span> програмист</li>
                     <li>Предимно програмист на <span class="fancy">игри</span></li>
                     <li>Занимавам се с <span class="fancy">open source</span></li>
                     <ul>
-                        <li><a href="http://ibob.github.io">ibob.github.io</a></li>
+                        <li class="fragment"><a href="http://ibob.github.io">ibob.github.io</a></li>
                     </ul>
                 </ul>
             </section>
@@ -64,7 +64,7 @@
             <section>
                 <div class="quote">
                     <img class="qportrait" src="don.gif" />
-                    <div class="qcontent">
+                    <div class="fragment qcontent">
                         <div class="qtext">Optimization is the root of all evil</div>
                         <div class="qauthor">Donald Knuth</div>
                     </div>
@@ -118,7 +118,7 @@
             <section>
                 <div class="quote">
                     <img class="qportrait" src="andrei.jpg" />
-                    <div class="qcontent">
+                    <div class="fragment qcontent">
                         <div class="qtext">To some extent, optimization is to our industry what sexual intercourse is to teenagers. There's a veil of awesomeness surrounding it; everybody thinks it's cool, has an opinion about it, and talks about it a great deal; yet in spite of ample folklore, few get to do it meaningfully or at all.</div>
                         <div class="qauthor">Andrei Alexandrescu</div>
                     </div>
@@ -132,7 +132,7 @@
             <section>
                 <div class="quote">
                     <img class="qportrait" src="blago.jpg" />
-                    <div class="qcontent">
+                    <div class="qcontent fragment">
                         <div class="qtext">2018-та година е. Кой пише за CPU?</div>
                         <div class="qauthor">Благовест Тасков</div>
                     </div>
@@ -142,15 +142,15 @@
             <section class="slide">
                 <h3>Защо CPU, а не GPU?</h3>
                 <ul>
-                    <li>GPU е ултрамегамощно <span>за някои задачи.</span></li>
-                    <li>Дрън дрън архитектурни разлики</li>
-                    <li>За тези задачи GPU не е добър избор:</li>
+                    <li>GPU е ултрамегамощно <span class="fragment">за някои задачи.</span></li>
+                    <li class="fragment">Дрън дрън архитектурни разлики</li>
+                    <li class="fragment">За тези задачи GPU не е добър избор:</li>
                     <ul>
-                    <li><span class="fancy">Малко данни:</span> PCI-bus overhead</li>
-                    <li><span class="fancy">Непаралелизируеми</span> алгоритми</li>
-                    <li>Понякога сме <span class="fancy">GPU-bound</span></li>
+                    <li class="fragment"><span class="fancy">Малко данни:</span> PCI-bus overhead</li>
+                    <li class="fragment"><span class="fancy">Непаралелизируеми</span> алгоритми</li>
+                    <li class="fragment">Понякога сме <span class="fancy">GPU-bound</span></li>
                     </ul>
-                    <li>Някои неща важат и за GPU</li>
+                    <li class="fragment">Някои неща важат и за GPU</li>
                 </ul>
             </section>
 
@@ -161,7 +161,7 @@
 
             <section>
                 <p>Ще се фокусираме върху по low-level концепции и няма да говорим за multi-threading.</p>
-                <p>Ще говорим за хардуер<span>... поне отгоре-отгоре</span></p>
+                <p>Ще говорим за хардуер<span class="fragment">... поне отгоре-отгоре</span></p>
             </section>
 
             <section>
@@ -173,10 +173,10 @@
                 <ul>
                     <li>Асимптотична оценка на сложността на алгоритми</li>
                     <li>Полезна и много широко използвана</li>
-                    <li>Θ-нотация, Ω-нотация, и т.н.</li>
-                    <li>Оценява се <span class="fancy">нарастването на сложността</span> спрямо нарастването на входа</li>
-                    <li>Оценка с малките букви (о, θ,  ω) - често прекалява</li>
-                    <li><span class="fancy">Реалната сложност</span> все пак съществува</li>
+                    <li class="fragment">Θ-нотация, Ω-нотация, и т.н.</li>
+                    <li class="fragment">Оценява се <span class="fancy">нарастването на сложността</span> спрямо нарастването на входа</li>
+                    <li class="fragment">Оценка с малките букви (о, θ,  ω) - често прекалява</li>
+                    <li class="fragment"><span class="fancy">Реалната сложност</span> все пак съществува</li>
                 </ul>
             </section>
 
@@ -184,52 +184,52 @@
                 <h3>Пример: О(1)</h3>
                 <p>Да се вземе шестия елемент от контейнер.</p>
                 <br/>
-                <pre><code>  std::vector&lt;int&gt; v;
+                <pre class="fragment"><code>  std::vector&lt;int&gt; v;
   ...
   int sixth = v[6]; // !</code></pre>
-                <p>Теоритична реална сложност: 1</p>
+                <p class="fragment">Теоритична реална сложност: 1</p>
                 <br/>
-                <pre><code>  std::list&lt;int&gt; l;
+                <pre class="fragment"><code>  std::list&lt;int&gt; l;
   ...
   auto isixth = l.begin();
   for(int i=0; i&lt;6; ++i) ++isixth;
   int sixth = *isixth; // !</code></pre>
-                <p>Теоритична реална сложност: 6</p>
+                <p class="fragment">Теоритична реална сложност: 6</p>
             </section>
 
             <section class="slide">
                 <h3>Пример: О(n)</h3>
                 <p>Да съберат елементите от списък.</p>
                 <br/>
-                <pre><code>  int sum = 0;
+                <pre class="fragment"><code>  int sum = 0;
   for(auto elem : container) sum += elem;</code></pre>
-                <p>Теоритична реална сложност: n</p>
+                <p class="fragment">Теоритична реална сложност: n</p>
                 <br/>
-                <pre><code>  point3 sum = {0, 0, 0};
+                <pre class="fragment"><code>  point3 sum = {0, 0, 0};
   for (const auto&amp; elem : container) {
       sum.x += elem.x;
       sum.y += elem.y;
       sum.z += elem.z;
   }</code></pre>
-                <p>Теоритична реална сложност: 3n</p>
+                <p class="fragment">Теоритична реална сложност: 3n</p>
             </section>
 
             <section class="slide">
                 <h3>Хакване на О-нотацията</h3>
-                <p>Константна сложност<span>: 1000.</span></p>
-                <ul>
+                <p>Константна сложност<span class="fragment">: 1000.</span></p>
+                <ul class="fragment">
                     <li>Линейна за по-малко от 1000 елемента е по-бърза</li>
                     <li>Квадратна за по-малко от 32 е по-бърза</li>
                     <li>Кубична за по-малко от 10 е по-бърза</li>
                 </ul>
                 <br/><br/>
-                <p>Линейна сложност: 100n.</p>
-                <ul>
+                <p class="fragment">Линейна сложност: 100n.</p>
+                <ul class="fragment">
                     <li>Квадратна за по-малко от 100 е по-бърза</li>
                     <li>Кубична за по-малко от 10 е по-бърза</li>
                 </ul>
                 <br/><br/>
-                <p>...</p>
+                <p class="fragment">...</p>
             </section>
 
             <section>
@@ -242,7 +242,7 @@
 
             <section>
                 <p>Съвременният хардуер прави реалната сложност <span class="fancy">практически неизчислима</span></p>
-                <p>Но, все пак...</p>
+                <p class="fragment">Но, все пак...</p>
             </section>
 
             <section>
@@ -263,10 +263,10 @@
 
             <section class="slide">
                 <h3>Cache ($)</h3>
-                <p>Кешът е памет <span class="fancy">близко до процесора</span></p>
-                <p>Cache levels - <span class="fancy">колкото по-близко, толкова по-бързо</span></p>
-                <img class="diagram" src="cache-diagram.png" />
-                <p>RAM (&rarr; L4?) &rarr; L3 &rarr; L2 &rarr; L1</p>
+                <p class="fragment">Кешът е памет <span class="fancy">близко до процесора</span></p>
+                <p class="fragment">Cache levels - <span class="fancy">колкото по-близко, толкова по-бързо</span></p>
+                <img class="fragment diagram" src="cache-diagram.png" />
+                <p class="fragment">RAM (&rarr; L4?) &rarr; L3 &rarr; L2 &rarr; L1</p>
             </section>
 
             <section class="slide">
@@ -274,13 +274,13 @@
                 <ul>
                 <p>От "Дай памет на адрес Х!" следват потенциално различни стратегии. Например:</p>
                 <p>&nbsp;&nbsp;<span class="fancy">4KB на L3</span> &rarr; <span class="fancy">256B на L2</span> &rarr; <span class="fancy">64B на L1</span></p>
-                <ul>
+                <ul class="fragment">
                     <li>Ако паметта е в кеша - <span class="fancy">cache hit</span></li>
                     <li>Ако я няма - <span class="fancy">cache miss</span></li>
                 </ul>
                 <br/>
-                <p>Колко ни струва това?</p>
-                <ul>
+                <p class="fragment">Колко ни струва това?</p>
+                <ul class="fragment">
                     <li>L1: ~<span class="fancy">4</span> цикъла</li>
                     <li>L2: ~<span class="fancy">10</span> цикъла</li>
                     <li>L3: ~<span class="fancy">20</span> цикъла</li>
@@ -291,20 +291,20 @@
             <section class="slide">
                 <h3>Какво значи това?</h3>
                 <ul>
-                <li>Бързи работи:</li>
-                    <ul>
+                <li class="fragment">Бързи работи:</li>
+                    <ul class="fragment">
                     <li><span class="fancy">Value types / PODs</span></li>
                     <li><span class="fancy">Contiguous memory</span></li>
                     </ul>
-                <li>Бавни работи:</li>
+                <li class="fragment">Бавни работи:</li>
                     <ul>
-                    <li>Индирекции</li>
-                    <li>Включително динамичен полиморфизъм</li>
+                    <li class="fragment">Индирекции</li>
+                    <li class="fragment">Включително динамичен полиморфизъм</li>
                     </ul>
-                <li>Array-of-structs vs Struct-of-arrays</li>
+                <li class="fragment">Array-of-structs vs Struct-of-arrays</li>
                 </ul>
                 <br/><br/>
-                <div class="quote">
+                <div class="fragment quote">
                     <img class="qportrait" src="bg-people.jpg" />
                     <div class="qcontent">
                         <div class="qtext">По-малко кеш мисове, по-щастлив процесор</div>
@@ -320,10 +320,10 @@
             <section class="slide">
                 <h3>Видове кеш</h3>
                 <ul>
-                <li><span class="fancy">Data</span> - Нашите данни. Това което гледахме</li>
-                <li><span class="fancy">Instruction</span> - кодът на програмата. Демото е трудно :(</li>
-                <li><span class="fancy">TLB</span> - за виртуалната памет. Нямаме контрол върху него</li>
-                <li>Всички тези са L1. L2+ са смесени</li>
+                <li class="fragment"><span class="fancy">Data</span> - Нашите данни. Това което гледахме</li>
+                <li class="fragment"><span class="fancy">Instruction</span> - кодът на програмата. Демото е трудно :(</li>
+                <li class="fragment"><span class="fancy">TLB</span> - за виртуалната памет. Нямаме контрол върху него</li>
+                <li class="fragment">Всички тези са L1. L2+ са смесени</li>
                 </ul>
             </section>
 
@@ -355,13 +355,13 @@
                 <h3>Branch predictors</h3>
                 <ul>
                 <li>Branch @ 0x12300 : <code>y,n,n,y,y,y,y,y</code></li>
-                <li>Loop predictors - има и такива</li>
-                <li><code>__builtin_expect</code> - леко безсмислено</li>
-                <li>Ако няма идея? - Изпълняваме и двата бранча</li>
+                <li class="fragment">Loop predictors - има и такива</li>
+                <li class="fragment"><code>__builtin_expect</code> - леко безсмислено</li>
+                <li class="fragment">Ако няма идея? - Изпълняваме и двата бранча</li>
                 </ul>
                 <br/>
                 <br/>
-                <p><em><span class="fancy">Спекулативно изпълнение</span>: Изпълнението на код, който може би не трябва да бъде изпълняван</em></p>
+                <p class="fragment"><em><span class="fancy">Спекулативно изпълнение</span>: Изпълнението на код, който може би не трябва да бъде изпълняван</em></p>
             </section>
 
             <section>
@@ -371,14 +371,14 @@
             <section class="slide">
                 <h3>Изводи</h3>
                 <ul>
-                <li><code>if</code> вече не е толкова страшен</li>
-                <li>Dense is better than sparse</li>
+                <li class="fragment"><code>if</code> вече не е толкова страшен</li>
+                <li class="fragment">Dense is better than sparse</li>
                 </ul>
                 <br/>
                 <br/>
-                <div class="quote">
+                <div class="fragment quote">
                     <img class="qportrait" src="kenneth.jpg" />
-                    <div class="qcontent">
+                    <div class="fragment qcontent">
                         <div class="qtext">I believe that order is better than chaos</div>
                         <div class="qauthor">Kenneth Clark</div>
                     </div>
@@ -387,7 +387,7 @@
 
             <section>
                 <h2>Syscalls и алокации</h2>
-                <h3>Най-вече алокации!</h3>
+                <h3 class="fragment">Най-вече алокации!</h3>
             </section>
 
             <section>
@@ -398,49 +398,49 @@
             <section class="slide">
                 <h3>Syscall</h3>
                 <p>Напускаме пределите на нашата програма и се отправяме в света на операционната система</p>
-                <img class="diagram" style="margin-left: 20px;" src="boldly-go.jpg" />
+                <img class="fragment diagram" style="margin-left: 20px;" src="boldly-go.jpg" />
             </section>
 
             <section class="slide">
                 <h3>Syscall примери</h3>
                 <ul>
-                <li>Не рънтайм като <code>sin, cos, qsort</code></li>
-                <li>I/O</li>
+                <li class="fragment">Не рънтайм като <code>sin, cos, qsort</code></li>
+                <li class="fragment">I/O</li>
                 </ul>
                 <br/>
                 <br/>
-                <div class="quote">
+                <div class="fragment quote">
                     <img class="qportrait" src="bobi.jpg" />
-                    <div class="qcontent">
+                    <div class="fragment qcontent">
                         <div class="qtext">Ако нещо е бавно и не е очевидно какво е, най-вероятният виновник е I/O</div>
                         <div class="qauthor">Аз</div>
                     </div>
                 </div>
                 <br/>
                 <ul>
-                <li>Менажиране на процеси и нишки</li>
-                <li>Драйверни извиквания като OpenGL</li>
-                <li>Алокации и деалокации</li>
+                <li class="fragment">Менажиране на процеси и нишки</li>
+                <li class="fragment">Драйверни извиквания като OpenGL</li>
+                <li class="fragment">Алокации и деалокации</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Алокации и деалокации</h3>
                 <ul>
-                    <li>Явна цена</li>
+                    <li class="fragment">Явна цена</li>
                     <ul>
-                        <li>Операционната система трябва да извърши една камара неща.</li>
-                        <li>Физическата памет: страници</li>
-                        <li>Свободно парче поредни страници</li>
-                        <li>Синхронизация между различни процеси и нишки</li>
+                        <li class="fragment">Операционната система трябва да извърши една камара неща.</li>
+                        <li class="fragment">Физическата памет: страници</li>
+                        <li class="fragment">Свободно парче поредни страници</li>
+                        <li class="fragment">Синхронизация между различни процеси и нишки</li>
                     </ul>
-                    <li>Commit size - много помага</li>
-                    <li>Не-толкова-явна цена</li>
+                    <li class="fragment">Commit size - много помага</li>
+                    <li class="fragment">Не-толкова-явна цена</li>
                     <ul>
-                        <li>Нулиране/Изчистване на памет</li>
-                        <li>Фрагментация</li>
+                        <li class="fragment">Нулиране/Изчистване на памет</li>
+                        <li class="fragment">Фрагментация</li>
                     </ul>
-                    <li><span class="fancy">Всяка алокация и деалокация е syscall</span></li>
+                    <li class="fragment"><span class="fancy">Всяка алокация и деалокация е syscall</span></li>
                 </ul>
             </section>
 
@@ -451,13 +451,13 @@
             <section class="slide">
                 <h3>Какво да направим?</h3>
                 <ul>
-                    <li>Билярди и басейни <span>(сиреч <span class="fancy">pools</span>)</span></li>
+                    <li class="fragment">Билярди и басейни <span class="fragment">(сиреч <span class="fancy">pools</span>)</span></li>
                     <ul>
-                        <li>Защо Жаба е по-бърза от С++?</li>
+                        <li class="fragment">Защо Жаба е по-бърза от С++?</li>
                     </ul>
-                    <li><span class="fancy">Преизползване</span> на обекти</li>
-                    <li>Code it like it's 1969. Масиви с <span class="fancy">фиксиран размер</span></li>
-                    <li>Reserve (например <span class="fancy"><code>std::vector::reserve</code></span>)</li>
+                    <li class="fragment"><span class="fancy">Преизползване</span> на обекти</li>
+                    <li class="fragment">Code it like it's 1969. Масиви с <span class="fancy">фиксиран размер</span></li>
+                    <li class="fragment">Reserve (например <span class="fancy"><code>std::vector::reserve</code></span>)</li>
                 </ul>
             </section>
 
@@ -484,16 +484,16 @@
             <section class="slide">
                 <h3>Instruction set</h3>
                 <ul>
-                    <li>Какво може нашия процесор?</li>
+                    <li class="fragment">Какво може нашия процесор?</li>
                     <ul>
-                        <li>Да изпълнява инструкции</li>
+                        <li class="fragment">Да изпълнява инструкции</li>
                     </ul>
-                    <li>Не всички са достъпни през С или С++</li>
+                    <li class="fragment">Не всички са достъпни през С или С++</li>
                     <ul>
-                        <li>Например <code>rdtsc</code></li>
+                        <li class="fragment">Например <code>rdtsc</code></li>
                     </ul>
-                    <li>Компилаторите ни дават начин да ги достъпим чрез <span class="fancy">intrinsics</span></li>
-                    <ul>
+                    <li class="fragment">Компилаторите ни дават начин да ги достъпим чрез <span class="fancy">intrinsics</span></li>
+                    <ul class="fragment">
                         <li><a href="https://gcc.gnu.org/onlinedocs/gcc/Target-Builtins.html">gcc и clang</a>: <code>__builtin_???</code></li>
                         <li><a href="https://docs.microsoft.com/en-us/cpp/intrinsics/compiler-intrinsics">msvc</a>: <code>_???, _m_??, _mm_??</code></li>
                     </ul>
@@ -513,7 +513,7 @@
                 </ul>
                 <br/>
                 <br/>
-                <p>Заслужава си да ги прегледате и може би да откриете неочаквани прозрения</p>
+                <p class="fragment">Заслужава си да ги прегледате и може би да откриете неочаквани прозрения</p>
             </section>
 
             <section>
@@ -524,29 +524,29 @@
             <section class="slide">
                 <h3>Single Instruction Multiple Data</h3>
                 <ul>
-                    <li>x86</li>
+                    <li class="fragment">x86</li>
                     <ul>
-                        <li>MMX, SSE, SSE2, SSE3, SSE4, SSE5, <span class="fancy">AVX</span>, FMA, AVX2, AVX-512</li>
+                        <li class="fragment">MMX, SSE, SSE2, SSE3, SSE4, SSE5, <span class="fancy">AVX</span>, FMA, AVX2, AVX-512</li>
                     </ul>
-                    <li>ARM</li>
+                    <li class="fragment">ARM</li>
                     <ul>
-                        <li>NEON, ARMv8</li>
+                        <li class="fragment">NEON, ARMv8</li>
                     </ul>
-                    <li>Управляват се с интринсики</li>
-                    <li>Внимавайте с <span class="fancy">alignment</span></li>
-                    <li>Компилаторите са <a href="https://godbolt.org/g/N3HyWw">мощни!</a></li>
+                    <li class="fragment">Управляват се с интринсики</li>
+                    <li class="fragment">Внимавайте с <span class="fancy">alignment</span></li>
+                    <li class="fragment">Компилаторите са <a href="https://godbolt.org/g/N3HyWw">мощни!</a></li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Beyond</h3>
                 <ul>
-                    <li>Това всичко беше повърхностно</li>
-                    <li>За да спечелите от хардуера, трябва да го познавате</li>
-                    <li>Четете повече дисасембли</li>
-                    <li>Винаги бенчмарквайте</li>
-                    <li>???</li>
-                    <li>Profit</li>
+                    <li class="fragment">Това всичко беше повърхностно</li>
+                    <li class="fragment">За да спечелите от хардуера, трябва да го познавате</li>
+                    <li class="fragment">Четете повече дисасембли</li>
+                    <li class="fragment">Винаги бенчмарквайте</li>
+                    <li class="fragment">???</li>
+                    <li class="fragment">Profit</li>
                 </ul>
             </section>
 
@@ -566,25 +566,25 @@
     }
     measure_time_to_access(memory[0]);
     measure_time_to_access(memory[0x100]);</code></pre>
-                <img class="diagram" src="lebron-intel.jpg" />
+                <img class="fragment diagram" src="lebron-intel.jpg" />
             </section>
 
             <section class="slide">
                 <h3>Бонус: Spectre</h3>
-                <pre><code>
-    if (some_condition) {
+                <p>Код от операционната система:</p>
+                <pre><code>    if (some_condition) {
         hidden_val = hidden_data[N];
         whatever = public_data[hidden_val]; // o_O
-    }
-                </code></pre>
+    }</code></pre>
                 <ul>
-                    <li>Branch-prediction е трудно<span>: Частично адресиране</span></li>
-                    <li>Branch predictor poisoning: Програма която има <code>if(true)</code> на същия частичен адрес</li>
+                    <li class="fragment">Branch-prediction е трудно<span class="fragment">: Частично адресиране</span></li>
+                    <li class="fragment">Branch predictor poisoning: Програма която има <code>if(true)</code> на същия частичен адрес</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Бонус: Spectre</h3>
+                <p>Код от операционната система:</p>
                 <pre><code>    if (some_condition) { // на кой адрес е това?
         hidden_val = hidden_data[N];
         whatever = public_data[hidden_val]; // o_O
@@ -593,10 +593,10 @@
                     <li>Branch-prediction е трудно<span>: Частично адресиране</span></li>
                     <li>Branch predictor poisoning: Програма която има <code>if(true)</code> на същия частичен адрес</li>
                 </ul>
-                <pre><code>    for(auto&amp; elem : public_data) {
+                <pre class="fragment"><code>    for(auto&amp; elem : public_data) {
         measure_time_to_access(elem);
     }</code></pre>
-                <p>Нямаше реални примери, но се откриха</p>
+                <p class="fragment">Нямаше реални примери, но се откриха</p>
             </section>
 
             <section>
