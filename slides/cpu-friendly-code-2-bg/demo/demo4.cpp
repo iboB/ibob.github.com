@@ -23,7 +23,7 @@ void unsorted(picobench::state& s)
         }
     }
 
-    sanity_check(s.iterations(), prod);
+    sanity_check(s.iterations(), *reinterpret_cast<int*>(&prod));
 }
 
 void sorted(picobench::state& s)
@@ -47,7 +47,7 @@ void sorted(picobench::state& s)
         }
     }
 
-    sanity_check(s.iterations(), prod);
+    sanity_check(s.iterations(), *reinterpret_cast<int*>(&prod));
 }
 
 #define ITERATIONS .iterations({ 100000, 200000 })

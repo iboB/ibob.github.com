@@ -66,7 +66,7 @@
                     <img class="qportrait" src="don.gif" />
                     <div class="qcontent">
                         <div class="qtext">Optimization is the root of all evil</div>
-                        <div class="qauthor">Donald Knuth</p>
+                        <div class="qauthor">Donald Knuth</div>
                     </div>
                 </div>
             </section>
@@ -76,7 +76,7 @@
                     <img class="qportrait" src="don.gif" />
                     <div class="qcontent">
                         <div class="qtext"><del>Optimization is the root of all evil</del></div>
-                        <div class="qauthor">Donald Knuth</p>
+                        <div class="qauthor">Donald Knuth</div>
                     </div>
                 </div>
             </section>
@@ -86,7 +86,7 @@
                     <img class="qportrait" src="don.gif" />
                     <div class="qcontent">
                         <div class="qtext">Premature optimization is the root of all evil</div>
-                        <div class="qauthor">Donald Knuth</p>
+                        <div class="qauthor">Donald Knuth</div>
                     </div>
                 </div>
             </section>
@@ -96,7 +96,7 @@
                     <img class="qportrait" src="don.gif" />
                     <div class="qcontent">
                         <div class="qtext"><del>Premature optimization is the root of all evil</del></div>
-                        <div class="qauthor">Donald Knuth</p>
+                        <div class="qauthor">Donald Knuth</div>
                     </div>
                 </div>
             </section>
@@ -106,7 +106,7 @@
                     <img class="qportrait" src="don.gif" />
                     <div class="qcontent">
                         <div class="qtext">We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil</div>
-                        <div class="qauthor">Donald Knuth</p>
+                        <div class="qauthor">Donald Knuth</div>
                     </div>
                 </div>
             </section>
@@ -120,7 +120,7 @@
                     <img class="qportrait" src="andrei.jpg" />
                     <div class="qcontent">
                         <div class="qtext">To some extent, optimization is to our industry what sexual intercourse is to teenagers. There's a veil of awesomeness surrounding it; everybody thinks it's cool, has an opinion about it, and talks about it a great deal; yet in spite of ample folklore, few get to do it meaningfully or at all.</div>
-                        <div class="qauthor">Andrei Alexandrescu</p>
+                        <div class="qauthor">Andrei Alexandrescu</div>
                     </div>
                 </div>
             </section>
@@ -134,7 +134,7 @@
                     <img class="qportrait" src="blago.jpg" />
                     <div class="qcontent">
                         <div class="qtext">2018-та година е. Кой пише за CPU?</div>
-                        <div class="qauthor">Благовест Тасков</p>
+                        <div class="qauthor">Благовест Тасков</div>
                     </div>
                 </div>
             </section>
@@ -152,6 +152,16 @@
                     </ul>
                     <li>Някои неща важат и за GPU</li>
                 </ul>
+            </section>
+
+            <section>
+                <h2>Сипи още хардуер!</h2>
+                <img class="diagram" style="margin-left: 0;" src="servers.png" />
+            </section>
+
+            <section>
+                <p>Ще се фокусираме върху по low-level концепции и няма да говорим за multi-threading.</p>
+                <p>Ще говорим за хардуер<span>... поне отгоре-отгоре</span></p>
             </section>
 
             <section>
@@ -298,7 +308,7 @@
                     <img class="qportrait" src="bg-people.jpg" />
                     <div class="qcontent">
                         <div class="qtext">По-малко кеш мисове, по-щастлив процесор</div>
-                        <div class="qauthor">Българска народна поговорка</p>
+                        <div class="qauthor">Българска народна поговорка</div>
                     </div>
                 </div>
             </section>
@@ -347,12 +357,122 @@
                 <li>Branch @ 0x12300 : <code>y,n,n,y,y,y,y,y</code></li>
                 <li>Loop predictors - има и такива</li>
                 <li><code>__builtin_expect</code> - леко безсмислено</li>
-                <li>Ако няма идея? Спекулативно изпълнение</li>
+                <li>Ако няма идея? - Изпълняваме и двата бранча</li>
                 </ul>
+                <br/>
+                <br/>
+                <p><em><span class="fancy">Спекулативно изпълнение</span>: Изпълнението на код, който може би не трябва да бъде изпълняван</em></p>
+            </section>
+
+            <section>
+                <h3>Демо 4</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Изводи</h3>
+                <ul>
+                <li><code>if</code> вече не е толкова страшен</li>
+                <li>Dense is better than sparse</li>
+                </ul>
+                <br/>
+                <br/>
+                <div class="quote">
+                    <img class="qportrait" src="kenneth.jpg" />
+                    <div class="qcontent">
+                        <div class="qtext">I believe that order is better than chaos</div>
+                        <div class="qauthor">Kenneth Clark</div>
+                    </div>
+                </div>
             </section>
 
             <section>
                 <h2>Syscalls и алокации</h2>
+                <h3>Най-вече алокации!</h3>
+            </section>
+
+            <section>
+                <img class="diagram" style="margin-left: 250px;" src="cpu-stop.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Syscall</h3>
+                <p>Напускаме пределите на нашата програма и се отправяме в света на операционната система</p>
+                <img class="diagram" style="margin-left: 20px;" src="boldly-go.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Syscall примери</h3>
+                <ul>
+                <li>Не рънтайм като <code>sin, cos, qsort</code></li>
+                <li>I/O</li>
+                </ul>
+                <br/>
+                <br/>
+                <div class="quote">
+                    <img class="qportrait" src="bobi.jpg" />
+                    <div class="qcontent">
+                        <div class="qtext">Ако нещо е бавно и не е очевидно какво е, най-вероятният виновник е I/O</div>
+                        <div class="qauthor">Аз</div>
+                    </div>
+                </div>
+                <br/>
+                <ul>
+                <li>Менажиране на процеси и нишки</li>
+                <li>Драйверни извиквания като OpenGL</li>
+                <li>Алокации и деалокации</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Алокации и деалокации</h3>
+                <ul>
+                    <li>Явна цена</li>
+                    <ul>
+                        <li>Операционната система трябва да извърши една камара неща.</li>
+                        <li>Физическата памет: страници</li>
+                        <li>Свободно парче поредни страници</li>
+                        <li>Синхронизация между различни процеси и нишки</li>
+                    </ul>
+                    <li>Commit size - много помага</li>
+                    <li>Не-толкова-явна цена</li>
+                    <ul>
+                        <li>Нулиране/Изчистване на памет</li>
+                        <li>Фрагментация</li>
+                    </ul>
+                    <li><span class="fancy">Всяка алокация и деалокация е syscall</span></li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Демо 5</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Какво да направим?</h3>
+                <ul>
+                    <li>Билярди и басейни <span>(сиреч <span class="fancy">pools</span>)</span></li>
+                    <ul>
+                        <li>Защо Жаба е по-бърза от С++?</li>
+                    </ul>
+                    <li>Преизползване на обекти</li>
+                    <li>Code it like it's 1969. Масиви с фиксиран размер</li>
+                    <li>Reserve (например <code>std::vector::reserve</code>)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Демо 5'</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Какво ни коства това?</h3>
+                <ul>
+                    <li>Повече памет</li>
+                    <li>По-сложен и труден за четене код</li>
+                    <li>По-дълго време за зареждане</li>
+                    <li>В краен случай malloc-lite: Да решаваме проблемите, които операционната система решава</li>
+                    <li>За щастие в 90% от ситуациите можем да минем с 10% от усилията</li>
+                </ul>
             </section>
 
             <section>

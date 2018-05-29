@@ -1,28 +1,33 @@
+#define NOMINMAX
+
 #include "common.inl"
 
 #include <vector>
 #include <list>
 #include <cstddef>
+#include <algorithm>
 
-struct ivec
+struct vec
 {
-    int x, y;
-    int manhattan_length() const {
+    double x, y;
+    double manhattan_length() const {
         return x + y;
     }
 };
 
+double drand() { return rand(); }
+
 void vector(picobench::state& s)
 {
-    std::vector<ivec> v;
+    std::vector<vec> v;
     srand(s.iterations());
     v.reserve(s.iterations());
 
     for (int i=0; i<s.iterations(); ++i) {
-        v.push_back({rand(), rand()});
+        v.push_back({drand(), drand()});
     }
 
-    int sum = 0;
+    double sum = 0;
 
     {
         picobench::scope scope(s);
@@ -31,19 +36,19 @@ void vector(picobench::state& s)
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), *reinterpret_cast<int*>(&sum));
 }
 
 void list(picobench::state& s)
 {
-    std::list<ivec> l;
+    std::list<vec> l;
     srand(s.iterations());
 
     for (int i=0; i<s.iterations(); ++i) {
-        l.push_back({rand(), rand()});
+        l.push_back({drand(), drand()});
     }
 
-    int sum = 0;
+    double sum = 0;
 
     {
         picobench::scope scope(s);
@@ -52,7 +57,7 @@ void list(picobench::state& s)
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), *reinterpret_cast<int*>(&sum));
 }
 
 
@@ -171,14 +176,14 @@ std::vector<std::vector<T>> pool_alloc<T>::pool(1);
 
 void list_alloc(picobench::state& s)
 {
-    std::list<ivec, pool_alloc<ivec>> l;
+    std::list<vec, pool_alloc<vec>> l;
     srand(s.iterations());
 
     for (int i = 0; i<s.iterations(); ++i) {
-        l.push_back({ rand(), rand() });
+        l.push_back({ drand(), drand() });
     }
 
-    int sum = 0;
+    double sum = 0;
 
     {
         picobench::scope scope(s);
@@ -187,9 +192,9 @@ void list_alloc(picobench::state& s)
         }
     }
 
-    sanity_check(s.iterations(), sum);
+    sanity_check(s.iterations(), *reinterpret_cast<int*>(&sum));
 }
 
 PICOBENCH(vector);
 PICOBENCH(list);
-PICOBENCH(list_alloc);
+//PICOBENCH(list_alloc);
