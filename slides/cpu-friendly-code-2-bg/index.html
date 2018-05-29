@@ -160,8 +160,8 @@
             </section>
 
             <section>
-                <p>Ще се фокусираме върху по low-level концепции и няма да говорим за multi-threading.</p>
-                <p>Ще говорим за хардуер<span class="fragment">... поне отгоре-отгоре</span></p>
+                <p>Ще се фокусираме върху по-low-level концепции и няма да говорим за multi-threading.</p>
+                <p class="fragment">Ще говорим за хардуер<span class="fragment">... поне отгоре-отгоре</span></p>
             </section>
 
             <section>
@@ -171,8 +171,8 @@
             <section class="slide">
                 <h3>О-нотация</h3>
                 <ul>
-                    <li>Асимптотична оценка на сложността на алгоритми</li>
-                    <li>Полезна и много широко използвана</li>
+                    <li class="fragment">Асимптотична оценка на сложността на алгоритми</li>
+                    <li class="fragment">Полезна и много широко използвана</li>
                     <li class="fragment">Θ-нотация, Ω-нотация, и т.н.</li>
                     <li class="fragment">Оценява се <span class="fancy">нарастването на сложността</span> спрямо нарастването на входа</li>
                     <li class="fragment">Оценка с малките букви (о, θ,  ω) - често прекалява</li>
@@ -187,14 +187,14 @@
                 <pre class="fragment"><code>  std::vector&lt;int&gt; v;
   ...
   int sixth = v[6]; // !</code></pre>
-                <p class="fragment">Теоритична реална сложност: 1</p>
+                <p class="fragment">Теоретична реална сложност: 1</p>
                 <br/>
                 <pre class="fragment"><code>  std::list&lt;int&gt; l;
   ...
   auto isixth = l.begin();
   for(int i=0; i&lt;6; ++i) ++isixth;
   int sixth = *isixth; // !</code></pre>
-                <p class="fragment">Теоритична реална сложност: 6</p>
+                <p class="fragment">Теоретична реална сложност: 6</p>
             </section>
 
             <section class="slide">
@@ -203,7 +203,7 @@
                 <br/>
                 <pre class="fragment"><code>  int sum = 0;
   for(auto elem : container) sum += elem;</code></pre>
-                <p class="fragment">Теоритична реална сложност: n</p>
+                <p class="fragment">Теоретична реална сложност: n</p>
                 <br/>
                 <pre class="fragment"><code>  point3 sum = {0, 0, 0};
   for (const auto&amp; elem : container) {
@@ -211,12 +211,12 @@
       sum.y += elem.y;
       sum.z += elem.z;
   }</code></pre>
-                <p class="fragment">Теоритична реална сложност: 3n</p>
+                <p class="fragment">Теоретична реална сложност: 3n</p>
             </section>
 
             <section class="slide">
                 <h3>Хакване на О-нотацията</h3>
-                <p>Константна сложност<span class="fragment">: 1000.</span></p>
+                <p class="fragment">Константна сложност<span class="fragment">: 1000.</span></p>
                 <ul class="fragment">
                     <li>Линейна за по-малко от 1000 елемента е по-бърза</li>
                     <li>Квадратна за по-малко от 32 е по-бърза</li>
@@ -298,7 +298,7 @@
                     </ul>
                 <li class="fragment">Бавни работи:</li>
                     <ul>
-                    <li class="fragment">Индирекции</li>
+                    <li class="fragment">Индирекции (с указатели)</li>
                     <li class="fragment">Включително динамичен полиморфизъм</li>
                     </ul>
                 <li class="fragment">Array-of-structs vs Struct-of-arrays</li>
@@ -404,7 +404,7 @@
             <section class="slide">
                 <h3>Syscall примери</h3>
                 <ul>
-                <li class="fragment">Не рънтайм като <code>sin, cos, qsort</code></li>
+                <li class="fragment"><span class="fancy">Не</span> неща като <code>sin, cos, qsort</code></li>
                 <li class="fragment">I/O</li>
                 </ul>
                 <br/>
@@ -425,7 +425,7 @@
             </section>
 
             <section class="slide">
-                <h3>Алокации и деалокации</h3>
+                <h3>Алокации</h3>
                 <ul>
                     <li class="fragment">Явна цена</li>
                     <ul>
@@ -491,8 +491,9 @@
                     <li class="fragment">Не всички са достъпни през С или С++</li>
                     <ul>
                         <li class="fragment">Например <code>rdtsc</code></li>
+                        <li class="fragment">или <code>wbinvd</code></li>
                     </ul>
-                    <li class="fragment">Компилаторите ни дават начин да ги достъпим чрез <span class="fancy">intrinsics</span></li>
+                    <li class="fragment">Компилаторите ни дават начин да достъпим някои от тях чрез <span class="fancy">intrinsics</span></li>
                     <ul class="fragment">
                         <li><a href="https://gcc.gnu.org/onlinedocs/gcc/Target-Builtins.html">gcc и clang</a>: <code>__builtin_???</code></li>
                         <li><a href="https://docs.microsoft.com/en-us/cpp/intrinsics/compiler-intrinsics">msvc</a>: <code>_???, _m_??, _mm_??</code></li>
