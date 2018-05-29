@@ -391,7 +391,8 @@
             </section>
 
             <section>
-                <img class="diagram" style="margin-left: 250px;" src="cpu-stop.jpg" />
+                <img class="diagram" style="margin-left: 300px;" src="cpu-stop.jpg" />
+                <p>Hammer time</p>
             </section>
 
             <section class="slide">
@@ -454,9 +455,9 @@
                     <ul>
                         <li>Защо Жаба е по-бърза от С++?</li>
                     </ul>
-                    <li>Преизползване на обекти</li>
-                    <li>Code it like it's 1969. Масиви с фиксиран размер</li>
-                    <li>Reserve (например <code>std::vector::reserve</code>)</li>
+                    <li><span class="fancy">Преизползване</span> на обекти</li>
+                    <li>Code it like it's 1969. Масиви с <span class="fancy">фиксиран размер</span></li>
+                    <li>Reserve (например <span class="fancy"><code>std::vector::reserve</code></span>)</li>
                 </ul>
             </section>
 
@@ -476,12 +477,85 @@
             </section>
 
             <section>
+                <img class="diagram" style="margin-left: 300px;" src="cpu-cup.jpg" />
                 <h2>Интринсики</h2>
             </section>
 
+            <section class="slide">
+                <h3>Instruction set</h3>
+                <ul>
+                    <li>Какво може нашия процесор?</li>
+                    <ul>
+                        <li>Да изпълнява инструкции</li>
+                    </ul>
+                    <li>Не всички са достъпни през С или С++</li>
+                    <ul>
+                        <li>Например <code>rdtsc</code></li>
+                    </ul>
+                    <li>Компилаторите ни дават начин да ги достъпим чрез <span class="fancy">intrinsics</span></li>
+                    <ul>
+                        <li><a href="https://gcc.gnu.org/onlinedocs/gcc/Target-Builtins.html">gcc и clang</a>: <code>__builtin_???</code></li>
+                        <li><a href="https://docs.microsoft.com/en-us/cpp/intrinsics/compiler-intrinsics">msvc</a>: <code>_???, _m_??, _mm_??</code></li>
+                    </ul>
+                </ul>
+            </section>
+
             <section>
+                <h3>Демо 6</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Недостатъци</h3>
+                <ul>
+                    <li>Compiler-specific</li>
+                    <li>Architecture-specific</li>
+                    <li><code>#ifdef</code> ту дъ рескю</li>
+                </ul>
+                <br/>
+                <br/>
+                <p>Заслужава си да ги прегледате и може би да откриете неочаквани прозрения</p>
+            </section>
+
+            <section>
+                <img class="diagram" style="margin-left: 300px;" src="cpu-run.jpg" />
                 <h2>SIMD and beyond</h2>
             </section>
+
+            <section class="slide">
+                <h3>Single Instruction Multiple Data</h3>
+                <ul>
+                    <li>x86</li>
+                    <ul>
+                        <li>MMX, SSE, SSE2, SSE3, SSE4, SSE5, <span class="fancy">AVX</span>, FMA, AVX2, AVX-512</li>
+                    </ul>
+                    <li>ARM</li>
+                    <ul>
+                        <li>NEON, ARMv8</li>
+                    </ul>
+                    <li>Управляват се с интринсики</li>
+                    <li>Внимавайте с <span class="fancy">alignment</span></li>
+                    <li>Компилаторите са <a href="https://godbolt.org/g/N3HyWw">мощни!</a></li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Beyond</h3>
+                <ul>
+                    <li>Това всичко беше повърхностно</li>
+                    <li>За да спечелите от хардуера, трябва да го познавате</li>
+                    <li>Четете повече дисасембли</li>
+                    <li>Винаги бенчмарквайте</li>
+                    <li>???</li>
+                    <li>Profit</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Бонус: Hyperthreading</h3>
+                <p>... и как може да ни пореже</p>
+                <img class="diagram" src="../cpupbg/ooo_core_hyper.png" />
+            </section>
+
             <section class="slide">
                 <h3>Бонус: Meltdown</h3>
                 <pre><code>    char* memory = new char[0x200];
@@ -493,6 +567,36 @@
     measure_time_to_access(memory[0]);
     measure_time_to_access(memory[0x100]);</code></pre>
                 <img class="diagram" src="lebron-intel.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Бонус: Spectre</h3>
+                <pre><code>
+    if (some_condition) {
+        hidden_val = hidden_data[N];
+        whatever = public_data[hidden_val]; // o_O
+    }
+                </code></pre>
+                <ul>
+                    <li>Branch-prediction е трудно<span>: Частично адресиране</span></li>
+                    <li>Branch predictor poisoning: Програма която има <code>if(true)</code> на същия частичен адрес</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Бонус: Spectre</h3>
+                <pre><code>    if (some_condition) { // на кой адрес е това?
+        hidden_val = hidden_data[N];
+        whatever = public_data[hidden_val]; // o_O
+    }</code></pre>
+                <ul>
+                    <li>Branch-prediction е трудно<span>: Частично адресиране</span></li>
+                    <li>Branch predictor poisoning: Програма която има <code>if(true)</code> на същия частичен адрес</li>
+                </ul>
+                <pre><code>    for(auto&amp; elem : public_data) {
+        measure_time_to_access(elem);
+    }</code></pre>
+                <p>Нямаше реални примери, но се откриха</p>
             </section>
 
             <section>

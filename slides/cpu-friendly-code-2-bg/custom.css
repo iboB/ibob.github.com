@@ -38,6 +38,7 @@ body {
 .reveal a:not(.image)
 {
 	color: #448E45;
+	text-decoration: underline;
 }
 
 .reveal a:not(.image):hover
