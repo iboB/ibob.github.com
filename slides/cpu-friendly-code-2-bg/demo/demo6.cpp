@@ -40,7 +40,7 @@ void no_intrin(picobench::state& s)
         v.push_back(rand() + 1);
     }
 
-    double sum = 0;
+    int sum = 0;
 
     {
         picobench::scope scope(s);
@@ -48,6 +48,8 @@ void no_intrin(picobench::state& s)
             sum += lame_count_bits(elem);
         }
     }
+
+    sanity_check(s.iterations(), sum);
 }
 
 void intrin(picobench::state& s)
@@ -60,7 +62,7 @@ void intrin(picobench::state& s)
         v.push_back(rand() + 1);
     }
 
-    double sum = 0;
+    int sum = 0;
 
     {
         picobench::scope scope(s);
@@ -68,9 +70,11 @@ void intrin(picobench::state& s)
             sum += count_bits(elem);
         }
     }
+
+    sanity_check(s.iterations(), sum);
 }
 
-#define ITERATIONS .iterations({ 100000, 200000 })
+#define ITERATIONS .iterations({ 50000, 100000 })
 
 PICOBENCH(no_intrin) ITERATIONS;
 PICOBENCH(intrin) ITERATIONS;
