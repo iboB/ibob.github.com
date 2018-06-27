@@ -61,7 +61,7 @@ function calcAge() {
 
     var now = new Date();
     var age = now.getFullYear() - YEAR;
-    var mdif = now.getMonth() - MONTH - 1; // jan is 0 in getMonth
+    var mdif = now.getMonth() - MONTH + 1; // jan is 0 in getMonth
 
     if (mdif < 0) {
         --age;
