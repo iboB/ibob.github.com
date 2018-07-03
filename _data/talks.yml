@@ -6,6 +6,7 @@
       [DynaMix](https://github.com/iboB/dynamix). An improved version of the
       talk from 2017 in China.
     slides: /slides/dynamixv2/
+    video: https://www.youtube.com/watch?v=-s0zYXGCfJk
   - title: "DynaMix: A New Take on Polymorphism"
     desc: >-
       A talk at
@@ -20,6 +21,10 @@
 
 - language: Bulgarian
   talks:
+  - title: CPU-Friendly Code
+    desc: >-
+      A talk for C++ User Group Meeting Sofia about microoptimizations.
+    slides: /slides/cpu-friendly-code-2-bg/
   - title: Програмиране за графични ускорители
     desc: >-
       A talk for [Astea Conference](http://conference.astea.solutions/bg) 2018
