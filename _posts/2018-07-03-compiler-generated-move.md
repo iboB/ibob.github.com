@@ -13,7 +13,7 @@ So, I wrote a simple struct:
 struct simple_struct
 {
     std::function<void(int)> func;
-    vector<int> data; // call func with each element in data
+    std::vector<int> data; // call func with each element in data
 };
 ```
 
@@ -51,7 +51,7 @@ struct simple_struct
     simple_struct(const simple_struct&) = delete;
 
     std::function<void(int)> func;
-    vector<int> data; // call func with each element in data
+    std::vector<int> data; // call func with each element in data
     std::unique_ptr<complex_struct> more_data;
 };
 ```
