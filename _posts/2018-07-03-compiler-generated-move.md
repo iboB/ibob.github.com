@@ -31,7 +31,7 @@ After a while I had to add a `unique_ptr` member to that struct... and then I go
 
 "Whoa!", I thought, "Why do you want to copy the struct? It's obviously movable, so just use the compiler-generated move constructor."
 
-After a short investigation I found that the culprit was the `std::function` member because, as it turns out, `std::function`'s [move constructor](https://en.cppreference.com/w/cpp/utility/functional/function/function) is not `noexcept`. This is a big problem because `std::vector` uses [`std::move_if_noexcept`](https://en.cppreference.com/w/cpp/utility/move_if_noexcept) on reallocation to move its members only if their move constructors are `noexcept` and otherwise copy them. That's because there is simply not a reasonable way to preserve the valid state of the `vector` if a move throws and exception.
+After a short investigation I found that the culprit was the `std::function` member because, as it turns out, `std::function`'s [move constructor](https://en.cppreference.com/w/cpp/utility/functional/function/function) is not `noexcept`. This is a big problem because `std::vector` uses [`std::move_if_noexcept`](https://en.cppreference.com/w/cpp/utility/move_if_noexcept) on reallocation to move its members only if their move constructors are `noexcept` and otherwise copy them. That's because there is simply no reasonable way to preserve the valid state of the `vector` if a move throws an exception.
 
 And why isn't `std::function`'s move constructor `noexcept`? Well in hindsight it's obvious. There is no guarantee that the variables captured by value from a lambda will have `noexcept` move constructors. `std::function` must be able to hold any lambda, so for that to be possible it can't have a `noexcept` move constructor of its own.[^1]
 
@@ -66,5 +66,5 @@ I added this to my mental list of gotchas and hopefully this blog post will help
 
 ___
 
-[^1]: As pointed out by comments on [Cpplang Slack](https://cpplang.slack.com). This isn't that obvious. `std::function` doesn't *have* to move its contents. True most if not all implementation use a small buffer optimization, but they may choose *not* to use it in case its contents don't agree with `is_nothrow_move_constructible`. Alas, they don't seem to choose so.
+[^1]: As pointed out by comments on [Cpplang Slack](https://cpplang.slack.com). This isn't that obvious. `std::function` doesn't *have* to move its contents. True, most if not all implementation use a small buffer optimization, but they may choose *not* to use it in case its contents don't agree with `is_nothrow_move_constructible`. And in fact in the latest versions (after 2017) of libc++ and libstdc++ it is so!
 [^2]: Thanks to [Miro Knejp](https://twitter.com/mknejp) for pointing out this error.
