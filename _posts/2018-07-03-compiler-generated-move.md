@@ -46,7 +46,6 @@ struct simple_struct
 {
     simple_struct() = default;
     simple_struct(simple_struct&&) = default;
-
     simple_struct(const simple_struct&) = delete;
 
     std::function<void(int)> func;
@@ -67,5 +66,5 @@ I added this to my mental list of gotchas and hopefully this blog post will help
 
 ___
 
-[^1]: As pointed out by comments on [Cpplang Slack](cpplang.slack.com). This isn't that obvious. `std::function` doesn't *have* to move its contents. True most if not all implementation use a small buffer optimization, but they may choose *not* to use it in case its contents don't agree with `is_nothrow_move_constructible`. Alas, they don't seem to choose so.
+[^1]: As pointed out by comments on [Cpplang Slack](https://cpplang.slack.com). This isn't that obvious. `std::function` doesn't *have* to move its contents. True most if not all implementation use a small buffer optimization, but they may choose *not* to use it in case its contents don't agree with `is_nothrow_move_constructible`. Alas, they don't seem to choose so.
 [^2]: Thanks to [Miro Knejp](https://twitter.com/mknejp) for pointing out this error.
