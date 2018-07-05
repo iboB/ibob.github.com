@@ -27,7 +27,7 @@ std::vector<simple_struct> stuffs;
 
 *If you spotted the problem by now, well done. For me it was a surprise. Curiously when I told the story to some friends, they were suprised too. Hopefully this blog post helps others who didn't see the following coming.*
 
-After a while I had to add a `unique_ptr` member to that struct... and then I got a compiler error that the copy-constructor of `simple_struct` was implicitly deleted and I can't have a `vector` of those.
+After some time while debugging (and luckily not using [Just My Code](https://msdn.microsoft.com/en-us/library/dn457346.aspx)) I stepped into the copy-constructor of `vector<int>` while `vector<simple_struct>` was being resized.
 
 "Whoa!", I thought, "Why do you want to copy the struct? It's obviously movable, so just use the compiler-generated move constructor."
 
@@ -37,7 +37,7 @@ And why isn't `std::function`'s move constructor `noexcept`? Well in hindsight i
 
 Finally, since a member's move constructor isn't `noexcept`, the compiler-generated move constructor of a class or struct is also not `noexcept`. It's only logical.
 
-So, it turns out that before adding the `unique_ptr` member there were vectors of integers (and big ones, mind you) copied on each reallocation of the vector of `simple_struct`. A sad waste of CPU cycles.
+So, it turns out that there were vectors of integers (and big ones, mind you) copied on each reallocation of the vector of `simple_struct`. A sad waste of CPU cycles.
 
 Luckily the fix was simple. ~~A `= default` move constructor *is* `noexcept`.~~[^2] I didn't need to copy the struct, so I just deleted the copy constructor. Thus the vector had no choice but to use the move constructor. I did this with full realization that should a move constructor throw, the vector *will* end up in an invalid state. I documented it, but it's highly unlikely for this to ever become an issue. So the final version of `simple_struct`, which wasn't pointlessly copied, ended up like this:
 
@@ -50,7 +50,6 @@ struct simple_struct
 
     std::function<void(int)> func;
     std::vector<int> data; // call func with each element in data
-    std::unique_ptr<complex_struct> more_data;
 };
 ```
 
