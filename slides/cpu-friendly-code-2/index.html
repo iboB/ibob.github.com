@@ -1,0 +1,648 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>CPU-friendly Code</title>
+
+    <meta name="description" content="Slides for a talk about CPU-architecture-oriented optimizations">
+    <meta name="author" content="Borislav Stanimirov">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight-new/styles/arduino-light.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+
+            <section class="title">
+                <img class="diagram" src="../cpu-friendly-code-2-bg/cpu-beer.png" />
+                <h1>CPU-friendly Code</h1>
+                <h3>O-notation isn't everything</h3>
+                <p><a href="http://ibob.github.io">Borislav Stanimirov</a></p>
+            </section>
+
+            <section class="slide">
+                <h3>Hello, World</h3>
+                <ul>
+                    <li><span class="fancy">Borislav</span> aka <span class="fancy">Bobi</span> aka <span class="fancy">iboB</span></li>
+                    <li>Mostly a <span class="fancy">C++</span> programmer</li>
+                    <li>Mostly a <span class="fancy">game</span> programmer</li>
+                    <li>I also do <span class="fancy">open source</span></li>
+                    <ul>
+                        <li class="fragment"><a href="http://ibob.github.io">ibob.github.io</a></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Optimizations</h2>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/don.gif" />
+                    <div class="fragment qcontent">
+                        <div class="qtext">Optimization is the root of all evil</div>
+                        <div class="qauthor">Donald Knuth</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/don.gif" />
+                    <div class="qcontent">
+                        <div class="qtext"><del>Optimization is the root of all evil</del></div>
+                        <div class="qauthor">Donald Knuth</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/don.gif" />
+                    <div class="qcontent">
+                        <div class="qtext">Premature optimization is the root of all evil</div>
+                        <div class="qauthor">Donald Knuth</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/don.gif" />
+                    <div class="qcontent">
+                        <div class="qtext"><del>Premature optimization is the root of all evil</del></div>
+                        <div class="qauthor">Donald Knuth</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/don.gif" />
+                    <div class="qcontent">
+                        <div class="qtext">We should forget about small efficiencies, say about 97% of the time: premature optimization is the root of all evil</div>
+                        <div class="qauthor">Donald Knuth</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <p>This talk is <span class="fancy">to a great extent</span> about those 3%</p>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/andrei.jpg" />
+                    <div class="fragment qcontent">
+                        <div class="qtext">To some extent, optimization is to our industry what sexual intercourse is to teenagers. There's a veil of awesomeness surrounding it; everybody thinks it's cool, has an opinion about it, and talks about it a great deal; yet in spite of ample folklore, few get to do it meaningfully or at all.</div>
+                        <div class="qauthor">Andrei Alexandrescu</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <p>This talk is about <span class="fancy">fundamental principles</span> and not about algorithms</p>
+            </section>
+
+            <section>
+                <div class="quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/blago.jpg" />
+                    <div class="qcontent fragment">
+                        <div class="qtext">It's 2018. Who writes code for the CPU?</div>
+                        <div class="qauthor">Blagovest Taskov</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide">
+                <h3>Why CPU and not GPU?</h3>
+                <ul>
+                    <li>The GPU is crazy-mega-powerful <span class="fragment">for some problems.</span></li>
+                    <li class="fragment">Blah-blah architectural differences</li>
+                    <li class="fragment">The GPU is a bad choice for these problems:</li>
+                    <ul>
+                    <li class="fragment"><span class="fancy">Few data:</span> PCI-bus overhead</li>
+                    <li class="fragment"><span class="fancy">Non-parallelizable</span> algorithms</li>
+                    <li class="fragment">Sometimes we're <span class="fancy">GPU-bound</span></li>
+                    </ul>
+                    <li class="fragment">Still some things apply equaly for GPU-s</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Add more hardware!</h2>
+                <img class="diagram" style="margin-left: 0;" src="../cpu-friendly-code-2-bg/servers.png" />
+            </section>
+
+            <section>
+                <p>We'll focus on low-level concepts and won't talk about multi-threading.</p>
+                <p class="fragment">We will talk about hardware<span class="fragment">... a least a bit</span></p>
+            </section>
+
+            <section>
+                <h2>O-notation isn't everything</h2>
+            </section>
+
+            <section class="slide">
+                <h3>O-notation</h3>
+                <ul>
+                    <li class="fragment">An asymptotic evaluation of the complexity of an algorithm</li>
+                    <li class="fragment">Very useful and widely used</li>
+                    <li class="fragment">Θ-notation, Ω-notation, etc</li>
+                    <li class="fragment">We evaluate <span class="fancy">the growth of the complexity</span> based on the growth of the input</li>
+                    <li class="fragment">Little-letter notation (о, θ,  ω) - too conservative</li>
+                    <li class="fragment">The <span class="fancy">real complexity</span> still exists</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Example: О(1)</h3>
+                <p>Take the sixth element from a container.</p>
+                <br/>
+                <pre class="fragment"><code>  std::vector&lt;int&gt; v;
+  ...
+  int sixth = v[6]; // !</code></pre>
+                <p class="fragment">Theoretical real complexity: 1</p>
+                <br/>
+                <pre class="fragment"><code>  std::list&lt;int&gt; l;
+  ...
+  auto isixth = l.begin();
+  for(int i=0; i&lt;6; ++i) ++isixth;
+  int sixth = *isixth; // !</code></pre>
+                <p class="fragment">Theoretical real complexity: 6</p>
+            </section>
+
+            <section class="slide">
+                <h3>Example: О(n)</h3>
+                <p>Sum the elements from a list.</p>
+                <br/>
+                <pre class="fragment"><code>  int sum = 0;
+  for(auto elem : container) sum += elem;</code></pre>
+                <p class="fragment">Theoretical real complexity: n</p>
+                <br/>
+                <pre class="fragment"><code>  point3 sum = {0, 0, 0};
+  for (const auto&amp; elem : container) {
+      sum.x += elem.x;
+      sum.y += elem.y;
+      sum.z += elem.z;
+  }</code></pre>
+                <p class="fragment">Theoretical real complexity: 3n</p>
+            </section>
+
+            <section class="slide">
+                <h3>Hacking O-notation</h3>
+                <p class="fragment">Constant complexity<span class="fragment">: 1000.</span></p>
+                <ul class="fragment">
+                    <li>Linear for less than a 1000 elements is faster</li>
+                    <li>Quadratc for less than 32 is faster</li>
+                    <li>Cubic for less than 10 is faster</li>
+                </ul>
+                <br/><br/>
+                <p class="fragment">Linear complexity: 100n.</p>
+                <ul class="fragment">
+                    <li>Quadratic for less than 100 is faster</li>
+                    <li>Cubic for less than 10 is faster</li>
+                </ul>
+                <br/><br/>
+                <p class="fragment">...</p>
+            </section>
+
+            <section>
+                <p>It's useful to have an idea of the real complexity and the size of the input</p>
+            </section>
+
+            <section>
+                <h3>Demo 1 and 2</h3>
+            </section>
+
+            <section>
+                <p>Modern hardware makes the real complexity <span class="fancy">pratically impossible to calculate</span></p>
+                <p class="fragment">But nevertheless...</p>
+            </section>
+
+            <section>
+                <h2>Cache locality</h2>
+            </section>
+
+            <section>
+                <img class="diagram" style="margin-left: 250px;" src="../cpu-friendly-code-2-bg/cpu-cash.jpg" />
+            </section>
+
+            <section>
+                <h2>Cache Locality</h2>
+            </section>
+
+            <section>
+                <img class="diagram" src="../cpu-friendly-code-2-bg/mobo-comic.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Cache ($)</h3>
+                <p class="fragment">Cache is memory <span class="fancy">close to the CPU</span></p>
+                <p class="fragment">Cache levels - <span class="fancy">the closer, the faster</span></p>
+                <img class="fragment diagram" src="../cpu-friendly-code-2-bg/cache-diagram.png" />
+                <p class="fragment">RAM (&rarr; L4?) &rarr; L3 &rarr; L2 &rarr; L1</p>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+                <ul>
+                <p>Responding to "Give me data on address X!" leads to potentially different strategies. For example:</p>
+                <p>&nbsp;&nbsp;<span class="fancy">4KB to L3</span> &rarr; <span class="fancy">256B to L2</span> &rarr; <span class="fancy">64B to L1</span></p>
+                <ul class="fragment">
+                    <li>The data is in the cache - <span class="fancy">cache hit</span></li>
+                    <li>It it's not - <span class="fancy">cache miss</span></li>
+                </ul>
+                <br/>
+                <p class="fragment">How much does this cost?</p>
+                <ul class="fragment">
+                    <li>L1: ~<span class="fancy">4</span> cycles</li>
+                    <li>L2: ~<span class="fancy">10</span> cycles</li>
+                    <li>L3: ~<span class="fancy">20</span> cycles</li>
+                    <li>RAM: ~<span class="fancy">100</span> cycles</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>What does this mean?</h3>
+                <ul>
+                <li class="fragment">Fast stuff:</li>
+                    <ul class="fragment">
+                    <li><span class="fancy">Value types / PODs</span></li>
+                    <li><span class="fancy">Contiguous memory</span></li>
+                    </ul>
+                <li class="fragment">Slow stuff:</li>
+                    <ul>
+                    <li class="fragment">Indirections (pointers)</li>
+                    <li class="fragment">This includes dynamic polymorphism</li>
+                    </ul>
+                <li class="fragment">Array-of-structs vs Struct-of-arrays</li>
+                </ul>
+                <br/><br/>
+                <div class="fragment quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/bg-people.jpg" />
+                    <div class="qcontent">
+                        <div class="qtext">Less cache misses lead to a happier CPU</div>
+                        <div class="qauthor">Bulgarian folk proverb</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h3>Demo 3 and 1'</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Types of cache</h3>
+                <ul>
+                <li class="fragment"><span class="fancy">Data</span> - Our data. What the examples were about</li>
+                <li class="fragment"><span class="fancy">Instruction</span> - The code of the program. A demo is hard :(</li>
+                <li class="fragment"><span class="fancy">TLB</span> - for virtual memory. We don't have control over this</li>
+                <li class="fragment">All of these are L1. L2+ are mixed</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Branch prediction</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Branch</h3>
+                <p>Well... litearlly a branch in the program</p>
+                <br/>
+                <img class="diagram" src="../cpu-friendly-code-2-bg/raining.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Branch</h3>
+                <p>Well... litearlly a branch in the program</p>
+                <br/>
+                <img class="diagram" src="../cpu-friendly-code-2-bg/raining-miss.png" />
+            </section>
+
+            <section class="slide">
+                <h3>CPU ОоО Pipeline</h3>
+                <img class="diagram" src="../cpupbg/ooo_core.png" />
+                <p align="right">Waiting is expensive</p>
+            </section>
+
+            <section class="slide">
+                <h3>Branch predictors</h3>
+                <ul>
+                <li>Branch @ 0x12300 : <code>y,n,n,y,y,y,y,y</code></li>
+                <li class="fragment">Loop predictors - this is a thing</li>
+                <li class="fragment"><code>__builtin_expect</code> - borderline pointless</li>
+                <li class="fragment">If we have no clue, execute both branches</li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment"><em><span class="fancy">Speculative execution</span>: The execution of code, which possibly shouldn't be executed</em></p>
+            </section>
+
+            <section>
+                <h3>Demo 4</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Conclusions</h3>
+                <ul>
+                <li class="fragment"><code>if</code>-s are not that scary anymore</li>
+                <li class="fragment">Dense is better than sparse</li>
+                </ul>
+                <br/>
+                <br/>
+                <div class="fragment quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/kenneth.jpg" />
+                    <div class="fragment qcontent">
+                        <div class="qtext">I believe that order is better than chaos</div>
+                        <div class="qauthor">Kenneth Clark</div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Syscalls и алокации</h2>
+                <h3 class="fragment">Especially allocations!</h3>
+            </section>
+
+            <section>
+                <img class="diagram" style="margin-left: 300px;" src="../cpu-friendly-code-2-bg/cpu-stop.jpg" />
+                <p>Hammer time</p>
+            </section>
+
+            <section class="slide">
+                <h3>Syscall</h3>
+                <p>We leave the reaches of our program and boldly go into the world of the operating system</p>
+                <img class="fragment diagram" style="margin-left: 20px;" src="../cpu-friendly-code-2-bg/boldly-go.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Syscall examples</h3>
+                <ul>
+                <li class="fragment"><span class="fancy">Not</span> functions like <code>sin, cos, qsort</code></li>
+                <li class="fragment">I/O (input and output)</li>
+                </ul>
+                <br/>
+                <br/>
+                <div class="fragment quote">
+                    <img class="qportrait" src="../cpu-friendly-code-2-bg/bobi.jpg" />
+                    <div class="fragment qcontent">
+                        <div class="qtext">If something is slow, and it's not obvious why, the most likely suspect is I/O</div>
+                        <div class="qauthor">Me</div>
+                    </div>
+                </div>
+                <br/>
+                <ul>
+                <li class="fragment">Managing threads and processes</li>
+                <li class="fragment">Driver calls like OpenGL</li>
+                <li class="fragment">Allocations and deallocations</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Алокации</h3>
+                <ul>
+                    <li class="fragment">Obvious cost</li>
+                    <ul>
+                        <li class="fragment">The OS has to do a bunch of stuff.</li>
+                        <li class="fragment">Physical memory: pages</li>
+                        <li class="fragment">Free chung of consecutive pages</li>
+                        <li class="fragment">Sync between threads and processes</li>
+                    </ul>
+                    <li class="fragment">Commit size - it's very helpful</li>
+                    <li class="fragment">Not-so-obvious cost</li>
+                    <ul>
+                        <li class="fragment">Zeroing/clearing of memory</li>
+                        <li class="fragment">Fragmentation</li>
+                    </ul>
+                    <li class="fragment"><span class="fancy">Every allocation is a syscall</span></li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Demo 5</h3>
+            </section>
+
+            <section class="slide">
+                <h3>What can we do?</h3>
+                <ul>
+                    <li class="fragment">Object and memory pools</li>
+                    <ul>
+                        <li class="fragment">Why is Java faster than C++?</li>
+                    </ul>
+                    <li class="fragment"><span class="fancy">Reusing</span> objects</li>
+                    <li class="fragment">Code it like it's 1969. <span class="fancy">Fixed size</span> arrays</li>
+                    <li class="fragment">Reserve (for example <span class="fancy"><code>std::vector::reserve</code></span>)</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Demo 5'</h3>
+            </section>
+
+            <section class="slide">
+                <h3>What does this cost?</h3>
+                <ul>
+                    <li>More memory</li>
+                    <li>Code which is more complicated and harder to read</li>
+                    <li>Longer loading time</li>
+                    <li>malloc-lite: locally solve the problems which the OS is trying to solve</li>
+                    <li>Luckily in 90% ot the cases we can go away with 10% of the effort.</li>
+                </ul>
+            </section>
+
+            <section>
+                <img class="diagram" style="margin-left: 300px;" src="../cpu-friendly-code-2-bg/cpu-cup.jpg" />
+                <h2>Intrinsics</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Instruction set</h3>
+                <ul>
+                    <li class="fragment">What can our CPU do?</li>
+                    <ul>
+                        <li class="fragment">Execute instructions</li>
+                    </ul>
+                    <li class="fragment">Not all instructions are accessible through С or С++</li>
+                    <ul>
+                        <li class="fragment">For example <code>rdtsc</code></li>
+                        <li class="fragment">or <code>wbinvd</code></li>
+                    </ul>
+                    <li class="fragment">Most compilers allow us to access them through <span class="fancy">intrinsics</span></li>
+                    <ul class="fragment">
+                        <li><a href="https://gcc.gnu.org/onlinedocs/gcc/Target-Builtins.html">gcc and clang</a>: <code>__builtin_???</code></li>
+                        <li><a href="https://docs.microsoft.com/en-us/cpp/intrinsics/compiler-intrinsics">msvc</a>: <code>_???, _m_??, _mm_??</code></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Demo 6</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Drawbacks</h3>
+                <ul>
+                    <li>Compiler-specific</li>
+                    <li>Architecture-specific</li>
+                    <li><code>#ifdef</code> to the rescue</li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment">It's worth goign through them and maybe have a revelation</p>
+            </section>
+
+            <section>
+                <img class="diagram" style="margin-left: 300px;" src="../cpu-friendly-code-2-bg/cpu-run.jpg" />
+                <h2>SIMD and beyond</h2>
+            </section>
+
+            <section class="slide">
+                <h3>Single Instruction Multiple Data</h3>
+                <ul>
+                    <li class="fragment">x86</li>
+                    <ul>
+                        <li class="fragment">MMX, SSE, SSE2, SSE3, SSE4, SSE5, <span class="fancy">AVX</span>, FMA, AVX2, AVX-512</li>
+                    </ul>
+                    <li class="fragment">ARM</li>
+                    <ul>
+                        <li class="fragment">NEON, ARMv8</li>
+                    </ul>
+                    <li class="fragment">Accessed through intrinsics (or... you know Assembly)</li>
+                    <li class="fragment">Tace care of <span class="fancy">alignment</span></li>
+                    <li class="fragment">Contemporary compilers are <a href="https://godbolt.org/g/N3HyWw">powerful!</a></li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Beyond</h3>
+                <ul>
+                    <li class="fragment">We just scratched the surface</li>
+                    <li class="fragment">To make good use of the hardware, you must know it</li>
+                    <li class="fragment">Read more disassembly</li>
+                    <li class="fragment">Always benchmark</li>
+                    <li class="fragment">???</li>
+                    <li class="fragment">Profit</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Bonus: Hyperthreading</h3>
+                <p>... and how it can screw us up</p>
+                <img class="diagram" src="../cpupbg/ooo_core_hyper.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Bonus: Meltdown</h3>
+                <pre><code>    char* memory = new char[0x200];
+    if (something_false) {
+        char value = *(char*)(KERNEL_MEM_PTR);
+        int index = (value &amp; 1) * 0x100;
+        puts(memory[index]);
+    }
+    measure_time_to_access(memory[0]);
+    measure_time_to_access(memory[0x100]);</code></pre>
+                <img class="fragment diagram" src="../cpu-friendly-code-2-bg/lebron-intel.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>Bonus: Spectre</h3>
+                <p>OS code:</p>
+                <pre><code>    if (some_condition) {
+        hidden_val = hidden_data[N];
+        whatever = public_data[hidden_val]; // o_O
+    }</code></pre>
+                <ul>
+                    <li class="fragment">Branch-prediction is hard<span class="fragment">: Partial addressing</span></li>
+                    <li class="fragment">Branch predictor poisoning: Software which has an <code>if(true)</code> at the same partial address</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Bonus: Spectre</h3>
+                <p>OS code:</p>
+                <pre><code>    if (some_condition) { // at which address is this?
+        hidden_val = hidden_data[N];
+        whatever = public_data[hidden_val]; // o_O
+    }</code></pre>
+                <ul>
+                    <li>Branch-prediction is hard<span>: Partial addressing</span></li>
+                    <li>Branch predictor poisoning: Software which has an <code>if(true)</code> at the same partial address</li>
+                </ul>
+                <pre class="fragment"><code>    for(auto&amp; elem : public_data) {
+        measure_time_to_access(elem);
+    }</code></pre>
+                <p class="fragment">Initially there weren't any real-life examples, but since then some have been found</p>
+            </section>
+
+            <section>
+                <h1>End!</h1>
+                <h2>Questions?</h2>
+                <br/>
+                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+                <p>
+                    <br />
+                    <small>
+                    These slides are here: <a href="http://ibob.github.io/slides/cpu-friendly-code-2/">http://ibob.github.io/slides/cpu-friendly-code-2/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Slides license <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons By 3.0</a><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"></a>
+                    </small>
+                </p>
+            </section>
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'simple', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/highlight-new/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+    </script>
+
+</body>
+</html>

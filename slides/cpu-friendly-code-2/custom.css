@@ -1,0 +1,143 @@
+@import url('https://fonts.googleapis.com/css?family=Fira+Sans');
+
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
+  text-transform: none;
+  font-family: 'Fira Sans', sans-serif;
+}
+
+body {
+  background: #fff; /* For browsers that do not support gradients */
+  background: linear-gradient(#fff, #fff, #eee); /* Standard syntax */
+}
+
+
+.reveal {
+	font-family: 'Fira Sans', sans-serif;
+}
+
+.title h1 {
+	font-size: 3em;
+}
+
+.title img {
+	padding-left: 50px;
+}
+
+.reveal section.slide
+{
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal a:not(.image)
+{
+	color: #448E45;
+	text-decoration: underline;
+}
+
+.reveal a:not(.image):hover
+{
+	color: #6c6;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	text-align: left;
+	border-bottom: 1px solid #EF4136;
+	margin-bottom: 40px;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	display: block;
+	box-shadow: none;
+	margin-left: 150px;
+}
+
+.reveal section img
+{
+	background-color: white;
+}
+
+.reveal section span.fancy
+{
+	/*font-style: italic;*/
+	/*font-weight: bold;*/
+	color: #EF4136;
+}
+
+.reveal code
+{
+	font-family: Consolas, monaco, monospace;
+}
+
+.reveal section code.inline
+{
+}
+
+.reveal pre
+{
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.reveal pre code
+{
+    max-height: 80%;
+	font-size: 1.5em;
+	line-height: 1em;
+}
+
+.reveal .quote
+{
+	width: 100%;
+	text-align: left;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+.quote .qportrait
+{
+	display: inline-block;
+	border: none;
+	background: none;
+	box-shadow: none;
+	margin: 0;
+	align-self: center;
+}
+
+.quote .qcontent
+{
+	margin-left: 50px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-orient: vertical;
+	-webkit-box-direction: normal;
+	-ms-flex-direction: column;
+		flex-direction: column;
+	-webkit-box-pack: center;
+	-ms-flex-pack: center;
+		justify-content: center;
+	flex: 1 1 0%;
+}
+
+.quote .qtext
+{
+	font-style: italic;
+}
+
+.quote .qauthor
+{
+	margin-top: 15px;
+	text-align: right;
+}
