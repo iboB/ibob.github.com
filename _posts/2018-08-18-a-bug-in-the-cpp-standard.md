@@ -62,19 +62,19 @@ int proxy(foo& f, int n)
 
 And we have a method in `foo` like `int const_method(int) const;`, it will work as expected. [Live demo here](https://godbolt.org/z/oWqTZv).
 
-However, what if we have an `const` overload of `some_method`? Overloads on const-ness are after all a very common thing. Well, now we're out of luck. According to the pre C++17 standards, there is literally no way of dealing with this, if we keep our `proxy` overloads.
+However, what if we have an `const` overload of `some_method`? Overloads on const-ness are after all a very common thing. Well, now we're out of luck. According to the pre C++17 standards, there is literally no way of dealing with this if we keep our `proxy` overloads.
 
-Now, of course without doing anything there will be ambiguity in this line: `int (*func)(foo&, int) = proxy<&foo::some_method>;`. Your initial idea would be to cast the template argument to the appropriate overload, but expressions like this are not allowed in pre-17 standards. [Live demo here](https://godbolt.org/z/EkQcqU). Change the standard to C++17 and it will work. [C++17 allows constant expressions in template arguments](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4198.html).
+Now, of course without doing anything, there will be ambiguity in this line: `int (*func)(foo&, int) = proxy<&foo::some_method>;`. Your initial idea would be to cast the template argument to the appropriate overload, but expressions like this are not allowed in pre-17 standards. [Live demo here](https://godbolt.org/z/EkQcqU). Change the standard to C++17 and it will work. [C++17 allows constant expressions in template arguments](http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2014/n4198.html).
 
 A fun fact about this bug is that it's only visible in clang. MSVC and gcc let this cast slide *contradicting the standard* in all versions.
 
-Even though this is fixed, I'm not happy with it, because DynaMix will just now begin transitioning to C++14. It will be probably 3 more years until C++17 become ubiquitous for all platforms and a transition to 17 will be safe. For now I have to use a workaround where there are no overloads of the proxy function but two different functions `proxy` and `const_proxy`. This works but messes-up some code. Transitioning to C++17 will make things in this regard a lot cleaner.
+Even though this is fixed, I'm not happy with it because DynaMix will just now begin transitioning to C++14. It will be probably 3 more years until C++17 become ubiquitous for all platforms and a transition to 17 will be safe. For now I have to use a workaround where there are no overloads of the proxy function but two different functions `proxy` and `const_proxy`. This works but messes-up some code. Transitioning to C++17 will make things in this regard a lot cleaner.
 
 But this brings me to:
 
 ## A pretty active bug in the C++ standard
 
-Let's go back to our first example, and instead of dealing with const functions, deal with a parent of `foo`. Let's imagine this hierarchy:
+Let's go back to our first example and instead of dealing with const functions, deal with a parent of `foo`. Let's imagine this hierarchy:
 
 ```c++
 struct parent
@@ -114,7 +114,7 @@ int (*pfunc)(foo&, int) = proxy<foo, parent, &foo::parent_method>;
 
 Sad. Ugly. [Live demo here](https://godbolt.org/z/axbMxo).
 
-So, yeah, I do call this a bug in the standard. We should absolutely be allowed to perform that cast. Make all casts constant expressions. It's easy!
+So, yeah, I do call this a bug in the standard. We should absolutely be allowed to perform that cast. Make all casts constant expressions! It's easy!
 
 ...
 
