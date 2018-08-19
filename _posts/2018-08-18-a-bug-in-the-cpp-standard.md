@@ -96,7 +96,7 @@ Now we can try casting and adding `-std=c++17`:
 int (*pfunc)(foo&, int) = proxy<(int (foo::*)(int))&foo::parent_method>;
 ```
 
-... but the thing is, this particular cast is not a constant expression. Clang and gcc both don't allow us to cast the template argument here, even though they [clearly can perform the cast at compile time](https://godbolt.org/z/4k-iG_). Luckily for some [MSVC does allow this cast](https://godbolt.org/z/xdAAJ2). You can't test it on Compiler Explorer but even MSVC 2005 does allow that cast.
+... but the thing is, this particular cast is not a constant expression in terms ot non-type template arguments[^1]. Clang and gcc both don't allow us to cast the template argument here, even though they [clearly can perform the cast at compile time](https://godbolt.org/z/4k-iG_). Luckily for some [MSVC does allow this cast](https://godbolt.org/z/xdAAJ2). You can't test it on Compiler Explorer but even MSVC 2005 does allow that cast.
 
 Now I get that this is a standard issue, but... come on. This seems trivial. And now because of this I have to deal with a nasty workaround which [spills all the way into user land](https://github.com/iboB/dynamix/blob/master/include/dynamix/message.hpp#L145):
 
@@ -114,10 +114,12 @@ int (*pfunc)(foo&, int) = proxy<foo, parent, &foo::parent_method>;
 
 Sad. Ugly. [Live demo here](https://godbolt.org/z/axbMxo).
 
-So, yeah, I do call this a bug in the standard. We should absolutely be allowed to perform that cast. Make all casts constant expressions! It's easy!
+So, yeah, I do call this a bug in the standard. We should absolutely be allowed to perform that cast. Allow all constant expression casts in non-type template arguments! It's easy!
 
 ...
 
 Well, at least it's easy to say.
 
+___
 
+[^1]: This one is a bit more subtle then I initially thought so I think it deserves an explanation. Casting functions in C++ can have two meanings: selection from a list of overloads and an actual cast. The wording of the standard for non-type template arguments is *"If the template-argument represents a set of overloaded functions (or a pointer or member pointer to such), the matching function is selected from the set"*. So even though casting `parent::*member` to `child::*member` is of course an implicit cast and a constant expression, the fact that what I need is a *cast* and not a *selection* makes the operation ineligible for a template argument.
