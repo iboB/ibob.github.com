@@ -98,7 +98,7 @@ int (*pfunc)(foo&, int) = proxy<(int (foo::*)(int))&foo::parent_method>;
 
 ... but the thing is, this particular cast is not a constant expression in terms ot non-type template arguments[^1]. Clang and gcc both don't allow us to cast the template argument here, even though they [clearly can perform the cast at compile time](https://godbolt.org/z/4k-iG_). Luckily for some, [MSVC does allow this cast](https://godbolt.org/z/xdAAJ2). You can't test it on Compiler Explorer but even MSVC 2005 does allow that cast.
 
-Now I get that this is a standard issue but... come on! This seems trivial. And now because of this I have to deal with a nasty workaround which [spills all the way into user land](https://github.com/iboB/dynamix/blob/master/include/dynamix/message.hpp#L145):
+Now I get that this is a standard issue but... come on! This seems trivial. And now because of this I have to deal with a nasty workaround which [spills all the way into user land](https://github.com/iboB/dynamix/blob/8b15d7893f7f98380871c7f7efd9f2a8457fafe0/include/dynamix/message.hpp#L145):
 
 ```c++
 template <typename T, typename MethodOwner, int (MethodOwner::*Method)(int)>
