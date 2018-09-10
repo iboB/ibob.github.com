@@ -168,6 +168,33 @@ int main()
                 <p class="inter">DynaMix: A New Take on <span class="fancy">Polymorphism</span></p>
             </section>
 
+            <section>
+                <h3>Polymorphism</h3>
+                <p class="inter">Many forms</p>
+                <p class="inter">The same code does multiple things</p>
+            </section>
+
+            <section class="slide">
+                <h3>Static Polymorphism</h3>
+                <p>The differentiation is done by the compiler</p>
+<pre><code class="cpp hljs">abs(5);
+abs(5.); // function overloads
+</code></pre>
+<pre><code class="cpp hljs">
+template &lt;typename Vector&gt;
+auto dot(const Vector& a, const Vector& b) {
+    assert(a.size() == b.size());
+    typename Vector::value_type sum = 0;
+    for (size_t i=0; i&lt;a.size(); ++i) {
+        sum += a[i]*b[i]; // operator overloads
+    }
+    return sum;
+}
+</code></pre>
+            <br/>
+            <p><span class="fancy">This is modern C++</span></p>
+            </section>
+
             <section class="slide">
                 <h3>Polymorphism</h3>
                 <br/>
