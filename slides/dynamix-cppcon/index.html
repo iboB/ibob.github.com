@@ -176,13 +176,14 @@ int main()
 
             <section class="slide">
                 <h3>Static Polymorphism</h3>
+                <br/>
                 <p>The differentiation is done by the compiler</p>
 <pre><code class="cpp hljs">abs(5);
 abs(5.); // function overloads
 </code></pre>
 <pre><code class="cpp hljs">
 template &lt;typename Vector&gt;
-auto dot(const Vector& a, const Vector& b) {
+auto dot_product(const Vector& a, const Vector& b) {
     assert(a.size() == b.size());
     typename Vector::value_type sum = 0;
     for (size_t i=0; i&lt;a.size(); ++i) {
@@ -191,29 +192,24 @@ auto dot(const Vector& a, const Vector& b) {
     return sum;
 }
 </code></pre>
-            <br/>
-            <p><span class="fancy">This is modern C++</span></p>
             </section>
 
-            <section class="slide">
-                <h3>Polymorphism</h3>
+            <section>
+                <p><span class="fancy">Static polymorphism is modern C++</span></p>
+                <img src="bjarne-now.jpg" />
+                <p class="cite-source"><a href="https://www.chu.cam.ac.uk/news/2017/sep/29/bjarne-stroustrup-wins-faraday-medal/">image source</a></p>
+            </section>
+
+            <section>
+                <p class="inter">We're not going to talk about modern C++</p>
                 <br/>
-                <ul>
-                    <li>Polymorphism means "many forms"</li>
-                    <li>The same code does multiple things</li>
-                    <li>Static polymorphism</li>
-                    <ul>
-                        <li>Functon overloads</li>
-                        <li>Templates</li>
-                        <li>The compiler generates different binaries for the same code</li>
-                        <li><span class="fancy">Modern C++</span></li>
-                    </ul>
-                    <li>Dynamic polymorphism and Object oriented programming (OOP)</li>
-                </ul>
+                <img src="bjarne-young.jpg" />
+                <p>Dynamic polymorphism and Object oriented programming (OOP)</p>
             </section>
 
             <section class="slide">
                 <h3>OOP and Polymorphism</h3>
+                <br/>
                 <ul>
                     <li>OOP has come to imply dynamic polymorphism</li>
                     <ul>
@@ -230,6 +226,7 @@ auto dot(const Vector& a, const Vector& b) {
 
             <section class="slide">
                 <h3>C++ and Business Logic</h3>
+                <br/>
                 <ul>
                     <li>Is C++ is a <span class="fancy">bad choice</span> for business logic?</li>
                     <li>Many projects have chosen <span class="fancy">other languages</span>: Lua, Python, JavaScript, Ruby…</li>
@@ -285,6 +282,7 @@ int main() {
 
             <section class="slide">
                 <h3>Polymorphic Wrappers</h3>
+                <br/>
                 <ul>
                     <li><span class="fancy">Better</span> than classic virtual functions</li>
                     <ul>
@@ -293,7 +291,7 @@ int main() {
                         <li>More extensible</li>
                         <li>Potentially faster</li>
                     </ul>
-                    </br>
+                    <br/>
                     <li>… but more or less <span class="fancy">the same</span></li>
                     <ul>
                         <li>Interface types</li>
@@ -306,6 +304,7 @@ int main() {
 
             <section class="slide">
                 <h3>Other C++ polymorphism</h3>
+                <br/>
                 <ul>
                     <li>Signals/slots (Multicasts)</li>
                     <ul>
@@ -313,7 +312,7 @@ int main() {
                         <li>Especially in GUI libraries (say Qt)</li>
                         <li><a href="http://www.boost.org/doc/libs/1_64_0/doc/html/signals2.html">Boost.Signals2</a>, <a href="https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a>, …</li>
                     </ul>
-                    </br>
+                    <br/>
                     <li>Multiple dispatch</li>
                     <ul>
                         <li><code class="inline">collide(obj1, obj2);</code></li>
@@ -321,7 +320,7 @@ int main() {
                         <li>Relatively easy to mimic</li>
                         <li><a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>, <a href="https://github.com/jll63/yomm11">yomm11</a></li>
                     </ul>
-                    </br>
+                    <br/>
                     <li>Functional programming libraries</li>
                 </ul>
             </section>
@@ -337,18 +336,19 @@ int main() {
             <section class="slide">
                 <h3>DynaMix</h3>
                 <ul>
+                    <br/>
                     <li>Open source, <span class="fancy">MIT license</span>, C++ library</li>
                     <ul>
                         <li><a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a></li>
                     </ul>
-                    </br>
+                    <br/>
                     <li>This talk is an introduction to the library</li>
                     <ul>
                         <li>Focus on the <span class="fancy">what</span> and <span class="fancy">why</span></li>
                         <li>Hardly even mention the “how”</li>
                         <li>There will also be a small <span class="fancy">demo</span></li>
                     </ul>
-                    </br>
+                    <br/>
                     <li>History</li>
                     <ul>
                         <li>2007: Interface. Zahary Karadjov</li>
@@ -384,6 +384,7 @@ int main() {
 
             <section class="slide">
                 <h3>What is DynaMix?</h3>
+                <br/>
                 <ul>
                     <li>Not a physics library</li>
                     <li>Not even a game library</li>
@@ -470,6 +471,7 @@ int main() {
 
             <section class="slide">
             <h3>DynaMix: The Gist</h3>
+                <br/>
                 <ul>
                 <li>Building blocks</li>
                 <ul>
@@ -598,6 +600,7 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
 
             <section class="slide">
                 <h3>DynaMix vs Scripts</h3>
+                <br/>
                 <ul>
                     <li>Cons of using a scripting language</li>
                     <ul>
@@ -614,12 +617,14 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                             <li>Not yet. But you can mix.</li>
                         </ul>
                     </ul>
-                    <li>The library has found a niche in <span class="fancy">mobile games</span>, which are less likely to sacrifice performance</li>
                 </ul>
+                <br/><br/>
+                <p>The library has found a niche in <span class="fancy">mobile games</span>, which are less likely to sacrifice performance</p>
             </section>
 
             <section class="slide">
                 <h3>When to Use DynaMix?</h3>
+                <br/>
                 <ul>
                     <li>When you're writing software with <span class="fancy">complex polymorphic objects</span></li>
                     <li>When you have <span class="fancy">subsystems</span> which care about <span class="fancy">interface</span> (rather than data)</li>
@@ -636,8 +641,10 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
             <section class="slide">
                 <h3>When Not to Use DynaMix?</h3>
                 <br/>
+                <p><em>DynaMix is a means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose.</em></p>
+                <br/>
+                <p>... so it's not really suitable for:</p>
                 <ul>
-                    <li><em>DynaMix is a means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose</em></li>
                     <li>Small scale projects</li>
                     <li>Projects which have little use of polymorphism</li>
                     <li>Existing large projects</li>
@@ -647,6 +654,7 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
 
             <section class="slide">
                 <h3>Performance</h3>
+                <br/>
                 <ul>
                     <li>Message calls, as any polymorphic call, are slower than function calls</li>
                     <li>They are comparable to <code class="inline">std::function</code></li>
@@ -665,8 +673,14 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                 </ul>
             </section>
 
+            <section>
+                <img class="diagram" src="uni-linux.png" />
+                <img class="diagram" src="multi-linux.png" />
+            </section>
+
             <section class="slide">
                 <h3>Recap</h3>
+                <br/>
                 <ul>
                     <li>Compose and mutate objects from mixins</li>
                     <li>Have uni- and multicast messages</li>

@@ -134,3 +134,9 @@ body
 {
 	background: none;
 }
+
+.reveal .cite-source
+{
+	text-align: right;
+	font-size: 15pt;
+}
