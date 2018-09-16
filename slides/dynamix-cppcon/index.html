@@ -212,16 +212,43 @@ auto dot_product(const Vector& a, const Vector& b) {
                 <br/>
                 <ul>
                     <li>OOP has come to imply dynamic polymorphism</li>
-                    <ul>
-                        <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
-                        <li>It's in the category of things which are slower and <span class="fancy">can't have good compilation errors</span></li>
-                    </ul>
-                    <li>Totally anti modern C++</li>
+                    <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
+                    <li>It's in the category of things which are slower and <span class="fancy">can't have good compilation errors</span></li>
+                </ul>
+                <br/><br/>
+                <p style="text-align: center"><span class="fancy">Totally anti modern C++</span></p>
+            </section>
+
+            <section class="slide">
+                <h3>State of OOP</h3>
+                <br/>
+                <ul>
                     <li>OOP has been criticized a lot</li>
                     <li>People forget that C++ is an <span class="fancy">OOP language</li>
-                    <li>Out of the box in an OOP context C++ only gives us <span class="fancy">virtual functions</span> for polymorphism</li>
                     <li>OOP can be useful for <span class="fancy">business logic</span> <span>(gameplay)</span></li>
-                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>C++ and OOP</h3>
+                <p>Out of the box in an OOP context C++ only gives us <span class="fancy">virtual functions</span> for polymorphism</p>
+<pre><code class="cpp hljs">
+struct Drawable {
+    virtual void draw(ostream&amp; out) const = 0;
+}
+struct Square : public Drawable {
+    virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
+};
+struct Circle {
+    virtual void draw(ostream&amp; out) const override { out &lt; &quot;Circle\n&quot;; }
+};
+void f(const Drawable&amp; d) {
+    d.draw(cout);
+}
+int main() {
+    f(Square{});
+    f(Circle{});
+}
+</code></pre>
             </section>
 
             <section class="slide">
