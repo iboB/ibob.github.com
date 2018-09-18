@@ -213,7 +213,12 @@ auto dot_product(const Vector& a, const Vector& b) {
                 <ul>
                     <li>OOP has come to imply dynamic polymorphism</li>
                     <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
-                    <li>It's in the category of things which are slower and <span class="fancy">can't have good compilation errors</span></li>
+                    <ul>
+                        <li>Virtual functions</li>
+                        <li>Function pointers</li>
+                        <li><code>std::function</code></li>
+                    </ul>
+                    <li>It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
                 </ul>
                 <br/><br/>
                 <p style="text-align: center"><span class="fancy">Totally anti modern C++</span></p>
@@ -226,6 +231,9 @@ auto dot_product(const Vector& a, const Vector& b) {
                     <li>OOP has been criticized a lot</li>
                     <li>People forget that C++ is an <span class="fancy">OOP language</li>
                     <li>OOP can be useful for <span class="fancy">business logic</span> <span>(gameplay)</span></li>
+                </ul>
+                <p style="text-align: center"><img height="400" class="diagram" src="objects.png" /></p>
+                <p class="cite-source"><a href="https://medium.com/omarelgabrys-blog/the-story-of-object-oriented-programming-12d1901a1825">image source</a></p>
             </section>
 
             <section class="slide">
