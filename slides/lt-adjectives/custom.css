@@ -1,0 +1,9 @@
+.reveal .title h1 {
+  font-size: 3em;
+}
+
+.reveal section img.diagram {
+  border: none;
+  background: none;
+  box-shadow: none;
+}
