@@ -170,18 +170,18 @@ int main()
 
             <section>
                 <h3>Polymorphism</h3>
-                <p class="inter">Many forms</p>
-                <p class="inter">The same code does multiple things</p>
+                <p class="inter fragment">Many forms</p>
+                <p class="inter fragment">The same code does multiple things</p>
             </section>
 
             <section class="slide">
                 <h3>Static Polymorphism</h3>
                 <br/>
-                <p>The differentiation is done by the compiler</p>
-<pre><code class="cpp hljs">abs(5);
+                <p class="fragment">The differentiation is done by the compiler</p>
+<pre class="fragment"><code class="cpp hljs">abs(5);
 abs(5.); // function overloads
 </code></pre>
-<pre><code class="cpp hljs">
+<pre class="fragment"><code class="cpp hljs">
 template &lt;typename Vector&gt;
 auto dot_product(const Vector& a, const Vector& b) {
     assert(a.size() == b.size());
@@ -204,24 +204,24 @@ auto dot_product(const Vector& a, const Vector& b) {
                 <p class="inter">We're not going to talk about modern C++</p>
                 <br/>
                 <img src="bjarne-young.jpg" />
-                <p>Dynamic polymorphism and Object oriented programming (OOP)</p>
+                <p class="fragment">Dynamic polymorphism and Object oriented programming (OOP)</p>
             </section>
 
             <section class="slide">
                 <h3>OOP and Polymorphism</h3>
                 <br/>
                 <ul>
-                    <li>OOP has come to imply dynamic polymorphism</li>
-                    <li>Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
-                    <ul>
+                    <li class="fragment">OOP has come to imply dynamic polymorphism</li>
+                    <li class="fragment">Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
+                    <ul class="fragment">
                         <li>Virtual functions</li>
                         <li>Function pointers</li>
                         <li><code>std::function</code></li>
                     </ul>
-                    <li>It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
+                    <li class="fragment">It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
                 </ul>
                 <br/><br/>
-                <p style="text-align: center"><span class="fancy">Totally anti modern C++</span></p>
+                <p style="text-align: center" class="fragment"><span class="fancy">Totally anti modern C++</span></p>
             </section>
 
             <section class="slide">
@@ -229,11 +229,13 @@ auto dot_product(const Vector& a, const Vector& b) {
                 <br/>
                 <ul>
                     <li>OOP has been criticized a lot</li>
-                    <li>People forget that C++ is an <span class="fancy">OOP language</li>
-                    <li>OOP can be useful for <span class="fancy">business logic</span> <span>(gameplay)</span></li>
+                    <li class="fragment">People forget that C++ is an <span class="fancy">OOP language</li>
+                    <li class="fragment">OOP can be useful for <span class="fancy">business logic</span> <span>(gameplay)</span></li>
                 </ul>
+                <div class="fragment">
                 <p style="text-align: center"><img height="400" class="diagram" src="objects.png" /></p>
                 <p class="cite-source"><a href="https://medium.com/omarelgabrys-blog/the-story-of-object-oriented-programming-12d1901a1825">image source</a></p>
+                </div>
             </section>
 
             <section class="slide">
@@ -264,14 +266,14 @@ int main() {
                 <br/>
                 <ul>
                     <li>Is C++ is a <span class="fancy">bad choice</span> for business logic?</li>
-                    <li>Many projects have chosen <span class="fancy">other languages</span>: Lua, Python, JavaScript, Ruby…</li>
-                    <ul>
+                    <li class="fragment">Many projects have chosen <span class="fancy">other languages</span>: Lua, Python, JavaScript, Ruby…</li>
+                    <ul class="fragment">
                         <li>C++ has <span class="fancy">poor OOP capabilities</span></li>
                         <li>You can <span class="fancy">hotswap</span></li>
                         <li>You can <span class="fancy">delegate to non-programmers</span></li>
                     </ul>
-                    <li>However:</li>
-                    <ul>
+                    <li class="fragment">However:</li>
+                    <ul class="fragment">
                         <li>The code is <span class="fancy">slower</span></li>
                         <li>There is <span class="fancy">more complexity</span> in the binding layer</li>
                         <li>There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs)</li>
@@ -290,14 +292,14 @@ int main() {
             <section class="slide">
                 <h3>Polymorphism in Modern C++</h3>
                 <ul>
-                    <li>Polymorphic type-erasure wrappers</li>
-                    <ul>
+                    <li class="fragment">Polymorphic type-erasure wrappers</li>
+                    <ul class="fragment">
                         <li><a href="http://www.boost.org/doc/libs/1_65_1/doc/html/boost_typeerasure.html">Boost.TypeErasure</a>,
                             <a href="https://github.com/ldionne/dyno">Dyno</a>,
                             <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a></li>
                     </ul>
                 </ul>
-<pre><code class="cpp hljs">
+<pre class="fragment"><code class="cpp hljs">
 using Drawable = Library_Magic(void, draw, (ostream&amp;));
 struct Square {
     void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
@@ -320,15 +322,15 @@ int main() {
                 <br/>
                 <ul>
                     <li><span class="fancy">Better</span> than classic virtual functions</li>
-                    <ul>
+                    <ul class="fragment">
                         <li>Information hiding (PIMPL)</li>
                         <li>Non-intrusive</li>
                         <li>More extensible</li>
                         <li>Potentially faster</li>
                     </ul>
                     <br/>
-                    <li>… but more or less <span class="fancy">the same</span></li>
-                    <ul>
+                    <li class="fragment">… but more or less <span class="fancy">the same</span></li>
+                    <ul class="fragment">
                         <li>Interface types</li>
                         <li>Implementation types</li>
                         <li>Basically improved virtual functions</li>
@@ -341,22 +343,22 @@ int main() {
                 <h3>Other C++ polymorphism</h3>
                 <br/>
                 <ul>
-                    <li>Signals/slots (Multicasts)</li>
-                    <ul>
+                    <li class="fragment">Signals/slots (Multicasts)</li>
+                    <ul class="fragment">
                         <li>Very popular</li>
                         <li>Especially in GUI libraries (say Qt)</li>
                         <li><a href="http://www.boost.org/doc/libs/1_64_0/doc/html/signals2.html">Boost.Signals2</a>, <a href="https://www.codeproject.com/Articles/7150/Member-Function-Pointers-and-the-Fastest-Possible">FastDelegate</a>, …</li>
                     </ul>
                     <br/>
-                    <li>Multiple dispatch</li>
-                    <ul>
+                    <li class="fragment">Multiple dispatch</li>
+                    <ul class="fragment">
                         <li><code class="inline">collide(obj1, obj2);</code></li>
                         <li>Obscure feature</li>
                         <li>Relatively easy to mimic</li>
-                        <li><a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>, <a href="https://github.com/jll63/yomm11">yomm11</a></li>
+                        <li><a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>, <a href="https://github.com/jll63/yomm2">yomm2</a></li>
                     </ul>
                     <br/>
-                    <li>Functional programming libraries</li>
+                    <li class="fragment">Functional programming libraries</li>
                 </ul>
             </section>
 
@@ -372,20 +374,20 @@ int main() {
                 <h3>DynaMix</h3>
                 <ul>
                     <br/>
-                    <li>Open source, <span class="fancy">MIT license</span>, C++ library</li>
-                    <ul>
+                    <li class="fragment">Open source, <span class="fancy">MIT license</span>, C++ library</li>
+                    <ul class="fragment">
                         <li><a href="https://github.com/iboB/dynamix">github.com/iboB/dynamix</a></li>
                     </ul>
                     <br/>
-                    <li>This talk is an introduction to the library</li>
-                    <ul>
+                    <li class="fragment">This talk is an introduction to the library</li>
+                    <ul class="fragment">
                         <li>Focus on the <span class="fancy">what</span> and <span class="fancy">why</span></li>
                         <li>Hardly even mention the “how”</li>
                         <li>There will also be a small <span class="fancy">demo</span></li>
                     </ul>
                     <br/>
-                    <li>History</li>
-                    <ul>
+                    <li class="fragment">History</li>
+                    <ul class="fragment">
                         <li>2007: Interface. Zahary Karadjov</li>
                         <li>2013: Rebirth as <span class="fancy">Boost.Mixin</span></li>
                         <li>2016: Bye, Boost. Hello, <span class="fancy">DynaMix</span></li>
@@ -421,12 +423,12 @@ int main() {
                 <h3>What is DynaMix?</h3>
                 <br/>
                 <ul>
-                    <li>Not a physics library</li>
-                    <li>Not even a game library</li>
-                    <li>A new take on polymorphism</li>
+                    <li class="fragment">Not a physics library</li>
+                    <li class="fragment">Not even a game library</li>
+                    <li class="fragment">A new take on polymorphism</li>
                 </ul>
                 <br/><br/><br/>
-                <p style="text-align: center"><span class="fancy">Compose and modify polymorphic objects at run time</span></p>
+                <p class="fragment" style="text-align: center"><span class="fancy">Compose and modify polymorphic objects at run time</span></p>
             </section>
 
             <section class="slide">
@@ -561,14 +563,14 @@ DYNAMIX_DEFINE_MESSAGE(play);
 DYNAMIX_DEFINE_MESSAGE(foo);
 </code></pre>
                 <br/>
-                <p>We <span class="fancy">fully</span> separate the interface from the implementation.</p>
+                <p class="fragment">We <span class="fancy">fully</span> separate the interface from the implementation.</p>
             </section>
 
             <section>
             <p><span class="fancy">Message</span> vs <span class="fancy">Method</span></p>
             <p>Late binding and Smalltalk</p>
             <br/>
-<pre><code class="cpp hljs" data-trim>
+<pre class="fragment"><code class="cpp hljs" data-trim>
 struct Foo {
     void bar();
 };
@@ -619,8 +621,8 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
 </code></pre>
                 <br/>
                 <ul>
-                <li><code class="inline">dm_this</code> is like <code class="inline">self</code>: the owning object</li>
-                <li>No inheritance. The library is non-intrusive</li>
+                <li class="fragment"><code class="inline">dm_this</code> is like <code class="inline">self</code>: the owning object</li>
+                <li class="fragment">No inheritance. The library is non-intrusive</li>
                 </ul>
             </section>
 
@@ -637,24 +639,24 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                 <h3>DynaMix vs Scripts</h3>
                 <br/>
                 <ul>
-                    <li>Cons of using a scripting language</li>
+                    <li class="fragment">Cons of using a scripting language</li>
                     <ul>
-                        <li>The code is <span class="fancy">slower</span> <span class="yes">V</span></li>
-                        <li><span class="fancy">More complexity</span> in the binding layer <span class="yes">V</span></li>
-                        <li>There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs) <span class="yes">V</span></li>
+                        <li class="fragment">The code is <span class="fancy">slower</span> <span class="yes fragment">V</span></li>
+                        <li class="fragment"><span class="fancy">More complexity</span> in the binding layer <span class="yes fragment">V</span></li>
+                        <li class="fragment">There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs) <span class="yes fragment">V</span></li>
                     </ul>
-                    <li>Pros of using a scripting language</li>
+                    <li class="fragment">Pros of using a scripting language</li>
                     <ul>
-                        <li>C++ has <span class="fancy">poor OOP</span> capabilities <span class="yes">V</span></li>
-                        <li>You can <span class="fancy">hotswap</span> <span class="yes">V</span></li>
-                        <li>You can <span class="fancy">delegate to non-programmers</span> <span class="no">X</span></li>
+                        <li class="fragment">C++ has <span class="fancy">poor OOP</span> capabilities <span class="yes fragment">V</span></li>
+                        <li class="fragment">You can <span class="fancy">hotswap</span> <span class="yes fragment">V</span></li>
+                        <li class="fragment">You can <span class="fancy">delegate to non-programmers</span> <span class="no fragment">X</span></li>
                         <ul>
-                            <li>Not yet. But you can mix.</li>
+                            <li class="fragment">Not yet. But you can mix.</li>
                         </ul>
                     </ul>
                 </ul>
                 <br/><br/>
-                <p>The library has found a niche in <span class="fancy">mobile games</span>, which are less likely to sacrifice performance</p>
+                <p class="fragment">The library has found a niche in <span class="fancy">mobile games</span>, which are less likely to sacrifice performance</p>
             </section>
 
             <section class="slide">
@@ -664,8 +666,8 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                     <li>When you're writing software with <span class="fancy">complex polymorphic objects</span></li>
                     <li>When you have <span class="fancy">subsystems</span> which care about <span class="fancy">interface</span> (rather than data)</li>
                     <li>When you want <span class="fancy">plugins</span> which enable various aspects of your objects</li>
-                    <li>Such types of projects include</li>
-                    <ul>
+                    <li class="fragment">Such types of projects include</li>
+                    <ul class="fragment">
                         <li>Most CAD systems</li>
                         <li>Some games: especially RPGs and strategies</li>
                         <li>Some enterprise systems</li>
@@ -676,10 +678,10 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
             <section class="slide">
                 <h3>When Not to Use DynaMix?</h3>
                 <br/>
-                <p><em>DynaMix is a means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose.</em></p>
+                <p class="fragment"><em>DynaMix is a means to create a project's <span class="fancy">architecture</span> rather than achieve its purpose.</em></p>
                 <br/>
-                <p>... so it's not really suitable for:</p>
-                <ul>
+                <p class="fragment">... so it's not really suitable for:</p>
+                <ul class="fragment">
                     <li>Small scale projects</li>
                     <li>Projects which have little use of polymorphism</li>
                     <li>Existing large projects</li>
@@ -691,16 +693,16 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
                 <h3>Performance</h3>
                 <br/>
                 <ul>
-                    <li>Message calls, as any polymorphic call, are slower than function calls</li>
-                    <li>They are comparable to <code class="inline">std::function</code></li>
-                    <li>Mutations can be fairly slow. Internal types</li>
-                    <li>Memory overhead</li>
+                    <li class="fragment">Message calls, as any polymorphic call, are slower than function calls</li>
+                    <li class="fragment">They are comparable to <code class="inline">std::function</code></li>
+                    <li class="fragment">Mutations can be fairly slow. Internal types</li>
+                    <li class="fragment">Memory overhead</li>
                     <ul>
-                        <li>For objects: pointers but mainly size of mixins</li>
-                        <li>For unique types: sparse arrays of mixins</li>
+                        <li class="fragment">For objects: pointers but mainly size of mixins</li>
+                        <li class="fragment">For unique types: sparse arrays of mixins</li>
                     </ul>
-                    <li>Thread safety</li>
-                    <ul>
+                    <li class="fragment">Thread safety</li>
+                    <ul class="fragment">
                         <li>Calling messages is safe</li>
                         <li>Mutating an object in one thread and calling messages on it in another is not safe</li>
                         <li>Mutating two objects in two threads is safe</li>
