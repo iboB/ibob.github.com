@@ -146,6 +146,22 @@ int main()
             </section>
 
             <section class="slide">
+                <h3>Hello, World</h3>
+                <br/>
+<pre><code class="cpp hljs">
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+    std::cout &lt;&lt; "These slides are here:<span style="font-weight: bold; background-color: lightgray;"> https://is.gd/dmxcpp</span>\n";
+    return 0;
+}
+
+</code></pre>
+            </section>
+
+            <section class="slide">
                 <h3>Bulgaria</h3>
                 <p align="center"><img src="europe.png" /></p>
             </section>
@@ -301,6 +317,34 @@ int main() {
                 </ul>
 <pre class="fragment"><code class="cpp hljs">
 using Drawable = Library_Magic(void, draw, (ostream&amp;));
+struct Square {
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
+};
+struct Circle {
+    void draw(ostream&amp; out) const { out &lt; &quot;Circle\n&quot;; }
+};
+void f(const Drawable&amp; d) {
+    d.draw(cout);
+}
+int main() {
+    f(Square{});
+    f(Circle{});
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Polymorphism in Modern C++</h3>
+                <ul>
+                    <li>Polymorphic type-erasure wrappers</li>
+                    <ul>
+                        <li><a href="http://www.boost.org/doc/libs/1_65_1/doc/html/boost_typeerasure.html">Boost.TypeErasure</a>,
+                            <a href="https://github.com/ldionne/dyno">Dyno</a>,
+                            <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a></li>
+                    </ul>
+                </ul>
+<pre><code class="cpp hljs">
+using Drawable = <span style="font-weight: bold; background-color: lightgray;">Library_Magic(void, draw, (ostream&amp;));</span>
 struct Square {
     void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
 };
