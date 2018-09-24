@@ -199,7 +199,7 @@ int main()
 abs(5.); // function overloads
 </code></pre>
 <pre class="fragment"><code class="cpp hljs">
-template &lt;typename Vector&gt;
+template &lt;typename Vector&gt; // templates
 auto dot_product(const Vector& a, const Vector& b) {
     assert(a.size() == b.size());
     typename Vector::value_type sum = 0;
@@ -225,15 +225,15 @@ auto dot_product(const Vector& a, const Vector& b) {
             </section>
 
             <section class="slide">
-                <h3>OOP and Polymorphism</h3>
+                <h3>Dynamic Polymorphism</h3>
                 <br/>
                 <ul>
                     <li class="fragment">OOP has come to imply dynamic polymorphism</li>
                     <li class="fragment">Dynamic polymorphism is when the compiler can see a function call but <span class="fancy">can't know</span> which actual piece of code will be executed next</li>
                     <ul class="fragment">
-                        <li>Virtual functions</li>
                         <li>Function pointers</li>
                         <li><code>std::function</code></li>
+                        <li>Virtual functions</li>
                     </ul>
                     <li class="fragment">It's in the category of things which are <span class="fancy">slower</span> and <span class="fancy">can't have good compilation errors</span></li>
                 </ul>
@@ -768,11 +768,9 @@ struct headphones {
             &lt;&lt; &quot; through headphones\n&quot;;
     }
 };
-<span class='codehl'>
-struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+<span class='codehl'>struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
 struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
-struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
-</span>
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};  </span>
 </code></pre>
             </section>
 
@@ -800,8 +798,8 @@ int main() {
             <section class="slide">
             <h3>Static Polymorphism with Mixins</h3>
 <pre style="width: 100%"><code class="cpp hljs">
-<span class='codehl'>template &lt;typename Player&gt;
-void use_player(Player&amp; player) {
+<span class='codehl'>template &lt;typename SoundPlayer&gt;
+void use_player(SoundPlayer&amp; player) {
     player.play();
 }</span>
 
@@ -821,8 +819,8 @@ int main() {
             <section class="slide">
             <h3>Static Polymorphism with Mixins</h3>
 <pre style="width: 100%"><code class="cpp hljs">
-template &lt;typename Player&gt;
-void use_player(Player&amp; player) {
+template &lt;typename SoundPlayer&gt;
+void use_player(SoundPlayer&amp; player) {
     player.play();
 }
 
@@ -842,8 +840,8 @@ int main() {
             <section class="slide">
             <h3>Static Polymorphism with Mixins</h3>
 <pre style="width: 100%"><code class="cpp hljs">
-template &lt;typename Player&gt;
-void use_player(Player&amp; player) {
+template &lt;typename SoundPlayer&gt;
+void use_player(SoundPlayer&amp; player) {
     player.play();
 }
 
@@ -867,7 +865,7 @@ int main() {
                 <li>Building blocks</li>
                 <ul>
                 <li><code class="inline">dynamix::object</code> – just an empty object</li>
-                <li><span class="fancy">Mixins</span> – classes that you've written which actually implement messages</li>
+                <li><span class="fancy">Mixins</span> – user classes which actually implement functionality</li>
                 <li><span class="fancy">Messages</span> – function-like pieces of interface, that an object might implement</li>
                 </ul>
                 <br/>
