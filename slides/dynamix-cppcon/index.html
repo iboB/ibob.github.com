@@ -125,7 +125,7 @@
                 <h1 class="seo">DynaMix</h1>
                 <h3>A New Take on Polymorphism</h3>
                 <p>
-                    by <a href="http://ibob.github.io">Borislav Stanimirov</a>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
                 </p>
             </section>
 
@@ -171,8 +171,9 @@ int main()
                 <br/>
                 <ul>
                     <li>Mostly a <span class="fancy">C++</span> programmer</li>
-                    <li>Mostly a <span class="fancy">game</span> programmer since 2006</li>
+                    <li>Mostly a <span class="fancy">game</span> programmer</li>
                     <li><span class="fancy">Open-source</span> programmer</li>
+                    <li><a href="https://github.com/iboB">github.com/iboB</a></li>
                 </ul>
             </section>
 
@@ -500,6 +501,131 @@ a.move_to(10) # -> can’t fly to 10
 </code></pre>
             </section>
 
+            <section class="slide">
+            <h3>Some Inspirational Ruby</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+<span class='codehl'>  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end</span>
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Some Inspirational Ruby</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+<span class='codehl'>  def can_move_to?(target)
+    true # flying creatures don't care
+  end</span>
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Some Inspirational Ruby</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+<span class='codehl'>module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end</span>
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Some Inspirational Ruby</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+<span class='codehl'>a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10</span>
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Some Inspirational Ruby</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+<span class='codehl'>a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10</span>
+</code></pre>
+            </section>
+
             <section>
                 <p class="inter">DynaMix means <span class="fancy">"Dynamic Mixins"</span></p>
             </section>
@@ -528,6 +654,127 @@ struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
 </code></pre>
             </section>
 
+            <section class="slide">
+            <h3>Static (CRTP) Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs"><span class='codehl'>struct cd_reader {
+    string get_sound() const {
+        return cd.empty() ? &quot;silence&quot; : (&quot;cd: &quot; + cd);
+    }
+    string cd;
+};</span>
+template &lt;typename Self&gt;
+struct headphones {
+    const Self* self() const {
+        return static_cast&lt;const Self*&gt;(this);
+    }
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; self()-&gt;get_sound()
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static (CRTP) Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">struct cd_reader {
+    string get_sound() const {
+        return cd.empty() ? &quot;silence&quot; : (&quot;cd: &quot; + cd);
+    }
+    string cd;
+};
+template &lt;<span class='codehl'>typename Self</span>&gt;
+struct headphones {
+    const Self* self() const {
+        return static_cast&lt;const Self*&gt;(this);
+    }
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; self()-&gt;get_sound()
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static (CRTP) Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">struct cd_reader {
+    string get_sound() const {
+        return cd.empty() ? &quot;silence&quot; : (&quot;cd: &quot; + cd);
+    }
+    string cd;
+};
+template &lt;typename Self&gt;
+struct headphones {
+<span class='codehl'>    const Self* self() const {
+        return static_cast&lt;const Self*&gt;(this);
+    }</span>
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; self()-&gt;get_sound()
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static (CRTP) Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">struct cd_reader {
+    string get_sound() const {
+        return cd.empty() ? &quot;silence&quot; : (&quot;cd: &quot; + cd);
+    }
+    string cd;
+};
+template &lt;typename Self&gt;
+struct headphones {
+    const Self* self() const {
+        return static_cast&lt;const Self*&gt;(this);
+    }
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; <span class='codehl'>self()-&gt;get_sound()</span>
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static (CRTP) Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">struct cd_reader {
+    string get_sound() const {
+        return cd.empty() ? &quot;silence&quot; : (&quot;cd: &quot; + cd);
+    }
+    string cd;
+};
+template &lt;typename Self&gt;
+struct headphones {
+    const Self* self() const {
+        return static_cast&lt;const Self*&gt;(this);
+    }
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; self()-&gt;get_sound()
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+<span class='codehl'>
+struct diskman : public cd_reader, public headphones&lt;diskman&gt; {};
+struct boombox : public cd_reader, public speakers&lt;boombox&gt; {};
+struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};
+</span>
+</code></pre>
+            </section>
 
             <section class="slide">
             <h3>Static Polymorphism with Mixins</h3>
@@ -545,6 +792,69 @@ int main() {
     ipod ip;
     ip.mp3 = &quot;Led Zeppelin - Black Dog.mp3&quot;;
     use_player(ip); // -&gt; Playing &quot;Led Zeppelin - Black Dog.mp3&quot;
+}
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static Polymorphism with Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+<span class='codehl'>template &lt;typename Player&gt;
+void use_player(Player&amp; player) {
+    player.play();
+}</span>
+
+int main() {
+    diskman dm;
+    dm.cd = &quot;Led Zeppelin IV (1971)&quot;;
+    use_player(dm); // -&gt; Playing &quot;Led Zeppelin IV (1971)&quot;
+
+    ipod ip;
+    ip.mp3 = &quot;Led Zeppelin - Black Dog.mp3&quot;;
+    use_player(ip); // -&gt; Playing &quot;Led Zeppelin - Black Dog.mp3&quot;
+}
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static Polymorphism with Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+template &lt;typename Player&gt;
+void use_player(Player&amp; player) {
+    player.play();
+}
+
+int main() {
+<span class='codehl'>    diskman dm;
+    dm.cd = &quot;Led Zeppelin IV (1971)&quot;;
+    use_player(dm); // -&gt; Playing &quot;Led Zeppelin IV (1971)&quot;</span>
+
+    ipod ip;
+    ip.mp3 = &quot;Led Zeppelin - Black Dog.mp3&quot;;
+    use_player(ip); // -&gt; Playing &quot;Led Zeppelin - Black Dog.mp3&quot;
+}
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Static Polymorphism with Mixins</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+template &lt;typename Player&gt;
+void use_player(Player&amp; player) {
+    player.play();
+}
+
+int main() {
+    diskman dm;
+    dm.cd = &quot;Led Zeppelin IV (1971)&quot;;
+    use_player(dm); // -&gt; Playing &quot;Led Zeppelin IV (1971)&quot;
+
+<span class='codehl'>    ipod ip;
+    ip.mp3 = &quot;Led Zeppelin - Black Dog.mp3&quot;;
+    use_player(ip); // -&gt; Playing &quot;Led Zeppelin - Black Dog.mp3&quot;</span>
 }
 
 </code></pre>
@@ -629,22 +939,22 @@ void Foo::bar() {} // method
             <section class="slide">
             <h3>Boilerplate Continued</h3>
             <p>Mixins:</p>
-<pre><code class="cpp hljs" data-trim>DYNAMIX_DECLARE_MIXIN(cd_reader);
+<pre class="fragment"><code class="cpp hljs" data-trim>DYNAMIX_DECLARE_MIXIN(cd_reader);
 DYNAMIX_DECLARE_MIXIN(headphones_output);
 // That’s all we need to mutate
 </code></pre>
-<pre><code class="cpp hljs" data-trim>
-class cd_reader {
+<pre class="fragment"><code class="cpp hljs" data-trim>class cd_reader {
 public:
     string get_sound() {
-        return cd.empty() ? &quot;silence&quot; : (&quot;CD &quot; + cd);
+        return _cd.empty() ? &quot;silence&quot; : (&quot;CD &quot; + cd);
     }
     void insert(const string&amp; cd) {
         _cd = cd;
     }
     string _cd;
 };
-DYNAMIX_DEFINE_MIXIN(cd_reader, get_sound_msg);
+</code></pre>
+<pre class="fragment"><code class="cpp hljs" data-trim>DYNAMIX_DEFINE_MIXIN(cd_reader, get_sound_msg);
 // ...
 DYNAMIX_DEFINE_MIXIN(mp3_reader, get_sound_msg);
 </code></pre>
@@ -663,9 +973,24 @@ public:
 
 DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
 </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Referring to the Owning Object</h3>
+<pre><code class="cpp hljs" data-trim>
+class headphones_output {
+public:
+    void play() {
+        cout &lt;&lt; &quot;Playing &quot; &lt;&lt; <span class="codehl">get_sound(dm_this)</span>
+            &lt;&lt; &quot; through headphones\n&quot;;
+    }
+};
+
+DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
+</code></pre>
                 <br/>
                 <ul>
-                <li class="fragment"><code class="inline">dm_this</code> is like <code class="inline">self</code>: the owning object</li>
+                <li><code class="inline">dm_this</code> is like <code class="inline">self</code>: the owning object</li>
                 <li class="fragment">No inheritance. The library is non-intrusive</li>
                 </ul>
             </section>
