@@ -261,15 +261,15 @@ auto dot_product(const Vector& a, const Vector& b) {
 struct Drawable {
     virtual void draw(ostream&amp; out) const = 0;
 }
-struct Square : public Drawable {
-    virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
-};
-struct Circle {
-    virtual void draw(ostream&amp; out) const override { out &lt; &quot;Circle\n&quot;; }
-};
 void f(const Drawable&amp; d) {
     d.draw(cout);
 }
+struct Square : public Drawable {
+    virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
+};
+struct Circle : public Drawable {
+    virtual void draw(ostream&amp; out) const override { out &lt; &quot;Circle\n&quot;; }
+};
 int main() {
     f(Square{});
     f(Circle{});
@@ -317,15 +317,15 @@ int main() {
                 </ul>
 <pre class="fragment"><code class="cpp hljs">
 using Drawable = Library_Magic(void, draw, (ostream&amp;));
+void f(const Drawable&amp; d) {
+    d.draw(cout);
+}
 struct Square {
     void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
 };
 struct Circle {
     void draw(ostream&amp; out) const { out &lt; &quot;Circle\n&quot;; }
 };
-void f(const Drawable&amp; d) {
-    d.draw(cout);
-}
 int main() {
     f(Square{});
     f(Circle{});
@@ -344,16 +344,16 @@ int main() {
                     </ul>
                 </ul>
 <pre><code class="cpp hljs">
-using Drawable = <span style="font-weight: bold; background-color: lightgray;">Library_Magic(void, draw, (ostream&amp;));</span>
+using Drawable = <span class='codehl'>Library_Magic(void, draw, (ostream&amp;));</span>
+void f(const Drawable&amp; d) {
+    d.draw(cout);
+}
 struct Square {
     void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
 };
 struct Circle {
     void draw(ostream&amp; out) const { out &lt; &quot;Circle\n&quot;; }
 };
-void f(const Drawable&amp; d) {
-    d.draw(cout);
-}
 int main() {
     f(Square{});
     f(Circle{});
@@ -828,6 +828,14 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
             ]
         });
 
+        revealWrapper = document.querySelector( '.reveal' );
+        foot = document.createElement('div');
+        foot.classList.add('footer');
+        revealWrapper.appendChild(foot);
+
+        Reveal.addEventListener('slidechanged', function (event) {
+            foot.innerHTML = event.indexh + ' | is.gd/dmxcpp | CppCon 2018 | @stanimirovb';
+        }, false);
     </script>
 
 </body>
