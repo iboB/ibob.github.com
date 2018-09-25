@@ -247,7 +247,7 @@ auto dot_product(const Vector& a, const Vector& b) {
                 <ul>
                     <li>OOP has been criticized a lot</li>
                     <li class="fragment">People forget that C++ is an <span class="fancy">OOP language</li>
-                    <li class="fragment">OOP can be useful for <span class="fancy">business logic</span> <span>(gameplay)</span></li>
+                    <li class="fragment">OOP can be useful for <span class="fancy">business logic</span> <span class="fragment">(gameplay)</span></li>
                 </ul>
                 <div class="fragment">
                 <p style="text-align: center"><img height="400" class="diagram" src="objects.png" /></p>
@@ -777,8 +777,8 @@ struct ipod : public mp3_reader, public headphones&lt;ipod&gt; {};  </span>
             <section class="slide">
             <h3>Static Polymorphism with Mixins</h3>
 <pre style="width: 100%"><code class="cpp hljs">
-template &lt;typename Player&gt;
-void use_player(Player&amp; player) {
+template &lt;typename SoundPlayer&gt;
+void use_player(SoundPlayer&amp; player) {
     player.play();
 }
 
@@ -880,7 +880,7 @@ int main() {
             <section class="slide">
             <h3>DynaMix Sound Player</h3>
 <pre style="width: 100%"><code class="cpp hljs">
-dynamix::object sound_player; // just an empty dynamix::object
+<span class="codehl">dynamix::object sound_player;</span> // just an empty dynamix::object
 
 dynamix::mutate(sound_player)
     .add&lt;cd_reader&gt;()
@@ -897,6 +897,126 @@ dynamix::mutate(sound_player)
     .add&lt;speakers_output&gt;();
 
 play(sound_player);
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix Sound Player</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+dynamix::object sound_player; // just an empty dynamix::object
+
+<span class="codehl">dynamix::mutate(sound_player)
+    .add&lt;cd_reader&gt;()
+    .add&lt;headphones_output&gt;();</span>
+
+sound_player.get&lt;cd_reader&gt;()-&gt;insert(&quot;Led Zeppelin IV (1971)&quot;);
+
+// play is a message
+play(sound_player); // cant have sound_player.play() :(
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; through headphones
+
+dynamix::mutate(sound_player)
+    .remove&lt;headphones_output&gt;()
+    .add&lt;speakers_output&gt;();
+
+play(sound_player);
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix Sound Player</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+dynamix::object sound_player; // just an empty dynamix::object
+
+dynamix::mutate(sound_player)
+    .add&lt;cd_reader&gt;()
+    .add&lt;headphones_output&gt;();
+
+<span class="codehl">sound_player.get&lt;cd_reader&gt;()-&gt;insert(&quot;Led Zeppelin IV (1971)&quot;);</span>
+
+// play is a message
+play(sound_player); // cant have sound_player.play() :(
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; through headphones
+
+dynamix::mutate(sound_player)
+    .remove&lt;headphones_output&gt;()
+    .add&lt;speakers_output&gt;();
+
+play(sound_player);
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix Sound Player</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+dynamix::object sound_player; // just an empty dynamix::object
+
+dynamix::mutate(sound_player)
+    .add&lt;cd_reader&gt;()
+    .add&lt;headphones_output&gt;();
+
+sound_player.get&lt;cd_reader&gt;()-&gt;insert(&quot;Led Zeppelin IV (1971)&quot;);
+
+// play is a message
+<span class="codehl">play(sound_player);</span> // cant have sound_player.play() :(
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; through headphones
+
+dynamix::mutate(sound_player)
+    .remove&lt;headphones_output&gt;()
+    .add&lt;speakers_output&gt;();
+
+play(sound_player);
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix Sound Player</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+dynamix::object sound_player; // just an empty dynamix::object
+
+dynamix::mutate(sound_player)
+    .add&lt;cd_reader&gt;()
+    .add&lt;headphones_output&gt;();
+
+sound_player.get&lt;cd_reader&gt;()-&gt;insert(&quot;Led Zeppelin IV (1971)&quot;);
+
+// play is a message
+play(sound_player); // cant have sound_player.play() :(
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; through headphones
+
+<span class="codehl">dynamix::mutate(sound_player)
+    .remove&lt;headphones_output&gt;()
+    .add&lt;speakers_output&gt;();</span>
+
+play(sound_player);
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>DynaMix Sound Player</h3>
+<pre style="width: 100%"><code class="cpp hljs">
+dynamix::object sound_player; // just an empty dynamix::object
+
+dynamix::mutate(sound_player)
+    .add&lt;cd_reader&gt;()
+    .add&lt;headphones_output&gt;();
+
+sound_player.get&lt;cd_reader&gt;()-&gt;insert(&quot;Led Zeppelin IV (1971)&quot;);
+
+// play is a message
+play(sound_player); // cant have sound_player.play() :(
+// -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; through headphones
+
+dynamix::mutate(sound_player)
+    .remove&lt;headphones_output&gt;()
+    .add&lt;speakers_output&gt;();
+
+<span class="codehl">play(sound_player);</span>
 // -&gt; Playing CD &quot;Led Zeppelin IV (1971)&quot; THROUGH SPEAKERS
 </code></pre>
             </section>
@@ -1101,6 +1221,11 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
             </section>
 
             <section>
+                <p class="inter">C++ allows you to have great power with OOP. Make use of it!</p>
+                <p class="fragment">... but don't abuse it</p>
+            </section>
+
+            <section>
                 <h1>End</h1>
                 <h2>Questions?</h2>
                 <br/>
@@ -1157,7 +1282,11 @@ DYNAMIX_DEFINE_MIXIN(headphones_output, play_msg);
         revealWrapper.appendChild(foot);
 
         Reveal.addEventListener('slidechanged', function (event) {
-            foot.innerHTML = event.indexh + ' | is.gd/dmxcpp | CppCon 2018 | @stanimirovb';
+            if (event.indexh != 0) {
+                foot.innerHTML = event.indexh + ' | is.gd/dmxcpp | CppCon 2018 | @stanimirovb';
+            } else {
+                foot.innerHTML = '';
+            }
         }, false);
     </script>
 
