@@ -642,6 +642,19 @@
                 //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
             ]
         });
+
+        revealWrapper = document.querySelector( '.reveal' );
+        foot = document.createElement('div');
+        foot.classList.add('footer');
+        revealWrapper.appendChild(foot);
+
+        Reveal.addEventListener('slidechanged', function (event) {
+            if (event.indexh != 0) {
+                foot.innerHTML = event.indexh + ' | CPU-Friendly Code | @stanimirovb';
+            } else {
+                foot.innerHTML = '';
+            }
+        }, false);
     </script>
 
 </body>
