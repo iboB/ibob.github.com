@@ -22,7 +22,7 @@ Some other preferences and opinions I have:
 * **Editor/IDE:** I prefer Visual Studio, Visual Studio Code, and SciTE. I've tried learning vim several times, with no success. If I have to use a terminal editor, I use JOE.
 * **Version Control:** I prefer git or Mercurial. I've grown to dislike SVN, CVS, and anything not distributed.
 * **C++ standard:** Modern. I write mostly in C++11 because some mobile compilers are a bit behind but I use C++14 and 17 when I can.
-* **C++ build toolset:** I've been using CMake exclusively for the past 6 years. I like premake, but unfrotunately, it simply lacks features. I dislike SCons.
+* **C++ build toolset:** I've been using CMake exclusively for the past 6 years. I like premake, but unfortunately, it simply lacks features. I dislike SCons.
 * **Open-source licenses:** I mostly use MIT and CC-By. I'm not a fan of copyleft licenses and I try to avoid them.
 * **Bridge bidding system:** I play a modified version of Modern Acol with my regular partner but I'm OK with SAYC and Precision too. I like Blue Club, but there are very few people that still play it. I find fourth major openers particularly appealing.
 * **Video Games:** Some of my favorites are BroodWar, TitanQuest, TLJ, NWN, Baldur's Gate, and recently Pillars of Eternity.

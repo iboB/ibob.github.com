@@ -128,7 +128,7 @@ Well, at least it's easy to say.
 
 ## A needed revision and correction
 
-So, yeah... As you've probably seen in the preface, this is not a bug in the standard. I mistakenly interpreted the wording of the standard to think so. It turns out that it's a bug in gcc and clang. More precisely it's a bug in the Itanium C++ ABI which they target. The error message I get is poor but in fact if you change `proxy` from a function template to a class tempalte [clang gives a better error message](https://godbolt.org/z/_y99bn): "sorry, [...] not supported yet".
+So, yeah... As you've probably seen in the preface, this is not a bug in the standard. I mistakenly interpreted the wording of the standard to think so. It turns out that it's a bug in gcc and clang. More precisely it's a bug in the Itanium C++ ABI which they target. The error message I get is poor but in fact if you change `proxy` from a function template to a class template [clang gives a better error message](https://godbolt.org/z/_y99bn): "sorry, [...] not supported yet".
 
 The actual problem is that the specific mangling that such a template will produce is simply [not supported by the target ABI](https://groups.google.com/a/isocpp.org/forum/embed/?place=forum/std-discussion#!topic/std-discussion/__QDbLgpFik). So even though the code is valid, compilers which target this ABI simply cannot compile it. MSVC and icc compile it without problems (now... I'm pretty sure MSVC compiles it as a side effect of not following the standard too strictly, because even MSVC 2005 can compile this code - 12 years before it was valid - but at least their mangling supports such templates).
 
