@@ -131,13 +131,13 @@ int main()
 
             <section>
                 <p>The part which deals with the software's purpose</p>
-                <pre><code class="cpp hljs">
+                <pre class="fragment"><code class="cpp hljs">
                     int a;
                     int b;
                     cin &gt;&gt; a &gt;&gt; b;
                     cout &lt;&lt; a + b &lt;&lt; '\n';
                 </code></pre>
-                <p>Business logic: adding two integers</p>
+                <p class="fragment">Business logic: adding two integers</p>
             </section>
 
             <section>
@@ -219,29 +219,44 @@ int main()
                 <br/>
                 <br/>
                 <br/>
-                <p align="center">People don't seem to want to write business logic in C++</p>
-                <br/>
-                <br/>
-                <p align="center">Why?</p>
+                <p  class="fragment" align="center">People don't seem to want to write business logic in C++</p>                
             </section>
 
             <section>
+                <p>Well... is there a problem with that?</p>
+            </section>
+            
+            <section class="slide">
+                <h3>Problems with that</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">The code is <span class="fancy">slower</span></li>
+                    <li class="fragment">There is <span class="fancy">more complexity</span> in the binding layer</li>
+                    <li class="fragment">There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs)</li>
+                </ul>
+            </section>
+            
+            <section>
+                <p>Why don't people use C++?</p>
+            </section>
+            
+            <section>
                 <h2>1. OOP</h2>
-                <p>Controversial. I know</p>
+                <p class="fragment">Controversial. I know</p>
             </section>
 
             <section class="slide">
                 <h3>Criticism of OOP</h3>
                 <br/>
                 <ul>
-                    <li>You want a banana, but with it you also get the gorilla <span>and the entire jungle</span></li>
-                    <li>It dangerously couples the data with the functionality</li>
-                    <li>It's not reusable</li>
-                    <li>It's slow</li>
+                    <li class="fragment">You want a banana, but with it you also get the gorilla <span class="fragment">and the entire jungle</span></li>
+                    <li class="fragment">It dangerously <span class="fancy">couples the data with the functionality</span></li>
+                    <li class="fragment">It's <span class="fancy">not reusable</span></li>
+                    <li class="fragment">It's <span class="fancy">slow</span></li>
                 </ul>
                 <br/>
                 <br/>
-                <p align="center">People forget that <span class="fancy">C++ is an OOP language</span></p>                
+                <p class="fragment" align="center">People forget that <span class="fancy">C++ is an OOP language</span></p>                
             </section>
 
 
@@ -249,35 +264,35 @@ int main()
                 <h3>Defense of OOP</h3>
                 <br/>
                 <ul>
-                    <li>Many cricisims target <span class="fancy">concrete implementations</span></li>
-                    <li>Many are about <span class="fancy">misuse of OOP</span></li>
-                    <li>Some are about <span class="fancy">misconseptions of OOP</span></li>
+                    <li class="fragment">Many cricisims target <span class="fancy">concrete implementations</span></li>
+                    <li class="fragment">Many are about <span class="fancy">misuse of OOP</span></li>
+                    <li class="fragment">Some are about <span class="fancy">misconseptions of OOP</span></li>
                 </ul>
                 <br/>
                 <br/>
                 <br/>
-                <p align="center">But most importantly...</p>
+                <p class="fragment" align="center">But most importantly...</p>
             </section>
 
             <section>
                 <p>Software is written by human beings</p>
-                <img class="diagram" src="soon.webp" />
+                <img class="fragment diagram" src="soon.webp" />
             </section>
             
             <section>
-                <p>Human beings think in terms of objecsts</p>
-                <img class="diagram" src="objects.png" />
+                <p>Human beings think in terms of objects</p>
+                <img class="fragment diagram" src="objects.png" />
             </section>
             
             <section>
                 <p>Which languages thrive in fields with heavy business logic?</p>
                 <br/>
-                <p>Almost all are object-oriented ones.</p>
+                <p class="fragment">Almost all are object-oriented ones.</p>
             </section>
             
             <section class="slide">
             <h3>Powerful OOP</h3>
-            <pre><code class="js hljs">
+            <pre class="fragment"><code class="js hljs">
     function f(shape) {
         // Everything that has a draw method works
         shape.draw();
@@ -429,7 +444,7 @@ int main() {
         cout &lt;&lt; ptr->area() &lt;&lt; '\n';
     }
             </code></pre>
-            <p align="center">And what if we can't just edit the classes?</p>
+            <p class="fragment" align="center">And what if we can't just edit the classes?</p>
             </section>
             
             <section class="slide">
@@ -439,7 +454,7 @@ int main() {
                     <a href="https://github.com/boost-experimental/te">[Boost].TE</a>,
                     <a href="https://github.com/jll63/yomm2">yomm2</a>
                 </p>
-<pre><code class="cpp hljs">
+<pre class="fragment"><code class="cpp hljs">
 declare_method(double, area, (virtual_&lt;const Shape&amp;&gt; s);
 
 define_method(double, area, (const Square&amp; s)
@@ -976,9 +991,9 @@ o.moveTo(10); // can't fly to 10
                 <h3>Hotswap?</h3>
                 <br/>
                 <ul>
-                    <li>Change code in the program while it's running</li>
-                    <li>Typically a development-only feature</li>
-                    <li>Most business logic programmers are used to this</li>
+                    <li class="fragment">Change code in the program while it's running</li>
+                    <li class="fragment">Typically a development-only feature</li>
+                    <li class="fragment">Most business logic programmers are used to this</li>
                 </ul>
             </section>
             
@@ -986,11 +1001,11 @@ o.moveTo(10); // can't fly to 10
                 <h3>Stateless hotswap</h3>
                 <br/>
                 <ul>
-                    <li>Trivial in dynamic languages</li>
-                    <li>Easy even on C++: shared libraries</li>
-                    <li>Why don't you use it?</li>
+                    <li class="fragment">Trivial in dynamic languages</li>
+                    <li class="fragment">Easy even on C++: shared libraries</li>
+                    <li class="fragment">Why don't you use it?</li>
                 </ul>
-                <pre><code class="cpp hljs">
+                <pre class="fragment"><code class="cpp hljs">
     using foo_func_type = int (*)(float, MyType*);
     foo_func_type foo_func;
     void on_foo_file_changed() {
@@ -1000,6 +1015,15 @@ o.moveTo(10); // can't fly to 10
     }
                 </code></pre>
             </section>
+            
+            <section style="background-color: blue;">
+                <h2>
+                    <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
+                    <span style="color: white;">c</span><span style="color: red;">a</span><span style="color: white;">n</span><span style="color: red;">d</span><span style="color: white;">y</span>
+                    <span style="color: red;">t</span><span style="color: white;">i</span><span style="color: red;">m</span><span style="color: white;">e</span><span style="color: red;">!</span>
+                </h2>
+                <p style="color: white;">MixQuest again: github.com/iboB/mixquest</p>
+            </section>
           
             <section>
                 <p>Hotpatching: Edit-and-continue, <a href="https://molecular-matters.com/products_livepp.html">Live++</a></p>
@@ -1007,15 +1031,109 @@ o.moveTo(10); // can't fly to 10
             
             <section class="slide">
                 <h3>Stateful hotswap</h3>
-                <pre><code class="cpp hljs">
+                <pre class="fragment"><code class="cpp hljs">
         serialize_state();
         perform_hotswap();
         deserialize_state();
                 </code></pre>
                 <ul>
-                    <li>Easy in dynamic languages thanks to <span class="fancy">reflection</span></li>
-                    <li>Hard on C++ with no reflection</li>
+                    <li class="fragment">Easy in dynamic languages thanks to <span class="fancy">reflection</span></li>
+                    <li class="fragment">Hard on C++ with no reflection</li>
+                    <ul>
+                        <li class="fragment">Clang plugins: The future. 
+                            <a href="https://github.com/AustinBrunkhorst/CPP-Reflection">Cpp-Reflection</a>,
+                            <a href="https://github.com/foonathan/cppast">cppast</a>,
+                            <a href="https://github.com/chakaz/reflang">reflang</a>
+                        </li>
+                        <li class="fragment">But... <span class="fragment">you already have serialization</span></li>
+                        <li class="fragment">Versioning</li>
+                    </ul>
                 </ul>
+            </section>
+            
+            <section>
+                <p>Hotswapping C++ is real. Use it today!</p>
+            </section>
+            
+            <section>
+                <h2>3. REPL</h2>
+            </section>
+            
+            <section style="background-color: blue;">
+                <h2 id="demo-h2">
+                    <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
+                    <span style="color: white;">c</span><span style="color: red;">a</span><span style="color: white;">n</span><span style="color: red;">d</span><span style="color: white;">y</span>
+                    <span style="color: red;">t</span><span style="color: white;">i</span><span style="color: red;">m</span><span style="color: white;">e</span><span style="color: red;">!</span>
+                </h2>
+                <p id="demo-p" style="color: white;">Google chrome</p>
+            </section>
+            
+            <section>
+                <p>Wait... We can have this in C++?</p>
+                <small>well... sorta</small>
+            </section>
+            
+            <section class="slide">
+                <h3>Interpreting C++</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><a href="https://www.softintegration.com/">Ch</a> and <a href="https://github.com/root-project/cling">cling</a></li>
+                    <li class="fragment">Embedding... it's tough</li>
+                    <li class="fragment">You probably have to go <span class="fancy">all in</span></li>
+                    <ul>
+                        <li class="fragment">Unexpected bonuses</li>
+                        <li class="fragment">It may be too slow</li>
+                    </ul>
+                    <li class="fragment">Ch may sound nice but it doesn't support C++</li>
+                </ul>
+            </section>
+            
+            <section class="slide">
+                <h3>Hotswapping on steroids</h3>
+                <br/>
+                <ul>
+                    <li>The hacky approach</li>
+                    <li class="fragment">What if we create a shared library for each line of REPL code?</li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+                <div  class="fragment" style="background: blue;">
+                <h2 align="center">
+                    <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
+                    <span style="color: white;">c</span><span style="color: red;">a</span><span style="color: white;">n</span><span style="color: red;">d</span><span style="color: white;">y</span>
+                    <span style="color: red;">t</span><span style="color: white;">i</span><span style="color: red;">m</span><span style="color: white;">e</span><span style="color: red;">!</span>
+                </h2>
+                <p style="color: white;" align="center">RCRL: https://github.com/onqtam/rcrl</p>
+                </div>
+            </section>
+            
+            <section>
+            <p>There is more.</p>
+            </section>
+            
+            <section class="slide">
+                <h3>More</h3>
+                <br/>
+                <ol start="4">
+                    <li class="fragment"><span class="fancy">Build-time optimizations</span></li>
+                    <li class="fragment"><span class="fancy">Testing: </span>
+                        <a href="https://github.com/google/googletest">gtest</a>,
+                        <a href="https://github.com/onqtam/doctest">DocTest</a>, 
+                        <a href="https://github.com/catchorg/Catch2">Catch2</a>
+                    </li>
+                    <li class="fragment"><span class="fancy">Mocking: </span>
+                        <a href="https://github.com/google/googletest">gtest (gmock)</a>,
+                        <a href="https://github.com/eranpeer/FakeIt">FakeIt</a>
+                    </li>
+                    <li class="fragment"><span class="fancy">Property-based testing and fuzzing:</span>
+                        <a href="http://llvm.org/docs/LibFuzzer.html">libFuzzer</a>, clang plugins and the future.
+                    </li>
+                </ol>
+            </section>
+            
+            <section>
+                <p class="fragment"><em>The beast is back!</em> - Jon Kalb</p>
             </section>
             
             <section>
