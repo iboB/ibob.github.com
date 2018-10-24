@@ -172,6 +172,17 @@ int main()
                 </code></pre>
                 <p>Business logic: adding two integers</p>
             </section>
+            
+            <section>
+                <p>Presentation, i/o...</p>
+                <pre><code class="css hljs">
+                    FirstInteger a;
+                    SecondInteger b;
+                    <span class="codehl">input.obtainValues(a, b);</span>
+                    <span class="codehl">gui.display</span>(a + b);
+                </code></pre>
+                <p>Non-business logic</p>
+            </section>
 
             <section>
                 <p>Complex software doesn't mean complex business logic.</p>
@@ -558,6 +569,30 @@ int main() {
     shared_ptr&lt;Shape&gt; s1 = get_random_shape();
     shared_ptr&lt;Shape&gt; s2 = get_random_shape();
     cout &lt;&lt; "Collision: " &lt;&lt; s1->collide(s2.get()) &lt;&lt; '\n';
+            </code></pre>
+            </section>
+            
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual bool collide(const Shape* other) const = 0;
+        virtual bool collideImpl(const Square*) const = 0;
+        virtual bool collideImpl(const Circle*) const = 0;
+        virtual bool collideImpl(const Triangle*) const = 0;
+    }
+    struct Square : public Shape {
+        virtual bool collide(const Shape* other) const override {
+            return other->collideImpl(this);
+        }
+        virtual bool collideImpl(const Square*) const override;
+        virtual bool collideImpl(const Circle*) const override;
+        virtual bool collideImpl(const Triangle*) const override;
+    };    
+    // ...
+    shared_ptr&lt;Shape&gt; s1 = get_random_shape();
+    shared_ptr&lt;Shape&gt; s2 = get_random_shape();
+    cout &lt;&lt; "Collision: " &lt;&lt; <span class = "codehl">s1->collide(s2.get())</span> &lt;&lt; '\n';
             </code></pre>
             </section>
             
