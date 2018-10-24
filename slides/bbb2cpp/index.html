@@ -44,6 +44,20 @@
                 </p>
             </section>
 
+            <section class="title">
+                <h1>Bringing Business Logic Back to B++</h1>
+                <p>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+                </p>
+            </section>
+
+            <section class="title">
+                <h1>Bringing Business Logic Back to C++</h1>
+                <p>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+                </p>
+            </section>
+
             <section class="slide">
                 <h3>Hello, World</h3>
                 <br/>
@@ -53,7 +67,7 @@
 int main()
 {
     std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-    std::cout &lt;&lt; "These slides are here: https://is.gd/dmxcpp\n";
+    std::cout &lt;&lt; "These slides are here: https://is.gd/bbb2cpp\n";
     return 0;
 }
 
@@ -69,7 +83,7 @@ int main()
 int main()
 {
     std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-    std::cout &lt;&lt; "These slides are here:<span style="font-weight: bold; background-color: lightgray;"> https://is.gd/dmxcpp</span>\n";
+    std::cout &lt;&lt; "These slides are here: <span style="font-weight: bold; background-color: lightgray;">https://is.gd/bbb2cpp</span>\n";
     return 0;
 }
 
@@ -90,6 +104,164 @@ int main()
                     <li><span class="fancy">Open-source</span> programmer</li>
                     <li><a href="https://github.com/iboB">github.com/iboB</a></li>
                 </ul>
+            </section>
+
+            <section>
+                <h2>What is in this talk?</h2>
+            </section>
+
+            <section class="slide">
+                <h3>What is in this talk?</h3>
+                <br/>
+                <ul>
+                    <li>State of the world</li>
+                    <li>Various existing developments and techniques</li>
+                    <li>Some emerging ones</li>
+                    <li>The future?</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>What is Business Logic?</h2>
+            </section>
+
+            <section>
+                <blockquote><em>A part of a program which deals with the real world rules that determine how data is obtained, stored and processed.</em></blockquote>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="cpp hljs">
+                    int a;
+                    int b;
+                    cin &gt;&gt; a &gt;&gt; b;
+                    cout &lt;&lt; a + b &lt;&lt; '\n';
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="cpp hljs">
+                    <span class="codehl">int a;</span>
+                    <span class="codehl">int b;</span>
+                    cin &gt;&gt; a &gt;&gt; b;
+                    cout &lt;&lt; <span class="codehl">a + b</span> &lt;&lt; '\n';
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="css hljs">
+                    FirstInteger a;
+                    SecondInteger b;
+                    input.obtainValues(a, b);
+                    gui.display(a + b);
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="css hljs">
+                    <span class="codehl">FirstInteger a;</span>
+                    <span class="codehl">SecondInteger b;</span>
+                    input.obtainValues(a, b);
+                    gui.display(<span class="codehl">a + b</span>);
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>Complex software doesn't mean complex business logic.</p>
+            </section>
+
+            <section>
+            <img class="diagram" src="rt-scene.jpg" />
+            </section>
+
+            <section>
+            <img class="diagram" src="rt-how.svg" />
+            <p>_</p>
+            </section>
+
+            <section>
+            <img class="diagram" src="rt-how.svg" />
+            <p><span class="fancy">Simple. Right?</span></p>
+            </section>
+
+            <section>
+            <img class="diagram" src="fb.png" />
+            </section>
+
+            <section>
+            <img class="diagram" src="civ_vi.jpg" />
+            </section>
+
+            <section>
+            <img class="diagram" src="blender.jpg" />
+            </section>
+
+            <section>
+            <img class="diagram" src="ms-proj.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>What do we have here?</h3>
+                <br/>
+                <ul>
+                    <li>Websites - <span class="fancy">JS, C#, Java, Ruby...</span></li>
+                    <li>Gameplay - <span class="fancy">lua, C#, Python...</span></li>
+                    <li>CAD - <span class="fancy">Python, C#...</span></li>
+                    <li>Enterprise - <span class="fancy">Everything but C++</span></li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+                <p align="center">People don't seem to want to write business logic in C++</p>
+                <br/>
+                <br/>
+                <p align="center">Why?</p>
+            </section>
+
+            <section>
+                <h2>1. OOP</h2>
+                <p>Controversial. I know</p>
+            </section>
+
+            <section class="slide">
+                <h3>Criticism of OOP</h3>
+                <br/>
+                <ul>
+                    <li>You want a banana, but with it you also get the gorilla <span>and the entire jungle</span></li>
+                    <li>It dangerously couples the data with the functionality</li>
+                    <li>It's not reusable</li>
+                    <li>It's slow</li>
+                </ul>
+                <br/>
+                <br/>
+                <p align="center">People forget that <span class="fancy">C++ is an OOP language</span></p>
+            </section>
+
+
+            <section class="slide">
+                <h3>Defense of OOP</h3>
+                <br/>
+                <ul>
+                    <li>Many cricisims target <span class="fancy">concrete implementations</span></li>
+                    <li>Many are about <span class="fancy">misuse of OOP</span></li>
+                    <li>Some are about <span class="fancy">misconseptions of OOP</span></li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+                <p align="center">But most importantly...</p>
+            </section>
+
+            <section>
+                <p>Software is written by human beings</p>
+                <img class="diagram" src="soon.webp" />
             </section>
 
             <section>
@@ -145,7 +317,7 @@ int main()
 
         Reveal.addEventListener('slidechanged', function (event) {
             if (event.indexh != 0) {
-                foot.innerHTML = event.indexh + ' | is.gd/dmxcpp | CppCon 2018 | @stanimirovb';
+                foot.innerHTML = event.indexh + ' | is.gd/bbb2cpp | CppCon 2018 | @stanimirovb';
             } else {
                 foot.innerHTML = '';
             }
