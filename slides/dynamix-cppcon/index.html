@@ -269,7 +269,7 @@ struct Square : public Drawable {
     virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
 };
 struct Circle : public Drawable {
-    virtual void draw(ostream&amp; out) const override { out &lt; &quot;Circle\n&quot;; }
+    virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Circle\n&quot;; }
 };
 int main() {
     f(Square{});
@@ -325,7 +325,7 @@ struct Square {
     void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
 };
 struct Circle {
-    void draw(ostream&amp; out) const { out &lt; &quot;Circle\n&quot;; }
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Circle\n&quot;; }
 };
 int main() {
     f(Square{});
@@ -353,7 +353,7 @@ struct Square {
     void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
 };
 struct Circle {
-    void draw(ostream&amp; out) const { out &lt; &quot;Circle\n&quot;; }
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Circle\n&quot;; }
 };
 int main() {
     f(Square{});
