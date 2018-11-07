@@ -172,7 +172,7 @@ int main()
                 </code></pre>
                 <p>Business logic: adding two integers</p>
             </section>
-            
+
             <section>
                 <p>Presentation, i/o...</p>
                 <pre><code class="css hljs">
@@ -230,13 +230,13 @@ int main()
                 <br/>
                 <br/>
                 <br/>
-                <p  class="fragment" align="center">People don't seem to want to write business logic in C++</p>                
+                <p class="fragment" align="center">People don't seem to want to write business logic in C++</p>
             </section>
 
             <section>
                 <p>Well... is there a problem with that?</p>
             </section>
-            
+
             <section class="slide">
                 <h3>Problems with that</h3>
                 <br/>
@@ -246,11 +246,11 @@ int main()
                     <li class="fragment">There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs)</li>
                 </ul>
             </section>
-            
+
             <section>
                 <p>Why don't people use C++?</p>
             </section>
-            
+
             <section>
                 <h2>1. OOP</h2>
                 <p class="fragment">Controversial. I know</p>
@@ -267,7 +267,7 @@ int main()
                 </ul>
                 <br/>
                 <br/>
-                <p class="fragment" align="center">People forget that <span class="fancy">C++ is an OOP language</span></p>                
+                <p class="fragment" align="center">People forget that <span class="fancy">C++ is an OOP language</span></p>
             </section>
 
 
@@ -289,18 +289,18 @@ int main()
                 <p>Software is written by human beings</p>
                 <img class="fragment diagram" src="soon.webp" />
             </section>
-            
+
             <section>
                 <p>Human beings think in terms of objects</p>
                 <img class="fragment diagram" src="objects.png" />
             </section>
-            
+
             <section>
                 <p>Which languages thrive in fields with heavy business logic?</p>
                 <br/>
                 <p class="fragment">Almost all are object-oriented ones.</p>
             </section>
-            
+
             <section class="slide">
             <h3>Powerful OOP</h3>
             <pre class="fragment"><code class="js hljs">
@@ -322,7 +322,7 @@ int main()
     f(new Circle);
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -346,10 +346,10 @@ int main()
             </section>
 
             <section>
-                <h3>OOP isn't modern C++</h3> 
+                <h3>OOP isn't modern C++</h3>
                 <p>However C++ is a pretty powerful language.</p>
             </section>
-            
+
             <section class="slide">
                 <h3>Polymorphic type-erasure wrappers</h3>
                 <p>
@@ -401,7 +401,7 @@ int main() {
 }
 </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Powerful OOP</h3>
             <pre><code class="js hljs">
@@ -412,13 +412,13 @@ int main() {
     Circle.ptototype.area = function() {
         return this.radius * this.radius * Math.PI;
     }
-    
+
     s = new Square;
     s.side = 5;
     console.log(s.area()); // 25
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -436,7 +436,7 @@ int main() {
     }
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -457,7 +457,7 @@ int main() {
             </code></pre>
             <p class="fragment" align="center">And what if we can't just edit the classes?</p>
             </section>
-            
+
             <section class="slide">
                 <h3>Open methods</h3>
                 <p><em>Not to be confused with extension methods or UCS</em></p>
@@ -479,7 +479,7 @@ int main() {
 }
 </code></pre>
             </section>
-            
+
             <section class="slide">
                 <h3>Open methods</h3>
                 <p><em>Not to be confused with extension methods or UCS</em></p>
@@ -501,7 +501,7 @@ int main() {
 }
 </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Powerful OOP</h3>
             <pre><code class="perl6 hljs">
@@ -517,13 +517,13 @@ int main() {
     multi sub collide(Circle $c, Square $s) {
         collide_square_circle($s, $c);
     }
-    
+
     my $s1 = get_random_shape;
     my $s2 = get_random_shape;
     say "Collision: " ~ collide($s1, $s2);
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -540,14 +540,14 @@ int main() {
         virtual bool collideImpl(const Square*) const override;
         virtual bool collideImpl(const Circle*) const override;
         virtual bool collideImpl(const Triangle*) const override;
-    };    
+    };
     // ...
     shared_ptr&lt;Shape&gt; s1 = get_random_shape();
     shared_ptr&lt;Shape&gt; s2 = get_random_shape();
     cout &lt;&lt; "Collision: " &lt;&lt; s1->collide(s2.get()) &lt;&lt; '\n';
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -563,7 +563,7 @@ int main() {
         }</span>
         virtual bool collideImpl(const Square*) const override;
         virtual bool collideImpl(const Circle*) const override;
-        virtual bool collideImpl(const Triangle*) const override;        
+        virtual bool collideImpl(const Triangle*) const override;
     };
     // ...
     shared_ptr&lt;Shape&gt; s1 = get_random_shape();
@@ -571,7 +571,7 @@ int main() {
     cout &lt;&lt; "Collision: " &lt;&lt; s1->collide(s2.get()) &lt;&lt; '\n';
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -588,22 +588,22 @@ int main() {
         virtual bool collideImpl(const Square*) const override;
         virtual bool collideImpl(const Circle*) const override;
         virtual bool collideImpl(const Triangle*) const override;
-    };    
+    };
     // ...
     shared_ptr&lt;Shape&gt; s1 = get_random_shape();
     shared_ptr&lt;Shape&gt; s2 = get_random_shape();
     cout &lt;&lt; "Collision: " &lt;&lt; <span class = "codehl">s1->collide(s2.get())</span> &lt;&lt; '\n';
             </code></pre>
             </section>
-            
+
             <section class="slide">
                 <h3>Multiple dispatch (Multimethods)</h3>
                 <p>
-                    <a href="https://github.com/jll63/yomm2">yomm2</a>, 
+                    <a href="https://github.com/jll63/yomm2">yomm2</a>,
                     <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>
                 </p>
 <pre><code class="cpp hljs">
-declare_method(bool, collide, 
+declare_method(bool, collide,
     (virtual_&lt;const Shape&amp;&gt; s1, (virtual_&lt;const Shape&amp;&gt; s2));
 
 define_method(bool, collide, (const Square&amp; s, const Circle&amp; c)
@@ -621,7 +621,7 @@ cout &lt;&lt; "Collision: " &lt;&lt; collide(*s1, *s2) &lt;&lt; '\n';
 
 </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Powerful OOP</h3>
 <pre><code class="ruby hljs">module FlyingCreature
@@ -646,7 +646,7 @@ a.extend(AfraidOfEvens)
 a.move_to(10) # -> can’t fly to 10
 </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Powerful OOP</h3>
 <pre><code class="ruby hljs">module FlyingCreature
@@ -778,7 +778,7 @@ a.move_to(10) # -> can’t fly to 10</span>
             // ???
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">struct Object
@@ -789,7 +789,7 @@ a.move_to(10) # -> can’t fly to 10</span>
     bool canMoveTo(int target) const {
         return m_canMoveTo->call(target);
     } // ... every possible method ever (again)
-    
+
     void extend(shared_ptr&lt;Creature&gt; c) {
         c->setObject(this);
         m_canMoveTo = c;
@@ -798,11 +798,11 @@ a.move_to(10) # -> can’t fly to 10</span>
     void extend(shared_ptr&lt;ICanMoveTo&gt; cmt) {
         cmt->setObject(this);
         m_canMoveTo = cmt;
-    } // ... every possible extension ever    
+    } // ... every possible extension ever
 };
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Vanilla C++ OOP</h3>
             <pre><code class="cpp hljs">
@@ -816,7 +816,7 @@ o.extend(make_shared&lt;AfraidOfEvens&gt;());
 o.moveTo(10); // can't fly to 10
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Dynamic Mixins</h3>
             <p>
@@ -826,7 +826,7 @@ o.moveTo(10); // can't fly to 10
     DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
     struct FlyingCreature {
         void moveTo(int target) {
-            cout &lt;&lt; (canMoveTo(dm_this, target) ?
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
                 "flying to " : "can't fly to ")
                 &lt;&lt; target &lt;&lt; '\n';
         }
@@ -842,13 +842,13 @@ o.moveTo(10); // can't fly to 10
     int main() {
         object o;
         mutate(o).add&lt;FlyingCreature&gt;();
-        move_to(o, 10); // flying to 10
+        moveTo(o, 10); // flying to 10
         mutate(o).add&lt;AfraidOfEvens&gt;();
-        move_to(o, 10); // can't fly to 10
+        moveTo(o, 10); // can't fly to 10
     }
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Dynamic Mixins</h3>
             <p>
@@ -858,7 +858,7 @@ o.moveTo(10); // can't fly to 10
     DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);</span>
     struct FlyingCreature {
         void moveTo(int target) {
-            cout &lt;&lt; (canMoveTo(dm_this, target) ?
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
                 "flying to " : "can't fly to ")
                 &lt;&lt; target &lt;&lt; '\n';
         }
@@ -874,13 +874,13 @@ o.moveTo(10); // can't fly to 10
     int main() {
         object o;
         mutate(o).add&lt;FlyingCreature&gt;();
-        move_to(o, 10); // flying to 10
+        moveTo(o, 10); // flying to 10
         mutate(o).add&lt;AfraidOfEvens&gt;();
-        move_to(o, 10); // can't fly to 10
+        moveTo(o, 10); // can't fly to 10
     }
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Dynamic Mixins</h3>
             <p>
@@ -890,7 +890,7 @@ o.moveTo(10); // can't fly to 10
     DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
     struct FlyingCreature {
         void moveTo(int target) {
-            cout &lt;&lt; (<span class="codehl">canMoveTo(dm_this, target)</span> ?
+            cout &lt;&lt; (<span class="codehl">::canMoveTo(dm_this, target)</span> ?
                 "flying to " : "can't fly to ")
                 &lt;&lt; target &lt;&lt; '\n';
         }
@@ -906,13 +906,13 @@ o.moveTo(10); // can't fly to 10
     int main() {
         object o;
         mutate(o).add&lt;FlyingCreature&gt;();
-        move_to(o, 10); // flying to 10
+        moveTo(o, 10); // flying to 10
         mutate(o).add&lt;AfraidOfEvens&gt;();
-        move_to(o, 10); // can't fly to 10
+        moveTo(o, 10); // can't fly to 10
     }
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Dynamic Mixins</h3>
             <p>
@@ -922,7 +922,7 @@ o.moveTo(10); // can't fly to 10
     DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
     struct FlyingCreature {
         void moveTo(int target) {
-            cout &lt;&lt; (canMoveTo(dm_this, target) ?
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
                 "flying to " : "can't fly to ")
                 &lt;&lt; target &lt;&lt; '\n';
         }
@@ -938,13 +938,13 @@ o.moveTo(10); // can't fly to 10
     int main() {
         object o;
         mutate(o).add&lt;FlyingCreature&gt;();
-        move_to(o, 10); // flying to 10
+        moveTo(o, 10); // flying to 10
         mutate(o).add&lt;AfraidOfEvens&gt;();
-        move_to(o, 10); // can't fly to 10
+        moveTo(o, 10); // can't fly to 10
     }
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Dynamic Mixins</h3>
             <p>
@@ -954,7 +954,7 @@ o.moveTo(10); // can't fly to 10
     DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
     struct FlyingCreature {
         void moveTo(int target) {
-            cout &lt;&lt; (canMoveTo(dm_this, target) ?
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
                 "flying to " : "can't fly to ")
                 &lt;&lt; target &lt;&lt; '\n';
         }
@@ -970,13 +970,13 @@ o.moveTo(10); // can't fly to 10
     int main() {
         object o;
         mutate(o).add&lt;FlyingCreature&gt;();
-        move_to(o, 10); // flying to 10
+        moveTo(o, 10); // flying to 10
         mutate(o).add&lt;AfraidOfEvens&gt;();
-        move_to(o, 10); // can't fly to 10
+        moveTo(o, 10); // can't fly to 10
     }
             </code></pre>
             </section>
-            
+
             <section class="slide">
             <h3>Dynamic Mixins</h3>
             <p>
@@ -986,7 +986,7 @@ o.moveTo(10); // can't fly to 10
     DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
     struct FlyingCreature {
         void moveTo(int target) {
-            cout &lt;&lt; (canMoveTo(dm_this, target) ?
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
                 "flying to " : "can't fly to ")
                 &lt;&lt; target &lt;&lt; '\n';
         }
@@ -1002,13 +1002,13 @@ o.moveTo(10); // can't fly to 10
     int main() {
 <span class="codehl">        object o;
         mutate(o).add&lt;FlyingCreature&gt;();
-        move_to(o, 10); // flying to 10
+        moveTo(o, 10); // flying to 10
         mutate(o).add&lt;AfraidOfEvens&gt;();
-        move_to(o, 10); // can't fly to 10 </span>
+        moveTo(o, 10); // can't fly to 10 </span>
     }
             </code></pre>
             </section>
-            
+
             <section style="background-color: blue;">
                 <h2>
                     <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
@@ -1017,11 +1017,11 @@ o.moveTo(10); // can't fly to 10
                 </h2>
                 <p style="color: white;">MixQuest: github.com/iboB/mixquest</p>
             </section>
-            
+
             <section>
                 <h2>2. Hotswap</h2>
             </section>
-            
+
             <section class="slide">
                 <h3>Hotswap?</h3>
                 <br/>
@@ -1031,7 +1031,7 @@ o.moveTo(10); // can't fly to 10
                     <li class="fragment">Most business logic programmers are used to this</li>
                 </ul>
             </section>
-            
+
             <section class="slide">
                 <h3>Stateless hotswap</h3>
                 <br/>
@@ -1050,7 +1050,7 @@ o.moveTo(10); // can't fly to 10
     }
                 </code></pre>
             </section>
-            
+
             <section style="background-color: blue;">
                 <h2>
                     <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
@@ -1059,11 +1059,11 @@ o.moveTo(10); // can't fly to 10
                 </h2>
                 <p style="color: white;">MixQuest again: github.com/iboB/mixquest</p>
             </section>
-          
+
             <section>
                 <p>Hotpatching: Edit-and-continue, <a href="https://molecular-matters.com/products_livepp.html">Live++</a></p>
             </section>
-            
+
             <section class="slide">
                 <h3>Stateful hotswap</h3>
                 <pre class="fragment"><code class="cpp hljs">
@@ -1075,7 +1075,7 @@ o.moveTo(10); // can't fly to 10
                     <li class="fragment">Easy in dynamic languages thanks to <span class="fancy">reflection</span></li>
                     <li class="fragment">Hard on C++ with no reflection</li>
                     <ul>
-                        <li class="fragment">Clang plugins: The future. 
+                        <li class="fragment">Clang plugins: The future.
                             <a href="https://github.com/AustinBrunkhorst/CPP-Reflection">Cpp-Reflection</a>,
                             <a href="https://github.com/foonathan/cppast">cppast</a>,
                             <a href="https://github.com/chakaz/reflang">reflang</a>
@@ -1085,15 +1085,15 @@ o.moveTo(10); // can't fly to 10
                     </ul>
                 </ul>
             </section>
-            
+
             <section>
                 <p>Hotswapping C++ is real. Use it today!</p>
             </section>
-            
+
             <section>
                 <h2>3. REPL</h2>
             </section>
-            
+
             <section style="background-color: blue;">
                 <h2 id="demo-h2">
                     <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
@@ -1102,12 +1102,12 @@ o.moveTo(10); // can't fly to 10
                 </h2>
                 <p id="demo-p" style="color: white;">Google chrome</p>
             </section>
-            
+
             <section>
                 <p>Wait... We can have this in C++?</p>
                 <small>well... sorta</small>
             </section>
-            
+
             <section class="slide">
                 <h3>Interpreting C++</h3>
                 <br/>
@@ -1122,7 +1122,7 @@ o.moveTo(10); // can't fly to 10
                     <li class="fragment">Ch may sound nice but it doesn't support C++</li>
                 </ul>
             </section>
-            
+
             <section class="slide">
                 <h3>Hotswapping on steroids</h3>
                 <br/>
@@ -1142,11 +1142,11 @@ o.moveTo(10); // can't fly to 10
                 <p style="color: white;" align="center">RCRL: https://github.com/onqtam/rcrl</p>
                 </div>
             </section>
-            
+
             <section>
             <p>There is more.</p>
             </section>
-            
+
             <section class="slide">
                 <h3>More</h3>
                 <br/>
@@ -1154,7 +1154,7 @@ o.moveTo(10); // can't fly to 10
                     <li class="fragment"><span class="fancy">Build-time optimizations</span></li>
                     <li class="fragment"><span class="fancy">Testing: </span>
                         <a href="https://github.com/google/googletest">gtest</a>,
-                        <a href="https://github.com/onqtam/doctest">DocTest</a>, 
+                        <a href="https://github.com/onqtam/doctest">DocTest</a>,
                         <a href="https://github.com/catchorg/Catch2">Catch2</a>
                     </li>
                     <li class="fragment"><span class="fancy">Mocking: </span>
@@ -1166,11 +1166,11 @@ o.moveTo(10); // can't fly to 10
                     </li>
                 </ol>
             </section>
-            
+
             <section>
                 <p class="fragment"><em>The beast is back!</em> - Jon Kalb</p>
             </section>
-            
+
             <section>
                 <h1>End</h1>
                 <h2>Questions?</h2>
@@ -1186,7 +1186,7 @@ o.moveTo(10); // can't fly to 10
                     </small>
                 </p>
             </section>
-            
+
         </div>
     </div>
 
