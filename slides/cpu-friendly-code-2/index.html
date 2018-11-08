@@ -143,7 +143,7 @@
             <section class="slide">
                 <h3>Why CPU and not GPU?</h3>
                 <ul>
-                    <li>The GPU is crazy-mega-powerful <span class="fragment">for some problems.</span></li>
+                    <li class="fragment">The GPU is crazy-mega-powerful <span class="fragment">for some problems.</span></li>
                     <li class="fragment">Blah-blah architectural differences</li>
                     <li class="fragment">The GPU is a bad choice for these problems:</li>
                     <ul>
@@ -176,7 +176,7 @@
                     <li class="fragment">Very useful and widely used</li>
                     <li class="fragment">Θ-notation, Ω-notation, etc</li>
                     <li class="fragment">We evaluate <span class="fancy">the growth of the complexity</span> based on the growth of the input</li>
-                    <li class="fragment">Little-letter notation (о, θ,  ω) - too conservative</li>
+                    <li class="fragment">Little-letter notation (о, ω) - too conservative</li>
                     <li class="fragment">The <span class="fancy">real complexity</span> still exists</li>
                 </ul>
             </section>
@@ -242,12 +242,13 @@
             </section>
 
             <section>
-                <p>Modern hardware makes the real complexity <span class="fancy">pratically impossible to calculate</span></p>
+                <p>Modern hardware makes the real complexity</p>
+                <p><span class="fancy">pratically impossible to calculate</span></p>
                 <p class="fragment">But nevertheless...</p>
             </section>
 
             <section>
-                <h2>Cache locality</h2>
+                <h2>Cache Locality</h2>
             </section>
 
             <section>
@@ -387,7 +388,7 @@
             </section>
 
             <section>
-                <h2>Syscalls и алокации</h2>
+                <h2>Syscalls and allocations</h2>
                 <h3 class="fragment">Especially allocations!</h3>
             </section>
 
@@ -426,13 +427,13 @@
             </section>
 
             <section class="slide">
-                <h3>Алокации</h3>
+                <h3>Allocations</h3>
                 <ul>
                     <li class="fragment">Obvious cost</li>
                     <ul>
                         <li class="fragment">The OS has to do a bunch of stuff.</li>
                         <li class="fragment">Physical memory: pages</li>
-                        <li class="fragment">Free chung of consecutive pages</li>
+                        <li class="fragment">Free chunk of consecutive pages</li>
                         <li class="fragment">Sync between threads and processes</li>
                     </ul>
                     <li class="fragment">Commit size - it's very helpful</li>
@@ -515,7 +516,7 @@
                 </ul>
                 <br/>
                 <br/>
-                <p class="fragment">It's worth goign through them and maybe have a revelation</p>
+                <p class="fragment">It's worth goign through them. Maybe you'll have a revelation</p>
             </section>
 
             <section>
@@ -535,7 +536,7 @@
                         <li class="fragment">NEON, ARMv8</li>
                     </ul>
                     <li class="fragment">Accessed through intrinsics (or... you know Assembly)</li>
-                    <li class="fragment">Tace care of <span class="fancy">alignment</span></li>
+                    <li class="fragment">Mind the <span class="fancy">alignment</span></li>
                     <li class="fragment">Contemporary compilers are <a href="https://godbolt.org/g/N3HyWw">powerful!</a></li>
                 </ul>
             </section>
@@ -554,12 +555,12 @@
 
             <section class="slide">
                 <h3>Bonus: Hyperthreading</h3>
-                <p>... and how it can screw us up</p>
+                <!-- <p>... and how it can screw us up</p> -->
                 <img class="diagram" src="ooo_core_hyper.png" />
             </section>
 
             <section class="slide">
-                <h3>Bonus: Meltdown</h3>
+                <h3>Bonus: Modern Vulnerabilities</h3>
                 <pre><code>    char* memory = new char[0x200];
     if (something_false) {
         char value = *(char*)(KERNEL_MEM_PTR);
@@ -571,36 +572,6 @@
                 <img class="fragment diagram" src="../cpu-friendly-code-2-bg/lebron-intel.jpg" />
             </section>
 
-            <section class="slide">
-                <h3>Bonus: Spectre</h3>
-                <p>OS code:</p>
-                <pre><code>    if (some_condition) {
-        hidden_val = hidden_data[N];
-        whatever = public_data[hidden_val]; // o_O
-    }</code></pre>
-                <ul>
-                    <li class="fragment">Branch-prediction is hard<span class="fragment">: Partial addressing</span></li>
-                    <li class="fragment">Branch predictor poisoning: Software which has an <code>if(true)</code> at the same partial address</li>
-                </ul>
-            </section>
-
-            <section class="slide">
-                <h3>Bonus: Spectre</h3>
-                <p>OS code:</p>
-                <pre><code>    if (some_condition) { // at which address is this?
-        hidden_val = hidden_data[N];
-        whatever = public_data[hidden_val]; // o_O
-    }</code></pre>
-                <ul>
-                    <li>Branch-prediction is hard<span>: Partial addressing</span></li>
-                    <li>Branch predictor poisoning: Software which has an <code>if(true)</code> at the same partial address</li>
-                </ul>
-                <pre class="fragment"><code>    for(auto&amp; elem : public_data) {
-        measure_time_to_access(elem);
-    }</code></pre>
-                <p class="fragment">Initially there weren't any real-life examples, but since then some have been found</p>
-            </section>
-
             <section>
                 <h1>End!</h1>
                 <h2>Questions?</h2>
@@ -609,7 +580,11 @@
                 <p>
                     <br />
                     <small>
-                    These slides are here: <a href="http://ibob.github.io/slides/cpu-friendly-code-2/">http://ibob.github.io/slides/cpu-friendly-code-2/</a>
+                    The demos are here: <a href="https://github.com/iboB/cfc-demos">https://github.com/iboB/cfc-demos</a>
+                    </small>
+                    <br />
+                    <small>
+                    These slides are here: <a href="https://ibob.github.io/slides/cpu-friendly-code-2/">https://ibob.github.io/slides/cpu-friendly-code-2/</a>
                     </small>
                     <br />
                     <small>
