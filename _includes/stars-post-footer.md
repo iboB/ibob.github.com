@@ -1,0 +1,1 @@
+> This post is part of my [Project Stars]({{ site.baseurl }}{% post_url 2018-11-15-project-stars %}) where I post a short review for each of the 500+ repos that I've starred on GitHub.<br/>For more posts of this series see the tag [stars](/blog/tags/#stars) in this blog.
