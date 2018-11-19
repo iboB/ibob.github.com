@@ -7,7 +7,7 @@ tags: ['stars', 'data-structures']
 excerpt: A powerful and flexible C++11 library implementing succinct data structures
 ---
 
-This is one of the main reasons I started projects stars. I had starred SDSL some years ago because it looks interesting and completely forgotten about it until now. It still looks interesting.
+This is one of the main reasons I started Projects Stars. I had starred SDSL some years ago because it looks interesting and completely forgotten about it until now. It still looks interesting.
 
 | Summary | |
 |---|---|
@@ -23,9 +23,9 @@ This is one of the main reasons I started projects stars. I had starred SDSL som
 
 The Succinct Data Structure Library contains many such data structures. The ones that seem particularly interesting to me are the various integer vectors with different compression strategies.
 
-To be honest, I'm not sure what the applications of this library might be in practice. It seems like a purely academic effort. Still, it sparked some interest in me and I'm going to read more about succinct data structures and try to estimate their practical value. I must also admit that I do have a small issue is the GPL v3 license, but I know that is to be expected from academia...
+To be honest, I'm not sure what the applications of this library might be in practice. It seems like a purely academic effort. Still, it sparked my interest and I'm going to read more about succinct data structures and try to estimate their practical value. I must also admit that I do have a small issue with the GPL v3 license, but I know that is to be expected from academia...
 
-Other than that, the code is in C++11. After a brief skim, it looks pretty decent and well documented. The library's docs seem adequate and I do like the style (not typical for academic writings). There are some examples. As a whole it looks like the repo contains the relevant information for people who are interested in this.
+Other than that, the code is in C++11. After a brief skim, it looks pretty decent and well documented. The library's docs seem adequate and I do like the style (not typical for academic writing). There are some examples. As a whole it looks like the repo contains the relevant information for people who are interested in this.
 
 So I will definitely go more into this when I have the time. If anyone has already done so, please share you experience and thoughts.
 
