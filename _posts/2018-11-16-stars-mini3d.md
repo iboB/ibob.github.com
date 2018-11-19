@@ -2,7 +2,7 @@
 layout: post
 title: "Stars: Mini3d"
 category: stars
-tags: ['stars', 'engine']
+tags: ['stars', 'engine', 'gamedev']
 
 excerpt: Minimalistic, cross platform, open source 3d game engine framework
 ---
