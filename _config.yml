@@ -3,8 +3,8 @@ author: Borislav Stanimirov
 email: b.stanimirov@abv.bg
 description: >-
   Homepage of Borislav Stanimirov (aka iboB). Programmer.
-baseurl: ""
-url: "ibob.github.io"  # do I need this?
+baseurl:
+url:
 twitter_username: stanimirovb
 github_username:  iboB
 
