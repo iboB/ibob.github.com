@@ -35,7 +35,7 @@ So, which build system should be taught? Which package manager? This or that, or
 
 ![Is this package management?](/blog/cpp-package-butterfly.jpg)
 
-I've seen frustration and desperation even in seasoned professionals trying to incorporate some library with obscure build process in their code. I've  experienced it myself. (I'm looking at you [tensorflow](https://github.com/tensorflow/tensorflow))
+I've seen frustration and desperation even in seasoned professionals trying to incorporate some library with obscure build process in their code. I've  experienced it myself. (I'm looking at you, [tensorflow](https://github.com/tensorflow/tensorflow)!)
 
 And as if this is not enough, C++ has a... well, a bare-bones standard library. With it there is no way to do networking, or GUI, or any graphics at all for that matter. Working with freaking *directories* was first introduced in C++17. I've seen universities as late as 2016 teach C++ using Visual Studio 6. By the time they reach C++17,  humanity will have spread to the stars.
 
@@ -69,5 +69,5 @@ ___
 
 [^1]: Not my quote. The source is unknown for all I know. I've seen it attributed to a John Krueger. Maybe that's true.
 [^2]: This resemblance between [Boost].tmp and Haskell is accidental, by the way. It's just a reinvention by Odin of a good set of principles which happen to exist elsewhere.
-[^3]: "A monad is just a monoid in the category of endofunctors, what's the problem?". Not my quote. I couldn't find the source of that one, too. It's Haskell folklore now.
+[^3]: "A monad is just a monoid in the category of endofunctors, what's the problem?". Not my quote. A [paraphrasing of Saunders Mac Lane](https://stackoverflow.com/a/3870310) (thanks to [Simon Brand](https://twitter.com/tartanllama) for pointing out the source). It's Haskell folklore now.
 [^4]: PS. By the way, the languages which I would recommend for good first language are: Ruby and C#. Languages which I would call an adequate choice even though I see some issues include: Python, Swift, JavaScript, lua, clojure, Scala, Java, Kotlin, and PHP. But, hey, that's just, like, my opinion, man.
