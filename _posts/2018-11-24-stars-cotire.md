@@ -18,10 +18,10 @@ There are many CMake libraries out there and this is one of the better ones.
 
 ## Review
 
-Cotire is not a full-fledged CMake toolkit. Much like some libraries in my previous reviews, this library only does a few things, but it does them good.
+Cotire is not a full-fledged CMake toolkit. Much like some libraries in my previous reviews, this library only does a few things, but it does them well.
 
 Cotire means "compile time reducer". It has CMake macros for precompiled headers and unity builds. And please consider using precompiled headers if you don't already. It doesn't matter if you use Cotire or even CMake. Give them a try. They are probably the best way to reduce compilation times in terms of gain over investment. Precompiled headers work.
 
-Anyway there's not much else I can say here. Cotire is a nice little CMake library. Give it a try.
+Anyway, there's not much else I can say here. Cotire is a nice little CMake library. Give it a try.
 
 {% include stars-post-footer.md %}
