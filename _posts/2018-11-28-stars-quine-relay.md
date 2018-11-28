@@ -19,7 +19,7 @@ There are many repos on GitHub which are only there for entertainment: [serious 
 
 ## Review
 
-So, a quine is a program which outputs it's own source code. This is easy in the [Hello programming language](https://esolangs.org/wiki/Hello), but not that easy in others. It's actually a fun exercise to try to do it.
+So, a quine is a program which outputs it's own source code. This is easy in the [HQ9+](https://esolangs.org/wiki/HQ9%2B), but not that easy in others. It's actually a fun exercise to try to do it.
 
 Uroboros[^1], or ouroboros[^2], or uroborus[^3] (not sure there's a consensus on how this is spelled) is the [fitting name](https://en.wikipedia.org/wiki/Ouroboros) for a program which outputs the source code of a another program, which output the source of another... and so on, until the circle is closed by the last program outputting the source code of the first.
 
