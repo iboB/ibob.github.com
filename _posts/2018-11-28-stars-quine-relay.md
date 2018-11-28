@@ -2,7 +2,7 @@
 layout: post
 title: "Stars: Quine Relay"
 category: stars
-tags: ['stars', 'awesome']
+tags: ['stars', 'esoteric']
 
 
 excerpt: An uroboros program with 100+ programming languages
