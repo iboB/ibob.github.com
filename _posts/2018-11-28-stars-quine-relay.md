@@ -14,7 +14,7 @@ There are many repos on GitHub which are only there for entertainment: [serious 
 |---|---|
 | Repo     | **Quine Relay** [mame/quine-relay](https://github.com/mame/quine-relay): An uroboros program with 100+ programming languages |
 | License  | **MIT** |
-| Language | Text. Markdown. Some python to generate HTML. |
+| Language | 128 of them |
 | Status   | Complete. Stale. |
 
 ## Review
