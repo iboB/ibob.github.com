@@ -2,7 +2,7 @@
 layout: post
 title: "Stars: libui"
 category: stars
-tags: ['stars']
+tags: ['stars', 'gui']
 
 
 excerpt: Simple and portable (but not inflexible) GUI library in C that uses the native GUI technologies of each platform it supports.
