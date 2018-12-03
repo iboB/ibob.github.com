@@ -21,7 +21,7 @@ Sometimes you just want some native UI without having to depend on a huge framew
 
 Before coming across libui, I actually wondered why such a thing doesn't exist: a simple and small library which allows you to whip-up some native UI and forget about it. A library which is focused on creating GUI and isn't trying to be a million other things[^2]. I don't care about extending the library[^3]. Typically all I want are some buttons, some edit boxes, perhaps a list box and that's it.
 
-Well, as it turns out, such a a library does exist. It's libui: my star of the day for today. Even't though it's nowhere near as powerful as Qt, or wxWidgets, it has a bunch of useful features but most of all it's much, much easier to build, integrate, and use. It's written in C for Unix systems, C++ for windows, and Objective C for mac OS, but it has a simple C interface, so it's trivial to create a binding for your language of choice, and many bindings already do exist.
+Well, as it turns out, such a library does exist. It's libui: my star of the day for today. Even't though it's nowhere near as powerful as Qt, or wxWidgets, it has a bunch of useful features but most of all it's much, much easier to build, integrate, and use. It's written in C for Unix systems, C++ for windows, and Objective C for mac OS, but it has a simple C interface, so it's trivial to create a binding for your language of choice, and many bindings already do exist.
 
 Now, as I said, my requirements are typically modest,  but ever since I first saw libui, I haven't written any code for Qt, so, there's that.
 
