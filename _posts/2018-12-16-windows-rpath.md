@@ -6,6 +6,7 @@ tags: ['windows', 'shared-libs']
 
 excerpt: Some ideas and approaches to the problem of finding auto-loaded DLLs.
 ---
+> Edit: I added a section about delayed loading thanks to comments which pointed out that I had overlooked this
 
 There are two ways of loading a shared library (.DLL on Windows, .so on most Unix platforms, and .dylib on macs). One is to use a function like `LoadLibary` or `dlopen`. Then you must manually extract the functions from the library with `GetProcAddress` or `dlsym`. Most linkers (all that I know of) also allow you to link with a shared library so that it's loaded on startup and its functions are automatically resolved to symbols in your code. That's particularly useful as it's the only sensible way to load a C++ interface from a shared library.
 
@@ -167,9 +168,32 @@ Yes. This really works. The problem is that automating it is indeed a bit of a p
 
 I therefore wouldn't recommend this strategy over single-output-directory-and-third-party-dlls-copies, but if you're pressed to have the closest possible thing to an rpath on Windows, this really seems like the only way. I for one will definitely keep it in mind in case I ever have to use it.
 
+### Visual C/C++ specific: delayed DLL loading
+
+Since 2016 Microsoft's linker LINK.exe supports [delayed loading](https://docs.microsoft.com/en-us/cpp/build/reference/linker-support-for-delay-loaded-dlls?view=vs-2017). This feature allows a linked DLL to be loaded when the first call to a function from it is made instead of at the startup of the executable. To make use of delayed loading you should add the `/DELAYLOAD:dllname` switch to the linker command (for example `/DELAYLOAD:foo.dll`).
+
+At first I didn't realize how this can help. After all, I don't care *when* the DLL is loaded but *where* it's loaded *from*. But after some comments to this I found out that I had neglected to see ways to make this actually quite useful.
+
+First there's the naïve (and quite dangerous) approach which you should probably *not* use: `SetDllDirectory`. This function allows you to set the search path for DLLs which `LoadLibrary` will use. This will probably work for the simples of cases, but there are some problems which would make it from unusable to dangerous:
+* If you call functions from a DLL globally, this will not work. You have no way to guarantee that `SetDllDirectory` will be called before your global calls[^7].
+* `SetDllDirectory` sets the search paths for the *entire* process. This means that these search paths will be used for *all* calls to `LoadLibrary`. Depending on what kind of DLLs you have on your system, this may actually lead to stuff being loaded which you don't want and bring you to a whole new level of DLL Hell.
+
+There's another approach, though. Using the delayed loading helper function. 
+
+In a typical delayed loading scenario (where you only care about *when* or *if* some DLLs are loaded) you would link with `Delayimp.lib` which provides an function to do the actual delayed loading. You must define a hook function which the helper function will use. The hook function is quite easy to use and actually allows you to substitute the call to `LoadLibrary` with your own. You can see how to do so [in the docs](https://docs.microsoft.com/en-us/cpp/build/reference/calling-conventions-parameters-and-return-type?view=vs-2017). You would also see that setting the delayed loading hook depends on initializing a global variable, which brings us back to the problem of using functionality from the DLL globally. You will need this global to be initialized first, but you will have no way of guaranteeing it[^7]. 
+
+The thing is that you could choose to *not* link with `Delayimpl.lib` and instead provide a delayed loading function yourself. Now this is not *trivial* but it seems to be possible. I will probably play around with this in the following days and update this article.
+
+Using delayed loading with a custom helper function seems to be the closest thing you can get, without patching the executable. Still, there are several obvious problems with it which make it unpleasant:
+* It is LINK.exe specific, so Visual Studio specific. No MinGW here.
+* You will have to include a significant platform-specific piece of code in every binary
+* Your build system will have to supply the paths to libraries to the compiler. This is not really that trivial, because you will somehow have to transfer the knowledge of what DLLs you are using to the compiler. The easiest solution here would probably be for the build system to configure some .c file which will be added to the binary.
+
+Nevertheless this does seem quite workable, and as I said I will play with it more.
+
 ## What would be really nice?
 
-As you can see, sadly none of the solutions above are ideal. There is simply no great alternative to rpath on Windows, even though thanks to Max Bolingbroke we learned how to hack it in. But from learning how to hack it in, it seems as thought it's not that hard to actually have a solution. The linker could easily do it for us. In fact you saw that dlltool.exe gets us halfway there already.
+As you can see, sadly none of the solutions above are ideal. There is simply no great alternative to rpath on Windows, even though thanks to delayed loading we could manage it somehow, and thanks to Max Bolingbroke we learned how to hack it in. But from learning how to hack it in, it seems as though it's not that hard to actually have a solution. The linker could easily do it for us. In fact you saw that dlltool.exe gets us halfway there already.
 
 So here's my appeal to people who write linkers for Windows:
 
@@ -197,3 +221,4 @@ ___
 [^4]: By executable here I mean an actual executable or a loaded shared library which wants to load another shared library. In a sense both are executables, so I'll just use this word to refer to both cases.
 [^5]: And perhaps many others which I haven't thought of.
 [^6]: Well, actually, not necessarily. You can copy files many times next to specific dependencies, like if you have `dir_a\a.exe` and `dir_b\b.exe`, you can copy third party DLLs in both `dir_a` and `dir_b`. This is even more wasteful.
+[^7]: At least not unless you have a single compilation unit or manually patch the executable as a post-build step. I'm not aware of LINK.exe supporting linker scripts to let you manually reorder the executable sections when linking. If it does, this could also make it possible to guarantee something is executed first.
