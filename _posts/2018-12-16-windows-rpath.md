@@ -15,18 +15,18 @@ The first way (the manual one) works almost the same way on all platforms. You c
 If you're a Windows-only programmer, you probably developed your own way to deal with [DLL Hell](https://en.wikipedia.org/wiki/DLL_Hell), whether it's by [redirection](https://docs.microsoft.com/en-us/windows/desktop/dlls/dynamic-link-library-redirection) or careful output directory management. Or, you know, alternatively, you try to use DLLs as little as possible. Anyway, you should know that on other operating systems when linking with a shared library (.so or .dylib file), you can supply a search path for it to the linker itself. In fact, to some people's occasional frustration, the default search path when linking with no specific arguments is the absolute path to the shared library. This search path is called an rpath.
 
 If you do multi-platform programming, you've probably experienced frustration with the lack of rpaths on Windows.
-  
+
 If you're not a Windows programmer, I don't know why you're reading this article, but to put it simply: In Windows, shared libraries, or DLLs, don't have rpaths. Instead the executable searches for a shared library by filename in [a variety of places](https://docs.microsoft.com/en-us/windows/desktop/dlls/dynamic-link-library-search-order) which you cannot control when building the executable. It searches the files in the same directory as the executable, then files in your `PATH` environment variable, and some other insignificant places. And if the DLL isn't there?...
 
 ![dll was not found](/blog/wrpath-dll-not-found.png)
-  
+
 ## Why do we want that on Windows?
-  
+
 Some may be wondering why one would want such a thing. I'm sure some are perfectly content with the DLL search order, but here are two very popular use-cases[^5]:
 
 ### Using third party libraries
 
-This is probably the most common case. You want to use a third party library, but you don't really want to build it yourself, so you download a handy binary release and extract it... well, *somewhere*. Or you do want to build it yourself, but you do it with its default settings and it spits out its binaries *again somewhere*. 
+This is probably the most common case. You want to use a third party library, but you don't really want to build it yourself, so you download a handy binary release and extract it... well, *somewhere*. Or you do want to build it yourself, but you do it with its default settings and it spits out its binaries *again somewhere*.
 
 Most Windows programmers are likely familiar with this scenario.
 
@@ -60,7 +60,7 @@ To avoid this waste there's another popular approach here and that is copying or
 
 ## What else can people do?
 
-Having a common output directory and copying third party dependencies to it mostly works. It's what almost everyone does. But I don't like it. And neither should you! 
+Having a common output directory and copying third party dependencies to it mostly works. It's what almost everyone does. But I don't like it. And neither should you!
 
 Manually taking care of this is iffy and error prone. Knowing how easy it is to just specify a search path for a shared library on other platforms makes me cringe every time I have to deal with this Windows-specific problem.
 
@@ -80,13 +80,13 @@ If you program managed binaries, this might be useful info to you (and most like
 
 There's this thing called App Paths. In your registry under `HKLM` or `HKCU` you can find `Software\Microsoft\Windows\CurrentVersion\App Paths\` which contains a list of applications that can be started from the Run (Win-R) window without specifying a full path. If you open this, you will probably find your browser, your video player, and similar default programs inside.
 
-You can add your own, though. Just add a new key with the name of your executable (say "myexe.exe"), then in the default value supply the actual path to that executable. In doing so you will inform the operating system that an executable is globally available to run. Now you can run without the full path to the executable via the Run window, by calling `ShellExecute`. 
+You can add your own, though. Just add a new key with the name of your executable (say "myexe.exe"), then in the default value supply the actual path to that executable. In doing so you will inform the operating system that an executable is globally available to run. Now you can run without the full path to the executable via the Run window, by calling `ShellExecute`.
 
 The important thing here is that Windows will also load another value from the registry key of your executable. It's called "Path" and in it you can supply a string which will be appended to the `PATH` environment variable when the executable is started. So in `Path` you can add directories which contain the DLLs you need.
 
 ![regedit HKCU App Paths](/blog/wrpath-regedit-app-paths.png)<br/><small>Like this</small>
 
-This will work. 
+This will work.
 
 ...when you run it from the Run menu.
 
@@ -170,17 +170,17 @@ I therefore wouldn't recommend this strategy over single-output-directory-and-th
 
 ### Visual C/C++ specific: delayed DLL loading
 
-Since 2016 Microsoft's linker LINK.exe supports [delayed loading](https://docs.microsoft.com/en-us/cpp/build/reference/linker-support-for-delay-loaded-dlls?view=vs-2017). This feature allows a linked DLL to be loaded when the first call to a function from it is made instead of at the startup of the executable. To make use of delayed loading you should add the `/DELAYLOAD:dllname` switch to the linker command (for example `/DELAYLOAD:foo.dll`).
+Microsoft's linker LINK.exe supports [delayed loading](https://docs.microsoft.com/en-us/cpp/build/reference/linker-support-for-delay-loaded-dlls?view=vs-2017). This feature allows a linked DLL to be loaded when the first call to a function from it is made instead of at the startup of the executable. To make use of delayed loading you should add the `/DELAYLOAD:dllname` switch to the linker command (for example `/DELAYLOAD:foo.dll`).
 
 At first I didn't realize how this can help. After all, I don't care *when* the DLL is loaded but *where* it's loaded *from*. But after some comments to this I found out that I had neglected to see ways to make this actually quite useful.
 
-First there's the naïve (and quite dangerous) approach which you should probably *not* use: `SetDllDirectory`. This function allows you to set the search path for DLLs which `LoadLibrary` will use. This will probably work for the simples of cases, but there are some problems which would make it from unusable to dangerous:
+First there's the naïve (and quite dangerous) approach which you should probably *not* use: `SetDllDirectory`. This function allows you to set the search path for DLLs which `LoadLibrary` will use. This will probably work for the simplest of cases, but there are some problems which would make it from unusable to dangerous:
 * If you call functions from a DLL globally, this will not work. You have no way to guarantee that `SetDllDirectory` will be called before your global calls[^7].
 * `SetDllDirectory` sets the search paths for the *entire* process. This means that these search paths will be used for *all* calls to `LoadLibrary`. Depending on what kind of DLLs you have on your system, this may actually lead to stuff being loaded which you don't want and bring you to a whole new level of DLL Hell.
 
-There's another approach, though. Using the delayed loading helper function. 
+There's another approach, though. Using the delayed loading helper function.
 
-In a typical delayed loading scenario (where you only care about *when* or *if* some DLLs are loaded) you would link with `Delayimp.lib` which provides an function to do the actual delayed loading. You must define a hook function which the helper function will use. The hook function is quite easy to use and actually allows you to substitute the call to `LoadLibrary` with your own. You can see how to do so [in the docs](https://docs.microsoft.com/en-us/cpp/build/reference/calling-conventions-parameters-and-return-type?view=vs-2017). You would also see that setting the delayed loading hook depends on initializing a global variable, which brings us back to the problem of using functionality from the DLL globally. You will need this global to be initialized first, but you will have no way of guaranteeing it[^7]. 
+In a typical delayed loading scenario (where you only care about *when* or *if* some DLLs are loaded) you would link with `Delayimp.lib` which provides a function to do the actual delayed loading. You must define a hook function which the helper function will use. The hook function is quite easy to use and actually allows you to substitute the call to `LoadLibrary` with your own. You can see how to do so [in the docs](https://docs.microsoft.com/en-us/cpp/build/reference/calling-conventions-parameters-and-return-type?view=vs-2017). You would also see that setting the delayed loading hook depends on initializing a global variable, which brings us back to the problem of using functionality from the DLL globally. You will need this global to be initialized first, but you will have no way of guaranteeing it[^7].
 
 The thing is that you could choose to *not* link with `Delayimpl.lib` and instead provide a delayed loading function yourself. Now this is not *trivial* but it seems to be possible. I will probably play around with this in the following days and update this article.
 
