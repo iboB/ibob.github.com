@@ -16,6 +16,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/reveal.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/theme/solarized.min.css" id="theme" />
+    <link rel="stylesheet" href="../lib/slides.css" />
 
     <!-- For syntax highlighting -->
     <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
@@ -96,6 +97,7 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/js/reveal.min.js"></script>
+    <script src="../lib/slides.js"></script>
 
     <script>
         Reveal.initialize({
@@ -121,18 +123,7 @@
             ].map(p => { p.src = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/plugin/' + p.src; return p; })
         });
 
-        revealWrapper = document.querySelector( '.reveal' );
-        foot = document.createElement('div');
-        foot.classList.add('footer');
-        revealWrapper.appendChild(foot);
-
-        Reveal.addEventListener('slidechanged', function (event) {
-            if (event.indexh != 0) {
-                foot.innerHTML = event.indexh + ' | is.gd/bbb2cpp | CppCon 2018 | @stanimirovb';
-            } else {
-                foot.innerHTML = '';
-            }
-        }, false);
+        slides.footerSetup('link', 'bla 2019');
     </script>
 
 </body>
