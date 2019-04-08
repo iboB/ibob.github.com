@@ -13,10 +13,10 @@
         "third_party": true
     },
     "files.watcherExclude": {
-        ".git/*/**": true,
-        "**/.DS_Store": true,
-        ".bundle/*/**": true,
-        "vendor/*/**": true
+        "**/.git/*/**": true,
+        "**/**/.DS_Store": true,
+        "**/.bundle/*/**": true,
+        "**/vendor/*/**": true
     },
     "files.associations": {
         "array": "cpp",
