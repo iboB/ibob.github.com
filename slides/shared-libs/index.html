@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Faster Software Development with Shared Libraries</title>
+
+    <meta name="description" content="Slides for a talk about shared libraries">
+    <meta name="author" content="Borislav Stanimirov">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/reveal.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/theme/beige.min.css" id="theme" />
+    <link rel="stylesheet" href="../lib/slides.css" />
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
+
+    <!-- Slides-specific styles -->
+    <!-- <link rel="stylesheet" href="custom.css"> -->
+
+    <!-- Printing and PDF exports -->
+    <script>
+        var link = document.createElement( 'link' );
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = window.location.search.match( /print-pdf/gi ) ?
+            'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/pdf.min.css' :
+            'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/paper.min.css';
+        document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+            <section class="title">
+                <h1>Faster Software Development with Shared Libraries</h1>
+                <p>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>Hello, World</h3>
+                <br/>
+                <pre><code class="cpp hljs">
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+    std::cout &lt;&lt; "These slides are here: https://is.gd/\n";
+    return 0;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Borislav Stanimirov</h3>
+                <br/>
+                <ul>
+                    <li>Mostly a <span class="fancy">C++</span> programmer</li>
+                    <li>Mostly a <span class="fancy">game</span> programmer</li>
+                    <li>Recently a <span class="fancy">medical software</span> programmer</li>
+                    <li><span class="fancy">Open-source</span> programmer</li>
+                    <li><a href="https://github.com/iboB">github.com/iboB</a></li>
+                </ul>
+            </section>
+
+            <section class="slide">
+            </section>
+
+            <section>
+                <h1>End</h1>
+                <h2>Questions?</h2>
+                <br/>
+                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+                <p>
+                    <small>
+                    Link to these slides: <a href="http://ibob.github.io/slides/shared-libs/">http://ibob.github.io/slides/shared-libs/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Slides license <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons By 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/js/reveal.min.js"></script>
+    <script src="../lib/slides.js"></script>
+
+    <script>
+        Reveal.initialize({
+            // width: 1280,
+            // height: 720,
+
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            transition: 'none', // none/fade/slide/convex/concave/zoom
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                //{ src: 'markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: 'markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: 'highlight/highlight.min.js', async: true, callback: function() {
+                    hljs.initHighlightingOnLoad();
+                } },
+                //{ src: 'zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ].map(p => { p.src = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/plugin/' + p.src; return p; })
+        });
+
+        slides.footerSetup('link', 'bla 2019');
+    </script>
+
+</body>
+</html>
