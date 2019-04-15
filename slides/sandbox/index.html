@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Bringing Business Logic Back to C++</title>
+    <title>Sandbox Slides</title>
 
-    <meta name="description" content="Slides for a talk about business logic in C++">
+    <meta name="description" content="Sandbox slides">
     <meta name="author" content="Borislav Stanimirov">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -45,14 +45,41 @@
     <div class="reveal">
         <div class="slides">
             <section class="title">
-                <h1>Bringing Business Logic Back to C++</h1>
+                <h1>Sandbox Slides</h1>
                 <p>
                     by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
                 </p>
             </section>
 
             <section class="slide">
-                <h3>Stateful hotswap</h3>
+                <h3>Hello, World</h3>
+                <br/>
+                <pre><code class="cpp hljs">
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+    std::cout &lt;&lt; "These slides are here: https://is.gd/\n";
+    return 0;
+}
+                </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Borislav Stanimirov</h3>
+                <br/>
+                <ul>
+                    <li>Mostly a <span class="fancy">C++</span> programmer</li>
+                    <li>Mostly a <span class="fancy">game</span> programmer</li>
+                    <li>Recently a <span class="fancy">medical software</span> programmer</li>
+                    <li><span class="fancy">Open-source</span> programmer</li>
+                    <li><a href="https://github.com/iboB">github.com/iboB</a></li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Some Code</h3>
                 <pre class="fragment"><code class="cpp hljs">
         for(int i=0; i&lt;10; ++i);
         perform_hotswap();
