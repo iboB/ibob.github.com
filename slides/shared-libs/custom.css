@@ -1,3 +1,9 @@
+.reveal section.title h1
+{
+	font-size: 2em;
+}
+
+
 .reveal section.islide
 {
 	height: 100%;

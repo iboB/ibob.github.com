@@ -85,9 +85,9 @@ int main()
             <section>
                 <ul>
                     <li>Not covered by the C++ standard</li>
-                    <li>Most platforms and compilers (well... linkers) support them</li>
-                    <li>.dll, .so, .dylib <span>(and also executables)</span></li>
-                    <li>They are basically dynamically loaded executables</li>
+                    <li class="fragment">Most platforms and compilers (well... linkers) support them</li>
+                    <li class="fragment">.dll, .so, .dylib <span class="fragment">(and also executables)</span></li>
+                    <li class="fragment">They are basically dynamically loaded executables</li>
                 </ul>
             </section>
 
@@ -141,7 +141,7 @@ foo(1, 2.3f);
 
 FreeLibrary(lib) / dlclose(lib);
                 </code></pre>
-                <p>This works with any language</p>
+                <p class="fragment">This works with any language</p>
             </section>
 
             <section>
@@ -150,36 +150,36 @@ FreeLibrary(lib) / dlclose(lib);
 
             <section>
                 <p>Obviously multiple executables using the same library will be smaller</p>
-                <p><small>There are other minor production benefits</small></p>
-                <p><small>But that's not all</small></p>
+                <p><small class="fragment">There are other minor production benefits</small></p>
+                <p><small class="fragment">But that's not all</small></p>
             </section>
 
             <section class="slide">
                 <h3>Linker speed</h3>
                 <ul>
-                    <li>Exported symbols: all vs some</li>
-                    <li>None for on-demand loading</li>
-                    <li>When linking the shared lib you don't have access to other symbols</li>
-                    <li>Multiple-fold improvements are expected</li>
+                    <li class="fragment">Exported symbols: all vs some</li>
+                    <li class="fragment">None for on-demand loading</li>
+                    <li class="fragment">When linking the shared lib you don't have access to other symbols</li>
+                    <li class="fragment">Multiple-fold improvements are expected</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Hotswap</h3>
                 <ul>
-                    <li>On-demand loading only</li>
-                    <li>Watch for files and reload when necessary</li>
-                    <li>Cool examples!</li>
+                    <li class="fragment">On-demand loading only</li>
+                    <li class="fragment">Watch for files and reload when necessary</li>
+                    <li class="fragment">Cool examples!</li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>Danger zone</h3>
                 <ul>
-                    <li>Mixing debug/release shared libs and executables</li>
-                    <li>... or other compilation options</li>
-                    <li>Resource shared libraries</li>
-                    <li>Multiple loads of the same shared library</li>
+                    <li class="fragment">Mixing debug/release shared libs and executables</li>
+                    <li class="fragment">... or other compilation options</li>
+                    <li class="fragment">Resource shared libraries</li>
+                    <li class="fragment">Multiple loads of the same shared library</li>
                 </ul>
             </section>
 
@@ -230,7 +230,7 @@ extern "C" void foo(int a, float b); // linking with static lib
 
             <section>
                 <h3>Hoes and how to deal with them</h3>
-                <img alt="pimp" src="pimp.jpg" />
+                <img class="fragment" alt="pimp" src="pimp.jpg" />
             </section>
 
             <section>
@@ -259,7 +259,7 @@ extern "C" void foo(int a, float b); // linking with static lib
                     <li>%SystemRoot%</li>
                     <li>%PATH%</li>
                 </ol>
-                <p>Also manifests may play a role</p>
+                <p class="fragment">Also manifests may play a role</p>
             </section>
 
             <section class="slide">
@@ -274,7 +274,7 @@ extern "C" void foo(int a, float b); // linking with static lib
             <section class="slide">
                 <h3>Unix behavior on Windows</h3>
                 <p><a href="http://ibob.github.io/blog/2018/12/16/windows-rpath/">It's complicated</a></p>
-                <ul>
+                <ul class="fragment">
                     <li>Executable loaders</li>
                     <li>Delayed DLL loading</li>
                     <li>Patch the damn exe</li>
@@ -299,7 +299,7 @@ extern "C" void foo(int a, float b); // linking with static lib
 
             <section>
                 <img alt="sad panda" src="../cpupbg/sad_panda.png" />
-                <p>My epic missing demo</p>
+                <p class="fragment">My epic missing demo</p>
             </section>
 
             <section class="islide">
@@ -374,8 +374,8 @@ extern "C" PLUGIN_EXPORT void foo_method_plugin(foo* _this) {
             <section>
                 <ul>
                     <li>Deduplicate: global symbols go in their own shared libs</li>
-                    <li>Template statics <span class="fancy">WILL NOT WORK</span></li>
-                    <li>ODR violations</li>
+                    <li class="fragment">Template statics <span class="fancy">WILL NOT WORK</span></li>
+                    <li class="fragment">ODR violations</li>
                 </ul>
             </section>
 
@@ -385,8 +385,8 @@ extern "C" PLUGIN_EXPORT void foo_method_plugin(foo* _this) {
 
             <section>
                 <ul>
-                    <li>Global variables are destroyed<span>... likely</span></li>
-                    <li>libc heaps may be destroyed... oops!</li>
+                    <li>Global variables are destroyed<span class="fragment">... likely</span></li>
+                    <li class="fragment">libc heaps may be destroyed... oops!</li>
                 </ul>
             </section>
 
@@ -407,9 +407,9 @@ extern "C" PLUGIN_EXPORT void foo_method_plugin(foo* _this) {
                 <ul>
                     <li>Always export exceptions</li>
                     <li>VC does it for you, but export anyway</li>
-                    <li>Exceptions from a plugin. No!</li>
-                    <li>But...</li>
-                    <li>NO!</li>
+                    <li class="fragment">Exceptions from a plugin. No!</li>
+                    <li class="fragment">But...</li>
+                    <li class="fragment">NO!</li>
                 </ul>
             </section>
 
