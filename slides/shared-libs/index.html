@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
 
     <!-- Slides-specific styles -->
-    <!-- <link rel="stylesheet" href="custom.css"> -->
+    <link rel="stylesheet" href="custom.css">
 
     <!-- Printing and PDF exports -->
     <script>
@@ -78,7 +78,199 @@ int main()
                 </ul>
             </section>
 
+            <section>
+                <h3>What is a shared library?</h3>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Not covered by the C++ standard</li>
+                    <li>Most platforms and compilers (well... linkers) support them</li>
+                    <li>.dll, .so, .dylib <span>(and also executables)</span></li>
+                    <li>They are basically dynamically loaded executables</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Using a shared library</h3>
+            </section>
+
+            <section class="islide">
+                <p>Actively linking with it</p>
+                <pre><code class="cpp hljs">#if defined(_MSC_VER)
+#   define SYMBOL_EXPORT __declspec(dllexport)
+#   define SYMBOL_IMPORT __declspec(dllimport)
+#else
+#   define SYMBOL_EXPORT __attribute__((__visibility__("default")))
+#   define SYMBOL_IMPORT
+#endif // other compilers? who cares :)
+
+#if defined COMPILING_SHARED_LIB_X
+#    define X_API SYMBOL_EXPORT
+#else
+#    define X_API SYMBOL_IMPORT
+#endif
+....
+class X_API Foo {};
+
+class Bar {
+public:
+    X_API void barFunc();
+};
+
+X_API void func();
+// link with me</code></pre>
+            </section>
+
+            <section class="islide">
+                <p>On-demand loading/unloading</p>
+                <pre><code class="cpp hljs">
+// dyn lib plugin
+
+extern "C" X_API void foo(int a, float b);
+
+
+// executable
+
+auto lib = LoadLibrary("foo.dll") / dlopen("foo.so/dylib");
+auto func = GetProcAddress("foo") / dlsym("foo");
+
+auto foo = reinterpret_cast&lt;void (*)(int a, float b)&gt;(func);
+
+foo(1, 2.3f);
+
+FreeLibrary(lib) / dlclose(lib);
+                </code>
+                </pre>
+            </section>
+
+            <section>
+                <h3>Why use a shared library?</h3>
+            </section>
+
+            <section>
+                <p>Obviously multiple executables using the same library will be smaller</p>
+                <p><small>There are other minor production benefits</small></p>
+                <p><small>But that's not all</small></p>
+            </section>
+
             <section class="slide">
+                <h3>Linker speed</h3>
+                <ul>
+                    <li>Exported symbols: all vs some</li>
+                    <li>None for on-demand loading</li>
+                    <li>When linking the shared lib you don't have access to other symbols</li>
+                    <li>Multiple-fold improvements are expected</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Hotswap</h3>
+                <ul>
+                    <li>On-demand loading only</li>
+                    <li>Watch for files and reload when necessary</li>
+                    <li>Cool examples!</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Danger zone</h3>
+                <ul>
+                    <li>Mixing debug/release shared libs and executables</li>
+                    <li>... or other compilation options</li>
+                    <li>Resource shared libraries</li>
+                    <li>Multiple loads of the same shared library</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Why not use a shared library?</h3>
+            </section>
+
+            <section>
+                <p>The performance <span class="fancy">is</span> slower</p>
+            </section>
+
+            <section>
+                <p>... so use them only in development</p>
+            </section>
+
+            <section class="islide">
+                <p>It's easy:</p>
+                <pre><code class="cpp hljs">
+#if !defined(BUILDING_SHARED_LIB)
+#   define SYMBOL_EXPORT
+#   define SYMBOL_IMPORT
+#else
+...
+#endif
+                </code></pre>
+
+                <pre><code class="cpp hljs">
+#if defined(BUILDING_SHARED_LIB)
+void (*foo)(int a, int b); // to be filled by loader
+#else
+extern "C" void foo(int a, float b); // linking with static lib
+#endif
+                </code></pre>
+            </section>
+
+            <section>
+                <p>Well... sometimes not that easy...</p>
+            </section>
+
+            <section>
+                <h3>Behold the Motika</h3>
+                <img alt="motika" src="motika.png" />
+            </section>
+
+            <section>
+                <img alt="step on rake" src="rake.gif" />
+            </section>
+
+            <section>
+                <h3>Hoes and how to deal with them</h3>
+                <img alt="pimp" src="pimp.jpg" />
+            </section>
+
+            <section>
+                <h3>PATH and rpath</h3>
+            </section>
+
+            <section>
+                <h3>Visibility</h3>
+            </section>
+
+            <section>
+                <h3>No exporting classes from plugins</h3>
+            </section>
+
+            <section>
+                <h3>C++ objects in "extern C" functions</h3>
+            </section>
+
+            <section>
+                <h3>dlclose don't care</h3>
+            </section>
+
+            <section>
+                <h3>Global symbols, template instantiations, ODR violations</h3>
+            </section>
+
+            <section>
+                <h3>Memory and unloading shared libraries</h3>
+            </section>
+
+            <section>
+                <h3>Exceptions</h3>
+            </section>
+
+            <section>
+                <h3>static libs, absolute code and relocation</h3>
+            </section>
+
+            <section>
+                <h3>Same but different</h3>
             </section>
 
             <section>

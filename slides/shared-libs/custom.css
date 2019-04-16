@@ -1,0 +1,22 @@
+.reveal section.islide
+{
+	height: 100%;
+	display: table;
+}
+
+.reveal section span.fancy
+{
+	font-weight: bold;
+	color: #DF5000;
+}
+
+.reveal pre
+{
+	font-size: 0.5em;
+	box-shadow: none;
+}
+
+.reveal pre code
+{
+    max-height: 80%;
+}
