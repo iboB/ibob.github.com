@@ -140,8 +140,8 @@ auto foo = reinterpret_cast&lt;void (*)(int a, float b)&gt;(func);
 foo(1, 2.3f);
 
 FreeLibrary(lib) / dlclose(lib);
-                </code>
-                </pre>
+                </code></pre>
+                <p>This works with any language</p>
             </section>
 
             <section>
@@ -235,6 +235,50 @@ extern "C" void foo(int a, float b); // linking with static lib
 
             <section>
                 <h3>PATH and rpath</h3>
+                <p>Where are shared libs loaded from?</p>
+            </section>
+
+            <section class="slide">
+                <h3>Unix</h3>
+                <ol>
+                    <li>Is <span class="fancy">full path</span> it already loaded?</li>
+                    <li>Library run path</li>
+                    <li>$LD_LIBRARY_PATH</li>
+                    <li>Distro-specific places (say /etc/ld.so.preload)</li>
+                </ol>
+            </section>
+
+            <section class="slide">
+                <h3>Windows</h3>
+                <p>Likely this:</p>
+                <ol>
+                    <li>Is <span class="fancy">filename</span> it already loaded?</li>
+                    <li>Next to the executable</li>
+                    <li>%SystemRoot%\system32</li>
+                    <li>cwd</li>
+                    <li>%SystemRoot%</li>
+                    <li>%PATH%</li>
+                </ol>
+                <p>Also manifests may play a role</p>
+            </section>
+
+            <section class="slide">
+                <h3>Windows behavior on Unix</h3>
+                <p>Link with <code>-Wl,-rpath,.:$ORIGIN</code></p>
+                <p>... or ...</p>
+                <p><code>$ chrpath -r '.:$ORIGIN' exe</code></p>
+                <p>... or ...</p>
+                <p><code>$ patchelf --set-rpath '.:$ORIGIN' exe</code></p>
+            </section>
+
+            <section class="slide">
+                <h3>Unix behavior on Windows</h3>
+                <p><a href="http://ibob.github.io/blog/2018/12/16/windows-rpath/">It's complicated</a></p>
+                <ul>
+                    <li>Executable loaders</li>
+                    <li>Delayed DLL loading</li>
+                    <li>Patch the damn exe</li>
+                </ul>
             </section>
 
             <section>
@@ -242,7 +286,60 @@ extern "C" void foo(int a, float b); // linking with static lib
             </section>
 
             <section>
+                <ul>
+                    <li>gcc and clang export everything by default</li>
+                    <li>-fisibitliy=hidden -fvisibility-inlines-hidden</li>
+                    <li>VC doesn't even allow you to export everything</li>
+                </ul>
+            </section>
+
+            <section>
                 <h3>No exporting classes from plugins</h3>
+            </section>
+
+            <section>
+                <img alt="sad panda" src="../cpupbg/sad_panda.png" />
+                <p>My epic missing demo</p>
+            </section>
+
+            <section class="islide">
+                <p>My epic missing demo: the gist</p>
+                <pre><code class="cpp hljs">
+// foo.h
+class foo {
+    void method();
+};
+                </code></pre>
+
+                <pre><code class="cpp hljs">
+// foo.cpp
+void foo::method() {
+    cool(code);
+}
+                </code></pre>
+            </section>
+
+            <section class="islide">
+                <p>My epic missing demo: the gist</p>
+                <pre><code class="cpp hljs">
+// foo.cpp on client
+void (*foo_method_plugin)(foo* _this);
+void foo::method() {
+    foo_method_plugin(this);
+}
+
+void import_foo(void* plugin) {
+    foo_method_plugin = dlsym("foo_method_plugin");
+}
+                </code></pre>
+
+                <pre><code class="cpp hljs">
+// foo.cpp on plugin
+void foo::method() { cool(code); }
+extern "C" PLUGIN_EXPORT void foo_method_plugin(foo* _this) {
+    _this->method();
+}
+                </code></pre>
             </section>
 
             <section>
@@ -250,15 +347,56 @@ extern "C" void foo(int a, float b); // linking with static lib
             </section>
 
             <section>
+                <ul>
+                    <li>Will probably kinda work but better not risk it</li>
+                    <li>Send C++ objects by pointer</li>
+                    <li>100% guaranteed to <span class="fancy">not</span> work with another language</li>
+                </ul>
+            </section>
+
+            <section>
                 <h3>dlclose don't care</h3>
+                <img alt="honey badger" src="honey-badger.jpg" />
             </section>
 
             <section>
-                <h3>Global symbols, template instantiations, ODR violations</h3>
+                <h3>Use entry/exit points</h3>
+                <ul>
+                    <li>DllMain (attach/detach)</li>
+                    <li>_init() / _fini()</li>
+                </ul>
             </section>
 
             <section>
-                <h3>Memory and unloading shared libraries</h3>
+                <h3>Global symbols</h3>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Deduplicate: global symbols go in their own shared libs</li>
+                    <li>Template statics <span class="fancy">WILL NOT WORK</span></li>
+                    <li>ODR violations</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Heap and unloading shared libraries</h3>
+            </section>
+
+            <section>
+                <ul>
+                    <li>Global variables are destroyed<span>... likely</span></li>
+                    <li>libc heaps may be destroyed... oops!</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Mitigations</h3>
+                <ul>
+                    <li>Copy</li>
+                    <li>Deduplicate: issue heap from a single module</li>
+                    <li>Acceptance: deal with it</li>
+                </ul>
             </section>
 
             <section>
@@ -266,11 +404,47 @@ extern "C" void foo(int a, float b); // linking with static lib
             </section>
 
             <section>
+                <ul>
+                    <li>Always export exceptions</li>
+                    <li>VC does it for you, but export anyway</li>
+                    <li>Exceptions from a plugin. No!</li>
+                    <li>But...</li>
+                    <li>NO!</li>
+                </ul>
+            </section>
+
+            <section>
                 <h3>static libs, absolute code and relocation</h3>
             </section>
 
             <section>
+                <p>-fPIC</p>
+            </section>
+
+            <section>
                 <h3>Same but different</h3>
+            </section>
+
+            <section>
+                <h3>Same</h3>
+                <ul>
+                    <li>Dynamic loading</li>
+                    <li>On-demand load or link</li>
+                    <li>Ref counted</li>
+                    <li>Global objects</li>
+                    <li>extern "C" and reusability</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>... but different</h3>
+                <ul>
+                    <li>dlclose (dll/dylib vs so)</li>
+                    <li>rpath (dll vs dylib/so)</li>
+                    <li>PIC (dll/dylib vs so)</li>
+                    <li>Default visibility (vc vs gcc/clang)</li>
+                    <li>Entry/exit points (dll vs dylib/so)</li>
+                </ul>
             </section>
 
             <section>
