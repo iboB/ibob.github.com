@@ -60,7 +60,6 @@
 int main()
 {
     std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-    std::cout &lt;&lt; "These slides are here: https://is.gd/\n";
     return 0;
 }
                 </code></pre>
@@ -241,7 +240,7 @@ extern "C" void foo(int a, float b); // linking with static lib
             <section class="slide">
                 <h3>Unix</h3>
                 <ol>
-                    <li>Is <span class="fancy">full path</span> it already loaded?</li>
+                    <li>Is <span class="fancy">full path</span> already loaded?</li>
                     <li>Library run path</li>
                     <li>$LD_LIBRARY_PATH</li>
                     <li>Distro-specific places (say /etc/ld.so.preload)</li>
@@ -493,7 +492,7 @@ extern "C" PLUGIN_EXPORT void foo_method_plugin(foo* _this) {
             ].map(p => { p.src = 'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/plugin/' + p.src; return p; })
         });
 
-        slides.footerSetup('link', 'bla 2019');
+        slides.footerSetup('', 'DevBG C, C++');
     </script>
 
 </body>
