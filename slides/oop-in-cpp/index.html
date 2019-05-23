@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+
+    <title>Object-Oriented Programming in Modern C++</title>
+
+    <meta name="description" content="Slides for a talk about OOP in C++">
+    <meta name="author" content="Borislav Stanimirov">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <link rel="stylesheet" href="/third_party/reveal/css/reveal.min.css">
+    <link rel="stylesheet" href="/third_party/reveal/css/theme/default.css" id="theme">
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
+
+    <!-- Slides-specific styles -->
+    <link rel="stylesheet" href="custom.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+    document.write( '<link rel="stylesheet" href="/third_party/reveal/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="/third_party/reveal/lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+    <div class="reveal">
+        <div class="slides">
+            <section class="title">
+                <h1>Object-Oriented Programming in Modern C++</h1>
+                <p>
+                    by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+                </p>
+            </section>
+
+            <section class="slide">
+                <h3>Hello, World</h3>
+                <br/>
+<pre><code class="cpp hljs">
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+    std::cout &lt;&lt; "These slides are here: https://is.gd/oopcpp\n";
+    return 0;
+}
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Hello, World</h3>
+                <br/>
+<pre><code class="cpp hljs">
+#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+    std::cout &lt;&lt; "These slides are here: <span style="font-weight: bold; background-color: lightgray;">https://is.gd/oopcpp</span>\n";
+    return 0;
+}
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Bulgaria</h3>
+                <p align="center"><img src="../dynamix-cppcon/europe.png" /></p>
+            </section>
+
+            <section class="slide">
+                <h3>Borislav Stanimirov</h3>
+                <br/>
+                <ul>
+                    <li>Mostly a <span class="fancy">C++</span> programmer</li>
+                    <li>Mostly a <span class="fancy">game</span> programmer</li>
+                    <li>Mostly a working on <span class="fancy">medical software</span></li>
+                    <li><span class="fancy">Open-source</span> programmer</li>
+                    <li><a href="https://github.com/iboB">github.com/iboB</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>Business Logic</h2>
+            </section>
+
+            <section>
+                <blockquote><em>A part of a program which deals with the real world rules that determine how data is obtained, stored and processed.</em></blockquote>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre class="fragment"><code class="cpp hljs">
+                    int a;
+                    int b;
+                    cin &gt;&gt; a &gt;&gt; b;
+                    cout &lt;&lt; a + b &lt;&lt; '\n';
+                </code></pre>
+                <p class="fragment">Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="cpp hljs">
+                    <span class="codehl">int a;</span>
+                    <span class="codehl">int b;</span>
+                    cin &gt;&gt; a &gt;&gt; b;
+                    cout &lt;&lt; <span class="codehl">a + b</span> &lt;&lt; '\n';
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="css hljs">
+                    FirstInteger a;
+                    SecondInteger b;
+                    input.obtainValues(a, b);
+                    gui.display(a + b);
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>The part which deals with the software's purpose</p>
+                <pre><code class="css hljs">
+                    <span class="codehl">FirstInteger a;</span>
+                    <span class="codehl">SecondInteger b;</span>
+                    input.obtainValues(a, b);
+                    gui.display(<span class="codehl">a + b</span>);
+                </code></pre>
+                <p>Business logic: adding two integers</p>
+            </section>
+
+            <section>
+                <p>Presentation, i/o...</p>
+                <pre><code class="css hljs">
+                    FirstInteger a;
+                    SecondInteger b;
+                    <span class="codehl">input.obtainValues(a, b);</span>
+                    <span class="codehl">gui.display</span>(a + b);
+                </code></pre>
+                <p>Non-business logic</p>
+            </section>
+
+            <section>
+                <p>Complex software doesn't mean complex business logic.</p>
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/rt-scene.jpg" />
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/rt-how.svg" />
+            <p>_</p>
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/rt-how.svg" />
+            <p><span class="fancy">Simple. Right?</span></p>
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/fb.png" />
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/civ_vi.jpg" />
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/blender.jpg" />
+            </section>
+
+            <section>
+            <img class="diagram" src="../bbb2cpp/ms-proj.jpg" />
+            </section>
+
+            <section class="slide">
+                <h3>What do we have here?</h3>
+                <br/>
+                <ul>
+                    <li>Websites - <span class="fancy">JS, C#, Java, Ruby...</span></li>
+                    <li>Gameplay - <span class="fancy">lua, C#, Python...</span></li>
+                    <li>CAD - <span class="fancy">Python, C#...</span></li>
+                    <li>Enterprise - <span class="fancy">Everything but C++</span></li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+                <p class="fragment" align="center">People don't seem to want to write business logic in C++</p>
+                <br/>
+                <br/>
+                <p class="fragment" align="center">Note that there still is a lot of underlying C++ in such projects</p>
+            </section>
+
+            <section>
+                <p>Well... is there a problem with that?</p>
+            </section>
+
+            <section class="slide">
+                <h3>Problems with that</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">The code is <span class="fancy">slower</span></li>
+                    <li class="fragment">There is <span class="fancy">more complexity</span> in the binding layer</li>
+                    <li class="fragment">There are <span class="fancy">duplicated functionalities</span> (which means duplicated bugs)</li>
+                </ul>
+            </section>
+
+            <section>
+                <p>Why don't people use C++?</p>
+            </section>
+            
+            <section class="slide">
+                <h3>Some reasons</h3>                
+                <br/>
+                <ul>
+                    <li class="fragment">Buld times</li>
+                    <li class="fragment">Hotswap</li>
+                    <li class="fragment">Testing</li>
+                    <li class="fragment">But (I think) most importantly...</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2>OOP</h2>
+                <p class="fragment">Controversial. I know</p>
+            </section>
+
+            <section class="slide">
+                <h3>Criticism of OOP</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">You want a banana, but with it you also get the gorilla <span class="fragment">and the entire jungle</span></li>
+                    <li class="fragment">It dangerously <span class="fancy">couples the data with the functionality</span></li>
+                    <li class="fragment">It's <span class="fancy">not reusable</span></li>
+                    <li class="fragment">It's <span class="fancy">slow</span></li>
+                </ul>
+                <br/>
+                <br/>
+                <p class="fragment" align="center">People forget that <span class="fancy">C++ is an OOP language</span></p>
+            </section>
+
+
+            <section class="slide">
+                <h3>Defense of OOP</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Many cricisims target <span class="fancy">concrete implementations</span></li>
+                    <li class="fragment">Many are about <span class="fancy">misuse of OOP</span></li>
+                    <li class="fragment">Some are about <span class="fancy">misconseptions of OOP</span></li>
+                </ul>
+                <br/>
+                <br/>
+                <br/>
+                <p class="fragment" align="center">But most importantly...</p>
+            </section>
+
+            <section>
+                <p>Software is written by human beings</p>
+                <img class="fragment diagram" src="../bbb2cpp/soon.webp" />
+            </section>
+
+            <section>
+                <p>Human beings think in terms of objects</p>
+                <img class="fragment diagram" src="../bbb2cpp/objects.png" />
+            </section>
+
+            <section>
+                <p>Which languages thrive in fields with heavy business logic?</p>
+                <br/>
+                <p class="fragment">Almost all are object-oriented ones.</p>
+            </section>
+
+            <section class="slide">
+            <h3>Powerful OOP</h3>
+            <pre class="fragment"><code class="js hljs">
+    function f(shape) {
+        // Everything that has a draw method works
+        shape.draw();
+    }
+    Square = function () {
+        this.draw = function() {
+            console.log("Square");
+        }
+    };
+    Circle = function () {
+        this.draw = function() {
+            console.log("Circle");
+        }
+    };
+    f(new Square);
+    f(new Circle);
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual void draw(ostream&amp; out) const = 0;
+    }
+    void f(const Shape&amp; s) {
+        s.draw(cout);
+    }
+    struct Square : public Shape {
+        virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
+    };
+    struct Circle : public Shape {
+        virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Circle\n&quot;; }
+    };
+    int main() {
+        f(Square{});
+        f(Circle{});
+    }
+            </code></pre>
+            </section>
+
+            <section>
+                <h3>OOP isn't modern C++</h3>
+                <p>However C++ is a pretty powerful language.</p>
+            </section>
+
+            <section class="slide">
+                <h3>Polymorphic type-erasure wrappers</h3>
+                <p>
+                    <a href="http://www.boost.org/doc/libs/1_65_1/doc/html/boost_typeerasure.html">Boost.TypeErasure</a>,
+                    <a href="https://github.com/ldionne/dyno">Dyno</a>,
+                    <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>,
+                    <a href="https://github.com/boost-experimental/te">[Boost].TE</a>
+                </p>
+<pre class="fragment"><code class="cpp hljs">
+using Shape = Library_Magic(void, draw, (ostream&amp;));
+void f(const Shape&amp; s) {
+    s.draw(cout);
+}
+struct Square {
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
+};
+struct Circle {
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Circle\n&quot;; }
+};
+int main() {
+    f(Square{});
+    f(Circle{});
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Polymorphic type-erasure wrappers</h3>
+                <p>
+                    <a href="http://www.boost.org/doc/libs/1_65_1/doc/html/boost_typeerasure.html">Boost.TypeErasure</a>,
+                    <a href="https://github.com/ldionne/dyno">Dyno</a>,
+                    <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>,
+                    <a href="https://github.com/boost-experimental/te">[Boost].TE</a>
+                </p>
+<pre><code class="cpp hljs">
+using Shape = <span class='codehl'>Library_Magic(void, draw, (ostream&amp;));</span>
+void f(const Shape&amp; s) {
+    s.draw(cout);
+}
+struct Square {
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Square\n&quot;; }
+};
+struct Circle {
+    void draw(ostream&amp; out) const { out &lt;&lt; &quot;Circle\n&quot;; }
+};
+int main() {
+    f(Square{});
+    f(Circle{});
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Powerful OOP</h3>
+            <pre><code class="js hljs">
+    Square.ptototype.area = function() {
+        return this.side * this.side;
+    }
+
+    Circle.ptototype.area = function() {
+        return this.radius * this.radius * Math.PI;
+    }
+
+    s = new Square;
+    s.side = 5;
+    console.log(s.area()); // 25
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual void draw(ostream&amp; out) const = 0;
+    }
+    struct Square : public Shape {
+        virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
+        int side;
+    };
+    int main()
+    {
+        shared_ptr&lt;Shape&gt; ptr = make_shared&lt;Square&gt;();
+        cout &lt;&lt; ptr->area() &lt;&lt; '\n'; // ??
+    }
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual void draw(ostream&amp; out) const = 0;
+        <span class='codehl'>virtual double area() const = 0;</span>
+    }
+    struct Square : public Shape {
+        virtual void draw(ostream&amp; out) const override { out &lt;&lt; &quot;Square\n&quot;; }
+        <span class='codehl'>virtual double area() const override { return side * side; }</span>
+        double side;
+    };
+    int main()
+    {
+        shared_ptr&lt;Shape&gt; ptr = make_shared&lt;Square&gt;();
+        cout &lt;&lt; ptr->area() &lt;&lt; '\n';
+    }
+            </code></pre>
+            <p class="fragment" align="center">And what if we can't just edit the classes?</p>
+            </section>
+
+            <section class="slide">
+                <h3>Open methods</h3>
+                <p><em>Not to be confused with extension methods or UCS</em></p>
+                <p>
+                    <a href="https://github.com/boost-experimental/te">[Boost].TE</a>,
+                    <a href="https://github.com/jll63/yomm2">yomm2</a>
+                </p>
+<pre class="fragment"><code class="cpp hljs">
+declare_method(double, area, (virtual_&lt;const Shape&amp;&gt; s);
+
+define_method(double, area, (const Square&amp; s)
+{
+    return s.area * s.area;
+}
+
+int main() {
+    shared_ptr&lt;Shape&gt; ptr = make_shared&lt;Square&gt;();
+    cout &lt;&lt; area(ptr) &lt;&lt; '\n';
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Open methods</h3>
+                <p><em>Not to be confused with extension methods or UCS</em></p>
+                <p>
+                    <a href="https://github.com/boost-experimental/te">[Boost].TE</a>,
+                    <a href="https://github.com/jll63/yomm2">yomm2</a>
+                </p>
+<pre><code class="cpp hljs">
+<span class="codehl">declare_method</span>(double, area, (virtual_&lt;const Shape&amp;&gt; s);
+
+<span class="codehl">define_method</span>(double, area, (const Square&amp; s)
+{
+    return s.area * s.area;
+}
+
+int main() {
+    shared_ptr&lt;Shape&gt; ptr = make_shared&lt;Square&gt;();
+    cout &lt;&lt; <span class="codehl">area(ptr)</span> &lt;&lt; '\n';
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Powerful OOP</h3>
+            <pre><code class="perl6 hljs">
+    multi sub collide(Square $s, Square $c) {
+        collide_square_square($s, $c);
+    }
+    multi sub collide(Circle $s, Circle $c) {
+        collide_circle_circle($s, $c);
+    }
+    multi sub collide(Square $s, Circle $c) {
+        collide_square_circle($s, $c);
+    }
+    multi sub collide(Circle $c, Square $s) {
+        collide_square_circle($s, $c);
+    }
+
+    my $s1 = get_random_shape;
+    my $s2 = get_random_shape;
+    say "Collision: " ~ collide($s1, $s2);
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual bool collide(const Shape* other) const = 0;
+        virtual bool collideImpl(const Square*) const = 0;
+        virtual bool collideImpl(const Circle*) const = 0;
+        virtual bool collideImpl(const Triangle*) const = 0;
+    }
+    struct Square : public Shape {
+        virtual bool collide(const Shape* other) const override {
+            return other->collideImpl(this);
+        }
+        virtual bool collideImpl(const Square*) const override;
+        virtual bool collideImpl(const Circle*) const override;
+        virtual bool collideImpl(const Triangle*) const override;
+    };
+    // ...
+    shared_ptr&lt;Shape&gt; s1 = get_random_shape();
+    shared_ptr&lt;Shape&gt; s2 = get_random_shape();
+    cout &lt;&lt; "Collision: " &lt;&lt; s1->collide(s2.get()) &lt;&lt; '\n';
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual bool collide(const Shape* other) const = 0;
+        virtual bool collideImpl(const Square*) const = 0;
+        virtual bool collideImpl(const Circle*) const = 0;
+        virtual bool collideImpl(const Triangle*) const = 0;
+    }
+    struct Square : public Shape {
+        <span class = "codehl">virtual bool collide(const Shape* other) const override {
+            return other->collideImpl(this); /* copy this in every shape */
+        }</span>
+        virtual bool collideImpl(const Square*) const override;
+        virtual bool collideImpl(const Circle*) const override;
+        virtual bool collideImpl(const Triangle*) const override;
+    };
+    // ...
+    shared_ptr&lt;Shape&gt; s1 = get_random_shape();
+    shared_ptr&lt;Shape&gt; s2 = get_random_shape();
+    cout &lt;&lt; "Collision: " &lt;&lt; s1->collide(s2.get()) &lt;&lt; '\n';
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+    struct Shape {
+        virtual bool collide(const Shape* other) const = 0;
+        virtual bool collideImpl(const Square*) const = 0;
+        virtual bool collideImpl(const Circle*) const = 0;
+        virtual bool collideImpl(const Triangle*) const = 0;
+    }
+    struct Square : public Shape {
+        virtual bool collide(const Shape* other) const override {
+            return other->collideImpl(this);
+        }
+        virtual bool collideImpl(const Square*) const override;
+        virtual bool collideImpl(const Circle*) const override;
+        virtual bool collideImpl(const Triangle*) const override;
+    };
+    // ...
+    shared_ptr&lt;Shape&gt; s1 = get_random_shape();
+    shared_ptr&lt;Shape&gt; s2 = get_random_shape();
+    cout &lt;&lt; "Collision: " &lt;&lt; <span class = "codehl">s1->collide(s2.get())</span> &lt;&lt; '\n';
+            </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Multiple dispatch (Multimethods)</h3>
+                <p>
+                    <a href="https://github.com/jll63/yomm2">yomm2</a>,
+                    <a href="https://github.com/facebook/folly/blob/master/folly/docs/Poly.md">Folly.Poly</a>
+                </p>
+<pre><code class="cpp hljs">
+declare_method(bool, collide,
+    (virtual_&lt;const Shape&amp;&gt; s1, (virtual_&lt;const Shape&amp;&gt; s2));
+
+define_method(bool, collide, (const Square&amp; s, const Circle&amp; c)
+{
+    return collide_square_circle(s, c);
+}
+define_method(bool, collide, (const Circle&amp; c, const Square&amp; s)
+{
+    return collide_square_circle(s, c);
+}
+// ...
+shared_ptr&lt;Shape&gt; s1 = get_random_shape();
+shared_ptr&lt;Shape&gt; s2 = get_random_shape();
+cout &lt;&lt; "Collision: " &lt;&lt; collide(*s1, *s2) &lt;&lt; '\n';
+
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Powerful OOP</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Powerful OOP</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+<span class='codehl'>  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end</span>
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Powerful OOP</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+<span class='codehl'>  def can_move_to?(target)
+    true # flying creatures don't care
+  end</span>
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Powerful OOP</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+<span class='codehl'>module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end</span>
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Powerful OOP</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+<span class='codehl'>a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10</span>
+a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10
+</code></pre>
+            </section>
+
+           <section class="slide">
+            <h3>Powerful OOP</h3>
+<pre><code class="ruby hljs">module FlyingCreature
+  def move_to(target)
+    puts can_move_to?(target) ?
+      &quot;flying to #{target}&quot;
+      : &quot;can't fly to #{target}&quot;
+  end
+  def can_move_to?(target)
+    true # flying creatures don't care
+  end
+end
+module AfraidOfEvens
+  def can_move_to?(target)
+    target % 2 != 0
+  end
+end
+a = Object.new
+a.extend(FlyingCreature)
+a.move_to(10) # -> flying to 10
+<span class='codehl'>a.extend(AfraidOfEvens)
+a.move_to(10) # -> can’t fly to 10</span>
+</code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+            // ???
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">struct Object
+{
+    shared_ptr&lt;ICanMoveTo&gt; m_canMoveTo;
+    shared_ptr&lt;IMoveTo&gt; m_moveTo;
+    // ... every possible method ever
+    bool canMoveTo(int target) const {
+        return m_canMoveTo->call(target);
+    } // ... every possible method ever (again)
+
+    void extend(shared_ptr&lt;Creature&gt; c) {
+        c->setObject(this);
+        m_canMoveTo = c;
+        m_moveTo = c;
+    }
+    void extend(shared_ptr&lt;ICanMoveTo&gt; cmt) {
+        cmt->setObject(this);
+        m_canMoveTo = cmt;
+    } // ... every possible extension ever
+};
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Vanilla C++ OOP</h3>
+            <pre><code class="cpp hljs">
+// ... components
+// ... virtual inheritence
+// ... A LOT OF CODE
+Object o;
+o.extend(make_shared&lt;FlyingCreature&gt;());
+o.moveTo(10); // flying to 10
+o.extend(make_shared&lt;AfraidOfEvens&gt;());
+o.moveTo(10); // can't fly to 10
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Dynamic Mixins</h3>
+            <p>
+                <a href="https://github.com/iboB/dynamix">DynaMix</a>
+            </p>
+            <pre style="font-size: 0.6em"><code class="cpp hljs">    DYNAMIX_MESSAGE_1(void, moveTo, int, target);
+    DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
+    struct FlyingCreature {
+        void moveTo(int target) {
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
+                "flying to " : "can't fly to ")
+                &lt;&lt; target &lt;&lt; '\n';
+        }
+        bool canMoveTo(int target) const {
+            return true;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(FlyingCreature, moveTo_msg &amp; canMoveTo_msg);
+    struct AfraidOfEvens {
+        bool canMoveTo(int target) const {
+            return target % 2 != 0;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(AfraidOfEvens, priority(1, canMoveTo_msg));
+    int main() {
+        object o;
+        mutate(o).add&lt;FlyingCreature&gt;();
+        moveTo(o, 10); // flying to 10
+        mutate(o).add&lt;AfraidOfEvens&gt;();
+        moveTo(o, 10); // can't fly to 10
+    }
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Dynamic Mixins</h3>
+            <p>
+                <a href="https://github.com/iboB/dynamix">DynaMix</a>
+            </p>
+            <pre style="font-size: 0.6em"><code class="cpp hljs"><span class="codehl">    DYNAMIX_MESSAGE_1(void, moveTo, int, target);
+    DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);</span>
+    struct FlyingCreature {
+        void moveTo(int target) {
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
+                "flying to " : "can't fly to ")
+                &lt;&lt; target &lt;&lt; '\n';
+        }
+        bool canMoveTo(int target) const {
+            return true;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(FlyingCreature, moveTo_msg &amp; canMoveTo_msg);
+    struct AfraidOfEvens {
+        bool canMoveTo(int target) const {
+            return target % 2 != 0;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(AfraidOfEvens, priority(1, canMoveTo_msg));
+    int main() {
+        object o;
+        mutate(o).add&lt;FlyingCreature&gt;();
+        moveTo(o, 10); // flying to 10
+        mutate(o).add&lt;AfraidOfEvens&gt;();
+        moveTo(o, 10); // can't fly to 10
+    }
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Dynamic Mixins</h3>
+            <p>
+                <a href="https://github.com/iboB/dynamix">DynaMix</a>
+            </p>
+            <pre style="font-size: 0.6em"><code class="cpp hljs">    DYNAMIX_MESSAGE_1(void, moveTo, int, target);
+    DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
+    struct FlyingCreature {
+        void moveTo(int target) {
+            cout &lt;&lt; (<span class="codehl">::canMoveTo(dm_this, target)</span> ?
+                "flying to " : "can't fly to ")
+                &lt;&lt; target &lt;&lt; '\n';
+        }
+        bool canMoveTo(int target) const {
+            return true;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(FlyingCreature, moveTo_msg &amp; canMoveTo_msg);
+    struct AfraidOfEvens {
+        bool canMoveTo(int target) const {
+            return target % 2 != 0;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(AfraidOfEvens, priority(1, canMoveTo_msg));
+    int main() {
+        object o;
+        mutate(o).add&lt;FlyingCreature&gt;();
+        moveTo(o, 10); // flying to 10
+        mutate(o).add&lt;AfraidOfEvens&gt;();
+        moveTo(o, 10); // can't fly to 10
+    }
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Dynamic Mixins</h3>
+            <p>
+                <a href="https://github.com/iboB/dynamix">DynaMix</a>
+            </p>
+            <pre style="font-size: 0.6em"><code class="cpp hljs">    DYNAMIX_MESSAGE_1(void, moveTo, int, target);
+    DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
+    struct FlyingCreature {
+        void moveTo(int target) {
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
+                "flying to " : "can't fly to ")
+                &lt;&lt; target &lt;&lt; '\n';
+        }
+        bool canMoveTo(int target) const {
+            return true;
+        }
+    }; <span class="codehl">DYNAMIX_DEFINE_MIXIN(FlyingCreature, moveTo_msg &amp; canMoveTo_msg);</span>
+    struct AfraidOfEvens {
+        bool canMoveTo(int target) const {
+            return target % 2 != 0;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(AfraidOfEvens, priority(1, canMoveTo_msg));
+    int main() {
+        object o;
+        mutate(o).add&lt;FlyingCreature&gt;();
+        moveTo(o, 10); // flying to 10
+        mutate(o).add&lt;AfraidOfEvens&gt;();
+        moveTo(o, 10); // can't fly to 10
+    }
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Dynamic Mixins</h3>
+            <p>
+                <a href="https://github.com/iboB/dynamix">DynaMix</a>
+            </p>
+            <pre style="font-size: 0.6em"><code class="cpp hljs">    DYNAMIX_MESSAGE_1(void, moveTo, int, target);
+    DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
+    struct FlyingCreature {
+        void moveTo(int target) {
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
+                "flying to " : "can't fly to ")
+                &lt;&lt; target &lt;&lt; '\n';
+        }
+        bool canMoveTo(int target) const {
+            return true;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(FlyingCreature, moveTo_msg &amp; canMoveTo_msg);
+    struct AfraidOfEvens {
+        bool canMoveTo(int target) const {
+            return target % 2 != 0;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(AfraidOfEvens, <span class="codehl">priority(1, canMoveTo_msg)</span>);
+    int main() {
+        object o;
+        mutate(o).add&lt;FlyingCreature&gt;();
+        moveTo(o, 10); // flying to 10
+        mutate(o).add&lt;AfraidOfEvens&gt;();
+        moveTo(o, 10); // can't fly to 10
+    }
+            </code></pre>
+            </section>
+
+            <section class="slide">
+            <h3>Dynamic Mixins</h3>
+            <p>
+                <a href="https://github.com/iboB/dynamix">DynaMix</a>
+            </p>
+            <pre style="font-size: 0.6em"><code class="cpp hljs">    DYNAMIX_MESSAGE_1(void, moveTo, int, target);
+    DYNAMIX_CONST_MESSAGE_1(bool, canMoveTo, int, target);
+    struct FlyingCreature {
+        void moveTo(int target) {
+            cout &lt;&lt; (::canMoveTo(dm_this, target) ?
+                "flying to " : "can't fly to ")
+                &lt;&lt; target &lt;&lt; '\n';
+        }
+        bool canMoveTo(int target) const {
+            return true;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(FlyingCreature, moveTo_msg &amp; canMoveTo_msg);
+    struct AfraidOfEvens {
+        bool canMoveTo(int target) const {
+            return target % 2 != 0;
+        }
+    }; DYNAMIX_DEFINE_MIXIN(AfraidOfEvens, priority(1, canMoveTo_msg));
+    int main() {
+<span class="codehl">        object o;
+        mutate(o).add&lt;FlyingCreature&gt;();
+        moveTo(o, 10); // flying to 10
+        mutate(o).add&lt;AfraidOfEvens&gt;();
+        moveTo(o, 10); // can't fly to 10 </span>
+    }
+            </code></pre>
+            </section>
+
+            <section style="background-color: blue;">
+                <h2>
+                    <span style="color: red;">E</span><span style="color: white;">y</span><span style="color: red;">e</span>
+                    <span style="color: white;">c</span><span style="color: red;">a</span><span style="color: white;">n</span><span style="color: red;">d</span><span style="color: white;">y</span>
+                    <span style="color: red;">t</span><span style="color: white;">i</span><span style="color: red;">m</span><span style="color: white;">e</span><span style="color: red;">!</span>
+                </h2>
+                <p style="color: white;">MixQuest: github.com/iboB/mixquest</p>
+            </section>
+
+            <section>
+                <p class="fragment"><em>The beast is back!</em> - Jon Kalb</p>
+            </section>
+
+            <section>
+                <h1>End</h1>
+                <h2>Questions?</h2>
+                <br/>
+                <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+                <p>
+                    <small>
+                    Link to these slides: <a href="http://ibob.github.io/slides/oop-in-cpp/">http://ibob.github.io/slides/oop-in-cpp/</a>
+                    </small>
+                    <br />
+                    <small>
+                    Slides license <a rel="license" href="http://creativecommons.org/licenses/by/3.0/">Creative Commons By 3.0</a><br /><a rel="license" href="http://creativecommons.org/licenses/by/3.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/3.0/88x31.png" /></a>
+                    </small>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="/third_party/reveal/lib/js/head.min.js"></script>
+    <script src="/third_party/reveal/js/reveal.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+        	width: 1280,
+            height: 900,
+
+            controls: true,
+            progress: true,
+            history: true,
+            center: true,
+
+            theme: 'simple', // available themes are in /css/theme
+            transition: 'none', // default/cube/page/concave/zoom/linear/fade/none
+
+            // Optional libraries used to extend on reveal.js
+            dependencies: [
+                { src: '/third_party/reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                //{ src: '/third_party/reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                { src: '/third_party/highlight-new/highlight.pack.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                //{ src: '/third_party/reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                //{ src: '/third_party/reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+            ]
+        });
+
+        revealWrapper = document.querySelector( '.reveal' );
+        foot = document.createElement('div');
+        foot.classList.add('footer');
+        revealWrapper.appendChild(foot);
+
+        Reveal.addEventListener('slidechanged', function (event) {
+            if (event.indexh != 0) {
+                foot.innerHTML = event.indexh + ' | is.gd/oopcpp | CoreHard Spring 2019 | @stanimirovb';
+            } else {
+                foot.innerHTML = '';
+            }
+        }, false);
+    </script>
+
+</body>
+</html>
