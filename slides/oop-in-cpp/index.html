@@ -404,7 +404,43 @@ struct Shape {
     }
 };
 </code></pre>
-            <p>This, of course, is a simple and naive implementation. There's lots of room for optimization</p>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+struct Shape {
+    // virtual table
+    <span class="codehl">std::function&lt;void(ostream&)&gt; draw;</span>
+    std::function&lt;int()&gt; area;
+    
+    // fill the virtual table when constructing
+    template &lt;typename T&gt;
+    Shape(const T& t) {
+        draw = std::bind(&T::draw, &t);
+        area = std::bind(&T::area, &t);
+    }
+};
+</code></pre>
+            </section>            
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+struct Shape {
+    // virtual table
+    std::function&lt;void(ostream&)&gt; draw;
+    std::function&lt;int()&gt; area;
+    
+    // fill the virtual table when constructing
+    template &lt;typename T&gt;
+    Shape(const T& t) {
+        <span class="codehl">draw = std::bind(&T::draw, &t);</span>
+        area = std::bind(&T::area, &t);
+    }
+};
+</code></pre>
+            <p class="fragment">This, of course, is a simple and naive implementation. There's lots of room for optimization</p>
             </section>
 
             <section class="slide">
@@ -422,10 +458,58 @@ struct Shape {
     template &lt;typename T&gt;
     Shape(const T&amp; t) {
         m_obj = &amp;t;
-        draw = [](const void* obj, ostream& out) {
+        m_draw = [](const void* obj, ostream& out) {
             auto t = reinterpret_cast&lt;const T*&gt;(obj);
             t->draw(out);
         };
+    }
+};
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Faster dispatch</h3>
+<pre><code class="cpp hljs">
+struct Shape {
+    // virtual table
+    const void* m_obj;
+    <span class="codehl">void (*m_draw)(const void*, ostream&);</span>
+
+    void draw() const {
+        <span class="codehl">return m_draw(m_obj);</span>
+    }
+    
+    template &lt;typename T&gt;
+    Shape(const T&amp; t) {
+        m_obj = &amp;t;
+        m_draw = [](const void* obj, ostream& out) {
+            auto t = reinterpret_cast&lt;const T*&gt;(obj);
+            t->draw(out);
+        };
+    }
+};
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Faster dispatch</h3>
+<pre><code class="cpp hljs">
+struct Shape {
+    // virtual table
+    const void* m_obj;
+    void (*m_draw)(const void*, ostream&);
+
+    void draw() const {
+        return m_draw(m_obj);
+    }
+    
+    template &lt;typename T&gt;
+    Shape(const T&amp; t) {
+        m_obj = &amp;t;
+<span class="codehl">        m_draw = [](const void* obj, ostream& out) {
+            auto t = reinterpret_cast&lt;const T*&gt;(obj);
+            t->draw(out);
+        };</span>
     }
 };
 </code></pre>
