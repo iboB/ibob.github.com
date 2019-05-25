@@ -87,7 +87,7 @@ int main()
                 <ul>
                     <li>Mostly a <span class="fancy">C++</span> programmer</li>
                     <li>Mostly a <span class="fancy">game</span> programmer</li>
-                    <li>Mostly a working on <span class="fancy">medical software</span></li>
+                    <li>Recently working on <span class="fancy">medical software</span></li>
                     <li><span class="fancy">Open-source</span> programmer</li>
                     <li><a href="https://github.com/iboB">github.com/iboB</a></li>
                 </ul>
@@ -647,12 +647,211 @@ double area_for_square(const Square&) // user defines after this
             </section>
 
             <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">// declare method
+<span class = "codehl">using area_func = double (*)(const Shape*);</span>
+using area_func_getter = area_func (*)(const Shape*);
+std::vector&lt;area_func_getter&gt; area_getters;
+double area(Shape* s) {
+    for(auto g : area_getters) {
+        auto func = g();
+        if(func) return func(s);
+    }
+    throw error("Object doesn't implement area");
+}
+    
+// define method
+double area_for_square(const Square&);
+<span class = "codehl">double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}</span>
+area_func area_for_square_getter(const Shape* s) {
+    return dynamic_cast&lt;const Square*&gt;(s) ? area_for_square_call : nullptr;
+}
+auto register_area_for_square = []() {
+    area_getters.push_back(area_for_square_getter);
+    return area_getters.size();
+}();
+<span class = "codehl">double area_for_square(const Square&) // user defines after this</span>
+</code></pre>            
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">// declare method
+using area_func = double (*)(const Shape*);
+<span class = "codehl">using area_func_getter = area_func (*)(const Shape*);</span>
+std::vector&lt;area_func_getter&gt; area_getters;
+double area(Shape* s) {
+    for(auto g : area_getters) {
+        auto func = g();
+        if(func) return func(s);
+    }
+    throw error("Object doesn't implement area");
+}
+    
+// define method
+double area_for_square(const Square&);
+double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}
+<span class = "codehl">area_func area_for_square_getter(const Shape* s) {
+    return dynamic_cast&lt;const Square*&gt;(s) ? area_for_square_call : nullptr;
+}</span>
+auto register_area_for_square = []() {
+    area_getters.push_back(area_for_square_getter);
+    return area_getters.size();
+}();
+double area_for_square(const Square&) // user defines after this
+</code></pre>            
+            </section>
+
+<section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">// declare method
+using area_func = double (*)(const Shape*);
+using area_func_getter = area_func (*)(const Shape*);
+<span class = "codehl">std::vector&lt;area_func_getter&gt; area_getters;</span>
+double area(Shape* s) {
+    for(auto g : area_getters) {
+        auto func = g();
+        if(func) return func(s);
+    }
+    throw error("Object doesn't implement area");
+}
+    
+// define method
+double area_for_square(const Square&);
+double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}
+area_func area_for_square_getter(const Shape* s) {
+    return dynamic_cast&lt;const Square*&gt;(s) ? area_for_square_call : nullptr;
+}
+<span class = "codehl">auto register_area_for_square = []() {
+    area_getters.push_back(area_for_square_getter);
+    return area_getters.size();
+}();</span>
+double area_for_square(const Square&) // user defines after this
+</code></pre>            
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">// declare method
+using area_func = double (*)(const Shape*);
+using area_func_getter = area_func (*)(const Shape*);
+std::vector&lt;area_func_getter&gt; area_getters;
+<span class = "codehl">double area(Shape* s) {
+    for(auto g : area_getters) {
+        auto func = g();
+        if(func) return func(s);
+    }
+    throw error("Object doesn't implement area");
+}</span>
+    
+// define method
+double area_for_square(const Square&);
+double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}
+area_func area_for_square_getter(const Shape* s) {
+    return dynamic_cast&lt;const Square*&gt;(s) ? area_for_square_call : nullptr;
+}
+auto register_area_for_square = []() {
+    area_getters.push_back(area_for_square_getter);
+    return area_getters.size();
+}();
+double area_for_square(const Square&) // user defines after this
+</code></pre>            
+            </section>
+
+            <section class="slide">
                 <h3>Optimize the dispatch</h3>
 <pre><code class="cpp hljs">// declare method
 using area_func = double (*)(const Shape*);
 std::unordered_map&lt;std::type_index, area_func&gt; area_getters;
 double area(Shape* s) {
     auto f = area_getters.find(std::type_index(typeid(*s)));
+    if (f == area_getters.end()) throw error("Object doesn't implement area");
+    return f->second(s);
+}
+    
+// define method
+double area_for_square(const Square&);
+double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}
+auto register_area_for_square = []() {
+    area_getters[std::type_index(typeid(Square))] = area_for_square_call;
+    return area_getters.size();
+}();
+double area_for_square(const Square&) // user defines after this
+</code></pre>            
+            </section>
+
+            <section class="slide">
+                <h3>Optimize the dispatch</h3>
+<pre><code class="cpp hljs">// declare method
+using area_func = double (*)(const Shape*);
+<span class = "codehl">std::unordered_map&lt;std::type_index, area_func&gt; area_getters;</span>
+double area(Shape* s) {
+    auto f = area_getters.find(std::type_index(typeid(*s)));
+    if (f == area_getters.end()) throw error("Object doesn't implement area");
+    return f->second(s);
+}
+    
+// define method
+double area_for_square(const Square&);
+double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}
+auto register_area_for_square = []() {
+    area_getters[std::type_index(typeid(Square))] = area_for_square_call;
+    return area_getters.size();
+}();
+double area_for_square(const Square&) // user defines after this
+</code></pre>            
+            </section>
+
+            <section class="slide">
+                <h3>Optimize the dispatch</h3>
+<pre><code class="cpp hljs">// declare method
+using area_func = double (*)(const Shape*);
+std::unordered_map&lt;std::type_index, area_func&gt; area_getters;
+double area(Shape* s) {
+    auto f = area_getters.find(std::type_index(typeid(*s)));
+    if (f == area_getters.end()) throw error("Object doesn't implement area");
+    return f->second(s);
+}
+    
+// define method
+double area_for_square(const Square&);
+double area_for_square_call(const Shape* s) {
+    auto square = static_cast&lt;const Square*&gt;(s);
+    return area_for_square(*square);
+}
+auto register_area_for_square = []() {
+    <span class = "codehl">area_getters[std::type_index(typeid(Square))] = area_for_square_call;</span>
+    return area_getters.size();
+}();
+double area_for_square(const Square&) // user defines after this
+</code></pre>            
+            </section>
+
+            <section class="slide">
+                <h3>Optimize the dispatch</h3>
+<pre><code class="cpp hljs">// declare method
+using area_func = double (*)(const Shape*);
+std::unordered_map&lt;std::type_index, area_func&gt; area_getters;
+double area(Shape* s) {
+    <span class = "codehl">auto f = area_getters.find(std::type_index(typeid(*s)));</span>
     if (f == area_getters.end()) throw error("Object doesn't implement area");
     return f->second(s);
 }
@@ -1217,6 +1416,7 @@ auto moveTo_id = []() {
     msg_infos.emplace_back();
     return msg_infos.size();
 }();
+
 template &lt;typename Mixin&gt;
 void* moveTo_caller() {
     return [](void* mixin, int target) {
@@ -1226,8 +1426,76 @@ void* moveTo_caller() {
 }
 void moveTo(object& o, int target);
 </code></pre>
-                </section>
+            </section>
     
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+// message_registry
+struct message_info {}
+<span class="codehl">std::vector&lt;message_info*&gt; msg_infos;</span>
+// register mixin
+<span class="codehl">auto moveTo_id = []() {
+    msg_infos.emplace_back();
+    return msg_infos.size();
+}();</span>
+
+template &lt;typename Mixin&gt;
+void* moveTo_caller() {
+    return [](void* mixin, int target) {
+        auto m = reintepret_cast&lt;Mixin*&gt;(mixin);
+        m->moveTo(target);
+    };
+}
+void moveTo(object& o, int target);
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+// message_registry
+struct message_info {}
+std::vector&lt;message_info*&gt; msg_infos;
+// register mixin
+auto moveTo_id = []() {
+    msg_infos.emplace_back();
+    return msg_infos.size();
+}();
+
+template &lt;typename Mixin&gt;
+void* moveTo_caller() {
+<span class="codehl">    return [](void* mixin, int target) {
+        auto m = reintepret_cast&lt;Mixin*&gt;(mixin);
+        m->moveTo(target);
+    };</span>
+}
+void moveTo(object& o, int target);
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+// message_registry
+struct message_info {}
+std::vector&lt;message_info*&gt; msg_infos;
+// register mixin
+auto moveTo_id = []() {
+    msg_infos.emplace_back();
+    return msg_infos.size();
+}();
+
+template &lt;typename Mixin&gt;
+void* moveTo_caller() {
+    return [](void* mixin, int target) {
+        auto m = reintepret_cast&lt;Mixin*&gt;(mixin);
+        m->moveTo(target);
+    };
+}
+<span class="codehl">void moveTo(object& o, int target);</span>
+</code></pre>
+            </section>
 
             <section class="slide">
                 <h3>How does this work?</h3>
@@ -1253,21 +1521,164 @@ mixin_type_info* info_for(FlyingCreature*) {
             <section class="slide">
                 <h3>How does this work?</h3>
 <pre><code class="cpp hljs">
+// mixin_registry
+struct mixin_info {
+    <span class="codehl">std::vector&lt;void*&gt; funcs;</span>
+}
+std::vector&lt;mixin_info*&gt; mixin_infos;
+
+// register mixin
+auto FlyingCreature_id = []() {
+    auto info = new mixin_type_info;
+<span class="codehl">    info->funcs.resize(registered_messages.size());
+    info->funcs[moveTo_id] = moveTo_caller&lt;FlyingCreature&gt;</span>
+}();
+mixin_type_info* info_for(FlyingCreature*) {
+    return mixin_infos[FlyingCreature_id];
+}
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+// mixin_registry
+struct mixin_info {
+    std::vector&lt;void*&gt; funcs;
+}
+std::vector&lt;mixin_info*&gt; mixin_infos;
+
+// register mixin
+auto FlyingCreature_id = []() {
+    auto info = new mixin_type_info;
+    info->funcs.resize(registered_messages.size());
+    info->funcs[moveTo_id] = moveTo_caller&lt;FlyingCreature&gt;
+}();
+<span class="codehl">mixin_type_info* info_for(FlyingCreature*) {
+    return mixin_infos[FlyingCreature_id];
+}</span>
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
 struct object {
+    vector&lt;std::unique_ptr&lt;void&gt;&gt; mixins;
+
     struct vtable_entry {
         void* mixin;
         void* caller;
     };
     vector&lt;vtable_entry&gt; vtable;
-    vector&lt;std::shared_ptr&lt;void&gt;&gt; mixins;
 
     template &lt;typename Mixin&gt;
     void add() {
-        mixins.emplace_back(make_shared&lt;Mixin&gt;());
+        mixins.emplace_back(make_unique&lt;Mixin&gt;());
         auto info = info_for((Mixin*)nullptr);
         for(size_t i=0; i&lt;registered_messages.size(); ++i) {
             if (info->funcs[i]) vtable[i] = 
-                {mixins.back().get(), info->funcs[i]}
+                {mixins.back().get(), info->funcs[i]};
+        }
+    }
+};
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+struct object {
+    <span class="codehl">vector&lt;std::unique_ptr&lt;void&gt;&gt; mixins;</span>
+
+    struct vtable_entry {
+        void* mixin;
+        void* caller;
+    };
+    vector&lt;vtable_entry&gt; vtable;
+
+    template &lt;typename Mixin&gt;
+    void add() {
+        <span class="codehl">mixins.emplace_back(make_unique&lt;Mixin&gt;());</span>
+        auto info = info_for((Mixin*)nullptr);
+        for(size_t i=0; i&lt;registered_messages.size(); ++i) {
+            if (info->funcs[i]) vtable[i] = 
+                {mixins.back().get(), info->funcs[i]};
+        }
+    }
+};
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+struct object {
+    vector&lt;std::unique_ptr&lt;void&gt;&gt; mixins;
+
+<span class="codehl">    struct vtable_entry {
+        void* mixin;
+        void* caller;
+    };
+    vector&lt;vtable_entry&gt; vtable;</span>
+
+    template &lt;typename Mixin&gt;
+    void add() {
+        mixins.emplace_back(make_unique&lt;Mixin&gt;());
+        auto info = info_for((Mixin*)nullptr);
+        for(size_t i=0; i&lt;registered_messages.size(); ++i) {
+            if (info->funcs[i]) vtable[i] = 
+                {mixins.back().get(), info->funcs[i]};
+        }
+    }
+};
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+struct object {
+    vector&lt;std::unique_ptr&lt;void&gt;&gt; mixins;
+
+    struct vtable_entry {
+        void* mixin;
+        void* caller;
+    };
+    vector&lt;vtable_entry&gt; vtable;
+
+    template &lt;typename Mixin&gt;
+    void add() {
+        mixins.emplace_back(make_unique&lt;Mixin&gt;());
+        <span class="codehl">auto info = info_for((Mixin*)nullptr);</span>
+        for(size_t i=0; i&lt;registered_messages.size(); ++i) {
+            if (info->funcs[i]) vtable[i] = 
+                {mixins.back().get(), info->funcs[i]};
+        }
+    }
+};
+</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>How does this work?</h3>
+<pre><code class="cpp hljs">
+struct object {
+    vector&lt;std::unique_ptr&lt;void&gt;&gt; mixins;
+
+    struct vtable_entry {
+        void* mixin;
+        void* caller;
+    };
+    vector&lt;vtable_entry&gt; vtable;
+
+    template &lt;typename Mixin&gt;
+    void add() {
+        mixins.emplace_back(make_unique&lt;Mixin&gt;());
+        auto info = info_for((Mixin*)nullptr);
+        for(size_t i=0; i&lt;registered_messages.size(); ++i) {
+<span class="codehl">            if (info->funcs[i]) vtable[i] = 
+                {mixins.back().get(), info->funcs[i]};</span>
         }
     }
 };
