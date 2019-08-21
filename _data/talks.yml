@@ -1,5 +1,35 @@
 - language: English
   talks:
+  - title: "Object-Oriented Programming in Modern C++"
+    desc: >-
+      A talk at [CoreHard](https://corehard.by/en/) 2019 about object-oriented
+      programming in modern C++. An improved version of the **Bringing
+      Business Logic Back to C++** talk.
+    slides: /slides/oop-in-cpp/
+    video: https://www.youtube.com/watch?v=N8i2VITM4Pw
+  - title: "Bringing Business Logic Back to C++"
+    desc: >-
+      A talk at [code::dive](https://codedive.pl/) 2018 about object-oriented
+      programming in modern C++.
+    slides: /slides/bbb2cpp/
+    video: https://www.youtube.com/watch?v=GOIEb_Jrtsk
+  - title: "CPU-Friendly Code"
+    desc: >-
+      A talk at [code::dive](https://codedive.pl/) 2018 about writing code
+      while keeping in mind the hardware which executes it.
+    slides: /slides/cpu-friendly-code-2/
+    video: https://www.youtube.com/watch?v=NQdRqc4pVQc
+  - title: "DynaMix: A New Take on Polymorphism"
+    desc: >-
+      A talk at [CppCon](https://cppcon.org/) 2018 about
+      [DynaMix](https://github.com/iboB/dynamix). A yet more improved version
+      of the talk in Russia and China
+    slides: /slides/dynamix-cppcon/
+    video: https://www.youtube.com/watch?v=ckY7Pc-A9Xc
+  - title: "The Bad Big Wolf Meets Riding Hood Little Red"
+    desc: >-
+      A 5 minute comedy lightning talk at [CppCon](https://cppcon.org/) 2018.
+    video: https://www.youtube.com/watch?v=Dw0UBuTKHHg
   - title: "DynaMix: A New Take on Polymorphism"
     desc: >-
       A talk at [C++ Russia](http://cppconf.ru/) 2018 about
