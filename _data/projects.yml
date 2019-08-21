@@ -13,6 +13,18 @@
       libraries but much more easier to integrate and faster to build.
     github: https://github.com/iboB/picobench
     docs: https://github.com/iboB/picobench/blob/master/README.md
+  - name: JSBind
+    desc: >-
+      A C++ to JavaScript binding library which supports multiple JavaScript
+      engines and backends.
+    github: https://github.com/Chobolabs/jsbind
+    docs: https://github.com/Chobolabs/jsbind/blob/master/README.md
+  - name: CEF Demos
+    desc: >-
+      A collection of demos with the
+      [Chromium Embedded Framework](https://bitbucket.org/chromiumembedded/cef/src/master/).
+    github: https://github.com/iboB/cef-demos
+    docs: https://github.com/iboB/cef-demos/blob/master/README.md
   - name: chobo-shl
     desc: A collection of single-header container classes and helpers.
     github: https://github.com/Chobolabs/chobo-shl
@@ -29,6 +41,10 @@
     desc: A simple library for 3D mathematics
     github: https://github.com/iboB/yama
     docsd: I mean to write docs... but, you know ;)
+  - name: Word Grid
+    desc: A word game where you find words in adjacent cells in a grid
+    github: https://github.com/iboB/word-grid
+    docsd: None yet
   - name: spine-cpp
     desc: >-
       A C++ runtime for skeletal animation from
