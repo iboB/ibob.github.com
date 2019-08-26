@@ -1,15 +1,40 @@
-
+/* title */
 .reveal section.title h1 {
 	width: 100%;
 	font-size: 2em;
 }
 
+/* custom slides */
+.reveal section.slide {
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	text-align: left;
+	border-bottom: 2px solid #0077BD;
+}
+
+
 /* code highlight */
 .reveal .slides section .fragment.highlight-code {
     opacity: 1;
-    visibility: inherit; 
+    visibility: inherit;
 }
 .reveal .slides section .fragment.highlight-code.current-fragment {
     font-weight: bold;
     background-color: lightgray;
+}
+
+/* other code */
+.reveal pre code {
+    max-height: 80%;
+}
+
+/* other */
+.reveal section span.fancy {
+	font-weight: bold;
+	color: #DF5000;
 }

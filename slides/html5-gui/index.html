@@ -80,6 +80,15 @@ int main()
                 </ul>
             </section>
 
+            <section>
+                <h3>About this talk</h3>
+                <h2>The motivation</h2>
+            </section>
+
+            <section class="slide">
+
+            </section>
+
             <section class="slide">
                 <h3>About this talk</h3>
                 <br/>
@@ -102,13 +111,60 @@ int main()
             </section>
 
             <section>
+                <ol style="width: 70%">
+                    <li>Start HTTP server</li>
+                    <li>Open browser to <span class="fancy">&quot;http://localhost:1234&quot;</span></li>
+                </ol>
+            </section>
+
+            <section class="slide">
+                <h3>The Ajax HXR loop</h3>
+                <pre><code class="js hljs" data-noescape>function idle() {
+    let xhr = new XMLHttpRequest();
+    <span class="fragment highlight-code">xhr.open('GET', 'clientReady'); // get some "fake" service resource</span>
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) { // 4 = request done
+            if (xhr.status === 200) { // 200 = OK
+                <span class="fragment highlight-code">dispatch(xhr.responseText); // dispatch and use the response</span>
+                <span class="fragment highlight-code">idle(); // request more from the server</span>
+            } else {
+                console.log('Error: ' + xhr.status); // error
+            }
+        }
+    };
+    xhr.send(null);
+}
+// ignore other xhr responses           </code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Local HTTP server pros</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Local HTTP server cons</h3>
+            </section>
+
+            <section>
+                <h3>WebSocket Demo</h3>
+            </section>
+
+            <section>
                 <h3>Approach 2</h3>
                 <h2>Embedding a browser</h2>
             </section>
 
             <section>
+                <h3>CEF Demo</h3>
+            </section>
+
+            <section>
                 <h3>Approach 3</h3>
                 <h2>Custom HTML renderers</h2>
+            </section>
+
+            <section>
+                <h3>Ultralight Demo</h3>
             </section>
 
             <section>
