@@ -4,9 +4,9 @@
 <head>
     <meta charset="utf-8">
 
-    <title>Sandbox Slides</title>
+    <title>Using HTML 5 for GUI in C++</title>
 
-    <meta name="description" content="Sandbox slides">
+    <meta name="description" content="Slides for a talk about using HTML 5 for GUI for CppCon 2019">
     <meta name="author" content="Borislav Stanimirov">
 
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -45,7 +45,9 @@
     <div class="reveal">
         <div class="slides">
             <section class="title">
-                <h1>Sandbox Slides</h1>
+                <h2>Embrace Modern Technology:</h2>
+                <h1>Using HTML 5 for GUI in C++</h1>
+                <br/>
                 <p>
                     by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
                 </p>
@@ -54,13 +56,13 @@
             <section class="slide">
                 <h3>Hello, World</h3>
                 <br/>
-                <pre><code class="cpp hljs">
+                <pre><code class="cpp hljs" data-noescape>
 #include &lt;iostream&gt;
 
 int main()
 {
     std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-    std::cout &lt;&lt; "These slides are here: https://is.gd/\n";
+    std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">https://is.gd/</span>\n";
     return 0;
 }
                 </code></pre>
@@ -79,29 +81,34 @@ int main()
             </section>
 
             <section class="slide">
-                <h3>Some Code</h3>
-                <pre class="fragment"><code class="cpp hljs" data-noescape>
-        <span class="fragment highlight-code">for(int i=0; i&lt;10; ++i);</span>
-        <span class="fragment highlight-code">perform_hotswap();</span>
-        deserialize_state();
-                </code></pre>
+                <h3>About this talk</h3>
+                <br/>
                 <ul>
-                    <li class="fragment">Easy in dynamic languages thanks to <span class="fancy">reflection</span></li>
-                    <li class="fragment">Hard on C++ with no reflection</li>
-                    <ul>
-                        <li class="fragment">Clang plugins: The future.
-                            <a href="https://github.com/AustinBrunkhorst/CPP-Reflection">Cpp-Reflection</a>,
-                            <a href="https://github.com/foonathan/cppast">cppast</a>,
-                            <a href="https://github.com/chakaz/reflang">reflang</a>
-                        </li>
-                        <li class="fragment">But... <span class="fragment">you already have serialization</span></li>
-                        <li class="fragment">Versioning</li>
-                    </ul>
+                    <li>Not a talk about HTML 5</li>
+                    <li>It's a talk about using HTML 5 as GUI framework</li>
+                    <li>Three approaches<span>... well three and a half</span></li>
+                    <li>Some examples</li>
                 </ul>
             </section>
 
             <section>
-                <p>Hotswapping C++ is real. Use it today!</p>
+                <h2>What is HTML 5?</h2>
+                <small>Briefly</small>
+            </section>
+
+            <section>
+                <h3>Approach 1</h3>
+                <h2>A local HTTP server</h2>
+            </section>
+
+            <section>
+                <h3>Approach 2</h3>
+                <h2>Embedding a browser</h2>
+            </section>
+
+            <section>
+                <h3>Approach 3</h3>
+                <h2>Custom HTML renderers</h2>
             </section>
 
             <section>
@@ -111,7 +118,7 @@ int main()
                 <p>Borislav Stanimirov / <a href="http://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
                 <p>
                     <small>
-                    Link to these slides: <a href="http://ibob.github.io/slides/bbb2cpp/">http://ibob.github.io/slides/bbb2cpp/</a>
+                    Link to these slides: <a href="http://ibob.github.io/slides/html5-gui/">http://ibob.github.io/slides/html5-gui/</a>
                     </small>
                     <br />
                     <small>
@@ -128,8 +135,8 @@ int main()
 
     <script>
         Reveal.initialize({
-            // width: 1280,
-            // height: 720,
+            width: 1280,
+            height: 720,
 
             controls: true,
             progress: true,
@@ -150,7 +157,7 @@ int main()
             ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
         });
 
-        slides.footerSetup('link', 'bla 2019');
+        slides.footerSetup('is.gd/', 'CppCon 2019');
     </script>
 
 </body>

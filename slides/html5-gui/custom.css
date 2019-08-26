@@ -1,0 +1,15 @@
+
+.reveal section.title h1 {
+	width: 100%;
+	font-size: 2em;
+}
+
+/* code highlight */
+.reveal .slides section .fragment.highlight-code {
+    opacity: 1;
+    visibility: inherit; 
+}
+.reveal .slides section .fragment.highlight-code.current-fragment {
+    font-weight: bold;
+    background-color: lightgray;
+}
