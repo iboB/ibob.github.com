@@ -22,7 +22,7 @@
     <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
 
     <!-- Slides-specific styles -->
-    <!-- <link rel="stylesheet" href="custom.css"> -->
+    <link rel="stylesheet" href="custom.css">
 
     <!-- Printing and PDF exports -->
     <script>
@@ -80,9 +80,9 @@ int main()
 
             <section class="slide">
                 <h3>Some Code</h3>
-                <pre class="fragment"><code class="cpp hljs">
-        for(int i=0; i&lt;10; ++i);
-        perform_hotswap();
+                <pre class="fragment"><code class="cpp hljs" data-noescape>
+        <span class="fragment highlight-code">for(int i=0; i&lt;10; ++i);</span>
+        <span class="fragment highlight-code">perform_hotswap();</span>
         deserialize_state();
                 </code></pre>
                 <ul>

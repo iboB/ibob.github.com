@@ -1,0 +1,8 @@
+.reveal .slides section .fragment.highlight-code {
+    opacity: 1;
+    visibility: inherit; 
+}
+.reveal .slides section .fragment.highlight-code.current-fragment {
+font-weight: bold;
+background-color: lightgray;
+}
