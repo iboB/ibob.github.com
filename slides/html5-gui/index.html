@@ -118,16 +118,27 @@ int main()
             </section>
 
             <section class="slide">
-                <h3>Variants</h3>
+                <h3>Multi-Page Apps</h3>
                 <br/>
                 <ul>
-                    <li>I has been somewhat popular historically.</li>
-                    <li>The PHP GUI: Multi page apps</li>
-                    <ul>
-                        <li>Click hyperlink. Reqest page. Server generates it and sends it.</li>
-                        <li><span class="fancy">Not interactive.</span> <span>Server can't initiate communication</span></li>
-                    </ul>
+                    <li>Have been somewhat popular historically.</li>
+                    <li>The GUI of choice of the <span class="fancy">PHP</span> developer</li>
+                    <li>Click hyperlink. Reqest page. Server generates it and sends it.</li>
+                    <li><code class="inline">$ python -m SimpleHTTPServer 8080</code></li>
+                    <li><span class="fancy">Not interactive.</span> <span>Server can't initiate communication</span></li>
                 </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Single-Page Apps</h3>
+                <br/>
+                <ul>
+                    <li>Welcome to 2004: XHR and Ajax</li>
+                    <li>Request &rarr; Response. Request &rarr; Response.</li>
+                    <li><code class="inline">XMLHttpRequest</code> is not for XML</li>
+                    <li><span class="fancy">Not very interactive.</span> Everything needs to be polled</li>
+                </ul>
+                <p style="text-align: right">PS Use <code class="inline">fetch</code> if you do need Ajax</p>
             </section>
 
             <section class="slide">
@@ -147,7 +158,28 @@ int main()
     };
     xhr.send(null);
 }
-// ignore other xhr responses           </code></pre>
+// ignore other xhr responses</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>The Ajax HXR fetch loop</h3>
+                <pre><code class="js hljs" data-noescape>function idle() {
+    <span class="fragment highlight-code">fetch('clientReady') // get some "fake" service resource</span>
+        .then(data => {
+            <span class="fragment highlight-code">dispatch(xhr.responseText); // dispatch and use the response</span>
+            <span class="fragment highlight-code">idle(); // request more from the server</span>
+        })
+        .catch(error => console.log('Error: ' + xhr.status));
+}
+// ignore other xhr responses</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>Modern Single-Page Apps</h3>
+                <br/>
+                <ul>
+                    <li>Welcome to HTML 5: WebSocket</li>
+                </ul>
             </section>
 
             <section class="slide">
@@ -163,8 +195,16 @@ int main()
             </section>
 
             <section>
+                <h3>WebSocket Libraries</h3>
+            </section>
+
+            <section>
                 <h3>Approach 2</h3>
                 <h2>Embedding a browser</h2>
+            </section>
+
+            <section>
+                <h3>Chrome Architecture</h3>
             </section>
 
             <section>
@@ -172,8 +212,20 @@ int main()
             </section>
 
             <section>
+                <h3>CEF vs Electron</h3>
+            </section>
+
+            <section>
+                <h3>Embedding other browsers</h3>
+            </section>
+
+            <section>
                 <h3>Approach 3</h3>
                 <h2>Custom HTML renderers</h2>
+            </section>
+
+            <section>
+                <h3>Custom HTML rendering libraries</h3>
             </section>
 
             <section>

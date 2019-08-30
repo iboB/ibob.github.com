@@ -33,6 +33,11 @@
     max-height: 80%;
 }
 
+.reveal section code.inline {
+	color: #003377;
+}
+
+
 /* other */
 .reveal section span.fancy {
 	font-weight: bold;
