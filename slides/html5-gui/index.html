@@ -81,16 +81,93 @@ int main()
             </section>
 
             <section>
-                <h3>About this talk</h3>
-                <h2>The motivation</h2>
+                <p>So you want to make a GUI?</p>
             </section>
 
             <section>
-                <img class="diagram" src="netscape.webp" />
+                <h3>Simple</h3>
+                <img class="diagram" src="simple-gui.jpg" />
             </section>
 
             <section>
+                <h3>Complex</h3>
+                <img  style="height: 540px" class="diagram" src="complex-gui.jpg" />
+            </section>
+
+            <section>
+                <img class="diagram" src="qt.png" />
+                <h3 class="fragment">?</h3>
+            </section>
+
+            <section>
+                <p>A challenger appears</p>
+            </section>
+
+            <section>
+                <h3>Browsers</h3>
+                <img class="diagram" style="height: 540px" src="netscape.webp" />
+            </section>
+
+            <section>
+                <p>They've come a long way</p>
                 <img class="diagram" src="browsers.png" />
+                <p style="color: transparent">.</p>
+            </section>
+
+            <section>
+                <p>sophisticated <span class="fancy fragment">optimized</span></p>
+                <img class="diagram" src="browsers.png" />
+                <p><span class="fragment">powerful...</span> <span style="color: transparent">ubiquitous</span></p>
+            </section>
+
+            <section>
+                <p><span class="fancy">This</span> is a browser</p>
+            </section>
+
+            <section>
+                <div>
+                    <button>Button</button>
+                    <input type="text" />
+                </div>
+                <div>
+                    <label style="font-size: 0.4em">Checkbox 1<input type="checkbox" /></label>
+                    <label style="font-size: 0.4em">Checkbox 2<input type="checkbox" /></label>
+                </div>
+                <div>
+                    <label style="font-size: 0.4em">Radio 1<input checked="checked" type="radio" name="radioa" /></label>
+                    <label style="font-size: 0.4em">Radio 2<input type="radio" name="radioa" /></label>
+                    <label style="font-size: 0.4em">Radio 78<input type="radio" name="radioa" /></label>
+                </div>
+            </section>
+
+            <section>
+                <img class="diagram" src="../shared-libs/rake.gif" />
+            </section>
+
+            <section>
+                    <iframe width="888" height="500" data-src="https://www.youtube.com/embed/DVoAdR52sq4?start=4&autoplay=1" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </section>
+
+            <section>
+                    <iframe width="888" height="500" data-src="https://www.shadertoy.com/embed/XtsSWs?gui=false&paused=false&muted=false" frameborder="0" allowfullscreen="allowfullscreen"></iframe>
+            </section>
+
+            <section>
+                <small>The last 5 slides took me 10 minutes to make</small>
+            </section>
+
+            <section>
+                <p>The browser is an <span class="fancy">immensely</span> powerful presentation platform</p>
+            </section>
+
+            <section>
+                <p>sophisticated <span class="fancy">optimized</span></p>
+                <img class="diagram" src="browsers.png" />
+                <p>powerful... <span class="fancy fragment">ubiquitous</span></p>
+            </section>
+
+            <section>
+                <img class="diagram" src="fridge.jpg" />
             </section>
 
             <section>
@@ -129,12 +206,16 @@ int main()
                 <span class="tiny">source: <a href="https://insights.stackoverflow.com/survey/2019">Stack Overflow Survey 2019</a></span>
             </section>
 
+            <section>
+                <p>Can we make use of that?</p>
+            </section>
+
             <section class="slide">
                 <h3>About this talk</h3>
                 <br/>
                 <ul>
                     <li>Not a talk about HTML 5</li>
-                    <li>It's a talk about using HTML 5 as GUI framework</li>
+                    <li>It's a talk about using HTML 5 as <span class="fancy">GUI framework</span></li>
                     <li>Three approaches<span>... well three and a half</span></li>
                     <li>Some examples</li>
                 </ul>
@@ -142,7 +223,7 @@ int main()
 
             <section>
                 <h2>What is HTML 5?</h2>
-                <small>Briefly</small>
+                <small class="fragment">Briefly</small>
             </section>
 
             <section>
@@ -305,6 +386,9 @@ int main()
             center: true,
 
             transition: 'none', // none/fade/slide/convex/concave/zoom
+
+            autoPlayMedia: false,
+            preloadIframes: false,
 
             // Optional libraries used to extend on reveal.js
             dependencies: [
