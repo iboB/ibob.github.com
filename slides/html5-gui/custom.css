@@ -39,6 +39,21 @@
 
 
 /* other */
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+.reveal section .inline {
+	display: inline-block;
+}
+
+.reveal section span.tiny {
+	font-size: 0.5em;
+}
+
 .reveal section span.fancy {
 	font-weight: bold;
 	color: #DF5000;
