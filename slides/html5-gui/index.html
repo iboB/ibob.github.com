@@ -62,7 +62,7 @@
 int main()
 {
     std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-    std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">https://is.gd/</span>\n";
+    std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">https://is.gd/html5gui</span>\n";
     return 0;
 }
                 </code></pre>
@@ -87,6 +87,20 @@ int main()
             <section>
                 <h3>Simple</h3>
                 <img class="diagram" src="simple-gui.jpg" />
+            </section>
+
+            <section>
+                <ul>
+                    <li>GTK</li>
+                    <li>WxWidgets</li>
+                    <li>WindowsForms</li>
+                    <li>MFC</li>
+                    <li>Many, many more...</li>
+                    <span class="fragment">
+                    <li><span class="fancy">libui:</span> <a href="https://github.com/andlabs/libui">gh/andlabs/libui</a></li>
+                    <li><span class="fancy">Dear ImGui:</span> <a href="https://github.com/ocornut/imgui">gh/ocornut/imgui</a></li>
+                    </span>
+                </ul>
             </section>
 
             <section>
@@ -219,7 +233,7 @@ int main()
                 <br/>
                 <ul>
                     <li>Not a talk about HTML 5</li>
-                    <li>It's a talk about using HTML 5 as <span class="fancy">GUI framework</span></li>
+                    <li>It's a talk about using HTML 5 as a <span class="fancy">GUI framework</span></li>
                     <li>Three approaches<span>... well three and a half</span></li>
                     <li>Some examples</li>
                 </ul>
@@ -406,7 +420,7 @@ int main()
             ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
         });
 
-        slides.footerSetup('is.gd/', 'CppCon 2019');
+        slides.footerSetup('is.gd/html5gui', 'CppCon 2019');
     </script>
 
 </body>
