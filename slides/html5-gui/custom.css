@@ -46,6 +46,14 @@
 	box-shadow: none;
 }
 
+.reveal section img.ui-diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+	height: 600px;
+}
+
 .reveal section .inline {
 	display: inline-block;
 }
