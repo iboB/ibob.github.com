@@ -80,6 +80,17 @@ int main()
                 </ul>
             </section>
 
+            <section class="slide">
+                <h3>About this talk</h3>
+                <br/>
+                <ul>
+                    <li><strong>Using HTML 5 for GUI in C++</strong></li>
+                    <li>Three approaches and many <span class="fancy">variations</span></li>
+                    <li>More <span class="fancy">inspirational</span> than educational</li>
+                    <li>Some examples to help you <span class="fancy">start experimenting</span> right away</li>
+                </ul>
+            </section>
+
             <section>
                 <p>So you want to make a GUI?</p>
             </section>
@@ -245,20 +256,77 @@ int main()
                 <p>Can we make use of that?</p>
             </section>
 
+            <section>
+                <h2>What is HTML 5?</h2>
+                <p><small class="fragment">Briefly</small></p>
+            </section>
+
             <section class="slide">
-                <h3>About this talk</h3>
+                <h3>HTML 5 in a single slide</h3>
+                <ul>
+                    <li class="fragment">It's not a sinle thing</li>
+                    <li class="fragment">A stack of <span class="fancy">four languages</span></li>
+                    <span class="fragment">
+                    <li>Declarative languages <span class="fancy">define the DOM</span></li>
+                    <ul>
+                        <li><strong>HTML</strong> (including SVG) - defines elements</li>
+                        <li><strong>CSS</strong> - defines the style (apperance) of elements</li>
+                    </ul>
+                    </span>
+                    <span class="fragment">
+                    <li>Imperative languages <span class="fancy">modify the DOM</span></li>
+                    <ul>
+                        <li><strong>JavaScript</strong></li>
+                        <li><strong>WebAssembly</strong></li>
+                    </ul>
+                    </span>
+                </ul>
+                <p class="fragment" style="text-align: center">The End.</p>
+            </section>
+
+            <section>
+                <h2>What is HTML 5 development?</h2>
+                <p><span class="fragment fancy">More than simply</span> writing HTML, CSS, and JavaScript</p>
+            </section>
+
+            <section>
+                <h3>Remember this?</h3>
+                <img src="so-languages-hl.png"/>
+            </section>
+
+            <section class="slide">
+                <h3>Languages</h3>
                 <br/>
                 <ul>
-                    <li>Not a talk about HTML 5</li>
-                    <li>It's a talk about using HTML 5 as a <span class="fancy">GUI framework</span></li>
-                    <li>Three approaches<span>... well three and a half</span></li>
-                    <li>Some examples</li>
+                    <li class="fragment">CSS <span class="fragment">(a terrible language)</span></li>
+                    <ul class="fragment">
+                        <li>Hardly anyone writes pure CSS</li>
+                        <li><span class="fancy">Less, Sass</span>, many more alternatives</li>
+                    </ul>
+                    <li class="fragment">JavaScript <span class="fragment">(a quite decent language)</span></li>
+                    <ul class="fragment">
+                        <li>Many people use other languages</li>
+                        <li><span class="fancy">TypeScript, CoffeeScript</span>, and many more</li>
+                        <li class="fragment">Asm.js and C++</li>
+                    </ul>
+                    <li class="fragment"><span class="fancy">Many languages</span> for HTML and WebAssembly</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Workflows</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><span class="fancy">node.js</span></li>
+                    <li class="fragment">Package managers: <span class="fancy">npm, yarn, webpack...</span></li>
+                    <li class="fragment"><code class="cinline">$ npm start</code> - the ultimate build server</li>
+                    <li class="fragment">Debugging: Dev Tools. <span class="fragment fancy">F12</span></li>
+                    <li class="fragment">Frameworks: <span class="fancy">React, Vue, Angular</span>, and more</li>
                 </ul>
             </section>
 
             <section>
-                <h2>What is HTML 5?</h2>
-                <small class="fragment">Briefly</small>
+                <h2>HTML 5 Development Is Awesome</h2>
             </section>
 
             <section>
@@ -280,7 +348,7 @@ int main()
                     <li>Have been somewhat popular historically.</li>
                     <li>The GUI of choice of the <span class="fancy">PHP</span> developer</li>
                     <li>Click hyperlink. Reqest page. Server generates it and sends it.</li>
-                    <li><code class="inline">$ python -m SimpleHTTPServer 8080</code></li>
+                    <li><code class="cinline">$ python -m SimpleHTTPServer 8080</code></li>
                     <li><span class="fancy">Not interactive.</span> <span>Server can't initiate communication</span></li>
                 </ul>
             </section>
@@ -295,14 +363,26 @@ int main()
                 <ul>
                     <li>Welcome to 2004: XHR and Ajax</li>
                     <li>Request &rarr; Response. Request &rarr; Response.</li>
-                    <li><code class="inline">XMLHttpRequest</code> is not for XML</li>
+                    <li><code class="cinline">XMLHttpRequest</code> is not for XML</li>
                     <li><span class="fancy">Not very interactive.</span> Everything needs to be polled</li>
                 </ul>
-                <p style="text-align: right">PS Use <code class="inline">fetch</code> if you do need Ajax</p>
             </section>
 
             <section class="slide">
-                <h3>The Ajax HXR loop</h3>
+                <h3>An Ajax HXR loop</h3>
+                <pre><code class="js hljs" data-noescape>function idle() {
+    <span class="fragment highlight-code">fetch('clientReady') // get some "fake" service resource</span>
+        .then(data => {
+            <span class="fragment highlight-code">dispatch(xhr.responseText); // dispatch and use the response</span>
+            <span class="fragment highlight-code">idle(); // request more from the server</span>
+        })
+        .catch(error => console.log('Error: ' + xhr.status));
+}
+// ignore other xhr responses</code></pre>
+            </section>
+
+            <section class="slide">
+                <h3>The 2004 Ajax HXR loop</h3>
                 <pre><code class="js hljs" data-noescape>function idle() {
     let xhr = new XMLHttpRequest();
     <span class="fragment highlight-code">xhr.open('GET', 'clientReady'); // get some "fake" service resource</span>
@@ -319,19 +399,7 @@ int main()
     xhr.send(null);
 }
 // ignore other xhr responses</code></pre>
-            </section>
-
-            <section class="slide">
-                <h3>The Ajax HXR fetch loop</h3>
-                <pre><code class="js hljs" data-noescape>function idle() {
-    <span class="fragment highlight-code">fetch('clientReady') // get some "fake" service resource</span>
-        .then(data => {
-            <span class="fragment highlight-code">dispatch(xhr.responseText); // dispatch and use the response</span>
-            <span class="fragment highlight-code">idle(); // request more from the server</span>
-        })
-        .catch(error => console.log('Error: ' + xhr.status));
-}
-// ignore other xhr responses</code></pre>
+                <p style="text-align: right">PS Do use <code class="cinline">fetch</code> if you do Ajax</p>
             </section>
 
             <section class="slide">
