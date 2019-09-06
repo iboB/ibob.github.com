@@ -84,10 +84,10 @@ int main()
                 <h3>About this talk</h3>
                 <br/>
                 <ul>
-                    <li><strong>Using HTML 5 for GUI in C++</strong></li>
-                    <li>Three approaches and many <span class="fancy">variations</span></li>
-                    <li>More <span class="fancy">inspirational</span> than educational</li>
-                    <li>Some examples to help you <span class="fancy">start experimenting</span> right away</li>
+                    <li class="fragment"><strong>Using HTML 5 for GUI in C++</strong></li>
+                    <li class="fragment">Three approaches and many <span class="fancy">variations</span></li>
+                    <li class="fragment">More <span class="fancy">inspirational</span> than educational</li>
+                    <li class="fragment">Some examples to help you <span class="fancy">start experimenting</span> right away</li>
                 </ul>
             </section>
 
@@ -264,13 +264,13 @@ int main()
             <section class="slide">
                 <h3>HTML 5 in a single slide</h3>
                 <ul>
-                    <li class="fragment">It's not a sinle thing</li>
+                    <li class="fragment">It's not a single thing</li>
                     <li class="fragment">A stack of <span class="fancy">four languages</span></li>
                     <span class="fragment">
                     <li>Declarative languages <span class="fancy">define the DOM</span></li>
                     <ul>
                         <li><strong>HTML</strong> (including SVG) - defines elements</li>
-                        <li><strong>CSS</strong> - defines the style (apperance) of elements</li>
+                        <li><strong>CSS</strong> - defines the style (appearance) of elements</li>
                     </ul>
                     </span>
                     <span class="fragment">
@@ -286,7 +286,7 @@ int main()
 
             <section>
                 <h2>What is HTML 5 development?</h2>
-                <p><span class="fragment fancy">More than simply</span> writing HTML, CSS, and JavaScript</p>
+                <p class="fragment"><span class="fragment fancy">More than simply</span> writing HTML, CSS, and JavaScript</p>
             </section>
 
             <section>
@@ -326,7 +326,7 @@ int main()
             </section>
 
             <section>
-                <h2>HTML 5 Development Is Awesome</h2>
+                <h3>HTML 5 Development Is Modern</h3>
             </section>
 
             <section>
@@ -336,20 +336,23 @@ int main()
 
             <section>
                 <ol style="width: 70%">
-                    <li>Start HTTP server</li>
+                    <li>Start HTTP server<span class="fragment"> - our C++ application</span></li>
                     <li>Open browser to <span class="fancy">&quot;http://localhost:1234&quot;</span></li>
                 </ol>
+            </section>
+
+            <section>
+                <h3>Done since the 1990's</h3>
+                <img class="diagram" style="height: 400px" src="www-space-jam.jpg" />
             </section>
 
             <section class="slide">
                 <h3>Multi-Page Apps</h3>
                 <br/>
                 <ul>
-                    <li>Have been somewhat popular historically.</li>
-                    <li>The GUI of choice of the <span class="fancy">PHP</span> developer</li>
-                    <li>Click hyperlink. Reqest page. Server generates it and sends it.</li>
-                    <li><code class="cinline">$ python -m SimpleHTTPServer 8080</code></li>
-                    <li><span class="fancy">Not interactive.</span> <span>Server can't initiate communication</span></li>
+                    <li class="fragment">Click hyperlink. Reqest page. Server generates it and sends it.</li>
+                    <li class="fragment"><code class="cinline">$ python -m SimpleHTTPServer 8080</code></li>
+                    <li class="fragment">Serving dynamic content = <span class="fancy">GUI code on the server</span></li>
                 </ul>
             </section>
 
@@ -358,18 +361,31 @@ int main()
             </section>
 
             <section class="slide">
+                <br/>
+                <ul>
+                    <li class="fragment">Mutli-page apps are <span class="fancy">not interactive</span></li>
+                    <li class="fragment">They are generally a <span class="fancy">bad idea</span></li>
+                    <li class="fragment">They can qualify as a <span class="fancy">simple GUI</span></li>
+                    <li class="fragment">The PHP programmer's GUI of choice</li>
+                </ul>
+            </section>
+
+            <section class="slide">
                 <h3>Single-Page Apps</h3>
                 <br/>
                 <ul>
-                    <li>Welcome to 2004: XHR and Ajax</li>
-                    <li>Request &rarr; Response. Request &rarr; Response.</li>
-                    <li><code class="cinline">XMLHttpRequest</code> is not for XML</li>
-                    <li><span class="fancy">Not very interactive.</span> Everything needs to be polled</li>
+                    <li class="fragment">JavaScript to modifies the DOM</li>
+                    <li class="fragment">No new URL on every click</li>
+                    <li class="fragment">Welcome to 2004: Ajax and XHR</li>
+                    <li class="fragment"><code class="cinline">XMLHttpRequest</code><span class="fragment">. It's not for XML. Any text or binary works</span></li>
+                    <li class="fragment"><span class="fancy">Not very interactive.</span> Everything needs to be polled</li>
+                    <li class="fragment">The interactivity <span class="fancy">hack</span></li>
                 </ul>
             </section>
 
             <section class="slide">
                 <h3>An Ajax HXR loop</h3>
+                <br/>
                 <pre><code class="js hljs" data-noescape>function idle() {
     <span class="fragment highlight-code">fetch('clientReady') // get some "fake" service resource</span>
         .then(data => {
@@ -379,12 +395,13 @@ int main()
         .catch(error => console.log('Error: ' + xhr.status));
 }
 // ignore other xhr responses</code></pre>
+                <p class="fragment" style="text-align: right">But where is <code class="cinline">XMLHttpRequest</code>?</p>
             </section>
 
             <section class="slide">
                 <h3>The 2004 Ajax HXR loop</h3>
                 <pre><code class="js hljs" data-noescape>function idle() {
-    let xhr = new XMLHttpRequest();
+    <span class="fragment highlight-code">let xhr = new XMLHttpRequest();</span>
     <span class="fragment highlight-code">xhr.open('GET', 'clientReady'); // get some "fake" service resource</span>
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) { // 4 = request done
@@ -399,36 +416,158 @@ int main()
     xhr.send(null);
 }
 // ignore other xhr responses</code></pre>
-                <p style="text-align: right">PS Do use <code class="cinline">fetch</code> if you do Ajax</p>
+                <p class="fragment" style="text-align: right">PS Do use <code class="cinline">fetch</code> if you do Ajax</p>
             </section>
 
             <section class="slide">
                 <h3>Modern Single-Page Apps</h3>
                 <br/>
                 <ul>
-                    <li>Welcome to HTML 5: WebSocket</li>
+                    <li class="fragment">Welcome to HTML 5: <span class="fancy">WebSocket</span></li>
+                    <li class="fragment">The XHR loop to the next level</li>
+                    <li class="fragment"><span class="fancy">Simpler and cleaner</span> communication API</li>
+                    <li class="fragment"><span class="fancy">More powerful</span>, too</li>
                 </ul>
             </section>
 
             <section class="slide">
-                <h3>Local HTTP server pros</h3>
+                <h3>The WebSocket loop</h3>
+                <br/>
+                <pre><code class="js hljs" data-noescape>
+    <span class="fragment highlight-code">let ws = new WebSocket('ws://localhost:7658');</span>
+<span class="fragment highlight-code">    ws.onopen = myOnConnectionOpenedFunc;
+    ws.onclose = myOnConnectionClosedFunc;
+    ws.onmessage = myOnMessageFunc;
+    ws.onerror = myOnErrorFunc;</span>
+    ...
+    <span class="fragment highlight-code">ws.send('message to the server');</span>
+                </code></pre>
+                <p class="fragment" style="text-align: center">A <span class="fancy">continuous</span> connection between the server and the client</p>
+            </section>
+
+            <section>
+                <h3>Local HTTP server GUI architecture</h3>
+            </section>
+
+            <section>
+                <img class="ui-diagram" src="ui-http-simple.png" />
             </section>
 
             <section class="slide">
-                <h3>Local HTTP server cons</h3>
+                <h3>But...</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Remember <code class="cinline">$ npm start</code></li>
+                    <li class="fragment">The server is our C++ app. It needs to send HTML 5 content</li>
+                    <li class="fragment">HTML 5 developers need to give up their workflow? <span class="fragment fancy">No</span></li>
+                    <li class="fragment">We need to reimplement npm? <span class="fragment fancy">No</span></li>
+                    <li class="fragment">We could...</li>
+                </ul>
             </section>
 
             <section>
-                <h3>WebSocket Demo</h3>
+                <img class="ui-diagram" src="ui-http-module.png" />
+            </section>
+
+            <section class="slide">
+                <h3>WebSockets are more powerful</h3>
+                <br/>
+                <pre><code class="js hljs" data-noescape>
+    let ws = new WebSocket(<span class="fragment highlight-code">'ws://localhost:7658'</span>);
+    ws.onopen = myOnConnectionOpenedFunc;
+    ws.onclose = myOnConnectionClosedFunc;
+    ws.onmessage = myOnMessageFunc;
+    ws.onerror = myOnErrorFunc;
+    ...
+    ws.send('message to the server');
+                </code></pre>
+                <p class="fragment" style="text-align: center">This doesn't have to be the same URL as the HTTP server</p>
             </section>
 
             <section>
-                <h3>WebSocket Libraries</h3>
+                <img class="ui-diagram" src="ui-http-ws.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Adding WebSockets to a C++ app</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Many options</li>
+                    <li class="fragment">This is CppCon, so I'll use Boost.Beast</li>
+                    <li class="fragment"><span class="fancy">Echo demo</span></li>
+                    <span class="fragment">
+                    <li><a href="https://www.boost.org/doc/libs/1_70_0/libs/beast/doc/html/index.html">Boost.Beast docs</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=uJZgRcvPFwI">CppCon 2016: Vinnie Falco "Introducing Beast..."</a></li>
+                    <li><a href="https://www.youtube.com/watch?v=7FQwAjELMek">CppCon 2018: Vinnie Falco "Get rich quick! Using Boost.Beast WebSockets and Networking TS"</a></li>
+                    </span>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>WebSocket libraries for C++</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Boost.Beast <a href="https://github.com/boostorg/beast">gh/boostorg/beast</a> ws/http server/client</li>
+                    <li class="fragment">uWebSockets <a href="https://github.com/uNetworking/uWebSockets">gh/uNetworking/uWebSockets</a> ws/http server/client</li>
+                    <li class="fragment">WebSockets++ <a href="https://github.com/zaphoyd/websocketpp">gh/zaphoyd/websocketpp</a> ws-only server/client</li>
+                    <li class="fragment">Simple-WebSocket-Server <a href="https://gitlab.com/eidheim/Simple-WebSocket-Server">gitlab/eidheim/Simple-WebSocket-Server</a> ws-only server/client</li>
+                    <li class="fragment">Many more: Qt, Poco...</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>HTTP server pros</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">GUI for apps on a virtual machine</li>
+                    <ul>
+                        <li class="fragment">Virtual Linux with no X Window Server <span class="fancy">demo</span></li>
+                    </ul>
+                    <li class="fragment">Multiple sessions</li>
+                    <ul>
+                        <li class="fragment">... as long as your app supports them</li>
+                    </ul>
+                    <li class="fragment">You don't <em>have</em> to use "localhost"</li>
+                    <ul>
+                        <li class="fragment">Actual <span class="fancy">web apps</span></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>HTTP server cons</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">The client is a browser</li>
+                </ul>
+            </section>
+
+            <section>
+                <img class="ui-diagram" src="ui-mvc.png" />
+            </section>
+
+            <section>
+                <img class="ui-diagram" src="ui-http-controller.png" />
+            </section>
+
+            <section class="slide">
+                <h3>HTTP server cons</h3>
+                <br/>
+                <ul>
+                    <li>The client is a browser</li>
+                    <li class="fragment">Not a single application: <span class="fancy">server(s) and a browser</span></li>
+                    <li class="fragment"><span class="fancy">Lots of load</span> on the network interface</li>
+                </ul>
             </section>
 
             <section>
                 <h3>Approach 2</h3>
                 <h2>Embedding a browser</h2>
+            </section>
+
+            <section>
+                <p>A browser as a library</p>
+                <code class="fragment cinline">openBrowserWindow(url)</code>
             </section>
 
             <section>
