@@ -87,6 +87,10 @@ int main()
                     <li class="fragment"><strong>Using HTML 5 for GUI in C++</strong></li>
                     <li class="fragment">Three approaches and many <span class="fancy">variations</span></li>
                     <li class="fragment">More <span class="fancy">inspirational</span> than educational</li>
+                    <ul class="fragment">
+                        <li>Consider these approaches</li>
+                        <li>Maybe use them</li>
+                    </ul>
                     <li class="fragment">Some examples to help you <span class="fancy">start experimenting</span> right away</li>
                 </ul>
             </section>
@@ -96,6 +100,7 @@ int main()
             </section>
 
             <section>
+                <h3>Typical user interface</h3>
                 <img class="ui-diagram" src="ui.png" />
             </section>
 
@@ -129,10 +134,12 @@ int main()
             </section>
 
             <section>
+                <h3>MVC</h3>
                 <img class="ui-diagram" src="ui-mvc.png" />
             </section>
 
             <section>
+                <h3>Typical C++ MVC</h3>
                 <img class="ui-diagram" src="ui-mvc-classic.png" />
             </section>
 
@@ -204,6 +211,7 @@ int main()
 
             <section>
                 <p>The browser is an <span class="fancy">immensely</span> powerful presentation platform</p>
+                <p class="fragment">It's our <span class="fancy">user interface to the Internet</span></p>
             </section>
 
             <section>
@@ -253,7 +261,11 @@ int main()
             </section>
 
             <section>
-                <p>Can we make use of that?</p>
+                <p>Finding experienced and competent HTML 5 developers is easier than finding experienced and competent C++ developers</p>
+            </section>
+
+            <section>
+                <p>Can we make use of all that?</p>
             </section>
 
             <section>
@@ -281,7 +293,8 @@ int main()
                     </ul>
                     </span>
                 </ul>
-                <p class="fragment" style="text-align: center">The End.</p>
+                <p class="fragment" style="text-align: center">That's what every single web page is</p>
+                <p class="fragment" style="text-align: center">Including this one</p>
             </section>
 
             <section>
@@ -290,8 +303,8 @@ int main()
             </section>
 
             <section>
-                <h3>Remember this?</h3>
                 <img src="so-languages-hl.png"/>
+                <h3>That's a huge community</h3>
             </section>
 
             <section class="slide">
@@ -317,7 +330,7 @@ int main()
                 <h3>Workflows</h3>
                 <br/>
                 <ul>
-                    <li class="fragment"><span class="fancy">node.js</span></li>
+                    <li class="fragment"><span class="fancy">node.js</span> <span class="fragment">- it's for the front end too</span></li>
                     <li class="fragment">Package managers: <span class="fancy">npm, yarn, webpack...</span></li>
                     <li class="fragment"><code class="cinline">$ npm start</code> - the ultimate build server</li>
                     <li class="fragment">Debugging: Dev Tools. <span class="fragment fancy">F12</span></li>
@@ -357,6 +370,7 @@ int main()
             </section>
 
             <section>
+                <h3>Mult-page architecture</h3>
                 <img class="ui-diagram" src="ui-multi-page.png" />
             </section>
 
@@ -447,9 +461,6 @@ int main()
 
             <section>
                 <h3>Local HTTP server GUI architecture</h3>
-            </section>
-
-            <section>
                 <img class="ui-diagram" src="ui-http-simple.png" />
             </section>
 
@@ -457,15 +468,16 @@ int main()
                 <h3>But...</h3>
                 <br/>
                 <ul>
-                    <li class="fragment">Remember <code class="cinline">$ npm start</code></li>
+                    <li class="fragment">Remember <code class="cinline">$ npm start</code> and the marvelous workflow</li>
                     <li class="fragment">The server is our C++ app. It needs to send HTML 5 content</li>
-                    <li class="fragment">HTML 5 developers need to give up their workflow? <span class="fragment fancy">No</span></li>
                     <li class="fragment">We need to reimplement npm? <span class="fragment fancy">No</span></li>
-                    <li class="fragment">We could...</li>
+                    <li class="fragment">HTML 5 developers need to give up their workflow? <span class="fragment fancy">No</span></li>
+                    <li class="fragment">Isntead we could...</li>
                 </ul>
             </section>
 
             <section>
+                <h3>Node Modules?</h3>
                 <img class="ui-diagram" src="ui-http-module.png" />
             </section>
 
@@ -485,6 +497,7 @@ int main()
             </section>
 
             <section>
+                <h3>WebSocket Architecture</h3>
                 <img class="ui-diagram" src="ui-http-ws.png" />
             </section>
 
@@ -543,10 +556,12 @@ int main()
             </section>
 
             <section>
+                <h3>MVC</h3>
                 <img class="ui-diagram" src="ui-mvc.png" />
             </section>
 
             <section>
+                <h3>Controller in two languages</h3>
                 <img class="ui-diagram" src="ui-http-controller.png" />
             </section>
 
@@ -555,8 +570,15 @@ int main()
                 <br/>
                 <ul>
                     <li>The client is a browser</li>
+                    <ul>
+                        <li class="fragment">Compile C++ to JS or WebAssembly?</li>
+                    </ul>
                     <li class="fragment">Not a single application: <span class="fancy">server(s) and a browser</span></li>
                     <li class="fragment"><span class="fancy">Lots of load</span> on the network interface</li>
+                    <ul>
+                        <li class="fragment">Everything goes through HTTP</li>
+                        <li class="fragment">This might not be a problem on localhost</li>
+                    </ul>
                 </ul>
             </section>
 
@@ -571,32 +593,239 @@ int main()
             </section>
 
             <section>
-                <h3>Chrome Architecture</h3>
+                <p>For many platforms this is <code class="cinline">WebView</code></p>
+            </section>
+
+            <section class="slide">
+                <h3>Browser architecture in a single slide</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Tabs and iframes</li>
+                    <li class="fragment">Potential security issues</li>
+                    <li class="fragment">Separate processes - the renderer processes</li>
+                    <li class="fragment">Renderer processes are sandboxed</li>
+                    <li class="fragment">State between processes <span class="fragment">= cookies</span></li>
+                </ul>
             </section>
 
             <section>
-                <h3>CEF Demo</h3>
+                <h3>Browser Architecture</h3>
+                <img class="ui-diagram" src="ui-browser.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Things to consider when wrapping a browser</h3>
+                <h2 class="fragment" style="text-align: center">BRIB</h2>
+                <ul class="fragment">
+                    <li>Writing code in the <span class="fancy">B</span>rowser process</li>
+                    <li>Writing code in the <span class="fancy">R</span>enderer process</li>
+                    <li><span class="fancy">I</span>nterprocess communication</li>
+                    <li>C++&hArr;JS <span class="fancy">B</span>inding</li>
+                </ul>
+                <p class="fragment" style="text-align: center">Then it's like an HTTP server</p>
             </section>
 
             <section>
-                <h3>CEF vs Electron</h3>
+                <h3>Embedded Browser Architecture</h3>
+                <img class="ui-diagram" src="ui-browser-http.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Browser embedding in C++</h3>
+                <br/>
+                <ul>
+                    <li class="fragment"><code class="cinline">QWebView</code> - wraps native browser.</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Browser embedding in C++</h3>
+                <br/>
+                <ul>
+                    <li><s><code class="cinline">QWebView</code></s> - wraps native browser. <span class="fancy">No BRIB</span></li>
+                    <li class="fragment"><span class="fancy">Qt WebEngine</span> - wraps Chromium</li>
+                    <li class="fragment"><span class="fancy">CEF</span> (The Chromium Embedded Framework) - wraps Chromium</li>
+                    <li class="fragment"><span class="fancy">Electron</span> - wraps Chromium</li>
+                    <li class="fragment"><span class="fancy">WebKit</span></li>
+                    <li class="fragment">Qt WebKit - wraps WebKit. <span class="fancy">Outdated</span></li>
+                    <li class="fragment">Gecko <span class="fragment">- ???</span></li>
+                    <li class="fragment">WG21 p1108 - <code class="cinline">std::web_view</code> <span class="fragment fancy">Too early to say</span></li>
+                    <p class="fragment" style="text-align: center">Chromium is pretty popular.</p>
+                </ul>
             </section>
 
             <section>
-                <h3>Embedding other browsers</h3>
+                <img class="diagram" src="electron.png" />
+                <h3>Electron</h3>
+            </section>
+
+            <section>
+                <img class="diagram" src="vs-code.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Electron</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Not a C++ library</li>
+                    <li class="fragment"><span class="fancy">A WebView for JavaScript</span></li>
+                    <li class="fragment">node.js for GUI</li>
+                    <ul class="fragment">
+                        <li>Same API</li>
+                        <li>Same Native modules</li>
+                    </ul>
+                    <li class="fragment">Everything (the BRIB) is node.js-like JavaScript</li>
+                    <li class="fragment"><span class="fancy">A JavaScript programmer's dream come true</span></li>
+                    <li class="fragment">It can still work for you</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Electron Modules</h3>
+                <img class="ui-diagram" src="ui-electron-modules.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Qt WebEngine and CEF</h3>
+                <ul>
+                    <li class="fragment">Good Chromium wrappers</li>
+                    <li class="fragment">Almost the exact same features</li>
+                    <li class="fragment">The main difference is the license</li>
+                    <li class="fragment">More good Words about CEF</li>
+                    <ul>
+                        <li class="fragment">C interface</li>
+                        <li class="fragment">Java, .NET, Go, Python...</li>
+                        <li class="fragment">Electron used to be CEF</li>
+                    </ul>
+                    <li class="fragment"><span class="fancy">CEF Echo demo</span></li>
+                    <li class="fragment"><span class="fancy">CEF File system browser demo</span></li>
+                    <li class="fragment">JsBind - <a href="https://github.com/Chobolabs/jsbind">gh/Chobolabs/jsbind</a></li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>CEF and JsBind</h3>
+                <img class="ui-diagram" src="ui-browser-jsbind.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Yet more variants</h3>
+                <ul>
+                    <li class="fragment">Putting it inside existing UI. <span class="fragment">Qt WebEngine is the winner</span></li>
+                    <li class="fragment">Custom rendering</li>
+                    <ul>
+                        <li class="fragment">Everything must be in the browser. Or...</li>
+                        <li class="fragment">Render offscreen. Send to browser</li>
+                        <li class="fragment">Get the browser screen. <span class="fragment fancy">Demo</span></li>
+                    </ul>
+                    <li class="fragment">Lots of load on interprocess communication</li>
+                    <ul>
+                        <li class="fragment">Everything in the renderer process</li>
+                        <li class="fragment">Don't forget to turn off sandboxing</li>
+                        <li class="fragment"><span class="fancy">Synchronous CEF demo</span></li>
+                        <li class="fragment">Share memory</li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Renderer Process Application</h3>
+                <img class="ui-diagram" src="ui-renderer.png" />
+            </section>
+
+            <section class="slide">
+                <h3>Browser embedding pros</h3>
+                <br/>
+                <ul>
+                    <li>Controller code in C++</li>
+                    <li>Combine browser GUI with other GUI</li>
+                    <li>Ability to work entirely in the renderer process</li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Browser embedding cons</h3>
+                <ul>
+                    <li class="fragment">The <span class="fancy">fancy workflow is lost</span></li>
+                    <ul>
+                        <li class="fragment">Except Dev Tools. <span class="fragment">Remote Dev Tools demo</span></li>
+                        <li class="fragment">Mocking is (often) your friend. <span class="fragment">FS-Browser uses mocking</span></li>
+                    </ul>
+                    <li class="fragment"><span class="fancy">Debugging multiple processes</span> is harder</li>
+                    <ul>
+                        <li class="fragment">Tooling to the rescue</li>
+                        <li class="fragment">Single-process mode. <span>Use with caution</span></li>
+                    </ul>
+                    <li class="fragment">We want to go faster</li>
+                    <ul class="fragment">
+                        <li>Custom rendering</li>
+                        <li>Syncrhonous coms and sharing memory</li>
+                        <li>Sharing video memory</li>
+                    </ul>
+                </ul>
             </section>
 
             <section>
                 <h3>Approach 3</h3>
                 <h2>Custom HTML renderers</h2>
+                <p class="fragment">Typically game-dev territory</p>
             </section>
 
             <section>
-                <h3>Custom HTML rendering libraries</h3>
+                <h3>Take the rendering process out of the browser</h3>
+            </section>
+
+            <section class="slide">
+                <h3>Characteristics</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">Similar to many GUI libraries</li>
+                    <li class="fragment">Graphics only</li>
+                    <li class="fragment">Bring Your Own Renderer</li>
+                    <li class="fragment">At least some DOM and API changes</li>
+                    <li class="fragment"><code class="cinline">&lt;img src=id123 /&gt;</code></li>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>(Almost) Complete Solutions</h3>
+                <br/>
+                <ul>
+                    <li class="fragment">No known FOSS solutions</li>
+                    <li class="fragment"><span class="fancy">Ultralight</span> - <a href="https://ultralig.ht/">ultralig.ht</a></li>
+                    <ul>
+                        <li class="fragment">Free for free software</li>
+                        <li class="fragment">Stripped down WebKit</li>
+                    </ul>
+                    <li class="fragment"><span class="fancy">Coherent Gameface</span> - <a href="https://coherent-labs.com/products/coherent-gameface/">coherent-labs.com</a></li>
+                    <ul>
+                        <li class="fragment">Not free</li>
+                        <li class="fragment">Complete custom implementation</li>
+                        <li class="fragment"><a href="https://www.youtube.com/watch?v=yy8jQgmhbAU">CppCon 2018: Stoyan Nikolov OOP Is Dead, Long Live Data-oriented Design</a></li>
+                    </ul>
+                </ul>
+            </section>
+
+            <section class="slide">
+                <h3>Partial Solutions</h3>
+                <br/>
+                <ul>
+                    <li><a href="https://doc.qt.io/qt-5/qtqml-index.html">Qt Quick/QML</a> - Qt. Custom HTML/CSS Custom DOM</li>
+                    <li><a href="https://sciter.com/">sciter</a> - Quite poweful. No JS. Free without source and support</li>
+                    <li><a href="https://github.com/libRocket/libRocket">libRocket</a> - FOSS. Dead: lives in forks. Custom DOM. No JS.</li>
+                    <li><a href="https://mikke89.github.io/RmlUiDoc/">RmlUi</a> - FOSS. Custom HTML/CSS. Custom DOM. No JS.</li>
+                    <li><a href="http://www.litehtml.com/">litehtml</a> - FOSS. No DOM. No JS.</li>
+                </ul>
             </section>
 
             <section>
-                <h3>Ultralight Demo</h3>
+                <h3>Approach 4</h3>
+                <h2>C++ &rArr; WebAssembly or asm.js</h2>
+                <p class="fragment">Just for completeness</p>
+            </section>
+
+            <section>
+                <p>Join me <span class="fancy">in Crest 3 at 20:30</span> for more</p>
             </section>
 
             <section>
