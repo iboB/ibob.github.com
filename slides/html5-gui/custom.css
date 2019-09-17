@@ -66,3 +66,21 @@
 	font-weight: bold;
 	color: #DF5000;
 }
+
+.reveal section .widgets {
+	margin-bottom: 40px;
+}
+.reveal section .widgets button {
+	font-size: 1.2em;
+}
+.reveal section .widgets input {
+	font-size: 1.2em;
+}
+.reveal section .widgets input[type=radio], input[type=checkbox] {
+	transform: scale(2);
+	vertical-align: middle;
+	position: relative;
+	bottom: .08em;
+	margin-left: 15px;
+	margin-right: 30px;
+}
