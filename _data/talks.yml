@@ -1,5 +1,11 @@
 - language: English
   talks:
+  - title: "Embrace Modern Technology: Using HTML 5 for GUI in C++"
+    desc: >-
+      A talk at [CppCon](https://cppcon.org/) 2019 about using HTML 5 as a GUI
+      framework for C++ applications.
+    slides: /slides/html5-gui/
+    video: https://www.youtube.com/watch?v=bbbcZd4cuxg
   - title: "Object-Oriented Programming in Modern C++"
     desc: >-
       A talk at [CoreHard](https://corehard.by/en/) 2019 about object-oriented
