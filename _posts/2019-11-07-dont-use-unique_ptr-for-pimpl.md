@@ -11,6 +11,8 @@ excerpt: ... because unique_ptr in libc++ breaks value semantics
 
 > Edit 2: At first I suspected that this is an ommision in the standard, but now it seems that it's a bug in libc++. More at the bottom.
 
+> Edit 3: Several commenters [in /r/cpp](https://www.reddit.com/r/cpp/comments/dsuhh7/dont_use_unique_ptr_for_pimpl/) pointed out the best solution to the problem. I added information at the bottom of the post.
+
 So, there I was. Minding my own business, writing code, when suddenly... `std::unique_ptr` from libc++.
 
 I have a task manager class. It has some tasks and in its destructor it executes all not-yet-executed tasks like this:
@@ -108,7 +110,7 @@ The *other* thing is that `reset` is required [by specification](https://en.cppr
 
 For my code this meant that this sequence of events can happen:
 
-1. The defaulted destrutor of `task_manager` is called, which calls the destrutor of its member `std::unique_ptr<impl>`
+1. The defaulted destructor of `task_manager` is called, which calls the destructor of its member `std::unique_ptr<impl>`
 1. The unique pointer sets its managed pointer to `nullptr` and calls the deleter of the (now old) managed object
 1. The destructor of `task_manager::impl` is called and executes a task
 2. This calls `task_manager::push_task` to add another task
@@ -134,10 +136,36 @@ But the moral is: `unique_ptr` is allowed to break value semantics. Don't use it
 
 ...at least not for the reasons most commenters pointed out.
 
-The C++ standard says that the lifetime of an object ends when the destructor is called. So what I'm doing in my code is indeed accessing `task_manager` and subsequently `task_manager::impl` after their destructors have been called. The thing is that calling methods of objects after even their lifetime has ended, and the destructor hasn't finished, is not UB. [Special rules apply](http://eel.is/c++draft/class.cdtor). If it had been UB, there would be no way to call a method in your destructor. There would even be no point in specifying member destrutor order.
+The C++ standard says that the lifetime of an object ends when the destructor is called. So what I'm doing in my code is indeed accessing `task_manager` and subsequently `task_manager::impl` after their destructors have been called. The thing is that calling methods of objects after even their lifetime has ended, and the destructor hasn't finished, is not UB. [Special rules apply](http://eel.is/c++draft/class.cdtor). If it had been UB, there would be no way to call a method in your destructor. There would even be no point in specifying member destructor order.
 
-What was UB before I fixed the problem, however, was accessing `unique_ptr` after it's destructor had started. That's because even though it's not UB to access methods of classes in their destructors, [it **is** UB to access standard library types after their lifetime has ended](http://eel.is/c++draft/library#res.on.objects-2). So by adding my own `unique_ptr` implementation, which has guaranteed behaviour, this is not a problem anymore.
+What was UB before I fixed the problem, however, was accessing `unique_ptr` after it's destructor had started. That's because even though it's not UB to access methods of classes in their destructors, [it **is** UB to access standard library types after their lifetime has ended](http://eel.is/c++draft/library#res.on.objects-2). So by adding my own `unique_ptr` implementation, which has guaranteed behavior, this is not a problem anymore.
 
 ## It's still a bug in libc++
 
 At first I thought that it was no bug. I couldn't find any wording to explicitly forbid `~unique_ptr` to call `reset`. But user leni546 in the Cpplang slack, pointed out that [such wording exists](https://eel.is/c++draft/unique.ptr.single.dtor#2). So even though what I did was UB, libc++ **still** wasn't correct to call `reset` in the destructor. `unique_ptr` should have value semantics. I am vindicated... kinda.
+
+## The best solution
+
+Thanks to comments [in /r/cpp](https://www.reddit.com/r/cpp/comments/dsuhh7/dont_use_unique_ptr_for_pimpl/) I now have a solution to the problem which allows me to keep using `std::unique_ptr` even though it breaks value semantics.
+
+I can move the destruction logic back where it was: in the `task_manager` destructor, and have the `impl` destructor empty. Thus the code can look like this:
+
+```c++
+task_manager::impl::~impl() = default;
+// ...
+task_manager::~task_manager()
+{
+    while (!m_impl->tasks.empty())
+    {
+        auto to_execute = std::move(m_impl->tasks);
+        for (auto& t : to_execte)
+        {
+            t.execute(*this);
+        }
+    }
+}
+```
+
+Thus tasks which spawn tasks will have a safe `unique_ptr<impl>` instance to refer to. `~unique_ptr` won't be called at that point. Then when it does get called, there will be no redirections to the `task_manager`.
+
+Thanks, reddit!
