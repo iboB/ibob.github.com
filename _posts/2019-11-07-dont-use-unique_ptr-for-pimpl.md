@@ -84,7 +84,7 @@ The thing is that the destructor of `std::unique_ptr` in libc++ is written like 
 ```c++
 ~unique_ptr()
 {
-    reset();
+    reset(); // Ooh! I saved a couple of lines of code
 }
 ```
 
