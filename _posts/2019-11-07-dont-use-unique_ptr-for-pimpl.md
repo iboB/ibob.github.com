@@ -7,6 +7,10 @@ tags: ['c++']
 excerpt: ... because unique_ptr in libc++ breaks value semantics
 ---
 
+> Edit: there have been a comments that what I'm doing in the first place is UB. I address this at the bottom of the post.
+
+> Edit 2: At first I suspected that this is an ommision in the standard, but now it seems that it's a bug in libc++. More at the bottom.
+
 So, there I was. Minding my own business, writing code, when suddenly... `std::unique_ptr` from libc++.
 
 I have a task manager class. It has some tasks and in its destructor it executes all not-yet-executed tasks like this:
@@ -121,3 +125,19 @@ This all can easily be fixed by ditching the `unique_ptr` and using plain old `n
 What I did, though, is use this [silly half-assed `unique_ptr` implementation that I wrote](https://gist.github.com/iboB/c359d4ff542022543440f2e774e053e2) so I can keep my defaulted destructor. Feel free to use it if you want.
 
 But the moral is: `unique_ptr` is allowed to break value semantics. Don't use it for PIMPL.
+
+---
+
+> The original article ended here, but it seems I need to add a bit more content:
+
+## This is not UB
+
+...at least not for the reasons most commenters pointed out.
+
+The C++ standard says that the lifetime of an object ends when the destructor is called. So what I'm doing in my code is indeed accessing `task_manager` and subsequently `task_manager::impl` after their destructors have been called. The thing is that calling methods of objects after even their lifetime has ended, and the destructor hasn't finished, is not UB. [Special rules apply](http://eel.is/c++draft/class.cdtor). If it had been UB, there would be no way to call a method in your destructor. There would even be no point in specifying member destrutor order.
+
+What was UB before I fixed the problem, however, was accessing `unique_ptr` after it's destructor had started. That's because even though it's not UB to access methods of classes in their destructors, [it **is** UB to access standard library types after their lifetime has ended](http://eel.is/c++draft/library#res.on.objects-2). So by adding my own `unique_ptr` implementation, which has guaranteed behaviour, this is not a problem anymore.
+
+## It's still a bug in libc++
+
+At first I thought that it was no bug. I couldn't find any wording to explicitly forbid `~unique_ptr` to call `reset`. But user leni546 in the Cpplang slack, pointed out that [such wording exists](https://eel.is/c++draft/unique.ptr.single.dtor#2). So even though what I did was UB, libc++ **still** wasn't correct to call `reset` in the destructor. `unique_ptr` should have value semantics. I am vindicated... kinda.
