@@ -229,32 +229,41 @@
       <section class="slide">
         <h3>Pentium: The Savior</h3>
         <p>OoO that's cool. Out-of-order execution. 486 on steroids</p>
+        <p style="text-align: center;"><img class="diagram" src="ooo-00.png" /></p>
       </section>
 
       <section>
+        <img class="diagram" src="ooo-01.png" />
         <p>Fetch many instructions from instruction cache</p>
+        <p style="visibility: hidden;">x</p>
       </section>
 
       <section>
+        <img class="diagram" src="ooo-02.png" />
         <p>Take several instructions from Fetch buffer</p>
         <p>Split them into &mu;-ops (pieces of instructions)</p>
       </section>
 
       <section>
+        <img class="diagram" src="ooo-03.png" />
         <p>Arrange several &mu;-ops at a time</p>
         <p>Register renaming: virtual registers to &mu;-ops</p>
       </section>
 
       <section>
+        <img class="diagram" src="ooo-04.png" />
         <p>Reorder &mu;-ops and send to reservation stations</p>
+        <p style="visibility: hidden;">x</p>
       </section>
 
       <section>
+        <img class="diagram" src="ooo-05.png" />
         <p>OoO magic. Execute &mu;-ops in a ultra-mega-fast-fashion</p>
         <p>Make maximal usage of the available ports (execution units)</p>
       </section>
 
       <section>
+        <img class="diagram" src="ooo-06.png" />
         <p>Wait for &mu;-ops per instruction</p>
         <p>Wait for instructions and rearrange in oritinal order</p>
       </section>
@@ -302,69 +311,85 @@
       </section>
 
       <section>
+        <img src="c01.png"/>
         <p>We have an instruction whose program is running</p>
         <p>Life is good</p>
       </section>
 
       <section>
+        <img src="c02.png"/>
         <p>Suddenly the clever prefetch adds it to the instruction cache</p>
         <p>with some thousands of other istructions</p>
       </section>
 
       <section>
+        <img src="c03.png"/>
         <p>In instruction cache the Instruction Pointer is coming near</p>
+        <p style="visibility: hidden;">x</p>
       </section>
 
       <section>
+        <img src="c04.png"/>
         <p>The instruction loads our hero along with some tens of others</p>
         <p>to the fetch buffer</p>
       </section>
 
       <section>
+        <img src="c05.png"/>
         <p>It's our hero's turn to enter the decoder</p>
         <p>The decoder splits in int to several &mu;-ops</p>
       </section>
 
       <section>
+        <img src="c06.png"/>
         <p>The decoder finds out that some &mu;-ops need extra data</p>
         <p>On the other end of the world loading of data into data cache is initiated</p>
       </section>
 
       <section>
+        <img src="c07.png"/>
         <p>&mu;-ops enter the register alias table</p>
         <p>They get distributed renamed "fake" registers</p>
       </section>
 
       <section>
+        <img src="c08.png"/>
         <p>&mu;-ops enter the reorder buffer</p>
+        <p style="visibility: hidden;">x</p>
       </section>
 
       <section>
+        <img src="c09.png"/>
         <p>At the first possible opportunity they are sent to a reservation station</p>
         <p>Some &mu;-ops get executed right away. No one here knows why.</p>
       </section>
 
       <section>
+        <img src="c10.png"/>
         <p>Some &mu;-ops of our keep waiting, while &mu;-ops of</p>
         <p>other instructions get executed</p>
       </section>
 
       <section>
+        <img src="c11.png"/>
         <p>... and waiting</p>
         <p>... and waiting</p>
       </section>
 
       <section>
+        <img src="c12.png"/>
         <p>Finally their data is ready</p>
         <p>They get executed</p>
       </section>
 
       <section>
+        <img src="c13.png"/>
         <p>Now completely executed our instruction gets merged on its</p>
         <p>way of out of the reservation station and its result is ready</p>
       </section>
 
       <section>
+        <img src="c14.png"/>
         <p>In the retirement phase our hero gets put back in line</p>
         <p>with its original neighbors so it can leave the CPU</p>
       </section>

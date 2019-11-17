@@ -53,6 +53,7 @@
 	border: none;
 	background: none;
 	box-shadow: none;
+	margin: 0;
 }
 
 .reveal section img.ui-diagram
