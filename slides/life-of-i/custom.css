@@ -1,0 +1,141 @@
+/* title */
+.reveal section.title h1 {
+	width: 100%;
+	font-family: Impact, Haettenschweiler, sans-serif;
+	font-size: 2.5em;
+}
+
+/* custom slides */
+.reveal h4 {
+	font-family: Impact, Haettenschweiler, sans-serif;
+	text-transform: uppercase;
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
+}
+
+.reveal section.slide {
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	text-align: left;
+	border-bottom: 2px solid #0077BD;
+}
+
+
+/* code highlight */
+.reveal .slides section .fragment.highlight-code {
+    opacity: 1;
+    visibility: inherit;
+}
+.reveal .slides section .fragment.highlight-code.current-fragment {
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+/* other code */
+.reveal pre code {
+    max-height: 80%;
+}
+
+.reveal section code.cinline {
+	color: #003377;
+}
+
+
+/* other */
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+}
+
+.reveal section img.ui-diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+	height: 500px;
+}
+
+.reveal section .inline {
+	display: inline-block;
+}
+
+.reveal section span.tiny {
+	font-size: 0.5em;
+}
+
+.reveal section span.fancy {
+	font-weight: bold;
+	color: #DF5000;
+}
+
+.reveal section .widgets {
+	margin-bottom: 40px;
+}
+.reveal section .widgets button {
+	font-size: 1.2em;
+}
+.reveal section .widgets input {
+	font-size: 1.2em;
+}
+.reveal section .widgets input[type=radio], input[type=checkbox] {
+	transform: scale(2);
+	vertical-align: middle;
+	position: relative;
+	bottom: .08em;
+	margin-left: 15px;
+	margin-right: 30px;
+}
+
+.reveal section span.fetch
+{
+	font-weight: bold;
+	color: black;
+	background-color: #aaa;
+}
+
+.reveal section span.decode1
+{
+	font-weight: bold;
+	color: black;
+	background-color: #afa;
+}
+
+.reveal section span.decode2
+{
+	font-weight: bold;
+	color: black;
+	background-color: #f90;
+}
+
+.reveal section span.execution
+{
+	font-weight: bold;
+	color: black;
+	background-color: #ffaaaa;
+}
+
+.reveal section span.writeback
+{
+	font-weight: bold;
+	color: black;
+	background-color: #0ff;
+}
+
+.reveal section span.cpucyc
+{
+	font-weight: bold;
+	color: black;
+}
+
+.reveal section p.pinner
+{
+	padding-left: 80px;
+}

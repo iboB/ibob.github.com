@@ -1,0 +1,450 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>The Life of a CPU Instruction</title>
+
+  <meta name="description" content="Slides for a fun talk about the life of a CPU instruction">
+  <meta name="author" content="Borislav Stanimirov">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/reveal.min.css" />
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/theme/simple.min.css" id="theme" />
+  <link rel="stylesheet" href="../lib/slides.css" />
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
+
+  <!-- Slides-specific styles -->
+  <link rel="stylesheet" href="custom.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ?
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/pdf.min.css' :
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/paper.min.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+      <section class="title">
+        <h1>The Life of a CPU Instruction</h1>
+        <br/>
+        <p>
+          by <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+        </p>
+      </section>
+
+      <section class="slide">
+        <h3>Hello, World</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  #include &lt;iostream&gt;
+
+  int main()
+  {
+      std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">xxx</span>\n";
+      return 0;
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav Stanimirov</h3>
+        <br/>
+        <ul>
+          <li>Mostly a <span class="fancy">C++</span> programmer</li>
+          <li>Mostly a <span class="fancy">game</span> programmer</li>
+          <li>Recently a <span class="fancy">medical software</span> programmer</li>
+          <li><span class="fancy">Open-source</span> programmer</li>
+          <li><a href="https://github.com/iboB">github.com/iboB</a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>About this talk</h3>
+        <br/>
+        <ul>
+          <li>Covering a lot of ground</li>
+          <li>Almost every point can be a talk on its own... or a series of talks</li>
+          <li>Many things we'll only briefly mention</li>
+          <li>Will skip a lot of details</li>
+          <li>We'll focus on x86</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Basic terminology</h3>
+        <h4>Cycle/Tick</h4>
+        <ul>
+          <li>The time unit of the CPU</li>
+          <li>The perfect measuerment of complexity</li>
+          <li>The CPU goes "Tick. Tick. Tick."</li>
+        </ul>
+        <h4>Instruction</h4>
+        <ul>
+          <li>A designated path in the transistors of the CPU</li>
+          <li>Instruction sets - what instructions the CPU supports</li>
+        </ul>
+        <h4>Register</h4>
+        <ul>
+          <li>A chunk of data on the CPU itself</li>
+          <li>Fastes possible access</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Other stuff</h3>
+        <br/>
+        <ul>
+          <li>CU - king, ALU, FPU, MMX, SSE - plebs</li>
+          <li>Concrete registers</li>
+          <li>Concrete instructions</li>
+          <li>Communication with external (to the processor) devices</li>
+        </ul>
+        <p>We won't deal with those.</p>
+        <p>If you're intersted, "But How Do It Know" is a great book on the subject: <a href="http://www.buthowdoitknow.com/">buthowdoitknow.com</a></p>
+      </section>
+
+      <section class="slide">
+        <h3>Types of CPUs</h3>
+        <p>Many ways to classify</p>
+        <p>By instruction set:</p>
+        <ul>
+          <li>CISC - x86</li>
+          <li>RISC - ARM</li>
+        </ul>
+        <p>By purpose</p>
+        <ul>
+          <li>General purpose</li>
+          <li>Accellerators, GPUs</li>
+        </ul>
+        <p>Microcntrollers, virtual CPUs, exotics, MISC, and more</p>
+      </section>
+
+      <section class="slide">
+        <h3>CISC and RISC: x86 and ARM</h3>
+        <p>Very, very similar</p>
+        <p>Some differences:</p>
+        <ul>
+          <li>Instruction set (Duh). RISC consumes less power</li>
+          <li>Different names for the same things (annoying)</li>
+          <li>Load/Stsore and Register Memory</li>
+          <li>Many minor things</li>
+        </ul>
+        <p>Our focus is x86</p>
+      </section>
+
+      <section class="slide">
+        <h3>1978: Intel 8086</h3>
+        <br/>
+        <ul>
+          <li>Lots of cool stuff</li>
+          <li>A set of cool registers (AX-DX, address, IP)</li>
+          <li>A set of cool instructions</li>
+          <li>It's still backwards compatible. Many things have been added, but nothing has been removed</li>
+          <li>PCDOS on a Core i9</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>An instruction on 8086</h3>
+        <br/>
+        <ul>
+          <li>Tick. What's in IP</li>
+          <li>Tick. Prepare. Input</li>
+          <li>Tick. Execute</li>
+          <li>Tick. Retire. Output.</li>
+          <li>Tick. Increment IP</li>
+        </ul>
+        <p>... well, in a perfect world at least</p>
+        <p>Getting data. Wait state. Empty ticks</p>
+      </section>
+
+      <section class="slide">
+        <h3>Modern innovations</h3>
+        <br/>
+        <ul>
+          <li>80286: Instruction cache</li>
+          <li>80386. Data cache</li>
+          <li>80386. Translation lookaside buffer cache. TLB</li>
+          <li>L2, L3, L-umpteen cache</li>
+          <li>80486: First pipeline. Big success. An average of twofold improvement over a 386 with an equivalent speed</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The 486 pipeline</h3>
+        <ul>
+          <li>Fetch: take from instruction cache</li>
+          <li>Decode 1: determine path on CPU</li>
+          <li>Decode 2: prepare input</li>
+          <li>Execution: execute instruction</li>
+          <li>Writeback: write output</li>
+        </ul>
+        <p style="font-weight: bold; text-align: center;">5 different parts of the cpu:</p>
+        <pre>
+       i 1:  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+       i 2:      <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+       i 3:          <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+       i 4:              <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+       i 5:                  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+       cpu:  <span class="cpucyc">TickTickTickTickTickTickTickTickTick<span></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Problems with the 486 pipeline</h3>
+        <p>Inherited from before: Cache miss &rarr; Wait state &rarr; Sad panda </p>
+        <h4>Pipeline stall</h4>
+        <p class="pinner">Swap a and b:</p>
+        <pre><code class="no-highlight">      XOR a, b; XOR b, a; XOR a, b;</code></pre>
+        <p class="pinner">On the pipeline:</p>
+        <pre>
+        XOR a,b: <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+        XOR b,a:     <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+        XOR a,b:         <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS][PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
+        cpu:     <span class="cpucyc">TickTickTickTickTickTickTickTickTickTickTick<span>
+        </pre>
+        <p class="pinner">An instruction waiting means a stall</p>
+      </section>
+
+      <section class="slide">
+        <h3>Pentium: The Savior</h3>
+        <p>OoO that's cool. Out-of-order execution. 486 on steroids</p>
+      </section>
+
+      <section>
+        <p>Fetch many instructions from instruction cache</p>
+      </section>
+
+      <section>
+        <p>Take several instructions from Fetch buffer</p>
+        <p>Split them into &mu;-ops (pieces of instructions)</p>
+      </section>
+
+      <section>
+        <p>Arrange several &mu;-ops at a time</p>
+        <p>Register renaming: virtual registers to &mu;-ops</p>
+      </section>
+
+      <section>
+        <p>Reorder &mu;-ops and send to reservation stations</p>
+      </section>
+
+      <section>
+        <p>OoO magic. Execute &mu;-ops in a ultra-mega-fast-fashion</p>
+        <p>Make maximal usage of the available ports (execution units)</p>
+      </section>
+
+      <section>
+        <p>Wait for &mu;-ops per instruction</p>
+        <p>Wait for instructions and rearrange in oritinal order</p>
+      </section>
+
+      <section class="slide">
+        <h3>OoO that's cool</h3>
+        <br/>
+        <p class="pinner">We solved the pipeline stall problem</p>
+        <p class="pinner">All this magic is indistinguishable from grandpa 8086 to the programmer and program</p>
+      </section>
+
+      <section class="slide">
+        <h3>OoO that's not so cool</h3>
+        <p class="pinner">We created a new problem</p>
+        <p class="pinner">... when we have branching</p>
+        <p class="pinner">... we invest too much</p>
+        <p class="pinner">We get a monstrous pipeline stall:</p>
+        <ul>
+          <li>Wait for all pending instructions to finish</li>
+          <li>Roll back to the previous state</li>
+          <li>Restart the pipeline from the new place</li>
+        </ul>
+        <p class="pinner">Not really acceptable if we have 100 (or more) instructions in the pipeline</p>
+      </section>
+
+      <section class="slide">
+        <h3>Speculative execution</h3>
+        <p class="pinner">The answer to our waste problems</p>
+        <ul>
+          <li>When there's branching, execute both branches</li>
+          <li>When we finally know which is the correct branch, throw away the calculations for the other one</li>
+          <li>There's still waste, but much less of it</li>
+          <li>Enter branch predictors to help</li>
+          <li>Enter speculative execution exploits to spoil the good thing that we've got going here</li>
+        </ul>
+      </section>
+
+      <section class="title">
+        <h1>The Life of a CPU Instruction</h1>
+      </section>
+
+      <section>
+        <p>To our program the world looks exactly like it did in 8086</p>
+        <p>But to the instruction...</p>
+      </section>
+
+      <section>
+        <p>We have an instruction whose program is running</p>
+        <p>Life is good</p>
+      </section>
+
+      <section>
+        <p>Suddenly the clever prefetch adds it to the instruction cache</p>
+        <p>with some thousands of other istructions</p>
+      </section>
+
+      <section>
+        <p>In instruction cache the Instruction Pointer is coming near</p>
+      </section>
+
+      <section>
+        <p>The instruction loads our hero along with some tens of others</p>
+        <p>to the fetch buffer</p>
+      </section>
+
+      <section>
+        <p>It's our hero's turn to enter the decoder</p>
+        <p>The decoder splits in int to several &mu;-ops</p>
+      </section>
+
+      <section>
+        <p>The decoder finds out that some &mu;-ops need extra data</p>
+        <p>On the other end of the world loading of data into data cache is initiated</p>
+      </section>
+
+      <section>
+        <p>&mu;-ops enter the register alias table</p>
+        <p>They get distributed renamed "fake" registers</p>
+      </section>
+
+      <section>
+        <p>&mu;-ops enter the reorder buffer</p>
+      </section>
+
+      <section>
+        <p>At the first possible opportunity they are sent to a reservation station</p>
+        <p>Some &mu;-ops get executed right away. No one here knows why.</p>
+      </section>
+
+      <section>
+        <p>Some &mu;-ops of our keep waiting, while &mu;-ops of</p>
+        <p>other instructions get executed</p>
+      </section>
+
+      <section>
+        <p>... and waiting</p>
+        <p>... and waiting</p>
+      </section>
+
+      <section>
+        <p>Finally their data is ready</p>
+        <p>They get executed</p>
+      </section>
+
+      <section>
+        <p>Now completely executed our instruction gets merged on its</p>
+        <p>way of out of the reservation station and its result is ready</p>
+      </section>
+
+      <section>
+        <p>In the retirement phase our hero gets put back in line</p>
+        <p>with its original neighbors so it can leave the CPU</p>
+      </section>
+
+      <section class="slide">
+        <h3>Now we know</h3>
+        <br/>
+        <ul>
+          <li>Why branching is slower. It wasn't on 8086</li>
+          <li>What's the point of speculative execution</li>
+          <li>How caches help. They are physically closer to the CPU</li>
+          <li>We can't tell how fast a program is just by looking at its dissasembly</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Some materials</h3>
+        <br/>
+        <ul>
+          <li><a href="http://www.lighterra.com/papers/modernmicroprocessors/">Modern Microprocessors - John Sladek</a></li>
+          <li><a href="http://www.buthowdoitknow.com/">But How Do It Know? - J. Clark Scott</a></li>
+          <li>Wikipedia!</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Bonus</h3>
+        <p class="pinner">Hyper-threading</p>
+      </section>
+
+      <section>
+        <h1>End</h1>
+        <h2>Questions?</h2>
+        <p>Borislav Stanimirov / <a href="https://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+        <p>
+          <small>
+          These slides: <a href="https://ibob.github.io/slides/life-of-i/">ibob.github.io/slides/life-of-i/</a>
+          </small>
+          <br />
+          <small>
+          Slides license <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons By 4.0</a><br /><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+          </small>
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="../lib/reveal.js-3.8.0/js/reveal.min.js"></script>
+  <script src="../lib/slides.js"></script>
+
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'none', // none/fade/slide/convex/concave/zoom
+
+      autoPlayMedia: false,
+      preloadIframes: false,
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        //{ src: 'markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        //{ src: 'markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'highlight/highlight.min.js', async: true, callback: function() {
+          hljs.initHighlightingOnLoad();
+        } },
+        //{ src: 'zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+        //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
+    });
+
+    slides.footerSetup('xxx', 'code::dive 2019');
+  </script>
+
+</body>
+</html>
