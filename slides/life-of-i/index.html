@@ -61,7 +61,7 @@
   int main()
   {
       std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-      std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">xxx</span>\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">is.gd/lifeofi</span>\n";
       return 0;
   }
         </code></pre>
@@ -83,29 +83,29 @@
         <h3>About this talk</h3>
         <br/>
         <ul>
-          <li>Covering a lot of ground</li>
-          <li>Almost every point can be a talk on its own... or a series of talks</li>
-          <li>Many things we'll only briefly mention</li>
-          <li>Will skip a lot of details</li>
-          <li>We'll focus on x86</li>
+          <li class="fragment">Covering a lot of ground</li>
+          <li class="fragment">Almost every point can be a talk on its own<span class="fragment">... or a series of talks</span></li>
+          <li class="fragment">Many things we'll only briefly mention</li>
+          <li class="fragment">We'll skip a lot of details</li>
+          <li class="fragment">We'll focus on x86</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Basic terminology</h3>
-        <h4>Cycle/Tick</h4>
-        <ul>
+        <h4 class="fragment">Cycle/Tick</h4>
+        <ul class="fragment">
           <li>The time unit of the CPU</li>
           <li>The perfect measuerment of complexity</li>
           <li>The CPU goes "Tick. Tick. Tick."</li>
         </ul>
-        <h4>Instruction</h4>
-        <ul>
+        <h4 class="fragment">Instruction</h4>
+        <ul class="fragment">
           <li>A designated path in the transistors of the CPU</li>
-          <li>Instruction sets - what instructions the CPU supports</li>
+          <li>Instruction sets - what instructions a CPU supports</li>
         </ul>
-        <h4>Register</h4>
-        <ul>
+        <h4 class="fragment">Register</h4>
+        <ul class="fragment">
           <li>A chunk of data on the CPU itself</li>
           <li>Fastes possible access</li>
         </ul>
@@ -120,88 +120,88 @@
           <li>Concrete instructions</li>
           <li>Communication with external (to the processor) devices</li>
         </ul>
-        <p>We won't deal with those.</p>
-        <p>If you're intersted, "But How Do It Know" is a great book on the subject: <a href="http://www.buthowdoitknow.com/">buthowdoitknow.com</a></p>
+        <p class="fragment">We won't deal with those.</p>
+        <p class="fragment">If you're intersted, "But How Do It Know" is a great book on the subject: <a href="http://www.buthowdoitknow.com/">buthowdoitknow.com</a></p>
       </section>
 
       <section class="slide">
         <h3>Types of CPUs</h3>
-        <p>Many ways to classify</p>
-        <p>By instruction set:</p>
-        <ul>
+        <p class="fragment">Many ways to classify</p>
+        <p class="fragment">By instruction set:</p>
+        <ul class="fragment">
           <li>CISC - x86</li>
           <li>RISC - ARM</li>
         </ul>
-        <p>By purpose</p>
-        <ul>
+        <p class="fragment">By purpose:</p>
+        <ul class="fragment">
           <li>General purpose</li>
           <li>Accellerators, GPUs</li>
         </ul>
-        <p>Microcntrollers, virtual CPUs, exotics, MISC, and more</p>
+        <p class="fragment">Microcntrollers, virtual CPUs, exotics, MISC, and more</p>
       </section>
 
       <section class="slide">
         <h3>CISC and RISC: x86 and ARM</h3>
-        <p>Very, very similar</p>
-        <p>Some differences:</p>
+        <p class="fragment">Very, very similar</p>
+        <p class="fragment">Some differences:</p>
         <ul>
-          <li>Instruction set (Duh). RISC consumes less power</li>
-          <li>Different names for the same things (annoying)</li>
-          <li>Load/Stsore and Register Memory</li>
-          <li>Many minor things</li>
+          <li class="fragment">Instruction set (Duh). RISC consumes less power</li>
+          <li class="fragment">Different names for the same things (annoying)</li>
+          <li class="fragment">Load/Store and Register Memory</li>
+          <li class="fragment">Many minor things</li>
         </ul>
-        <p>Our focus is x86</p>
+        <p class="fragment">Our focus is x86</p>
       </section>
 
       <section class="slide">
         <h3>1978: Intel 8086</h3>
         <br/>
         <ul>
-          <li>Lots of cool stuff</li>
-          <li>A set of cool registers (AX-DX, address, IP)</li>
-          <li>A set of cool instructions</li>
-          <li>It's still backwards compatible. Many things have been added, but nothing has been removed</li>
-          <li>PCDOS on a Core i9</li>
+          <li class="fragment">Lots of cool stuff</li>
+          <li class="fragment">A set of cool registers (AX-DX, address, IP)</li>
+          <li class="fragment">A set of cool instructions</li>
+          <li class="fragment">It's still backwards compatible. Many things have been added, but nothing has been removed</li>
+          <li class="fragment">PCDOS on a Core i9</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>An instruction on 8086</h3>
+        <h3>The life of an instruction on 8086</h3>
         <br/>
         <ul>
-          <li>Tick. What's in IP</li>
-          <li>Tick. Prepare. Input</li>
-          <li>Tick. Execute</li>
-          <li>Tick. Retire. Output.</li>
-          <li>Tick. Increment IP</li>
+          <li class="fragment">Tick. What's in IP</li>
+          <li class="fragment">Tick. Prepare. Input</li>
+          <li class="fragment">Tick. Execute</li>
+          <li class="fragment">Tick. Retire. Output.</li>
+          <li class="fragment">Tick. Increment IP</li>
         </ul>
-        <p>... well, in a perfect world at least</p>
-        <p>Getting data. Wait state. Empty ticks</p>
+        <p class="fragment">... well, in a perfect world at least</p>
+        <p class="fragment">Getting data. Wait state. Empty ticks</p>
       </section>
 
       <section class="slide">
         <h3>Modern innovations</h3>
         <br/>
         <ul>
-          <li>80286: Instruction cache</li>
-          <li>80386. Data cache</li>
-          <li>80386. Translation lookaside buffer cache. TLB</li>
-          <li>L2, L3, L-umpteen cache</li>
-          <li>80486: First pipeline. Big success. An average of twofold improvement over a 386 with an equivalent speed</li>
+          <li class="fragment">80286: Instruction cache</li>
+          <li class="fragment">80386. Data cache</li>
+          <li class="fragment">80386. Translation lookaside buffer cache. TLB</li>
+          <li class="fragment">L2, L3, L-umpteen cache</li>
+          <li class="fragment">80486: First pipeline. Big success. An average of twofold improvement over a 386 with an equivalent speed</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>The 486 pipeline</h3>
         <ul>
-          <li>Fetch: take from instruction cache</li>
-          <li>Decode 1: determine path on CPU</li>
-          <li>Decode 2: prepare input</li>
-          <li>Execution: execute instruction</li>
-          <li>Writeback: write output</li>
+          <li class="fragment">Fetch: take from instruction cache</li>
+          <li class="fragment">Decode 1: determine path on CPU</li>
+          <li class="fragment">Decode 2: prepare input</li>
+          <li class="fragment">Execution: execute instruction</li>
+          <li class="fragment">Writeback: write output</li>
         </ul>
-        <p style="font-weight: bold; text-align: center;">5 different parts of the cpu:</p>
-        <pre>
+        <p class="fragment" style="font-weight: bold; text-align: center;">5 different parts of the cpu:</p>
+        <pre class="fragment">
        i 1:  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
        i 2:      <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
        i 3:          <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
@@ -212,24 +212,24 @@
 
       <section class="slide">
         <h3>Problems with the 486 pipeline</h3>
-        <p>Inherited from before: Cache miss &rarr; Wait state &rarr; Sad panda </p>
-        <h4>Pipeline stall</h4>
-        <p class="pinner">Swap a and b:</p>
-        <pre><code class="no-highlight">      XOR a, b; XOR b, a; XOR a, b;</code></pre>
-        <p class="pinner">On the pipeline:</p>
-        <pre>
+        <p class="fragment">Inherited from before: Cache miss &rarr; Wait state &rarr; Sad panda </p>
+        <h4 class="fragment">Pipeline stall</h4>
+        <p class="fragment pinner">Swap a and b:</p>
+        <pre class="fragment"><code class="no-highlight">      XOR a, b; XOR b, a; XOR a, b;</code></pre>
+        <p class="fragment pinner">On the pipeline:</p>
+        <pre class="fragment">
         XOR a,b: <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
         XOR b,a:     <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
         XOR a,b:         <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS][PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
         cpu:     <span class="cpucyc">TickTickTickTickTickTickTickTickTickTickTick<span>
         </pre>
-        <p class="pinner">An instruction waiting means a stall</p>
+        <p class="fragment pinner">An instruction waiting means a stall</p>
       </section>
 
       <section class="slide">
         <h3>Pentium: The Savior</h3>
-        <p>OoO that's cool. Out-of-order execution. 486 on steroids</p>
-        <p style="text-align: center;"><img class="diagram" src="ooo-00.png" /></p>
+        <p class="fragment">OoO that's cool. Out-of-order execution. 486 on steroids</p>
+        <p class="fragment" style="text-align: center;"><img class="diagram" src="ooo-00.png" /></p>
       </section>
 
       <section>
@@ -265,39 +265,39 @@
       <section>
         <img class="diagram" src="ooo-06.png" />
         <p>Wait for &mu;-ops per instruction</p>
-        <p>Wait for instructions and rearrange in oritinal order</p>
+        <p>Wait for instructions and rearrange in initinal order</p>
       </section>
 
       <section class="slide">
         <h3>OoO that's cool</h3>
         <br/>
         <p class="pinner">We solved the pipeline stall problem</p>
-        <p class="pinner">All this magic is indistinguishable from grandpa 8086 to the programmer and program</p>
+        <p class="fragment pinner">All this magic is indistinguishable from grandpa 8086 to the programmer and program</p>
       </section>
 
       <section class="slide">
         <h3>OoO that's not so cool</h3>
-        <p class="pinner">We created a new problem</p>
-        <p class="pinner">... when we have branching</p>
-        <p class="pinner">... we invest too much</p>
-        <p class="pinner">We get a monstrous pipeline stall:</p>
-        <ul>
+        <p class="fragment pinner">We created a new problem</p>
+        <p class="fragment pinner">... when we have branching</p>
+        <p class="fragment pinner">... we invest too much</p>
+        <p class="fragment pinner">We get a monstrous pipeline stall:</p>
+        <ul class="fragment">
           <li>Wait for all pending instructions to finish</li>
           <li>Roll back to the previous state</li>
           <li>Restart the pipeline from the new place</li>
         </ul>
-        <p class="pinner">Not really acceptable if we have 100 (or more) instructions in the pipeline</p>
+        <p class="fragment pinner">Not really acceptable if we have 100 (or more) instructions in the pipeline</p>
       </section>
 
       <section class="slide">
         <h3>Speculative execution</h3>
         <p class="pinner">The answer to our waste problems</p>
         <ul>
-          <li>When there's branching, execute both branches</li>
-          <li>When we finally know which is the correct branch, throw away the calculations for the other one</li>
-          <li>There's still waste, but much less of it</li>
-          <li>Enter branch predictors to help</li>
-          <li>Enter speculative execution exploits to spoil the good thing that we've got going here</li>
+          <li class="fragment">When there's branching, execute both branches</li>
+          <li class="fragment">When we finally know which is the correct branch, throw away the calculations for the other one</li>
+          <li class="fragment">There's still waste, but much less of it</li>
+          <li class="fragment">Enter branch predictors to help</li>
+          <li class="fragment">Enter speculative execution exploits to spoil the good thing that we've got going here</li>
         </ul>
       </section>
 
@@ -307,7 +307,7 @@
 
       <section>
         <p>To our program the world looks exactly like it did in 8086</p>
-        <p>But to the instruction...</p>
+        <p class="fragment">But to the instruction...</p>
       </section>
 
       <section>
@@ -366,7 +366,7 @@
 
       <section>
         <img src="c10.png"/>
-        <p>Some &mu;-ops of our keep waiting, while &mu;-ops of</p>
+        <p>Some &mu;-ops of our hero keep waiting, while &mu;-ops of</p>
         <p>other instructions get executed</p>
       </section>
 
@@ -398,10 +398,10 @@
         <h3>Now we know</h3>
         <br/>
         <ul>
-          <li>Why branching is slower. It wasn't on 8086</li>
-          <li>What's the point of speculative execution</li>
-          <li>How caches help. They are physically closer to the CPU</li>
-          <li>We can't tell how fast a program is just by looking at its dissasembly</li>
+          <li class="fragment">Why branching is slower. <span class="fragment">It wasn't on 8086</span></li>
+          <li class="fragment">What's the point of speculative execution</li>
+          <li class="fragment">How caches help. They are physically closer to the CPU</li>
+          <li class="fragment">We can't tell how fast a program is just by looking at its dissasembly</li>
         </ul>
       </section>
 
@@ -416,8 +416,8 @@
       </section>
 
       <section class="slide">
-        <h3>Bonus</h3>
-        <p class="pinner">Hyper-threading</p>
+        <h3>Bonus: Hyper-threading</h3>
+        <p style="text-align: center;"><img class="diagram" src="ht.png" /></p>
       </section>
 
       <section>
@@ -468,7 +468,7 @@
       ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
     });
 
-    slides.footerSetup('xxx', 'code::dive 2019');
+    slides.footerSetup('is.gd/lifeofi', 'code::dive 2019');
   </script>
 
 </body>
