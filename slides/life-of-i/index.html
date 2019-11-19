@@ -83,6 +83,19 @@
         <h3>About this talk</h3>
         <br/>
         <ul>
+          <li class="fragment">Answering some questions</li>
+          <li class="fragment">What do modern CPUs do?</span></li>
+          <li class="fragment">Why do we need CPU cache?</li>
+          <li class="fragment">Why is branching slow?</li>
+          <li class="fragment">Why do we need speculative execution?</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>About this talk</h3>
+        <br/>
+        <ul>
+          <li class="fragment">A beginner-friendly introduction</li>
           <li class="fragment">Covering a lot of ground</li>
           <li class="fragment">Almost every point can be a talk on its own<span class="fragment">... or a series of talks</span></li>
           <li class="fragment">Many things we'll only briefly mention</li>
@@ -93,21 +106,44 @@
 
       <section class="slide">
         <h3>Basic terminology</h3>
-        <h4 class="fragment">Cycle/Tick</h4>
-        <ul class="fragment">
-          <li>The time unit of the CPU</li>
-          <li>The perfect measuerment of complexity</li>
-          <li>The CPU goes "Tick. Tick. Tick."</li>
+        <h4>Cycle or Tick</h4>
+        <br/>
+        <ul>
+          <li class="fragment">The time unit of the CPU.</li>
+          <li class="fragment">Clock speed. This is what the GHz stand for</li>
+          <li class="fragment">The perfect measurement of complexity</li>
+          <li class="fragment">The CPU goes "Tick. Tick. Tick."</li>
         </ul>
-        <h4 class="fragment">Instruction</h4>
-        <ul class="fragment">
-          <li>A designated path in the transistors of the CPU</li>
-          <li>Instruction sets - what instructions a CPU supports</li>
+      </section>
+
+      <section class="slide">
+        <h3>Basic terminology</h3>
+        <h4>Register</h4>
+        <ul>
+          <li class="fragment">A (named) chunk of data on the CPU itself</li>
+          <li class="fragment">A "word" for the CPU <span class="fragment">(or less)</span></li>
+          <li class="fragment">Fastest possible access</li>
+          <li class="fragment">Not to be confused with...</li>
         </ul>
-        <h4 class="fragment">Register</h4>
-        <ul class="fragment">
-          <li>A chunk of data on the CPU itself</li>
-          <li>Fastes possible access</li>
+        <h4 class="fragment">Cache</h4>
+        <ul>
+          <li class="fragment">Not to be confused with "cash"</li>
+          <li class="fragment">Data close to the CPU</li>
+          <li class="fragment">The outside world is slow</li>
+          <li class="fragment">... but we're won't be talking about caches</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Basic terminology</h3>
+        <h4>Instruction</h4>
+        <br/>
+        <ul>
+          <li class="fragment">A designated path on the transistors of the CPU</li>
+          <li class="fragment">A function for the CPU</li>
+          <li class="fragment">Input - some registers</li>
+          <li class="fragment">Output - some other registers</li>
+          <li class="fragment">Instruction sets - what instructions a CPU supports</li>
         </ul>
       </section>
 
@@ -135,7 +171,7 @@
         <p class="fragment">By purpose:</p>
         <ul class="fragment">
           <li>General purpose</li>
-          <li>Accellerators, GPUs</li>
+          <li>Accellerators, GPUs, FPGAs</li>
         </ul>
         <p class="fragment">Microcntrollers, virtual CPUs, exotics, MISC, and more</p>
       </section>
@@ -169,8 +205,8 @@
         <h3>The life of an instruction on 8086</h3>
         <br/>
         <ul>
-          <li class="fragment">Tick. What's in IP</li>
-          <li class="fragment">Tick. Prepare. Input</li>
+          <li class="fragment">Tick. What's in IP? Load it</li>
+          <li class="fragment">Tick. Prepare input</li>
           <li class="fragment">Tick. Execute</li>
           <li class="fragment">Tick. Retire. Output.</li>
           <li class="fragment">Tick. Increment IP</li>
@@ -337,7 +373,7 @@
       <section>
         <img src="c05.png"/>
         <p>It's our hero's turn to enter the decoder</p>
-        <p>The decoder splits in int to several &mu;-ops</p>
+        <p>The decoder splits it into several &mu;-ops</p>
       </section>
 
       <section>
