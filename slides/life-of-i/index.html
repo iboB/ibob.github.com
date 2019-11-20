@@ -83,6 +83,12 @@
       <section class="slide">
         <h3>About this talk</h3>
         <br/>
+        <p>It's not about C++</p>
+      </section>
+
+      <section class="slide">
+        <h3>About this talk</h3>
+        <br/>
         <ul>
           <li>Answering some questions</li>
           <li>What do modern CPUs do?</span></li>
@@ -144,6 +150,7 @@
           <li class="fragment">A designated path on the transistors of the CPU</li>
           <li class="fragment">Input - some registers</li>
           <li class="fragment">Output - some other registers</li>
+          <li class="fragment">Not all instructions are equal in terms of performance</li>
           <li class="fragment">Instruction sets - what instructions a CPU supports</li>
         </ul>
       </section>
@@ -238,13 +245,15 @@
           <li class="fragment">Writeback: write output</li>
         </ul>
         <p class="fragment" style="font-weight: bold; text-align: center;">5 different parts of the cpu:</p>
-        <pre class="fragment">
+        <pre class="fragment ticks">
+
        i 1:  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
        i 2:      <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
        i 3:          <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
        i 4:              <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
        i 5:                  <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
-       cpu:  <span class="cpucyc">TickTickTickTickTickTickTickTickTick<span></pre>
+       cpu:  <span class="cpucyc">TickTickTickTickTickTickTickTickTick<span>
+       </pre>
       </section>
 
       <section class="slide">
@@ -252,9 +261,10 @@
         <p class="fragment">Inherited from before: Cache miss &rarr; Wait state &rarr; Sad panda </p>
         <h4 class="fragment">Pipeline stall</h4>
         <p class="fragment pinner">Swap a and b:</p>
-        <pre class="fragment"><code class="no-highlight">      XOR a, b; XOR b, a; XOR a, b;</code></pre>
+        <pre class="fragment ticks"><code class="no-highlight">      XOR a, b; XOR b, a; XOR a, b;</code></pre>
         <p class="fragment pinner">On the pipeline:</p>
-        <pre class="fragment">
+        <pre class="fragment ticks">
+
         XOR a,b: <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
         XOR b,a:     <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
         XOR a,b:         <span class="fetch">[F ]</span><span class="decode1">[D1]</span><span class="pipestall">[PS][PS][PS][PS]<span/><span class="decode2">[D2]</span><span class="execution">[EX]</span><span class="writeback">[WB]</span>
@@ -297,6 +307,12 @@
         <img class="diagram" src="ooo-05.png" />
         <p>OoO magic. Execute &mu;-ops in a ultra-mega-fast-fashion</p>
         <p>Make maximal usage of the available ports (execution units)</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="ooo-05.png" />
+        <p>Now there's a distinction between latency and throughput</p>
+        <p style="visibility: hidden;">x</p>
       </section>
 
       <section>
@@ -392,7 +408,7 @@
       <section>
         <img src="c08.png"/>
         <p>&mu;-ops enter the reorder buffer</p>
-        <p style="visibility: hidden;">x</p>
+        <p>They are orderd by dendencies</p>
       </section>
 
       <section>
