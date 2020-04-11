@@ -1,0 +1,102 @@
+body {
+	background: white; /* For browsers that do not support gradients */
+	background: -webkit-radial-gradient(white, lightgray); /* Safari 5.1 to 6.0 */
+	background: -o-radial-gradient(white, lightgray); /* For Opera 11.6 to 12.0 */
+	background: -moz-radial-gradient(white, lightgray); /* For Firefox 3.6 to 15 */
+	background: radial-gradient(white, lightgray); /* Standard syntax */
+}
+
+/* title */
+.reveal section.title h1 {
+	width: 100%;
+	font-family: Impact, Haettenschweiler, sans-serif;
+	font-size: 2.5em;
+}
+
+.reveal h3 {
+	color: #434549;
+}
+
+/* custom slides */
+.reveal h4 {
+	font-family: Impact, Haettenschweiler, sans-serif;
+	text-transform: uppercase;
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
+}
+
+.reveal section.slide {
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+	text-align: left;
+	border-bottom: 2px solid #0077BD;
+}
+
+
+/* code highlight */
+.reveal .slides section .fragment.highlight-code {
+    opacity: 1;
+    visibility: inherit;
+}
+.reveal .slides section .fragment.highlight-code.current-fragment {
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+/* other code */
+.reveal pre code {
+    max-height: 80%;
+}
+
+.reveal section code.cinline {
+	color: #003377;
+}
+
+.reveal pre.ticks {
+	background: white;
+}
+
+/* other */
+.reveal section img {
+	background: white;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+	margin: 0;
+}
+
+.reveal section img.ui-diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+	height: 500px;
+}
+
+.reveal section .inline {
+	display: inline-block;
+}
+
+.reveal section span.tiny {
+	font-size: 0.5em;
+}
+
+.reveal section span.fancy {
+	font-weight: bold;
+	color: #DF5000;
+}
+
+.reveal section p.pinner
+{
+	padding-left: 80px;
+}
