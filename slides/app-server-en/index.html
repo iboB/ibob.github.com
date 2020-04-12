@@ -63,7 +63,7 @@
   int main()
   {
       std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-      std::cout &lt;&lt; "These slides are here: <span class="fragment highlight-code">is.gd/lifeofi</span>\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment hl-code">is.gd/lifeofi</span>\n";
       return 0;
   }
         </code></pre>
@@ -110,6 +110,253 @@
 
       <section>
         <img class="diagram" src="deeper.jpg"/>
+      </section>
+
+      <section>
+        <h3>Accessing objects</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Object</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    Data& data() { return m_data; }
+    const Data& data() { return m_data; }
+  private:
+    Data m_data;
+  };
+        </code></pre>
+      </section>
+
+      <section>
+        <p>Multiple threads. Races</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    void lock() { m_mutex.lock(); }
+    void unlock() { m_mutex.unlock(); }
+  private:
+    std::mutex m_mutex;
+    Data m_data;
+  };
+        </code></pre>
+        <p class="pinner">Bad idea&trade;. Readers will have to wait on each other</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    void readLock() { m_mutex.lock_shared(); }
+    void readUnlock() { m_mutex.unlock_shared(); }
+
+    void writeLock()  { m_mutex.lock(); }
+    void writeUnlock()  { m_mutex.unlock(); }
+  private:
+    std::shared_mutex m_mutex;
+    Data m_data;
+  };
+        </code></pre>
+        <p class="pinner">Let's try to work with this</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    void readLock() <span class="hl-code-i">const</span> { m_mutex.lock_shared(); }
+    void readUnlock() <span class="hl-code-i">const</span> { m_mutex.unlock_shared(); }
+
+    void writeLock()  { m_mutex.lock(); }
+    void writeUnlock()  { m_mutex.unlock(); }
+  private:
+    <span class="hl-code-i">mutable</span> std::shared_mutex m_mutex;
+    Data m_data;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  <span class="hl-code-i">private:</span>
+    void readLock() const { m_mutex.lock_shared(); }
+    void readUnlock() const { m_mutex.unlock_shared(); }
+
+    void writeLock()  { m_mutex.lock(); }
+    void writeUnlock()  { m_mutex.unlock(); }
+
+    mutable std::shared_mutex m_mutex;
+    Data m_data;
+<span class="hl-code-i">    friend class ObjectReadLock;
+    friend class ObjectWriteLock;</span>
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Read Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectReadLock {
+  public:
+    ObjectReadLock(const Object&amp; obj) : m_object(obj) {
+      m_object.readLock();
+    };
+    ~ObjectReadLock() { m_object.readUnlock(); }
+
+    const Object* operator-&gt;() const { return &amp;m_object; }
+    const Object* operator*() const  { return &amp;m_object; }
+  private:
+    const Object&amp; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Write Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(Object&amp; obj) : m_object(obj) {
+      m_object.writeLock();
+    };
+    ~ObjectWriteLock() { m_object.writeUnlock(); }
+
+    Object* operator-&gt;() { return &amp;m_object; }
+    Object* operator*()  { return &amp;m_object; }
+  private:
+    Object&amp; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Shared Mutex Problems</h3>
+        <br/>
+        <ul>
+          <li class="fragment ss">Writers will have to wait on each other</li>
+          <li class="fragment">Writers will have to wait on readers</li>
+          <ul class="fragment">
+            <li>Our anatomical structures</li>
+            <li>Contouring algorithms write</li>
+            <li>Dose calculation reads</li>
+            <li>UI reads</li>
+            <li>Contouring algorithms may also read</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section>
+        <img src="cow.png" />
+        <p>CoW &ndash; Copy on Write</p>
+      </section>
+
+      <section class="slide">
+        <h3>Classic Swift-style CoW</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class CoW {
+      std::shared_ptr&lt;T&gt; m_data;
+  public:
+<span class="fragment hl-code">      const T& data() const {
+          return *m_data;
+      }</span>
+      T& mutableData() {
+          <span class="fragment hl-code">if (m_data.use_count() &gt; 1)</span>
+              <span class="fragment hl-code">m_data = std::make_shared&lt;T&gt;(*m_data);</span>
+          return *m_data;
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object CoW</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+  public:
+      const Object&amp; read() const {
+          return *m_object;
+      }
+      Object&amp; write() {
+          if (m_object.use_count() &gt; 1)
+              m_object = std::make_shared&lt;T&gt;(*m_object);
+          return *m_object;
+      }
+  };
+        </code></pre>
+        <p class="pinner">How do we refer to objects?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectWrapper myobj;
+std::thread gui([]() { guiLoop(myobj); });
+myobj.write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! After this line</span>
+
+...
+
+void guiLoop(ObjectWrapper obj) {
+  while (true) {
+    display(obj.read().getSomething()); <span class="fragment hl-code-i">// No way to access changed here</span>
+  }
+}
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Handle</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+  public:
+      const Object&amp; read() const {
+          return *m_object;
+      }
+      Object&amp; write() {
+          if (m_object.use_count() &gt; 1)
+              m_object = std::make_shared&lt;T&gt;(*m_object);
+          return *m_object;
+      }
+  };
+  <span class="fragment hl-code-i">using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;</span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects through Handles</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectHandle myobj;
+std::thread gui([]() { guiLoop(myobj); });
+myobj->write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! during this line</span>
+
+...
+
+void guiLoop(ObjectHandle obj) {
+  while (true) {
+    display(obj->read().getSomething()); <span class="fragment hl-code-i">// We race on the shared pointer here</span>
+  }
+}
+        </code></pre>
+      </section>
+
+      <section>
+        <h3>Type erasure</h3>
+      </section>
+
+      <section>
+        <h3>Managing objects</h3>
       </section>
 
       <section>

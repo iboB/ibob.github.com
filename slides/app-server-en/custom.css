@@ -38,13 +38,24 @@ body {
 	border-bottom: 2px solid #0077BD;
 }
 
+/* fragment strike through */
+.reveal .slides section .fragment.ss {
+	text-decoration: line-through;
+}
+.reveal .slides section .fragment.ss.current-fragment {
+	text-decoration: none;
+}
 
 /* code highlight */
-.reveal .slides section .fragment.highlight-code {
+.reveal .slides section .fragment.hl-code {
     opacity: 1;
     visibility: inherit;
 }
-.reveal .slides section .fragment.highlight-code.current-fragment {
+.reveal .slides section .fragment.hl-code.current-fragment {
+    font-weight: bold;
+    background-color: lightgray;
+}
+.reveal .slides section .hl-code-i {
     font-weight: bold;
     background-color: lightgray;
 }
@@ -98,5 +109,5 @@ body {
 
 .reveal section p.pinner
 {
-	padding-left: 80px;
+	text-align: center;
 }
