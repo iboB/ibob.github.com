@@ -210,7 +210,7 @@
   public:
     ObjectReadLock(const Object&amp; obj) : m_object(obj) {
       m_object.readLock();
-    };
+    }
     ~ObjectReadLock() { m_object.readUnlock(); }
 
     const Object* operator-&gt;() const { return &amp;m_object; }
@@ -228,7 +228,7 @@
   public:
     ObjectWriteLock(Object&amp; obj) : m_object(obj) {
       m_object.writeLock();
-    };
+    }
     ~ObjectWriteLock() { m_object.writeUnlock(); }
 
     Object* operator-&gt;() { return &amp;m_object; }
@@ -290,7 +290,7 @@
       }
       Object&amp; write() {
           if (m_object.use_count() &gt; 1)
-              m_object = std::make_shared&lt;T&gt;(*m_object);
+              m_object = std::make_shared&lt;Object&gt;(*m_object);
           return *m_object;
       }
   };
@@ -326,7 +326,7 @@ void guiLoop(ObjectWrapper obj) {
       }
       Object&amp; write() {
           if (m_object.use_count() &gt; 1)
-              m_object = std::make_shared&lt;T&gt;(*m_object);
+              m_object = std::make_shared&lt;Object&gt;(*m_object);
           return *m_object;
       }
   };
@@ -337,17 +337,155 @@ void guiLoop(ObjectWrapper obj) {
       <section class="slide">
         <h3>Referring to Objects through Handles</h3>
         <pre><code class="cpp hljs" data-noescape>
+<span class="hl-code-i">ObjectHandle</span> myobj;
+std::thread gui([]() { guiLoop(myobj); });
+myobj<span class="hl-code-i">-&gt;</span>write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! during this line</span>
+
+...
+
+void guiLoop(<span class="hl-code-i">ObjectHandle</span> obj) {
+  while (true) {
+    display(obj<span class="hl-code-i">-&gt;</span>read().getSomething()); <span class="fragment hl-code-i">// We race on the shared pointer here</span>
+  }
+}
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Handle Races</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+  public:
+<span class="fragment hl-code">      std::shared_ptr&lt;const Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }</span>
+      Object&amp; write() {
+          if (m_object.use_count() &gt; 1) {
+<span class="fragment hl-code">              auto newObject = std::make_shared&lt;Object&gt;(*m_object);
+              std::atomic_store_explicit(&m_object, newObject,
+                  std::memory_order_relaxed);</span>
+          }
+          return *m_object;
+      }
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects through Handles</h3>
+        <pre><code class="cpp hljs" data-noescape>
 ObjectHandle myobj;
 std::thread gui([]() { guiLoop(myobj); });
-myobj->write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! during this line</span>
+myobj-&gt;write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! during this line</span>
 
 ...
 
 void guiLoop(ObjectHandle obj) {
   while (true) {
-    display(obj->read().getSomething()); <span class="fragment hl-code-i">// We race on the shared pointer here</span>
+    display(obj-&gt;read()<span class="hl-code-i">-&gt;</span>getSomething()); <span class="fragment hl-code-i">// We race on object contents in "Something"</span>
   }
 }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Always CoW</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      <span class="fragment hl-code">std::shared_ptr&lt;Object&gt; m_writeObject;</span>
+  public:
+      std::shared_ptr&lt;const Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+<span class="fragment hl-code">      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return *m_writeObject;
+      }</span>
+<span class="fragment hl-code">      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+      }</span>
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Bring Back Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectReadLock {
+  public:
+    ObjectReadLock(const ObjectHandle& handle) : m_object(handle.read()) {}
+
+    const Object* operator-&gt;() const { return m_object.get(); }
+    const Object* operator*() const  { return *m_object; }
+  private:
+    std::shared_ptr&lt;const Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Bring Back Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() { m_handle.writeUnlock(); }
+
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects through Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectHandle myobj;
+std::thread gui([]() { guiLoop(myobj); });
+ObjectWriteLock(myobj)-&gt;changeSomething();
+
+...
+
+void guiLoop(ObjectHandle obj) {
+  while (true) {
+    display(ObjectReadLock(obj)-&gt;getSomething());
+  }
+}
+        </code></pre>
+        <p class="pinner">This can totally work</p>
+        <p class="pinner">... but uh-oh! What if we want to write from several threads?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Bring Back Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+  public:
+      std::shared_ptr&lt;Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return *m_writeObject;
+      }
+      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+      }
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
         </code></pre>
       </section>
 
