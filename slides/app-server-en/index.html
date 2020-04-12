@@ -402,7 +402,7 @@ void guiLoop(ObjectHandle obj) {
       }
 <span class="fragment hl-code">      std::shared_ptr&lt;Object&gt; writeLock() {
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
-          return *m_writeObject;
+          return m_writeObject;
       }</span>
 <span class="fragment hl-code">      void writeUnlock() {
           std::atomic_store_explicit(&m_object, m_writeObject,
@@ -467,18 +467,18 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Bring Back Locks</h3>
+        <h3>Multiple writers</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
-      std::shared_ptr&lt;Object&gt; m_writeObject;
-  public:
+      std::shared_ptr&lt;Object&gt; m_writeObject; <span class="hl-code-i">// Make this thread safe?</span>
+                                             <span class="fragment hl-code-i">// Where is the *real* data then?</span>
       std::shared_ptr&lt;Object&gt; read() const {
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
-          return *m_writeObject;
+          return m_writeObject;
       }
       void writeUnlock() {
           std::atomic_store_explicit(&m_object, m_writeObject,
@@ -487,6 +487,125 @@ void guiLoop(ObjectHandle obj) {
   };
   using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
         </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Heavy Artillery</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      <span class="hl-code-i">std::mutex m_accessMutex;</span>
+      std::shared_ptr&lt;Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          <span class="hl-code-i">m_accessMutex.lock();</span>
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          <span class="hl-code-i">m_accessMutex.unlock();</span>
+      }
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Previously in this talk...</h3>
+        <br/>
+        <ul>
+          <li><span class="fancy">Immutable objects</span></li>
+          <li>Almost exactly this is used in our code <span class="fancy">in services</span></li>
+          <li>But this is not how our app objects are made</li>
+          <li>Remember the optional CoW?</li>
+          <li>We still want that</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>What if?</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+<span class="hl-code-i">          m_writeObject = (m_object.use_count() &gt; 1)
+              ? std::make_shared&lt;T&gt;(*m_object);
+              : m_object;</span> <span class="fragment hl-code-i">// readers suffer</span>
+          return m_writeObject;
+      }
+      void writeUnlock() {
+      ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock on Read</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;Object&gt; read() const {
+          <span class="hl-code-i">std::lock_guard l(m_accessMutex);</span>
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+          m_writeObject = (m_object.use_count() &gt; 1)
+              ? std::make_shared&lt;T&gt;(*m_object);
+              : m_object;
+          return m_writeObject;
+      }
+      void writeUnlock() {
+      ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock on Read</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;Object&gt; read() const {
+          std::lock_guard l(m_accessMutex);
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+<span class="hl-code-i">          if (m_object.use_count() &gt; 1) {
+              auto newObject = std::make_shared&lt;Object&gt;(*m_object);
+              std::atomic_store_explicit(&m_object, newObject,
+                  std::memory_order_relaxed);
+          }
+          return m_object;</span>
+      }
+      void writeUnlock() {
+          <span class="fragment hl-code">m_accessMutex.unlock();</span>
+      }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Access Recap</h3>
+        <br/>
+        <ul>
+          <li>These are app objects</li>
+          <li>Many simultaneous readers</li>
+          <li>Synchronised writes from any thread</li>
+          <li>Readers wait for writers to complete</li>
+          <li>CoW only if we have active readers</li>
+        </ul>
       </section>
 
       <section>
