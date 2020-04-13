@@ -98,18 +98,47 @@
         </ul>
       </section>
 
-      <section>
-        <h3>Architectural Diagram</h3>
-        <p>full arch</p>
+      <section class="slide">
+        <h3>Birds Eye View</h3>
+        <ul>
+          <li>A browser client</li>
+          <li>...connecting to an application server</li>
+          <li>...which has multiple services and workers</li>
+          <ul>
+            <li>Service: always alive. Has sessions</li>
+            <ul>
+              <li>Treatment service</li>
+              <li>MRI service</li>
+              <li>...</li>
+            </ul>
+            <li>Worker: short life. Calculate something and die</li>
+            <ul>
+              <li>Identify bladder</li>
+              <li>Calculate dose</li>
+              <li>...</li>
+            </ul>
+          </ul>
+        </ul>
       </section>
 
-      <section>
+      <section class="slide">
         <h3>Going deeper</h3>
-        <p>app server</p>
+        <br/>
+        <ul>
+          <li>AppServer = UI Service</li>
+          <li>Has sessions for clients</li>
+          <li>Holds observable state in objects</li>
+          <li>WS Server - a layer for browsers. Reads and writes JSON</li>
+          <li>Theoretically we can have many other layers</li>
+        </ul>
       </section>
 
       <section>
         <img class="diagram" src="deeper.jpg"/>
+      </section>
+
+      <section>
+        <h3>AppServer Architecture</h3>
       </section>
 
       <section>
@@ -746,7 +775,7 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
       std::shared_ptr&lt;Object&gt; ObjectWrapper::writeLock() {
           m_accessMutex.lock();
-          if (<span class="hl-code-i">m_object->hasReadLocks()</span>) {
+          if (<span class="hl-code-i">m_object-&gt;hasReadLocks()</span>) {
               ...
         </code></pre>
       </section>
@@ -897,7 +926,7 @@ void guiLoop(ObjectHandle obj) {
       ObjectHandle m_handle;
   public:
       TypeHandle(const ObjectHandle& handle) {
-          if (handle->isA&lt;Type&gt;()) m_handle = handle;
+          if (handle-&gt;isA&lt;Type&gt;()) m_handle = handle;
       }
       explicit operator bool() const { return !!m_handle; }
   };
@@ -906,7 +935,7 @@ void guiLoop(ObjectHandle obj) {
       ObjectHandle m_handle;
   public:
       PolyHandle(const ObjectHandle& handle) {
-          if (handle->isOf&lt;TypeClass&gt;()) m_handle = handle;
+          if (handle-&gt;isOf&lt;TypeClass&gt;()) m_handle = handle;
       }
       explicit operator bool() const { return !!m_handle; }
   };
@@ -922,8 +951,8 @@ void guiLoop(ObjectHandle obj) {
       <span class="fragment hl-code">const Type* m_data = nullptr;</span>
   public:
       TypeReadLock(const ObjectHandle& handle) {
-          if (handle->isA&lt;Type&gt;()) {
-              m_payload = handle->read();
+          if (handle-&gt;isA&lt;Type&gt;()) {
+              m_payload = handle-&gt;read();
               <span class="fragment hl-code">m_data = getDataFromObject&lt;Type&gt;(*m_payload)</span>
           }
       }
@@ -944,13 +973,13 @@ void guiLoop(ObjectHandle obj) {
       const Type* m_data = nullptr;
   public:
       TypeReadLock(const ObjectHandle& handle) {
-          if (handle->isA&lt;Type&gt;()) {
-              m_payload = handle->read();
+          if (handle-&gt;isA&lt;Type&gt;()) {
+              m_payload = handle-&gt;read();
               m_data = getDataFromObject&lt;Type&gt;(*m_payload)
           }
       }
 <span class="hl-code-i">      TypeReadLock(const TypeHandle&lt;Type&gt;& handle) {
-          m_payload = handle->m_handle->read();
+          m_payload = handle-&gt;m_handle-&gt;read();
           m_data = getDataFromObject&lt;Type&gt;(*m_payload);
       }</span>
       const Type* operator-&gt;() const { return m_data; }
@@ -969,11 +998,401 @@ void guiLoop(ObjectHandle obj) {
   auto scan = TypeReadLock(scanHandle); // infer read lock type from type handle
   scan-&gt;findStructures();
         </code></pre>
+        <p class="pinner">The same for <code class="cinline">TypeWriteLock, PolyReadLock, PolyWriteLock</code></p>
+        <p class="pinner"><code class="cinline">TypeReadLock&lt;T&gt;</code> = <code class="cinline">std::shared_ptr&lt;const T&gt;</code></p>
       </section>
-
 
       <section>
         <h3>Managing objects</h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>ObjectManager</code></h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectManager {
+    <span class="fragment">mutable std::shared_mutex m_objectsMutex;</span>
+    std::vector&lt;ObjectHandle&gt; m_objects;  
+  public: 
+    <span class="fragment">ObjectHandle getObject(???) const;</span>
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Refer to Objects</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectManager {
+    std::shared_mutex m_objectsMutex;
+    <span class="hl-code-i">std::unordered_map&lt;Uri, ObjectHandle&gt; m_objects;</span>
+  public: 
+    ObjectHandle getObject(<span class="hl-code-i">const Uri& uri</span>) const;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Get Objects</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::getObject(const Uri& uri) const {
+      <span class="fragment hl-code">std::shared_lock lock(m_objectsMutex);</span>
+      auto f = m_objects.find(uri);
+      if (f != m_objects.end()) { 
+          <span class="fragment hl-code">return f-&gt;second;</span>
+      }
+      else {
+          <span class="fragment hl-code">return {};</span> <span class="fragment">// ???</span>
+      }
+  }
+        </code></pre>
+        <p class="pinner fragment">We don't have all objects ever here</p>
+        <p class="pinner fragment">What if we can load the object from somewhere?</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="deeper.jpg"/>
+      </section>
+
+      <section class="slide">
+        <h3>Deeper</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::getObject(const Uri& uri) <span class="fragment hl-code">const</span> {
+      std::shared_lock lock(m_objectsMutex);
+      auto f = m_objects.find(uri);
+      if (f != m_objects.end()) { 
+          return f-&gt;second;
+      }
+      else {
+<span class="hl-code-i">          auto obj = m_db-&gt;loadObject(uri);
+          m_objects[uri] = std::make_shared&lt;ObjectWrapper&gt;(obj);</span>
+      }
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Deeper</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::getObject(const Uri& uri) {
+      <span class="fragment hl-code">std::shared_lock lock(m_objectsMutex);</span>
+      auto f = m_objects.find(uri);
+      if (f != m_objects.end()) { 
+          return f-&gt;second;
+      }
+      else {
+<span class="hl-code-i">          auto obj = m_db-&gt;loadObject(uri);
+          m_objects[uri] = std::make_shared&lt;ObjectWrapper&gt;(obj);</span>
+      }
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Deeper</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::getObject(const Uri& uri) {
+      <span class="hl-code-i">{</span>
+      std::shared_lock lock(m_objectsMutex);
+      auto f = m_objects.find(uri);
+      if (f != m_objects.end()) { 
+          return f-&gt;second;
+      }
+      <span class="hl-code-i">}</span>
+      <span class="hl-code-i">return loadObject(uri);</span>
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Deeper</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::loadObject(const Uri& uri) {
+      <span class="fragment hl-code">if (!m_db-&gt;hasObject(uri)) return {};</span>
+      <span class="fragment hl-code">auto obj = m_db-&gt;loadObject(uri);</span>
+      <span class="fragment hl-code">std::unique_lock lock(m_objectsMutex);</span>
+      <span class="fragment hl-code">auto newHandle = std::make_shared&lt;ObjectWrapper&gt;(obj);</span>
+      <span class="fragment hl-code">m_objects[uri] = newHandle;</span>
+      return newHandle;
+  }
+        </code></pre>
+        <p class="pinner fragment">What if two threads request the same object at the same time?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Deeper</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::loadObject(const Uri& uri) {      
+      if (!m_db-&gt;hasObject(uri)) return {};
+      <span class="hl-code-i">std::lock_guard lock(m_loadingMutex);</span>
+      auto obj = m_db-&gt;loadObject(uri);
+      std::unique_lock lock(m_objectsMutex);
+      auto newHandle = std::make_shared&lt;ObjectWrapper&gt;(obj);
+      m_objects[uri] = newHandle;
+      return newHandle;
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Deeper</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::loadObject(const Uri& uri) {
+      if (!m_db-&gt;hasObject(uri)) return {};
+      std::lock_guard lock(m_loadingMutex);
+<span class="hl-code-i">      { // in case another thread already loaded the object
+        std::shared_lock lock(m_objectsMutex);
+        auto f = m_objects.find(uri);
+        if (f != m_objects.end()) { 
+            return f-&gt;second;
+        }
+      }</span>
+      auto obj = m_db-&gt;loadObject(uri);
+      std::unique_lock lock(m_objectsMutex);
+      auto newHandle = std::make_shared&lt;ObjectWrapper&gt;(obj);
+      m_objects[uri] = newHandle;
+      return newHandle;
+  }
+        </code></pre>
+      </section>
+
+      <section>
+        <p>Are we done with loading?</p>
+        <p>Not quite</p>        
+        <p>What if an object needs to load other objects in order to exist?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Let's Change it up</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::loadObject(const Uri& uri) {
+      if (!m_db-&gt;hasObject(uri)) return {};
+      <span class="fragment hl-code">{</span>
+        std::lock_guard lock(m_loadingMutex);
+        { // in case another thread already loaded the object
+          std::shared_lock lock(m_objectsMutex);
+          auto f = m_objects.find(uri);
+          if (f != m_objects.end()) { 
+              return f-&gt;second;
+          }
+        }
+        auto obj = m_db-&gt;loadObject(uri);
+        std::unique_lock lock(m_objectsMutex);
+        auto newHandle = std::make_shared&lt;ObjectWrapper&gt;(obj);
+        m_objects[uri] = newHandle;
+        <span class="fragment hl-code">newHandle-&gt;writeLock();</span>
+      }
+      <span class="fragment hl-code">newHandle-&gt;m_object-&gt;finalize();</span>
+      <span class="fragment hl-code">newHandle-&gt;writeUnlock();</span>
+      return newHandle;
+  }
+        </code></pre>
+      </section>
+
+      <section>
+        <p>Woohoo!</p>
+        <p>...</p>
+        <p>Oh no! It's TSAN again!</p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+  // thread A at some point
+  TypeHandle&lt;Patient&gt; bob = manager.getObject("Bob"); // patient bob gets loaded
+  
+  // thread B at another point
+  WriteLock(bob)-&gt;setScan(manager.getObject("scan-of-Bob"));
+        </code></pre>
+        <p>TSAN: lock order inversion</p>
+      </section>
+
+      <section class="slide">
+        <h3>What TSAN Observed?</h3>
+        <ul>
+          <li>Thread A: <code>getObject</code></li>
+          <ul>
+            <li>Lock of objects mutex</li>
+            <li>Lock of bob mutex</li>
+          </ul>
+          <li>Thread B: <code>WriteLock-&gt;setScan(getObject(</code></li>
+          <ul>
+            <li>Lock of bob mutex</li>
+            <li>Lock of objects mutex</li>
+          </ul>
+          <li>Potential dead lock?</li>
+          <li>Sadly no. Another false positive</li>
+          <li>Bob can't exist for a dead lock</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Let's Try and Fix it</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  ObjectHandle ObjectManager::loadObject(const Uri& uri) {
+      if (!m_db-&gt;hasObject(uri)) return {};
+      {
+        std::lock_guard lock(m_loadingMutex);
+        { // in case another thread already loaded the object
+          std::shared_lock lock(m_objectsMutex);
+          auto f = m_objects.find(uri);
+          if (f != m_objects.end()) { 
+              return f-&gt;second;
+          }
+        }
+        auto obj = m_db-&gt;loadObject(uri);
+<span class="hl-code-i">        auto newHandle = std::make_shared&lt;ObjectWrapper&gt;(obj);
+        newHandle-&gt;writeLock();</span>
+        std::unique_lock lock(m_objectsMutex);        
+        m_objects[uri] = newHandle;       
+      }
+      newHandle-&gt;m_object-&gt;finalize();
+      newHandle-&gt;writeUnlock();
+      return newHandle;
+  }
+        </code></pre>
+      </section>
+
+      <section>
+        <p>The previous example is fixed</p>
+        <p>But...</p>
+        <pre><code class="cpp hljs" data-noescape>
+  // thread A at some point
+  TypeHandle&lt;Patient&gt; bob = manager.getObject("Bob"); // patient bob gets loaded
+  
+  // thread B at another point
+  manager.forEachObject([](ObjectHandle obj) {
+    // Bob will be here
+    ObjectReadLock(obj)-&gt;saveToDB(db);
+  })
+        </code></pre>
+        <p>TSAN: lock order inversion!</p>
+      </section>
+
+      <section class="slide">
+        <h3>What TSAN Observed?</h3>
+        <ul>
+          <li>Thread A: <code>getObject</code></li>
+          <ul>
+            <li>Lock of bob mutex</li>
+            <li>Lock of objects mutex</li>
+          </ul>
+          <li>Thread B:</li>
+          <ul>
+            <li><code>forEachObject</code>: Lock of objects mutex</li>
+            <li>Read lock: Lock of bob mutex</li>
+          </ul>
+          <li>The same false positive</li>
+          <li>Bob can't exist for a dead lock</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Can we fix this?</h3>
+        <br/>
+        <ul>
+          <li>So far we have no idea how (or if)</li>
+          <li>We just don't lock in <code>forEachObject</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>Are we done with loading?</p>
+        <p>Not quite</p>
+        <p>What if want asynchronous loads?</p>
+        <p>Leaving this as an exerscise for the reader :)</p>
+      </section>
+
+      <section class="slide">
+        <h3>Tracking changes</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    int64_t revision() const { return m_revision; }
+  private:
+    int m_revision = 0;
+  };
+  <span class="fragment">
+  ObjectWriteLock::~ObjectWriteLock() { 
+      <span class="hl-code-i">++m_object-&gt;m_revision;</span>
+      m_object.reset();
+      m_handle.writeUnlock(); 
+  }</span>
+  <span class="fragment">
+  auto obj = ObjectReadLock(someHandle); <span class="fragment">// Ew! Update loop</span>
+  if (obj-&gt;revision() != lastKnownRevision) {
+      update(obj);
+  }
+  </span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Subscriptions</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::mutex m_subsMutex;
+      std::vector&lt;SubData&gt; m_subs;
+      void callSubs();
+  public:
+      SubHandle subscribe(SubCallback callback);
+      void unsubscribe(SubHandle handle);
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+  <span class="fragment">
+  void ObjectWrapper::writeUnlock() {
+      m_accessMutex.unlock();
+      <span class="hl-code-i">callSubs();</span>
+  }
+  </span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Implementing Subscriptions</h3>
+        <br/>
+        <ul>
+          <li>...</li>
+          <li>You know what?</li>
+          <li>Subscriptions are boring.</li>
+          <li>We have them. There is no cool story associated with them.</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Getting Rid of Objects</h3>
+        <p class="pinner">We just garbage collect</p>
+        <pre><code class="cpp hljs" data-noescape>
+  void ObjectManager::garbageCollect() {
+      std::unique_lock lock(m_objectsMutex);
+      for (auto it = m_objects.cbegin(); it != m_objects.cend();) {
+          <span class="fragment">// yes! use_count is safe here</span>
+          if (it->second.use_count() == 1) {
+              it = m_objects.erase(it);
+          } else {
+              ++it;
+          }
+      }      
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Takeaways</h3>
+        <br/>
+        <ul>
+          <li>We do cool stuff</li>
+          <li>TSAN is great!</li>
+          <li>All sanitizers are great</li>
+          <li>Write tests</li>
+          <li>Be healthy</li>
+        </ul>
       </section>
 
       <section>
