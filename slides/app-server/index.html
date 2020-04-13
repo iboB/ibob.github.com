@@ -91,28 +91,28 @@
         <h3>What did you just see?</h3>
         <br/>
         <ul>
-          <li>Software started <span class="fancy">from scratch</span> in Feb 2019</li>
-          <li>Aims to replace the existing software</li>
-          <li>Browser GUI</li>
-          <li><span class="fancy">C++17</span> backend</li>
+          <li class="fragment">Software started <span class="fancy">from scratch</span> in Feb 2019</li>
+          <li class="fragment">Aims to replace the existing software</li>
+          <li class="fragment">Browser GUI</li>
+          <li class="fragment"><span class="fancy">C++17</span> backend</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Birds Eye View</h3>
         <ul>
-          <li>A browser client</li>
-          <li>...connecting to an application server</li>
-          <li>...which has multiple services and workers</li>
+          <li class="fragment">A browser client</li>
+          <li class="fragment">...connecting to an <span class="fancy">application server</span></li>
+          <li class="fragment">...which has multiple services and workers</li>
           <ul>
-            <li>Service: always alive. Has sessions</li>
-            <ul>
+            <li class="fragment"><span class="fancy">Service</span>: always alive. Has sessions</li>
+            <ul class="fragment">
               <li>Treatment service</li>
               <li>MRI service</li>
               <li>...</li>
             </ul>
-            <li>Worker: short life. Calculate something and die</li>
-            <ul>
+            <li class="fragment"><span class="fancy">Worker</span>: short life. Calculate something and die</li>
+            <ul class="fragment">
               <li>Identify bladder</li>
               <li>Calculate dose</li>
               <li>...</li>
@@ -125,11 +125,11 @@
         <h3>Going deeper</h3>
         <br/>
         <ul>
-          <li>AppServer = UI Service</li>
-          <li>Has sessions for clients</li>
-          <li>Holds observable state in objects</li>
-          <li>WS Server - a layer for browsers. Reads and writes JSON</li>
-          <li>Theoretically we can have many other layers</li>
+          <li class="fragment"><span class="fancy">AppServer = UI Service</span></li>
+          <li class="fragment">Has sessions for clients</li>
+          <li class="fragment">Holds observable state in objects</li>
+          <li class="fragment">WS Server - a layer for browsers. Reads and writes JSON</li>
+          <li class="fragment">Theoretically we can have many other layers</li>
         </ul>
       </section>
 
@@ -175,7 +175,7 @@
     Data m_data;
   };
         </code></pre>
-        <p class="pinner">Bad idea&trade;. Readers will have to wait on each other</p>
+        <p class="pinner fragment"><span class="fancy">Bad idea&trade;</span> Readers will have to wait on each other</p>
       </section>
 
       <section class="slide">
@@ -193,7 +193,7 @@
     Data m_data;
   };
         </code></pre>
-        <p class="pinner">Let's try to work with this</p>
+        <p class="pinner fragment">Let's try to work with this</p>
       </section>
 
       <section class="slide">
@@ -238,9 +238,9 @@
   class ObjectReadLock {
   public:
     ObjectReadLock(const Object&amp; obj) : m_object(obj) {
-      m_object.readLock();
+      <span class="hl-code-i">m_object.readLock();</span>
     }
-    ~ObjectReadLock() { m_object.readUnlock(); }
+    ~ObjectReadLock() { <span class="hl-code-i">m_object.readUnlock();</span> }
 
     const Object* operator-&gt;() const { return &amp;m_object; }
     const Object* operator*() const  { return &amp;m_object; }
@@ -256,9 +256,9 @@
   class ObjectWriteLock {
   public:
     ObjectWriteLock(Object&amp; obj) : m_object(obj) {
-      m_object.writeLock();
+      <span class="hl-code-i">m_object.writeLock();</span>
     }
-    ~ObjectWriteLock() { m_object.writeUnlock(); }
+    ~ObjectWriteLock() { <span class="hl-code-i">m_object.writeUnlock();</span> }
 
     Object* operator-&gt;() { return &amp;m_object; }
     Object* operator*()  { return &amp;m_object; }
@@ -286,7 +286,7 @@
 
       <section>
         <img src="cow.png" />
-        <p>CoW &ndash; Copy on Write</p>
+        <p class="fragment">CoW &ndash; Copy on Write</p>
       </section>
 
       <section class="slide">
@@ -311,6 +311,7 @@
       <section class="slide">
         <h3>Object CoW</h3>
         <pre><code class="cpp hljs" data-noescape>
+  
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
   public:
@@ -324,7 +325,7 @@
       }
   };
         </code></pre>
-        <p class="pinner">How do we refer to objects?</p>
+        <p class="pinner fragment">How do we refer to objects?</p>
       </section>
 
       <section class="slide">
@@ -493,8 +494,8 @@ void guiLoop(ObjectHandle obj) {
   }
 }
         </code></pre>
-        <p class="pinner">This can totally work</p>
-        <p class="pinner">... but uh-oh! What if we want to write from several threads?</p>
+        <p class="pinner fragment">This can totally work <span class="fragment">if we <span class="fancy">promise</span> to only <span class="fancy">write from a single thread</span></span></p>
+        <p class="pinner fragment">... but what if we want to write from several threads?</p>
       </section>
 
       <section class="slide">
@@ -546,14 +547,14 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Previously in this talk...</h3>
+        <h3>So far...</h3>
         <br/>
         <ul>
-          <li><span class="fancy">Immutable objects</span></li>
-          <li>Almost exactly this is used in our code <span class="fancy">in services</span></li>
-          <li>But this is not how our app objects are made</li>
-          <li>Remember the optional CoW?</li>
-          <li>We still want that</li>
+          <li class="fragment">We have <span class="fancy">immutable objects</span></li>
+          <li class="fragment">Almost exactly this is used in our code <span class="fancy">in services</span></li>
+          <li class="fragment">But this is not how our app objects are made</li>
+          <li class="fragment">Remember the optional CoW?</li>
+          <li class="fragment">We still want that</li>
         </ul>
       </section>
 
@@ -630,10 +631,10 @@ void guiLoop(ObjectHandle obj) {
       <section class="slide">
         <h3>Are we done?</h3>
         <ul>
-          <li>While testing we get some suspicious CoWs</li>
-          <li>Uh-oh! Concurrent writers with no reads CoW??</li>
+          <li class="fragment">While testing we get some suspicious CoWs</li>
+          <li class="fragment">Uh-oh! Concurrent writers with no reads CoW??</li>
         </ul>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   class ObjectWriteLock {
   public:
     ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
@@ -693,31 +694,31 @@ void guiLoop(ObjectHandle obj) {
     <span class="hl-code-i">Object* m_object = nullptr;</span>
   };
         </code></pre>
-        <p class="pinner">At first we chose this</p>
+        <p class="pinner fragment">At first we chose this</p>
       </section>
 
       <section class="slide">
         <h3>We Can't Have Nice Things</h3>
         <br/>
         <ul>
-          <li>Run this with TSAN</li>
-          <li>Get a ton of race warnings</li>
-          <li>Investigate</li>
-          <li><code class="cinline">std::shared_ptr::use_count</code> uses a relaxed memory order</li>
+          <li class="fragment">Run this with TSAN</li>
+          <li class="fragment">Get a ton of race warnings</li>
+          <li class="fragment">Investigate</li>
+          <li class="fragment"><code class="cinline">std::shared_ptr::use_count</code> uses a relaxed memory order</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>What did TSAN see?</h3>
         <ul>
-          <li>Thread A is reading from an object</li>
-          <li>Thread B makes a write lock</li>
-          <li>What would <code class="cinline">if (m_object.use_count() &gt; 1)</code> do?</li>
+          <li class="fragment">Thread A is reading from an object</li>
+          <li class="fragment">Thread B makes a write lock</li>
+          <li class="fragment">What would <code class="cinline">if (m_object.use_count() &gt; 1)</code> do?</li>
           <ul>
-            <li>If the read finishes around that time <code>use_count</code> will be 1</li>
-            <li>But a reorder might happen and we can get 1 there before the reader has finished reading</li>
-            <li>In such case we won't make a CoW and will instead write to the same object</li>
-            <li>But <code>~shared_ptr()</code> uses release on the use count, so this can't happen</li>
+            <li class="fragment">If the read finishes around that time, <code>use_count</code> will be 1</li>
+            <li class="fragment">But a reorder might happen and we can get 1 there before the reader has finished reading</li>
+            <li class="fragment">In such case we won't make a CoW and will instead write to the same object</li>
+            <li class="fragment">But <code>~shared_ptr()</code> uses release on the use count, so this can't happen</li>
           </ul>
         </ul>
       </section>
@@ -726,11 +727,11 @@ void guiLoop(ObjectHandle obj) {
         <h3>The sad Truth</h3>
         <br/>
         <ul>
-          <li>After mucho mucho investigation</li>
-          <li>This sadly is a false positive</li>
-          <li>TSAN is trying to be smart. It reads C++ code and not just assembly.</li>
-          <li>It "knows" of the release-acquire relatioship and assumes relaxed loads are not part of it</li>
-          <li>There are no actual races!</li>
+          <li class="fragment">After mucho mucho investigation</li>
+          <li class="fragment">This sadly is a false positive</li>
+          <li class="fragment">TSAN is trying to be smart. It reads C++ code and not just assembly.</li>
+          <li class="fragment">It "knows" of the release-acquire relatioship and assumes relaxed loads are not part of it</li>
+          <li class="fragment">There are no actual races!</li>
         </ul>
       </section>
 
@@ -746,12 +747,12 @@ void guiLoop(ObjectHandle obj) {
         <h3>Options</h3>
         <br/>
         <ul>
-          <li>Live with it? Bad idea&trade;. <span class="fancy">TSAN is too awesome to abandon</span></li>
-          <li>Rewrite <code>std::shared_ptr</code> with a method <code class="cinline">use_count_acquire</code></li>
-          <ul>
+          <li class="fragment">Live with it? <span class="fragment">Bad idea&trade;.</span> <span class="fancy fragment">TSAN is too awesome to abandon</span></li>
+          <li class="fragment">Rewrite <code>std::shared_ptr</code> with a method <code class="cinline">use_count_acquire</code></li>
+          <ul class="fragment">
             <li>Not as bad as it sounds. There are benefits</li>
           </ul>
-          <li>Reimplement ref counting for objects</li>
+          <li class="fragment">Reimplement ref counting for objects</li>
         </ul>
       </section>
 
@@ -790,7 +791,7 @@ void guiLoop(ObjectHandle obj) {
             <li>Not as bad as it sounds. There are benefits</li>
           </ul>
           <li>Reimplement ref counting for objects</li>
-          <li><span class="fancy">Hack around it</span></li>
+          <li class="fragment">Or... <span class="fancy">hack around it</span></li>
         </ul>
       </section>
 
@@ -832,7 +833,7 @@ void guiLoop(ObjectHandle obj) {
     Object* operator*()  { return *m_object; }
   private:
     ObjectHandle m_handle;
-    std::shared_ptr&lt;Object&gt; m_object;
+    <span class="hl-code-i">std::shared_ptr&lt;Object&gt; m_object;</span>
   };
         </code></pre>
       </section>
@@ -841,8 +842,9 @@ void guiLoop(ObjectHandle obj) {
         <h3>Why does this work?</h3>
         <br/>
         <ul>
-          <li>We're not sure</li>
-          <li>Possibly accessing the use count within a mutex lock helps</li>
+          <li class="fragment">We're not sure</li>
+          <li class="fragment">Possibly accessing the use count within a mutex lock helps</li>
+          <li class="fragment">... or some such</li>
         </ul>
       </section>
 
@@ -850,11 +852,12 @@ void guiLoop(ObjectHandle obj) {
         <h3>Object Access Recap</h3>
         <br/>
         <ul>
-          <li>These are app objects</li>
+          <li>These are <span class="fancy">app objects</span></li>
           <li>Many simultaneous readers</li>
           <li>Synchronised writes from any thread</li>
           <li>Readers wait for writers to complete</li>
           <li>CoW only if we have active readers</li>
+          <li class="fragment">Cool story of TSAN false positive</li>
         </ul>
       </section>
 
@@ -875,7 +878,7 @@ void guiLoop(ObjectHandle obj) {
     <span class="fragment hl-code">Data m_data;</span>
   };
         </code></pre>
-        <p class="pinner">What is Data?</p>
+        <p class="pinner fragment">What is Data?</p>
       </section>
 
       <section class="slide">
@@ -883,10 +886,10 @@ void guiLoop(ObjectHandle obj) {
         <br/>
         <ul>
           <li>A free and open source library: <a href="https://github.com/iboB/dynamix">gh/iboB/dynamix</a></li>
-          <li>External type info</li>
+          <li>Custom type info</li>
           <li>Composition of polymorphic objects from building blocks</li>
           <li>Behavior and implementation changes at run time</li>
-          <li>Example: JSON updates</li>
+          <li class="fragment">Example: JSON updates</li>
         </ul>
       </section>
 
@@ -894,10 +897,10 @@ void guiLoop(ObjectHandle obj) {
         <h3>Object Characteristics</h3>
         <br/>
         <ul>
-          <li>Single main data type: <code class="cinline">isA&lt;Scan&gt;()</code></li>
-          <li>Polymorphic type class: <code class="cinline">isOf&lt;WorkspaceClass&gt;()</code></li>
-          <li>These things never change for an object</li>
-          <li>So we can add them to the handle</li>
+          <li class="fragment">Single main data type: <code class="cinline">isA&lt;Scan&gt;()</code></li>
+          <li class="fragment">Polymorphic type class: <code class="cinline">isOf&lt;WorkspaceClass&gt;()</code></li>
+          <li class="fragment">These things never change for an object</li>
+          <li class="fragment">So we can add them to the handle</li>
         </ul>
       </section>
 
@@ -906,27 +909,27 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
-      dynamix::object_type_info& m_typeInfo;
+      <span class="fragment hl-code">dynamix::object_type_info& m_typeInfo;</span>
   public:
-      template &lt;typename Type&gt;
-      bool isA() const;
-      template &lt;typename TypeClass&gt;
-      bool isOf() const;
+<span class="fragment hl-code">      template &lt;typename Type&gt;
+      bool isA() const;</span>
+<span class="fragment hl-code">      template &lt;typename TypeClass&gt;
+      bool isOf() const;</span>
   };
   using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
         </code></pre>
-        <p class="pinner">No need to lock the object to access these</p>
+        <p class="pinner fragment">No need to lock the object to access these</p>
       </section>
 
       <section class="slide">
         <h3>Reification</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   template &lt;typename Type&gt;
   class TypeHandle {
       ObjectHandle m_handle;
   public:
       TypeHandle(const ObjectHandle& handle) {
-          if (handle-&gt;isA&lt;Type&gt;()) m_handle = handle;
+          <span class="fragment hl-code">if (handle-&gt;isA&lt;Type&gt;()) m_handle = handle;</span>
       }
       explicit operator bool() const { return !!m_handle; }
   };
@@ -935,9 +938,9 @@ void guiLoop(ObjectHandle obj) {
       ObjectHandle m_handle;
   public:
       PolyHandle(const ObjectHandle& handle) {
-          if (handle-&gt;isOf&lt;TypeClass&gt;()) m_handle = handle;
+          <span class="fragment hl-code">if (handle-&gt;isOf&lt;TypeClass&gt;()) m_handle = handle;</span>
       }
-      explicit operator bool() const { return !!m_handle; }
+      <span class="fragment hl-code">explicit operator bool() const { return !!m_handle; }</span>
   };
         </code></pre>
       </section>
@@ -947,7 +950,7 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   template &lt;typename Type&gt;
   class TypeReadLock {
-      ObjectReadLock m_payload;
+      <span class="fragment hl-code">ObjectReadLock m_payload;</span>
       <span class="fragment hl-code">const Type* m_data = nullptr;</span>
   public:
       TypeReadLock(const ObjectHandle& handle) {
@@ -998,8 +1001,8 @@ void guiLoop(ObjectHandle obj) {
   auto scan = TypeReadLock(scanHandle); // infer read lock type from type handle
   scan-&gt;findStructures();
         </code></pre>
-        <p class="pinner">The same for <code class="cinline">TypeWriteLock, PolyReadLock, PolyWriteLock</code></p>
-        <p class="pinner"><code class="cinline">TypeReadLock&lt;T&gt;</code> = <code class="cinline">std::shared_ptr&lt;const T&gt;</code></p>
+        <p class="pinner fragment">The same for <code class="cinline">TypeWriteLock, PolyReadLock, PolyWriteLock</code></p>
+        <p class="pinner fragment"><code class="cinline">TypeReadLock&lt;T&gt;</code> = <code class="cinline">std::shared_ptr&lt;const T&gt;</code></p>
       </section>
 
       <section>
@@ -1020,7 +1023,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Refer to Objects</h3>
+        <h3>URI</h3>
         <br/>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectManager {
@@ -1165,8 +1168,8 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <p>Are we done with loading?</p>
-        <p>Not quite</p>        
-        <p>What if an object needs to load other objects in order to exist?</p>
+        <p class="fragment">Not quite</p>        
+        <p class="fragment">What if an object needs to load other objects in order to exist?</p>
       </section>
 
       <section class="slide">
@@ -1198,8 +1201,8 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <p>Woohoo!</p>
-        <p>...</p>
-        <p>Oh no! It's TSAN again!</p>
+        <p class="fragment">...</p>
+        <p class="fragment">Oh no! It's TSAN again!</p>
       </section>
 
       <section>
@@ -1216,19 +1219,19 @@ void guiLoop(ObjectHandle obj) {
       <section class="slide">
         <h3>What TSAN Observed?</h3>
         <ul>
-          <li>Thread A: <code>getObject</code></li>
-          <ul>
-            <li>Lock of objects mutex</li>
-            <li>Lock of bob mutex</li>
+          <li class="fragment">Thread A: <code>getObject</code></li>
+          <ul class="fragment">
+            <li>Lock of <span class="fancy">objects mutex</span></li>
+            <li>Lock of <span class="fancy">bob mutex</span></li>
           </ul>
-          <li>Thread B: <code>WriteLock-&gt;setScan(getObject(</code></li>
-          <ul>
-            <li>Lock of bob mutex</li>
-            <li>Lock of objects mutex</li>
+          <li class="fragment">Thread B: <code>WriteLock-&gt;setScan(getObject(</code></li>
+          <ul class="fragment">
+            <li>Lock of <span class="fancy">bob mutex</span></li>
+            <li>Lock of <span class="fancy">objects mutex</span></li>
           </ul>
-          <li>Potential dead lock?</li>
-          <li>Sadly no. Another false positive</li>
-          <li>Bob can't exist for a dead lock</li>
+          <li class="fragment">Potential dead lock?</li>
+          <li class="fragment">Sadly no. Another false positive</li>
+          <li class="fragment">Bob <span class="fancy">can't exist</span> for a dead lock</li>
         </ul>
       </section>
 
@@ -1261,8 +1264,8 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <p>The previous example is fixed</p>
-        <p>But...</p>
-        <pre><code class="cpp hljs" data-noescape>
+        <p class="fragment">But...</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   // thread A at some point
   TypeHandle&lt;Patient&gt; bob = manager.getObject("Bob"); // patient bob gets loaded
   
@@ -1272,31 +1275,31 @@ void guiLoop(ObjectHandle obj) {
     ObjectReadLock(obj)-&gt;saveToDB(db);
   })
         </code></pre>
-        <p>TSAN: lock order inversion!</p>
+        <p class="fragment">TSAN: lock order inversion!</p>
       </section>
 
       <section class="slide">
         <h3>What TSAN Observed?</h3>
         <ul>
-          <li>Thread A: <code>getObject</code></li>
-          <ul>
-            <li>Lock of bob mutex</li>
-            <li>Lock of objects mutex</li>
+          <li class="fragment">Thread A: <code>getObject</code></li>
+          <ul class="fragment">
+            <li>Lock of <span class="fancy">bob mutex</span></li>
+            <li>Lock of <span class="fancy">objects mutex</span></li>
           </ul>
-          <li>Thread B:</li>
-          <ul>
-            <li><code>forEachObject</code>: Lock of objects mutex</li>
-            <li>Read lock: Lock of bob mutex</li>
+          <li class="fragment">Thread B:</li>
+          <ul class="fragment">
+            <li><code>forEachObject</code>: Lock of <span class="fancy">objects mutex</span></li>
+            <li>Read lock: Lock of <span class="fancy">bob mutex</span></li>
           </ul>
-          <li>The same false positive</li>
-          <li>Bob can't exist for a dead lock</li>
+          <li class="fragment">The same false positive</li>
+          <li class="fragment">Bob can't exist for a dead lock</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Can we fix this?</h3>
         <br/>
-        <ul>
+        <ul class="fragment">
           <li>So far we have no idea how (or if)</li>
           <li>We just don't lock in <code>forEachObject</code></li>
         </ul>
@@ -1304,14 +1307,14 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <p>Are we done with loading?</p>
-        <p>Not quite</p>
-        <p>What if want asynchronous loads?</p>
-        <p>Leaving this as an exerscise for the reader :)</p>
+        <p class="fragment">Not quite</p>
+        <p class="fragment">What if want <span class="fancy">asynchronous</span> loads?</p>
+        <p class="fragment">Leaving this as an exerscise for the reader :)</p>
       </section>
 
       <section class="slide">
         <h3>Tracking changes</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   class Object {
   public:
     int64_t revision() const { return m_revision; }
@@ -1358,17 +1361,17 @@ void guiLoop(ObjectHandle obj) {
         <h3>Implementing Subscriptions</h3>
         <br/>
         <ul>
-          <li>...</li>
-          <li>You know what?</li>
-          <li>Subscriptions are boring.</li>
-          <li>We have them. There is no cool story associated with them.</li>
+          <li class="fragment">...</li>
+          <li class="fragment">You know what?</li>
+          <li class="fragment">Subscriptions are boring.</li>
+          <li class="fragment">We have them. There is no cool story associated with them.</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Getting Rid of Objects</h3>
-        <p class="pinner">We just garbage collect</p>
-        <pre><code class="cpp hljs" data-noescape>
+        <p class="pinner fragment">We just garbage collect</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   void ObjectManager::garbageCollect() {
       std::unique_lock lock(m_objectsMutex);
       for (auto it = m_objects.cbegin(); it != m_objects.cend();) {
@@ -1387,11 +1390,11 @@ void guiLoop(ObjectHandle obj) {
         <h3>Takeaways</h3>
         <br/>
         <ul>
-          <li>We do cool stuff</li>
-          <li>TSAN is great!</li>
-          <li>All sanitizers are great</li>
-          <li>Write tests</li>
-          <li>Be healthy</li>
+          <li class="fragment">We do cool stuff</li>
+          <li class="fragment">TSAN is great!</li>
+          <li class="fragment">All sanitizers are great</li>
+          <li class="fragment">Write tests</li>
+          <li class="fragment">Be healthy</li>
         </ul>
       </section>
 
