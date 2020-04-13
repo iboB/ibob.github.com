@@ -63,7 +63,7 @@
   int main()
   {
       std::cout &lt;&lt; "Hi, I'm Borislav!\n";
-      std::cout &lt;&lt; "These slides are here: <span class="fragment hl-code">is.gd/lifeofi</span>\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment hl-code">is.gd/apptalk</span>\n";
       return 0;
   }
         </code></pre>
@@ -436,7 +436,9 @@ void guiLoop(ObjectHandle obj) {
     ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
       m_object = m_handle.writeLock();
     }
-    ~ObjectWriteLock() { m_handle.writeUnlock(); }
+    ~ObjectWriteLock() { 
+      m_handle.writeUnlock(); 
+    }
 
     Object* operator-&gt;() { return m_object.get(); }
     Object* operator*()  { return *m_object; }
@@ -597,6 +599,225 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
+        <h3>Are we done?</h3>
+        <ul>
+          <li>While testing we get some suspicious CoWs</li>
+          <li>Uh-oh! Concurrent writers with no reads CoW??</li>
+        </ul>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() { 
+      m_handle.writeUnlock(); <span class="fragment hl-code-i">// we unlock the mutex but retain a ref</span>
+    }
+
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Fix A</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() { 
+      <span class="hl-code-i">m_object.reset();</span>
+      m_handle.writeUnlock(); 
+    }
+
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Fix B</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock()<span class="hl-code-i">.get()</span>;
+    }
+    ~ObjectWriteLock() { 
+      m_handle.writeUnlock(); 
+    }
+    // OMG THE PERF GAIN
+    Object* operator-&gt;() { return m_object; }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    <span class="hl-code-i">Object* m_object = nullptr;</span>
+  };
+        </code></pre>
+        <p class="pinner">At first we chose this</p>
+      </section>
+
+      <section class="slide">
+        <h3>We Can't Have Nice Things</h3>
+        <br/>
+        <ul>
+          <li>Run this with TSAN</li>
+          <li>Get a ton of race warnings</li>
+          <li>Investigate</li>
+          <li><code class="cinline">std::shared_ptr::use_count</code> uses a relaxed memory order</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>What did TSAN see?</h3>
+        <ul>
+          <li>Thread A is reading from an object</li>
+          <li>Thread B makes a write lock</li>
+          <li>What would <code class="cinline">if (m_object.use_count() &gt; 1)</code> do?</li>
+          <ul>
+            <li>If the read finishes around that time <code>use_count</code> will be 1</li>
+            <li>But a reorder might happen and we can get 1 there before the reader has finished reading</li>
+            <li>In such case we won't make a CoW and will instead write to the same object</li>
+            <li>But <code>~shared_ptr()</code> uses release on the use count, so this can't happen</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The sad Truth</h3>
+        <br/>
+        <ul>
+          <li>After mucho mucho investigation</li>
+          <li>This sadly is a false positive</li>
+          <li>TSAN is trying to be smart. It reads C++ code and not just assembly.</li>
+          <li>It "knows" of the release-acquire relatioship and assumes relaxed loads are not part of it</li>
+          <li>There are no actual races!</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>:(</p>
+      </section>
+
+      <section>
+        <p>What can we do?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Options</h3>
+        <br/>
+        <ul>
+          <li>Live with it? Bad idea&trade;. <span class="fancy">TSAN is too awesome to abandon</span></li>
+          <li>Rewrite <code>std::shared_ptr</code> with a method <code class="cinline">use_count_acquire</code></li>
+          <ul>
+            <li>Not as bad as it sounds. There are benefits</li>
+          </ul>
+          <li>Reimplement ref counting for objects</li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+      void Object::incReadLockCounter() const {
+          m_numActiveReadLocks.fetch_add(1, std::memory_order_relaxed);
+      }  
+      void Object::decReadLockCounter() const {
+          m_numActiveReadLocks.fetch_sub(1, <span class="hl-code-i">std::memory_order_release</span>);
+      }  
+      bool Object::hasReadLocks() const {
+          return m_numActiveReadLocks.load(<span class="hl-code-i">std::memory_order_acquire</span>) &gt; 0;
+      }
+  private:
+      mutable std::atomic_int32_t m_numActiveReadLocks = {};
+  };
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+      std::shared_ptr&lt;Object&gt; ObjectWrapper::writeLock() {
+          m_accessMutex.lock();
+          if (<span class="hl-code-i">m_object->hasReadLocks()</span>) {
+              ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Options</h3>
+        <br/>
+        <ul>
+          <li>Live with it? Bad idea&trade;. <span class="fancy">TSAN is too awesome to abandon</span></li>
+          <li>Rewrite <code>std::shared_ptr</code> with a method <code class="cinline">use_count_acquire</code></li>
+          <ul>
+            <li>Not as bad as it sounds. There are benefits</li>
+          </ul>
+          <li>Reimplement ref counting for objects</li>
+          <li><span class="fancy">Hack around it</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Our Optimized Write Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock().get();
+    }
+    ~ObjectWriteLock() { 
+      m_handle.writeUnlock(); 
+    }
+    // OMG THE PERF GAIN
+    Object* operator-&gt;() { return m_object; }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    Object* m_object = nullptr;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Our Deoptimized Write Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() { 
+      <span class="hl-code-i">m_object.reset();</span>
+      m_handle.writeUnlock(); 
+    }
+    // OMG THE PERF LOSS :(
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Why does this work?</h3>
+        <br/>
+        <ul>
+          <li>We're not sure</li>
+          <li>Possibly accessing the use count within a mutex lock helps</li>
+        </ul>
+      </section>
+
+      <section class="slide">
         <h3>Object Access Recap</h3>
         <br/>
         <ul>
@@ -610,7 +831,146 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <h3>Type erasure</h3>
+        <p>Without too much detail</p>
       </section>
+
+      <section class="slide">
+        <h3>Object</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    Data& data() { return m_data; }
+    const Data& data() { return m_data; }
+  private:
+    <span class="fragment hl-code">Data m_data;</span>
+  };
+        </code></pre>
+        <p class="pinner">What is Data?</p>
+      </section>
+
+      <section class="slide">
+        <h3>DynaMix</h3>
+        <br/>
+        <ul>
+          <li>A free and open source library: <a href="https://github.com/iboB/dynamix">gh/iboB/dynamix</a></li>
+          <li>External type info</li>
+          <li>Composition of polymorphic objects from building blocks</li>
+          <li>Behavior and implementation changes at run time</li>
+          <li>Example: JSON updates</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Object Characteristics</h3>
+        <br/>
+        <ul>
+          <li>Single main data type: <code class="cinline">isA&lt;Scan&gt;()</code></li>
+          <li>Polymorphic type class: <code class="cinline">isOf&lt;WorkspaceClass&gt;()</code></li>
+          <li>These things never change for an object</li>
+          <li>So we can add them to the handle</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Type Info in Handles</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      dynamix::object_type_info& m_typeInfo;
+  public:
+      template &lt;typename Type&gt;
+      bool isA() const;
+      template &lt;typename TypeClass&gt;
+      bool isOf() const;
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+        <p class="pinner">No need to lock the object to access these</p>
+      </section>
+
+      <section class="slide">
+        <h3>Reification</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename Type&gt;
+  class TypeHandle {
+      ObjectHandle m_handle;
+  public:
+      TypeHandle(const ObjectHandle& handle) {
+          if (handle->isA&lt;Type&gt;()) m_handle = handle;
+      }
+      explicit operator bool() const { return !!m_handle; }
+  };
+  template &lt;typename TypeClass&gt;
+  class PolyHandle {
+      ObjectHandle m_handle;
+  public:
+      PolyHandle(const ObjectHandle& handle) {
+          if (handle->isOf&lt;TypeClass&gt;()) m_handle = handle;
+      }
+      explicit operator bool() const { return !!m_handle; }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock Reification</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename Type&gt;
+  class TypeReadLock {
+      ObjectReadLock m_payload;
+      <span class="fragment hl-code">const Type* m_data = nullptr;</span>
+  public:
+      TypeReadLock(const ObjectHandle& handle) {
+          if (handle->isA&lt;Type&gt;()) {
+              m_payload = handle->read();
+              <span class="fragment hl-code">m_data = getDataFromObject&lt;Type&gt;(*m_payload)</span>
+          }
+      }
+      const Type* operator-&gt;() const { return m_data; }
+      const Type& operator*() const { return *m_data; }
+
+      explicit operator bool() const { return !!m_payload; }
+  };  
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock Reification</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename Type&gt;
+  class TypeReadLock {
+      ObjectReadLock m_payload;
+      const Type* m_data = nullptr;
+  public:
+      TypeReadLock(const ObjectHandle& handle) {
+          if (handle->isA&lt;Type&gt;()) {
+              m_payload = handle->read();
+              m_data = getDataFromObject&lt;Type&gt;(*m_payload)
+          }
+      }
+<span class="hl-code-i">      TypeReadLock(const TypeHandle&lt;Type&gt;& handle) {
+          m_payload = handle->m_handle->read();
+          m_data = getDataFromObject&lt;Type&gt;(*m_payload);
+      }</span>
+      const Type* operator-&gt;() const { return m_data; }
+      const Type& operator*() const { return *m_data; }
+
+      explicit operator bool() const { return !!m_payload; }
+  };  
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock Reification</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  TypeHandle&lt;Scan&gt; scanHandle;
+  ...
+  auto scan = TypeReadLock(scanHandle); // infer read lock type from type handle
+  scan-&gt;findStructures();
+        </code></pre>
+      </section>
+
 
       <section>
         <h3>Managing objects</h3>
@@ -664,7 +1024,7 @@ void guiLoop(ObjectHandle obj) {
       ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
     });
 
-    slides.footerSetup('is.gd/lifeofi', '2020');
+    slides.footerSetup('is.gd/apptalk', '2020');
   </script>
 
 </body>
