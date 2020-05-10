@@ -1,5 +1,11 @@
 - language: English
   talks:
+  - title: "The Life of a CPU Instruction"
+    desc: >-
+      A fun talk at [code::dive](https://codedive.pl/) 2019 about modern CPU
+      architecture from the point of view of an instruction
+    slides: /slides/life-of-i/
+    video: https://www.youtube.com/watch?v=Cj86huSL6A4
   - title: "Embrace Modern Technology: Using HTML 5 for GUI in C++"
     desc: >-
       A talk at [CppCon](https://cppcon.org/) 2019 about using HTML 5 as a GUI
