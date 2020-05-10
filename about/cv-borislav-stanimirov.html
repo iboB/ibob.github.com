@@ -1,7 +1,9 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"  "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<meta charset="utf-8">
+<title>Borislav Stanimirov</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <script type="text/javascript">
 function calcLastPositionTime() {
     var yearElem = document.getElementById('lp_year');
@@ -82,7 +84,7 @@ addEventListener('load', calcLastPositionTime, false);
 <style type="text/css">
 /*reset globals*/
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;vertical-align: baseline;background: transparent;}
-body {line-height: 1}
+body {line-height: 1.4em; }
 ol,ul {list-style: none}
 blockquote,q {quotes: none}
 blockquote:before,blockquote:after,q:before,q:after {content: '';content: none}
@@ -92,178 +94,298 @@ del {text-decoration: line-through}
 table {border-collapse: collapse;border-spacing: 0}
 /* end reset */
 
-.seo {
-    display: none;
-}
-
 body {
     color: #151510;
-    background: #cdcdcd;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 13px;
-    line-height: 1.8;
+    background: #86B1CC;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: medium;
+    padding: none;
+    margin: none;
 }
 
-.shadow {
+.cv {
     margin-left: auto;
     margin-right: auto;
-    border: 1px solid b5b5b5;
-    width: 800px;
-    background: #a0a0a7;
+    width: 1000px;
 }
 
-.main {
-    margin: 2px;
-    background: #f5f5ff;
+.head {
+    background: #374955;
+    color: #C4C8CB;
+    padding: 20px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.head .title {
+    margin-left: 30px;
+}
+
+.head h1 {
+    font-size: 2.5em;
+    line-height: 1em;
+    margin-bottom: 20px;
+}
+
+.head h2 {
+    font-size: 1.5em;
+    line-height: 1em;
+}
+
+.details li span:first-of-type {
+   display: inline-block;
+   margin-right: 5px;
+   width: 30px;
+   text-align: right;
+}
+
+.head a {
+    color: #C4C8CB;
+    text-decoration: underline;
+}
+
+.head .headshot {
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.head .title {
+    display: inline-block;
+}
+
+.head .details {
+    margin-left: auto;
+    font-weight: bold;
 }
 
 .content {
-    padding-top: 100px;
-    padding-bottom: 150px;
-    padding-left: 25px;
-    padding-right: 25px;
+    background: #f5f5ff;
+    padding: 20px;
 }
 
-th {
-    font-size: 12px;
-    font-weight:bold;
-    font-family: Arial, Helvetica, sans-serif;
-    margin-bottom: 0.5em;
-    text-transform: uppercase;
+.content a {
+    color: #A9586E;
 }
 
-th:first-letter {
-    font-size:1.5em;
-    font-weight:normal;
+section {
+    border-bottom: solid 1px #c4c8cb;
+    margin-bottom: 20px;
 }
 
-td {
-    padding-top: 10px;
+section:last-of-type {
+    border-bottom: none;
+    margin: none;
 }
 
-.left {
-    width: 30%;
-    text-align: right;
-    padding-right: 12px;
-    border-right: 1px solid #a0a0a0;
+article {
+    margin-left: 20px;
+    margin-bottom: 20px;
 }
 
-.right {
-    padding-left: 15px;
+.content h2 {
+    font-size: 1.7em;
+    margin-bottom: 20px;
 }
 
-#age, #lp_month, #lp_year, #lp_time {
-    display: inline;
+.content h3 {
+    font-size: 1.2em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.work h3 {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+.period {
+    display: inline-block;
+    font-size: small;
+    font-style: italic;
+}
+
+.languages td {
+    padding-right: 6px;
+}
+
+.languages td:first-of-type {
+    font-weight: bold;
+}
+
+.experience td {
+    padding-right: 10px;
+}
+
+.experience td:first-of-type {
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .cv {
+        width: 100%;
+    }
+    .period {
+        font-size: medium;
+        margin-bottom: 10px;
+    }
+    .title {
+        max-width: 30%;
+    }
+}
+@media (max-width: 426px) {
+    .head {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        text-align: center;
+    }
+    .head .headshot {
+        margin-bottom: 10px;
+    }
+    .head .title {
+        margin: 10px 0;
+    }
+    .head .details {
+        margin: 10px 0;
+    }
+    .head .details li {
+        line-height: 20px;
+    }
+    .work h3,
+    .period {
+        display: block;
+    }
+    .title {
+        max-width: 100%;
+    }
+}
+@media print {
+    .head {
+        color: #000;
+    }
+    .head a,
+    .content a {
+        color: #000;
+        text-decoration: none;
+    }
 }
 
 </style>
-<title>Borislav Stanimirov</title>
 </head>
 <body>
-<div class="shadow">
-<div class="main">
-<div class="content">
-    <h1 class="seo">Borislav Stanimirov</h1>
-    <table class="table" width="100%">
-    <tr><th class="left"></th></tr>
-    <tr><th class="left">Personal information</th><th></th></tr>
-    <tr><td class="left"> </td><td class="right"><img src="data:image/jpeg;base64,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"></td></tr>
-    <tr><td class="left">Name</td><td class="right">Borislav Stanimirov</td></tr>
-    <tr><td class="left">Address</td><td class="right">Sofia, Bulgaria</td></tr>
-    <tr><td class="left">E-mail</td><td class="right"><a href="mailto:b.stanimirov@abv.bg">b.stanimirov@abv.bg</a></td></tr>
-    <tr><td class="left">Date of birth</td><td class="right">25.06.1984 <div id="age"></div></td></tr>
-    <tr><td class="left"></td><td class="right"></td></tr>    
-    <tr><th class="left">Work experience</th><th></th></tr>
-    <tr><td class="left">Period</td><td class="right"><div id="lp_month">Feb</div>, <div id="lp_year">2019</div> - present <div id="lp_time"></div></td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="https://viewray.com/">ViewRay</a></td></tr>
-    <tr><td class="left">Product</td><td class="right">Medical software for cancer treatment</td></tr>
-    <tr><td class="left">Position</td><td class="right">Staff software engineer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Architecture, software design, and implementation of a client-server application which is used by medical personnel with ViewRay's cancer treatment installation.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Oct, 2018 - Feb, 2019 (4 Months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="https://www.schonfeld.com/">Schonfeld</a></td></tr>
-    <tr><td class="left">Product</td><td class="right">High-frequency trading software</td></tr>
-    <tr><td class="left">Position</td><td class="right">Programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Worked on integration of CMake and Conan in the build pipeline.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Jun, 2018 - Oct, 2018 (4 months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="https://www.egt-bg.com/en/home">EGT</a></td></tr>
-    <tr><td class="left">Product</td><td class="right">Slot-machine software engine</td></tr>
-    <tr><td class="left">Position</td><td class="right">Programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Working on a proprietary slot-machine software engine. Graphics, stability, performance.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">May, 2015 - Jun, 2018 (3 years)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="http://www.chobolabs.com">Chobolabs</a> (<a href="https://github.com/Chobolabs/">GitHub</a></a>)</td></tr>
-    <tr><td class="left">Product</td><td class="right"><a href="http://www.playmayhem.com">Mayhem</a></td></tr>
-    <tr><td class="left">Position</td><td class="right">Software engineer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Design and implementation of rendering system and many other engine systems. Optimizations. Transition to CMake. Support for browser targets with Emscripten. Internal software development. Several open-source libraries. Planning.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Mar, 2013 - June, 2014 (1 year 3 months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="http://www.epic-devs.com">Epic Devs</a></td></tr>
-    <tr><td class="left">Product</td><td class="right">Epic Pirate Story II</td></tr>
-    <tr><td class="left">Position</td><td class="right">Lead programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Management of tasks within the team. Software architecture and design. Planning. RnD. Training. Internal software development.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Mar, 2012 - Mar, 2013 (11 months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="http://www.gameloft.com">Gameloft Bulgaria</a></td></tr>
-    <tr><td class="left">Product</td><td class="right"><a href="http://blog.gameloft.com/index.php/2011/12/08/fantasy-town/">Fantasy Town</a>, <a href="http://forum.gameloft.com/index.php?topic=22845.0">Gangstar 3 Rio</a>, Minor work in other projects</td></tr>
-    <tr><td class="left">Position</td><td class="right">Lead programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Project evolution. Management of tasks within the team. Planning. RnD. Training. Support.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Oct, 2011 - Feb, 2012 (4 months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="www.abaltatech.com">Abalta Technologies</a></td></tr>
-    <tr><td class="left">Product</td><td class="right">Various</td></tr>
-    <tr><td class="left">Position</td><td class="right">Senior programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Research and development for the newest projects of the company.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Jan, 2006 - Jan, 2010 (4 years)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="http://mastheadstudios.com">Masthead Studios</a></td></tr>
-    <tr><td class="left">Product</td><td class="right"><a href="http://play-earthrise.com">Earthrise MMORPG</a></td></tr>
-    <tr><td class="left">Position</td><td class="right">Senior programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Management of tasks within the team. Planning. Core design. Rendering engine design and implementation: Terrain, Water, Sky, General rendering pipeline. Design and various implementation in the editors. Network design. Database design and implementation. Build-system design and implementation. Game-design-related coding.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Mar, 2004 - Jan, 2006 (1 year, 9 months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right">&mdash;</td></tr>
-    <tr><td class="left">Product</td><td class="right">Various: games, desktop applications, libraries</td></tr>
-    <tr><td class="left">Position</td><td class="right">Freelance programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Planning. Design. Coding. Support.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left">Period</td><td class="right">Sep, 2002 - Mar, 2004 (1 year, 6 months)</td></tr>
-    <tr><td class="left">Employer</td><td class="right"><a href="http://www.icb.bg">Interconsult Bulgaria</a></td></tr>
-    <tr><td class="left">Product</td><td class="right"><a href="http://www.caddiesoftware.com">Caddie</a></td></tr>
-    <tr><td class="left">Position</td><td class="right">Programmer</td></tr>
-    <tr><td class="left">Activities and responsibilities</td><td class="right">Tasks in the GUI and the rendering system. Maintaining and migrating legacy code.</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><th class="left">Languages</th><th></th></tr>
-    <tr><td class="left">Bulgarian</td><td class="right">native</td></tr>
-    <tr><td class="left">English</td><td class="right">excellent</td></tr>
-    <tr><td class="left">Russian</td><td class="right">good</td></tr>
-    <tr><td class="left">German</td><td class="right">good</td></tr>
-    <tr><th class="left">Technical skills</th><th></th></tr>
-    <tr><td class="left">C++</td><td class="right">Excellent. More than 20 years of experience. More than 17 years of professional experience</td></tr>
-    <tr><td class="left">Programming languages</td><td class="right">Advanced in C, Ruby, lua, Mathematica. Good understanding of Nim, C#, Java, Scala, D, PHP, JavaScript, Haskell, Lisp, Assembly, Perl, Python, and others</td></tr>
-    <tr><td class="left">APIs and libraries</td><td class="right">A lot of experience with boost, OpenGL, OpenCL, DirectX, Qt, SDL, MFC, Win32 and others</td></tr>
-    <tr><td class="left">Other</td><td class="right">Experience with software architecture and design. Advanced knowledge in graphical programming, programming algorithms, programming concepts, multi-threaded programming, mathematical algorithms, discrete mathematics, number theory. Experience with Windows, Linux, iOS, Android, asm.js and WebAssembly programming, various compilers, version control systems, build systems, and development environments.</td></tr>
-    <tr><th class="left">Education</th><th></th></tr>
-    <tr><td class="left"></th><td class="right"><em>No university education</em></th></tr>
-    <tr><td class="left">1997-2002</td><td class="right">Sofia Gymnasium of Mathematics</td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><th class="left">Other</th><th></th></tr>
-    <tr><td class="left">Personal website</td><td class="right"><a href="https://ibob.github.io">ibob.github.io</a></td></tr>
-    <tr><td class="left">GitHub profile</td><td class="right"><a href="https://github.com/iboB">github.com/iboB</a></td></tr>
-    <tr><td class="left">Linkedin profile</td><td class="right"><a href="https://www.linkedin.com/in/borislavstanimirov/">linkedin.com/in/borislavstanimirov/</a></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    <tr><td class="left"> </td><td class="right"></td></tr>
-    </table>
+<div class="cv">
+<div class="head">
+    <img class="headshot" alt="Borislav Stanimirov" src="data:image/webp;base64,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"/>
+    <div class="title">
+        <h1>Borislav Stanimirov</h1>
+        <h2>C++ Programmer, Software Architect</h2>
+    </div>
+    <ul class="details">
+        <li><span>l:</span>Sofia, Bulgaria</li>
+        <li><span>d:</span>25.06.1984 <span id="age"></span></li>
+        <li><span>@:</span><a href="mailto:b.stanimirov@abv.bg">b.stanimirov@abv.bg</a></li>
+        <li><span>w:</span><a href="https://ibob.github.io">ibob.github.io</a></li>
+        <li><span>gh:</span><a href="https://github.com/iboB">github.com/iboB</a></li>
+    </ul>
 </div>
+<div class="content">
+<section>
+    <h2>Profile</h2>
+    <article>
+        17+ years of professional experience with C++. Significant experience with software architecture and design, graphical programming and GPGPU, low level programming, algorithms, major platforms, compilers, version control systems, build systems, and IDEs
+    </article>
+</section>
+<section class="work">
+    <h2>Work Experience</h2>
+    <article>
+        <h3>Staff Software Engineer at <a href="https://viewray.com/">ViewRay</a></h3>
+        <div class="period"><span id="lp_month">Feb</span>, <span id="lp_year">2019</span> &ndash; present <span id="lp_time"></span></div>
+        <p>Architecture, software design, and implementation of a client-server application which is used by medical personnel with ViewRay's cancer treatment installation. UI Backend. Service architecture.</p>
+    </article>
+    <article>
+        <h3>Programmer at <a href="https://www.schonfeld.com/">Schonfeld</a></h3>
+        <div class="period">Oct, 2018 &ndash; Feb, 2019 (4 Months)</div>
+        <p>Worked on integration of CMake and Conan in the build pipeline of Schonfeld's high-frequency trading software.</p>
+    </article>
+    <article>
+        <h3>Senior Programmer at <a href="https://www.egt-bg.com/en/home">EGT</a></h3>
+        <div class="period">Jun, 2018 &ndash; Oct, 2018 (4 months)</div>
+        <p>Worked on a proprietary slot-machine software engine. Graphics, sound, stability, performance.</p>
+    </article>
+    <article>
+        <h3>Senior Programmer at <a href="http://www.chobolabs.com">Chobolabs</a></h3>
+        <div class="period">May, 2015 &ndash; Jun, 2018 (3 years)</div>
+        <p>Design and implementation of rendering system and many other engine systems for <a href="http://www.playmayhem.com">Mayhem</a>. Optimizations. Transition to CMake. Support for browser targets with Emscripten. Internal software development. Several open-source libraries at <a href="https://github.com/Chobolabs/">github.com/Chobolabs</a>. Planning.</p>
+    </article>
+    <article>
+        <h3>Lead Programmer at <a href="http://www.epic-devs.com">Epic Devs</a></h3>
+        <div class="period">Mar, 2013 &ndash; June, 2014 (1 year 3 months)</div>
+        <p>Software architecture and design for Epic Pirate Story II. Management of tasks within the team. Planning. RnD. Training. Internal software development.</p>
+    </article>
+    <article>
+        <h3>Lead Programmer at <a href="http://www.gameloft.com">Gameloft Bulgaria</a></h3>
+        <div class="period">Mar, 2012 &ndash; Mar, 2013 (11 months)</div>
+        <p>Project evolution for <a href="http://blog.gameloft.com/index.php/2011/12/08/fantasy-town/">Fantasy Town</a>, <a href="http://forum.gameloft.com/index.php?topic=22845.0">Gangstar 3 Rio</a>, and minor work in other projects. Management of tasks within the team. Planning. RnD. Training. Support.</p>
+    </article>
+    <article>
+        <h3>Senior Programmer at <a href="www.abaltatech.com">Abalta Technologies</a></h3>
+        <div class="period">Oct, 2011 &ndash; Feb, 2012 (4 months)</div>
+        <p>Research and development for the newest project of the company: a GPS tracker and GIS on a Windows CE device.</p>
+    </article>
+    <article>
+        <h3>Senior Programmer at <a href="http://mastheadstudios.com">Masthead Studios</a></h3>
+        <div class="period">Jan, 2006 &ndash; Jan, 2010 (4 years)</div>
+        <p>Worked on <a href="http://play-earthrise.com">Earthrise MMORPG</a> and its proprietary engine. Management of tasks within the team. Planning. Core design. Rendering engine design and implementation: Terrain, Water, Sky, General rendering pipeline. Design and various implementation in the editors. Network design. Database design and implementation. Build-system design and implementation. Game-design-related coding.</p>
+    </article>
+    <article>
+        <h3>Freelance Programmer</h3>
+        <div class="period">Mar, 2004 &ndash; Jan, 2006 (1 year, 9 months)</div>
+        <p>Various small projects: games, desktop applications</p>
+    </article>
+    <article>
+        <h3>Programmer at Interconsult Bulgaria</h3>
+        <div class="period">Sep, 2002 &ndash; Mar, 2004 (1 year, 6 months)</div>
+        <p>Worked on <a href="http://www.caddiesoftware.com">Caddie</a>. Tasks in the GUI and the rendering system. Maintaining and migrating legacy code.</p>
+    </article>
+</section>
+<section>
+    <h2>Education</h2>
+    <article><em>No university education</em></article>
+    <article>1997-2002: Sofia Gymnasium of Mathematics</article>
+</section>
+<section>
+    <h2>Other</h2>
+    <article>
+        <h3>Significant Experience With</h3>
+        <table class="experience">
+        <tr><td>Programming languages</td><td>C++, C, Ruby, lua, Mathematica, Nim, C#, Java, D, JavaScript, Assembly, and others</td></tr>
+        <tr><td>Frameworks and libraries</td><td>boost, Poco, Qt, OpenGL, OpenCL, DirectX &lt;10, and others</td></tr>
+        <tr><td>Platforms</td><td>Windows, Linux, macOS, Android, iOS, Browser</td></tr>
+        </table>
+    </article>
+    <article>
+        <h3>Projects</h3>
+        <a href="https://ibob.github.io/projects/">ibob.github.io/projects/</a>
+    </article>
+    <article>
+        <h3>Talks at Conferences and Meetups</h3>
+        <a href="https://ibob.github.io/talks/">ibob.github.io/talks/</a>
+    </article>
+    <article>
+        <h3>Languages</h3>
+        <table class="languages">
+            <tr><td>Bulgarian</td><td>&ndash; native</td></tr>
+            <tr><td>English</td><td>&ndash; excellent</td></tr>
+            <tr><td>German</td><td>&ndash; good</td></tr>
+            <tr><td>Russian</td><td>&ndash; good</td></tr>
+        </table>
+    </article>
+</section>
 </div>
 </div>
 </body>
