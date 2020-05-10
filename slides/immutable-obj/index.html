@@ -1,0 +1,928 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Immutable Objects in C++</title>
+
+  <meta name="description" content="Slides for a software architecture talk about immutable objects in C++">
+  <meta name="author" content="Borislav Stanimirov">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/reveal.min.css" />
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/theme/simple.min.css" id="theme" />
+  <link rel="stylesheet" href="../lib/slides.css" />
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
+
+  <!-- Slides-specific styles -->
+  <link rel="stylesheet" href="custom.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ?
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/pdf.min.css' :
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/paper.min.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+      <section class="title">
+        <h1>Immutable Objects in C++</h1>
+        <br/>
+        <p>
+          <a href="http://ibob.github.io">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+        </p>
+        <p>2020</p>
+      </section>
+
+      <section class="slide">
+        <h3>Hello, World</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  #include &lt;iostream&gt;
+
+  int main()
+  {
+      std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment hl-code">is.gd/apptalk</span>\n";
+      return 0;
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav Stanimirov</h3>
+        <br/>
+        <ul>
+          <li>Mostly a <span class="fancy">C++</span> programmer</li>
+          <li>2006-2018 a <span class="fancy">game</span> programmer</li>
+          <li>Since 2019 a <span class="fancy">medical software</span> programmer</li>
+          <li><span class="fancy">Open-source</span> programmer</li>
+          <li><a href="https://github.com/iboB">github.com/iboB</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <img class="diagram" src="ViewRay_Logo.png"/>
+        <p></p>
+        <h3>ViewRay's approach to treating cancer</h3>
+        <p><em>5 min demo of cancer treatment workflow</em></p>
+      </section>
+
+      <section class="slide">
+        <h3>What did you just see?</h3>
+        <br/>
+        <ul>
+          <li>Software started <span class="fancy">from scratch</span> in Feb 2019</li>
+          <li>Aims to replace the existing software</li>
+          <li>Browser GUI</li>
+          <li><span class="fancy">C++17</span> backend</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Birds Eye View</h3>
+        <ul>
+          <li>A browser client</li>
+          <li>...connecting to an <span class="fancy">application server</span></li>
+          <li>...which has multiple services and workers</li>
+          <ul>
+            <li><span class="fancy">Service</span>: always alive. Has sessions</li>
+            <ul>
+              <li>Treatment service</li>
+              <li>MRI service</li>
+              <li>...</li>
+            </ul>
+            <li><span class="fancy">Worker</span>: short life. Calculate something and die</li>
+            <ul>
+              <li>Identify bladder</li>
+              <li>Calculate dose</li>
+              <li>...</li>
+            </ul>
+          </ul>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Going deeper</h3>
+        <br/>
+        <ul>
+          <li><span class="fancy">AppServer = UI Service</span></li>
+          <li>Has sessions for clients</li>
+          <li>Holds observable state in objects</li>
+          <li>WS Server - a layer for browsers. Reads and writes JSON</li>
+          <li>Theoretically we can have many other layers</li>
+        </ul>
+      </section>
+
+      <section>
+        <img class="diagram" src="deeper.jpg"/>
+      </section>
+
+      <section>
+        <h3>AppServer Architecture</h3>
+      </section>
+
+      <section>
+        <h3>Accessing objects</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Object</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    Data& data() { return m_data; }
+    const Data& data() { return m_data; }
+  private:
+    Data m_data;
+  };
+        </code></pre>
+      </section>
+
+      <section>
+        <p>Multiple threads. Races</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    void lock() { m_mutex.lock(); }
+    void unlock() { m_mutex.unlock(); }
+  private:
+    std::mutex m_mutex;
+    Data m_data;
+  };
+        </code></pre>
+        <p class="pinner fragment"><span class="fancy">Bad idea&trade;</span> Readers will have to wait on each other</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    void readLock() { m_mutex.lock_shared(); }
+    void readUnlock() { m_mutex.unlock_shared(); }
+
+    void writeLock()  { m_mutex.lock(); }
+    void writeUnlock()  { m_mutex.unlock(); }
+  private:
+    std::shared_mutex m_mutex;
+    Data m_data;
+  };
+        </code></pre>
+        <p class="pinner fragment">Let's try to work with this</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+    void readLock() <span class="hl-code-i">const</span> { m_mutex.lock_shared(); }
+    void readUnlock() <span class="hl-code-i">const</span> { m_mutex.unlock_shared(); }
+
+    void writeLock()  { m_mutex.lock(); }
+    void writeUnlock()  { m_mutex.unlock(); }
+  private:
+    <span class="hl-code-i">mutable</span> std::shared_mutex m_mutex;
+    Data m_data;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_mutex</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  <span class="hl-code-i">private:</span>
+    void readLock() const { m_mutex.lock_shared(); }
+    void readUnlock() const { m_mutex.unlock_shared(); }
+
+    void writeLock()  { m_mutex.lock(); }
+    void writeUnlock()  { m_mutex.unlock(); }
+
+    mutable std::shared_mutex m_mutex;
+    Data m_data;
+<span class="hl-code-i">    friend class ObjectReadLock;
+    friend class ObjectWriteLock;</span>
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Read Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectReadLock {
+  public:
+    ObjectReadLock(const Object&amp; obj) : m_object(obj) {
+      <span class="hl-code-i">m_object.readLock();</span>
+    }
+    ~ObjectReadLock() { <span class="hl-code-i">m_object.readUnlock();</span> }
+
+    const Object* operator-&gt;() const { return &amp;m_object; }
+    const Object* operator*() const  { return &amp;m_object; }
+  private:
+    const Object&amp; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Write Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(Object&amp; obj) : m_object(obj) {
+      <span class="hl-code-i">m_object.writeLock();</span>
+    }
+    ~ObjectWriteLock() { <span class="hl-code-i">m_object.writeUnlock();</span> }
+
+    Object* operator-&gt;() { return &amp;m_object; }
+    Object* operator*()  { return &amp;m_object; }
+  private:
+    Object&amp; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Shared Mutex Problems</h3>
+        <br/>
+        <ul>
+          <li class="fragment ss">Writers will have to wait on each other</li>
+          <li class="fragment">Writers will have to wait on readers</li>
+          <ul class="fragment">
+            <li>Our anatomical structures</li>
+            <li>Contouring algorithms write</li>
+            <li>Dose calculation reads</li>
+            <li>UI reads</li>
+            <li>Contouring algorithms may also read</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section>
+        <img src="cow.png" />
+        <p class="fragment">CoW &ndash; Copy on Write</p>
+      </section>
+
+      <section class="slide">
+        <h3>Classic Swift-style CoW</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class CoW {
+      std::shared_ptr&lt;T&gt; m_data;
+  public:
+<span class="fragment hl-code">      const T& data() const {
+          return *m_data;
+      }</span>
+      T& mutableData() {
+          <span class="fragment hl-code">if (m_data.use_count() &gt; 1)</span>
+              <span class="fragment hl-code">m_data = std::make_shared&lt;T&gt;(*m_data);</span>
+          return *m_data;
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object CoW</h3>
+        <pre><code class="cpp hljs" data-noescape>
+
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+  public:
+      const Object&amp; read() const {
+          return *m_object;
+      }
+      Object&amp; write() {
+          if (m_object.use_count() &gt; 1)
+              m_object = std::make_shared&lt;Object&gt;(*m_object);
+          return *m_object;
+      }
+  };
+        </code></pre>
+        <p class="pinner fragment">How do we refer to objects?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectWrapper myobj;
+std::thread gui([]() { guiLoop(myobj); });
+myobj.write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! After this line</span>
+
+...
+
+void guiLoop(ObjectWrapper obj) {
+  while (true) {
+    display(obj.read().getSomething()); <span class="fragment hl-code-i">// No way to access changed here</span>
+  }
+}
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Handle</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+  public:
+      const Object&amp; read() const {
+          return *m_object;
+      }
+      Object&amp; write() {
+          if (m_object.use_count() &gt; 1)
+              m_object = std::make_shared&lt;Object&gt;(*m_object);
+          return *m_object;
+      }
+  };
+  <span class="fragment hl-code-i">using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;</span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects through Handles</h3>
+        <pre><code class="cpp hljs" data-noescape>
+<span class="hl-code-i">ObjectHandle</span> myobj;
+std::thread gui([]() { guiLoop(myobj); });
+myobj<span class="hl-code-i">-&gt;</span>write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! during this line</span>
+
+...
+
+void guiLoop(<span class="hl-code-i">ObjectHandle</span> obj) {
+  while (true) {
+    display(obj<span class="hl-code-i">-&gt;</span>read().getSomething()); <span class="fragment hl-code-i">// We race on the shared pointer here</span>
+  }
+}
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Object Handle Races</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+  public:
+<span class="fragment hl-code">      std::shared_ptr&lt;const Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }</span>
+      Object&amp; write() {
+          if (m_object.use_count() &gt; 1) {
+<span class="fragment hl-code">              auto newObject = std::make_shared&lt;Object&gt;(*m_object);
+              std::atomic_store_explicit(&m_object, newObject,
+                  std::memory_order_relaxed);</span>
+          }
+          return *m_object;
+      }
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects through Handles</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectHandle myobj;
+std::thread gui([]() { guiLoop(myobj); });
+myobj-&gt;write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! during this line</span>
+
+...
+
+void guiLoop(ObjectHandle obj) {
+  while (true) {
+    display(obj-&gt;read()<span class="hl-code-i">-&gt;</span>getSomething()); <span class="fragment hl-code-i">// We race on object contents in "Something"</span>
+  }
+}
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Always CoW</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      <span class="fragment hl-code">std::shared_ptr&lt;Object&gt; m_writeObject;</span>
+  public:
+      std::shared_ptr&lt;const Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+<span class="fragment hl-code">      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }</span>
+<span class="fragment hl-code">      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+      }</span>
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Bring Back Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectReadLock {
+  public:
+    ObjectReadLock(const ObjectHandle& handle) : m_object(handle.read()) {}
+
+    const Object* operator-&gt;() const { return m_object.get(); }
+    const Object* operator*() const  { return *m_object; }
+  private:
+    std::shared_ptr&lt;const Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Bring Back Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() {
+      m_handle.writeUnlock();
+    }
+
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects through Locks</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectHandle myobj;
+std::thread gui([]() { guiLoop(myobj); });
+ObjectWriteLock(myobj)-&gt;changeSomething();
+
+...
+
+void guiLoop(ObjectHandle obj) {
+  while (true) {
+    display(ObjectReadLock(obj)-&gt;getSomething());
+  }
+}
+        </code></pre>
+        <p class="pinner fragment">This can totally work <span class="fragment">if we <span class="fancy">promise</span> to only <span class="fancy">write from a single thread</span></span></p>
+        <p class="pinner fragment">... but what if we want to write from several threads?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Multiple writers</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject; <span class="hl-code-i">// Make this thread safe?</span>
+                                             <span class="fragment hl-code-i">// Where is the *real* data then?</span>
+      std::shared_ptr&lt;Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+      }
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Heavy Artillery</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      <span class="hl-code-i">std::mutex m_accessMutex;</span>
+      std::shared_ptr&lt;Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          <span class="hl-code-i">m_accessMutex.lock();</span>
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          <span class="hl-code-i">m_accessMutex.unlock();</span>
+      }
+  };
+  using ObjectHandle = std::shared_ptr&lt;ObjectWrapper&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>So far...</h3>
+        <br/>
+        <ul>
+          <li>We have <span class="fancy">immutable objects</span></li>
+          <li>Almost exactly this is used in our code <span class="fancy">in services</span></li>
+          <li>But this is not how our app objects are made</li>
+          <li>Remember the optional CoW?</li>
+          <li>What if we still want that?</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>What if?</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;Object&gt; read() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+<span class="hl-code-i">          m_writeObject = (m_object.use_count() &gt; 1)
+              ? std::make_shared&lt;T&gt;(*m_object);
+              : m_object;</span> <span class="fragment hl-code-i">// readers suffer</span>
+          return m_writeObject;
+      }
+      void writeUnlock() {
+      ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock on Read</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;Object&gt; read() const {
+          <span class="hl-code-i">std::lock_guard l(m_accessMutex);</span>
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+          m_writeObject = (m_object.use_count() &gt; 1)
+              ? std::make_shared&lt;T&gt;(*m_object);
+              : m_object;
+          return m_writeObject;
+      }
+      void writeUnlock() {
+      ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Lock on Read</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;Object&gt; read() const {
+          std::lock_guard l(m_accessMutex);
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+<span class="hl-code-i">          if (m_object.use_count() &gt; 1) {
+              auto newObject = std::make_shared&lt;Object&gt;(*m_object);
+              std::atomic_store_explicit(&m_object, newObject,
+                  std::memory_order_relaxed);
+          }
+          return m_object;</span>
+      }
+      void writeUnlock() {
+          <span class="fragment hl-code">m_accessMutex.unlock();</span>
+      }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Are we done?</h3>
+        <ul>
+          <li class="fragment">While testing we get some suspicious CoWs</li>
+          <li class="fragment">Uh-oh! Concurrent writers with no reads CoW??</li>
+        </ul>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() {
+      m_handle.writeUnlock(); <span class="fragment hl-code-i">// we unlock the mutex but retain a ref</span>
+    }
+
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Fix A</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() {
+      <span class="hl-code-i">m_object.reset();</span>
+      m_handle.writeUnlock();
+    }
+
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    std::shared_ptr&lt;Object&gt; m_object;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Fix B</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock()<span class="hl-code-i">.get()</span>;
+    }
+    ~ObjectWriteLock() {
+      m_handle.writeUnlock();
+    }
+    // OMG THE PERF GAIN
+    Object* operator-&gt;() { return m_object; }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    <span class="hl-code-i">Object* m_object = nullptr;</span>
+  };
+        </code></pre>
+        <p class="pinner fragment">At first we chose this</p>
+      </section>
+
+      <section class="slide">
+        <h3>We Can't Have Nice Things</h3>
+        <br/>
+        <ul>
+          <li class="fragment">Run this with TSAN</li>
+          <li class="fragment">Get a ton of race warnings</li>
+          <li class="fragment">Investigate</li>
+          <li class="fragment"><code class="cinline">std::shared_ptr::use_count</code> uses a relaxed memory order</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>What did TSAN see?</h3>
+        <ul>
+          <li class="fragment">Thread A is reading from an object</li>
+          <li class="fragment">Thread B makes a write lock</li>
+          <li class="fragment">What would <code class="cinline">if (m_object.use_count() &gt; 1)</code> do?</li>
+          <ul>
+            <li class="fragment">If the read finishes around that time, <code>use_count</code> will be 1</li>
+            <li class="fragment">But a reorder might happen and we can get 1 there before the reader has finished reading</li>
+            <li class="fragment">In such case we won't make a CoW and will instead write to the same object</li>
+            <li class="fragment">But <code>~shared_ptr()</code> uses release on the use count, so this can't happen</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The sad Truth</h3>
+        <br/>
+        <ul>
+          <li class="fragment">After mucho mucho investigation</li>
+          <li class="fragment">This sadly is a false positive</li>
+          <li class="fragment">TSAN is trying to be smart. It reads C++ code and not just assembly.</li>
+          <li class="fragment">It "knows" of the release-acquire relatioship and assumes relaxed loads are not part of it</li>
+          <li class="fragment">There are no actual races!</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>:(</p>
+      </section>
+
+      <section>
+        <p>What can we do?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Options</h3>
+        <br/>
+        <ul>
+          <li class="fragment">Live with it? <span class="fragment">Bad idea&trade;.</span> <span class="fancy fragment">TSAN is too awesome to abandon</span></li>
+          <li class="fragment">Rewrite <code>std::shared_ptr</code> with a method <code class="cinline">use_count_acquire</code></li>
+          <ul class="fragment">
+            <li>Not as bad as it sounds. There are benefits</li>
+          </ul>
+          <li class="fragment">Reimplement ref counting for objects</li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+  class Object {
+  public:
+      void Object::incReadLockCounter() const {
+          m_numActiveReadLocks.fetch_add(1, std::memory_order_relaxed);
+      }
+      void Object::decReadLockCounter() const {
+          m_numActiveReadLocks.fetch_sub(1, <span class="hl-code-i">std::memory_order_release</span>);
+      }
+      bool Object::hasReadLocks() const {
+          return m_numActiveReadLocks.load(<span class="hl-code-i">std::memory_order_acquire</span>) &gt; 0;
+      }
+  private:
+      mutable std::atomic_int32_t m_numActiveReadLocks = {};
+  };
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+      std::shared_ptr&lt;Object&gt; ObjectWrapper::writeLock() {
+          m_accessMutex.lock();
+          if (<span class="hl-code-i">m_object-&gt;hasReadLocks()</span>) {
+              ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Options</h3>
+        <br/>
+        <ul>
+          <li>Live with it? Bad idea&trade;. <span class="fancy">TSAN is too awesome to abandon</span></li>
+          <li>Rewrite <code>std::shared_ptr</code> with a method <code class="cinline">use_count_acquire</code></li>
+          <ul>
+            <li>Not as bad as it sounds. There are benefits</li>
+          </ul>
+          <li>Reimplement ref counting for objects</li>
+          <li class="fragment">Or... <span class="fancy">hack around it</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Our Optimized Write Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock().get();
+    }
+    ~ObjectWriteLock() {
+      m_handle.writeUnlock();
+    }
+    // OMG THE PERF GAIN
+    Object* operator-&gt;() { return m_object; }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    Object* m_object = nullptr;
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Our Deoptimized Write Lock</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWriteLock {
+  public:
+    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+      m_object = m_handle.writeLock();
+    }
+    ~ObjectWriteLock() {
+      <span class="hl-code-i">m_object.reset();</span>
+      m_handle.writeUnlock();
+    }
+    // OMG THE PERF LOSS :(
+    Object* operator-&gt;() { return m_object.get(); }
+    Object* operator*()  { return *m_object; }
+  private:
+    ObjectHandle m_handle;
+    <span class="hl-code-i">std::shared_ptr&lt;Object&gt; m_object;</span>
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Why does this work?</h3>
+        <br/>
+        <ul>
+          <li class="fragment">We're not sure</li>
+          <li class="fragment">Possibly accessing the use count within a mutex lock helps</li>
+          <li class="fragment">... or some such</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Recap</h3>
+        <br/>
+        <ul>
+          <li>These are <span class="fancy">app objects</span></li>
+          <li>Many simultaneous readers</li>
+          <li>Synchronised writes from any thread</li>
+          <li>Readers wait for writers to complete</li>
+          <li>CoW only if we have active readers</li>
+          <li class="fragment">Cool story of TSAN false positive</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Takeaways</h3>
+        <br/>
+        <ul>
+          <li>We do cool stuff</li>
+          <li>TSAN is great!</li>
+          <li>All sanitizers are great</li>
+          <li>Write tests</li>
+          <li>Be healthy!</li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>End</h1>
+        <h2>Questions?</h2>
+        <p>Borislav Stanimirov / <a href="https://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+        <p>
+          <small>
+          These slides: <a href="https://ibob.github.io/slides/app-server/">ibob.github.io/slides/app-server/</a>
+          </small>
+          <br />
+          <small>
+          Slides license <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons By 4.0</a><br /><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+          </small>
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="../lib/reveal.js-3.8.0/js/reveal.min.js"></script>
+  <script src="../lib/slides.js"></script>
+
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'none', // none/fade/slide/convex/concave/zoom
+
+      autoPlayMedia: false,
+      preloadIframes: false,
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        //{ src: 'markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        //{ src: 'markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'highlight/highlight.min.js', async: true, callback: function() {
+          hljs.initHighlightingOnLoad();
+        } },
+        //{ src: 'zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+        //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
+    });
+
+    slides.footerSetup('is.gd/apptalk', '2020');
+  </script>
+
+</body>
+</html>
