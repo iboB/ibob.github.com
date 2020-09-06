@@ -10,7 +10,11 @@ body {
 .reveal section.title h1 {
 	width: 100%;
 	font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
-	font-size: 2.5em;
+	font-size: 2em;
+}
+
+.reveal section.title h2 {
+	font-size: 1.7em;
 }
 
 .reveal h3 {
