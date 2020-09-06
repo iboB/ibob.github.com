@@ -123,15 +123,31 @@
         </ul>
       </section>
 
+      <section>
+        <h3>Going Deeper</h3>
+      </section>
+
       <section class="slide">
-        <h3>Going deeper</h3>
+        <h3>UI Service</h3>
         <br/>
         <ul>
-          <li><span class="fancy">AppServer = UI Service</span></li>
           <li>Has sessions for clients</li>
-          <li>Holds observable state in objects</li>
+          <li>Can build type-erased UI objects from the app state</li>
           <li>WS Server - a layer for browsers. Reads and writes JSON</li>
           <li>Theoretically we can have many other layers</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Treatment Service</h3>
+        <br/>
+        <p>Creates a Treatment Session</p>
+        <ul>
+          <li>Has a state which represents a treatment in progress</li>
+          <li>Fetches imaging info from the MRI Service</li>
+          <li>Issues start/stop to the Radiotherapy Service</li>
+          <li>Gathers information about the delivered dose</li>
+          <li>At the end saves treatment data to the database</li>
         </ul>
       </section>
 
@@ -140,11 +156,7 @@
       </section>
 
       <section>
-        <h3>AppServer Architecture</h3>
-      </section>
-
-      <section>
-        <h3>Accessing objects</h3>
+        <h3>Objects</h3>
       </section>
 
       <section class="slide">
@@ -549,15 +561,13 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>So far...</h3>
-        <br/>
-        <ul>
-          <li>We have <span class="fancy">immutable objects</span></li>
-          <li>Almost exactly this is used in our code <span class="fancy">in services</span></li>
-          <li>But this is not how our app objects are made</li>
-          <li>Remember the optional CoW?</li>
-          <li>What if we still want that?</li>
-        </ul>
+        <p>And these are immutable objects</p>
+      </section>
+
+      <section>
+        <h3>And Now... A small tangent</h3>
+        <p>Remember the optional CoW?</p>
+        <p>What if we still want that?</p>
       </section>
 
       <section class="slide">
@@ -574,7 +584,7 @@ void guiLoop(ObjectHandle obj) {
           m_accessMutex.lock();
 <span class="hl-code-i">          m_writeObject = (m_object.use_count() &gt; 1)
               ? std::make_shared&lt;T&gt;(*m_object);
-              : m_object;</span> <span class="fragment hl-code-i">// readers suffer</span>
+              : m_object;</span> <span class="fragment hl-code-i">// readers suffer from races</span>
           return m_writeObject;
       }
       void writeUnlock() {
@@ -850,16 +860,28 @@ void guiLoop(ObjectHandle obj) {
         </ul>
       </section>
 
+      <section>
+        <h3>So Far...</h3>
+      </section>
+
       <section class="slide">
-        <h3>Recap</h3>
+        <h3>"Cool" Objects</h3>
         <br/>
         <ul>
-          <li>These are <span class="fancy">app objects</span></li>
-          <li>Many simultaneous readers</li>
+          <li><span class="fancy">Optional CoW</span> only if we have active readers</li>
+          <li><span class="fancy">Readers wait</span> on active writers by locking a mutex</li>
           <li>Synchronised writes from any thread</li>
-          <li>Readers wait for writers to complete</li>
-          <li>CoW only if we have active readers</li>
-          <li class="fragment">Cool story of TSAN false positive</li>
+          <li>We actually do use these in some places</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Immutable Objects</h3>
+        <br/>
+        <ul>
+          <li><span class="fancy">Always CoW</span></li>
+          <li>Fastest possible <span class="fancy">lockless reads</span></li>
+          <li>Synchronised writes from any thread</li>
         </ul>
       </section>
 
@@ -881,7 +903,7 @@ void guiLoop(ObjectHandle obj) {
         <p>Borislav Stanimirov / <a href="https://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
         <p>
           <small>
-          These slides: <a href="https://ibob.github.io/slides/app-server/">ibob.github.io/slides/app-server/</a>
+          These slides: <a href="https://ibob.github.io/slides/immutable-obj/">ibob.github.io/slides/immutable-obj/</a>
           </small>
           <br />
           <small>
@@ -923,7 +945,7 @@ void guiLoop(ObjectHandle obj) {
       ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
     });
 
-    slides.footerSetup('is.gd/immutable', '2020');
+    slides.footerSetup('is.gd/immutable', 'CppCon 2020');
   </script>
 
 </body>
