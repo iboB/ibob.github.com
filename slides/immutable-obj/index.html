@@ -470,6 +470,7 @@ void guiLoop(ObjectHandle obj) {
     std::shared_ptr&lt;const Object&gt; m_object;
   };
         </code></pre>
+        <p class="pinner">...not necessarily needed</p>
       </section>
 
       <section class="slide">
@@ -562,6 +563,17 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <p>And these are immutable objects</p>
+      </section>
+
+      <section class="slide">
+        <h3>Immutable?</h3>
+        <br/>
+        <ul>
+          <li>You don't change, <span class="fancy">you CoW</span></li>
+          <li>Every reference to the object is <span class="fancy">safe and valid forever</span></li>
+          <li>Why, yes, it can be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
+          <li>It forces <span class="fancy">another way of thinking</span></li>
+        </ul>
       </section>
 
       <section>
@@ -887,7 +899,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Improving Teminology</h3>
+        <h3>Improving Terminology</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
@@ -911,7 +923,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Improving Teminology</h3>
+        <h3>Improving Terminology</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
@@ -935,7 +947,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Improving Teminology</h3>
+        <h3>Improving Terminology</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
@@ -959,7 +971,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Improving Teminology</h3>
+        <h3>Improving Terminology</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
@@ -983,7 +995,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Improving Teminology</h3>
+        <h3>Improving Terminology</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
