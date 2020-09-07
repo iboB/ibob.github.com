@@ -9,7 +9,11 @@ let slides = {
 
         Reveal.addEventListener('slidechanged', function (event) {
             if (event.indexh != 0) {
-                foot.innerHTML = event.indexh + ' | ' + link + ' | ' + conf + ' | @stanimirovb';
+                let index = String(event.indexh);
+                if (event.indexv != 0) {
+                    index += '-' + event.indexv;
+                }
+                foot.innerHTML = index + ' | ' + link + ' | ' + conf + ' | @stanimirovb';
             } else {
                 foot.innerHTML = '';
             }
