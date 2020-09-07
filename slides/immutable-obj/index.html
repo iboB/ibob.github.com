@@ -519,7 +519,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_object;
       std::shared_ptr&lt;Object&gt; m_writeObject; <span class="hl-code-i">// Make this thread safe?</span>
                                              <span class="fragment hl-code-i">// Where is the *real* data then?</span>
-      std::shared_ptr&lt;Object&gt; read() const {
+      std::shared_ptr&lt;const Object&gt; read() const {
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
@@ -542,7 +542,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_object;
       std::shared_ptr&lt;Object&gt; m_writeObject;
       <span class="hl-code-i">std::mutex m_accessMutex;</span>
-      std::shared_ptr&lt;Object&gt; read() const {
+      std::shared_ptr&lt;const Object&gt; read() const {
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
@@ -581,7 +581,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_object;
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_accessMutex;
-      std::shared_ptr&lt;Object&gt; read() const {
+      std::shared_ptr&lt;const Object&gt; read() const {
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
@@ -603,7 +603,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_object;
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_accessMutex;
-      std::shared_ptr&lt;Object&gt; read() const {
+      std::shared_ptr&lt;const Object&gt; read() const {
           <span class="hl-code-i">std::lock_guard l(m_accessMutex);</span>
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
@@ -625,7 +625,7 @@ void guiLoop(ObjectHandle obj) {
   class ObjectWrapper {
       std::shared_ptr&lt;Object&gt; m_object;
       std::mutex m_accessMutex;
-      std::shared_ptr&lt;Object&gt; read() const {
+      std::shared_ptr&lt;const Object&gt; read() const {
           std::lock_guard l(m_accessMutex);
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
@@ -877,13 +877,135 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Immutable Objects</h3>
+        <h3>Immutable Objects So Far</h3>
         <br/>
         <ul>
           <li><span class="fancy">Always CoW</span></li>
           <li>Fastest possible <span class="fancy">lockless reads</span></li>
           <li>Synchronised writes from any thread</li>
         </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Improving Teminology</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;const Object&gt; <span class="fragment hl-code">read</span>() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; writeLock() {
+          m_accessMutex.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_accessMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Improving Teminology</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;const Object&gt; <span class="hl-code-i">detach</span>() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; <span class="fragment hl-code">writeLock</span>() {
+          m_accessMutex.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void writeUnlock() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_accessMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Improving Teminology</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_accessMutex;
+      std::shared_ptr&lt;const Object&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; <span class="hl-code-i">beginTransaction()</span> {
+          m_accessMutex.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void <span class="hl-code-i">endTransaction()</span> {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_accessMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Improving Teminology</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex <span class="hl-code-i">m_transactionMutex</span>;
+      std::shared_ptr&lt;const Object&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; beginTransaction() {
+          <span class="hl-code-i">m_transactionMutex</span>.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          <span class="hl-code-i">m_transactionMutex</span>.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Improving Teminology</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const Object&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void endTransaction(<span class="hl-code-i">bool store</span>) {
+          <span class="hl-code-i">if (store) {</span>
+            std::atomic_store_explicit(&m_object, m_writeObject,
+                std::memory_order_relaxed);
+          }
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
       </section>
 
       <section class="slide">
