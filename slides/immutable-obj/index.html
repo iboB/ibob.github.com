@@ -918,12 +918,12 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;const Object&gt; <span class="hl-code-i">detach</span>() const {
           return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
       }
-      std::shared_ptr&lt;Object&gt; <span class="fragment hl-code">writeLock</span>() {
+      std::shared_ptr&lt;Object&gt; <span class="fragment hl-code persist">writeLock</span>() {
           m_accessMutex.lock();
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
           return m_writeObject;
       }
-      void writeUnlock() {
+      void <span class="fragment hl-code persist">writeUnlock()</span> {
           std::atomic_store_explicit(&m_object, m_writeObject,
               std::memory_order_relaxed);
           m_accessMutex.unlock();
@@ -1017,6 +1017,16 @@ void guiLoop(ObjectHandle obj) {
           <li>Every reference to the object is <span class="fancy">safe and valid forever</span></li>
           <li>Why, yes, this <em>can</em> be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
           <li>It forces <span class="fancy">a different way of thinking</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3><code>shared_ptr</code> Wrapper</h3>
+        <br/>
+        <ul>
+          <li>Objects are, in a way, <span class="fancy">interned</span></li>
+          <li><span class="fancy">Shallow compare</span>: <code class="cinline">a == b</code> compares addresses</li>
+          <li>Not <code>string_view</code> anymore</li>
         </ul>
       </section>
 
