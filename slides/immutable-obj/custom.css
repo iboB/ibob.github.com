@@ -55,6 +55,10 @@ body {
     opacity: 1;
     visibility: inherit;
 }
+.reveal .slides section .fragment.hl-code.visible.persist {
+    font-weight: bold;
+    background-color: lightgray;
+}
 .reveal .slides section .fragment.hl-code.current-fragment {
     font-weight: bold;
     background-color: lightgray;
