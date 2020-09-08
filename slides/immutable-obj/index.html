@@ -565,15 +565,11 @@ void guiLoop(ObjectHandle obj) {
         <p>And these are immutable objects</p>
       </section>
 
-      <section class="slide">
+      <section>
         <h3>Immutable?</h3>
-        <br/>
-        <ul>
-          <li>You don't change, <span class="fancy">you CoW</span></li>
-          <li>Every reference to the object is <span class="fancy">safe and valid forever</span></li>
-          <li>Why, yes, it can be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
-          <li>It forces <span class="fancy">another way of thinking</span></li>
-        </ul>
+        <p>Think <code class="cinline">std::string_view</code></p>
+        <p>You don't change. You replace.</p>
+        <p>In this case with a copy.</p>
       </section>
 
       <section>
@@ -583,7 +579,7 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <section>
-          <h3>Addedndum A: Optional CoW</h3>
+          <h3>Addendum A: Optional CoW</h3>
         </section>
 
       <section class="slide">
@@ -889,16 +885,6 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Immutable Objects So Far</h3>
-        <br/>
-        <ul>
-          <li><span class="fancy">Always CoW</span></li>
-          <li>Fastest possible <span class="fancy">lockless reads</span></li>
-          <li>Synchronised writes from any thread</li>
-        </ul>
-      </section>
-
-      <section class="slide">
         <h3>Improving Terminology</h3>
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWrapper {
@@ -1021,14 +1007,50 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Takeaways</h3>
+        <h3>Immutable Objects So Far</h3>
         <br/>
         <ul>
-          <li>We do cool stuff</li>
-          <li>TSAN is great!</li>
-          <li>All sanitizers are great</li>
-          <li>Write tests</li>
-          <li>Be healthy!</li>
+          <li><span class="fancy">Atomic transactions</span> synchronised writes from any thread</li>
+          <li><span class="fancy">Always CoW</span> on transaction</li>
+          <li>Fastest possible <span class="fancy">lockless reads</span> by detaching</li>
+          <li>A detached object is possibly outdated</li>
+          <li>Every reference to the object is <span class="fancy">safe and valid forever</span></li>
+          <li>Why, yes, this <em>can</em> be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
+          <li>It forces <span class="fancy">a different way of thinking</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>React.js</p>
+      </section>
+
+      <section>
+        <p>Our state</p>
+        <p>tree</p>
+      </section>
+
+      <section>
+        <p>Shallow compares</p>
+      </section>
+
+      <section>
+        <p>Reactive programming. Functional programming. Tests</p>
+      </section>
+
+      <section>
+        <p>Unpleasant stuff</p>
+        <p>Allocators</p>
+        <p>need for mutable objects</p>
+      </section>
+
+      <section class="slide">
+        <h3>Programming with Immutable Objects</h3>
+        <br/>
+        <ul>
+          <li>State of wrapped <code class="cinline">shared_ptr&lt;const T&gt;</code></li>
+          <li>Processors which work with the state</li>
+          <li>Shallow compare to check for change</li>
+          <li>Shallow CoW from leaf to root on transactions</li>
         </ul>
       </section>
 
