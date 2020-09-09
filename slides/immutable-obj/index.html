@@ -1010,41 +1010,406 @@ void guiLoop(ObjectHandle obj) {
         <h3>Immutable Objects So Far</h3>
         <br/>
         <ul>
-          <li><span class="fancy">Atomic transactions</span> synchronised writes from any thread</li>
+          <li><span class="fancy">Atomic transactions</span>: synchronised writes from any thread</li>
           <li><span class="fancy">Always CoW</span> on transaction</li>
           <li>Fastest possible <span class="fancy">lockless reads</span> by detaching</li>
           <li>A detached object is possibly outdated</li>
           <li>Every reference to the object is <span class="fancy">safe and valid forever</span></li>
           <li>Why, yes, this <em>can</em> be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
-          <li>It forces <span class="fancy">a different way of thinking</span></li>
+          <li>It requires <span class="fancy">a different way of thinking</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>Hmm... smells like <span class="fancy">React.js</span></p>
+      </section>
+
+      <section class="slide">
+        <h3>React.js</h3>
+        <br/>
+        <ul>
+          <li>It's a GUI library for single-page applications</li>
+          <li>Take a state</li>
+          <li>Create the DOM - the elements on the page</li>
+          <li>That's it</li>
+          <li>Let's see an example...</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3><code>shared_ptr</code> Wrapper</h3>
+        <h3>Imaging Session State</h3>
+        <p>...in JavaScript</p>
+        <pre><code class="javascript hljs" data-noescape>
+  imagingState = {
+    <span class="fragment hl-code">patient</span>: {
+      orientation: null,
+      weight: null,
+    },
+    <span class="fragment hl-code">image</span>: {
+      name: '',
+      notes: '',
+      size: {x: 0, y: 0, z: 0},
+      buffer: null,
+      progress: 0,
+    },
+    <span class="fragment hl-code">table</span>: {
+      pos: {x: 0, y: 0, z: 0},
+      progress: 0,
+    },
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Build Some GUI</h3>
+        <pre><code class="javascript hljs" data-noescape>
+  <span class="hl-code-i">buildGUI</span>({
+    patient: {
+      orientation: HeadFirstSuppine,
+      weight: 80000,
+    },
+    image: {
+      name: 'My Image',
+      notes: 'Notes on my image',
+      size: {x: 200, y: 200, z: 200},
+      buffer: Loader.loadImage('test.img'),
+      progress: 1,
+    },
+    table: {
+      pos: {x: 2, y: 3, z: 4},
+      progress: 0.5,
+    },
+  });
+        </code></pre>
+      </section>
+
+      <section>
+
+      </section>
+
+      <section class="slide">
+        <h3>Change the State</h3>
+        <br/>
+        <pre><code class="javascript hljs" data-noescape>
+  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }
+        </code></pre>
+        <pre><code class="javascript hljs" data-noescape>
+  function shiftTable(state) {
+    return { table: { pos: { y: state.table.pos.y + 20 }}}};
+  }
+        </code></pre>
+        <p class="pinner">Thanks to JS reflection. These will be spliced onto the state</p>
+      </section>
+
+      <section class="slide">
+        <h3>Splicing onto the State</h3>
+        <pre><code class="javascript hljs" data-noescape>  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }</code></pre>
+        <pre><code class="ruby hljs" data-noescape>  state:
+    patient:
+      orientation: HeadFirstSuppine
+      weight: 80000
+    image:
+      <span class="fragment red-code">name:</span> "My image"
+      notes: "Notes on my image"
+      size:
+        x:200 y:200 z:200
+      buffer: [0,3,132,34,12...
+      progress: 1
+    table:
+      pos:
+        x:2 y:3 z:4
+      progress: 0.5
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Splicing onto the State</h3>
+        <pre><code class="javascript hljs" data-noescape>  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }
+
+  <span class="fragment hl-code">let oldState = state;</span>
+
+  <span class="fragment hl-code">state = reactSplice(state, setImageName);</span>
+
+  <span class="fragment hl-code">console.assert(state !== oldState, "Uh-oh");</span> <span class="fragment hl-code-i">// Uh-oh</span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Splicing onto the State</h3>
+        <pre><code class="javascript hljs" data-noescape>  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }</code></pre>
+        <pre><code class="ruby hljs" data-noescape>  <span class="fragment red-code">state:</span>
+    patient:
+      orientation: HeadFirstSuppine
+      weight: 80000
+    <span class="fragment red-code">image:</span>
+      <span class="fragment red-code">name:</span> "My image"
+      notes: "Notes on my image"
+      size:
+        x:200 y:200 z:200
+      buffer: [0,3,132,34,12...
+      progress: 1
+    table:
+      pos:
+        x:2 y:3 z:4
+      progress: 0.5
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Splicing onto the State</h3>
+        <pre><code class="javascript hljs" data-noescape>  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }
+
+  let oldState = state;
+
+  state = reactSplice(state, setImageName);
+
+  console.assert(state !== oldState, "Uh-oh"); <span class="fragment hl-code-i">// Everything is fine</span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Building GUI</h3>
+        <br/>
+        <pre><code class="javascript hljs" data-noescape>
+    if (state != oldState) return null;
+        </code></pre>
+        <pre><code class="javascript hljs" data-noescape>
+    if (state.image !== oldState.image) return null;
+    return &lt;img src="...
+        </code></pre>
+      </section>
+
+      <section>
+        <p>So... back to our objects...</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>shared_ptr</code> Wrapper and React.js</h3>
         <br/>
         <ul>
-          <li>Objects are, in a way, <span class="fancy">interned</span></li>
           <li><span class="fancy">Shallow compare</span>: <code class="cinline">a == b</code> compares addresses</li>
-          <li>Not <code>string_view</code> anymore</li>
+          <ul>
+            <li>Not <code>string_view</code> anymore</li>
+          </ul>
+          <li>CoW on every change is like React splicing</li>
+          <li>Detached references are <span class="fancy">safe and valid forever</span></li>
         </ul>
       </section>
 
-      <section>
-        <p>React.js</p>
+      <section class="slide">
+        <h3>Let's Build the State in C++</h3>
+        <br/><br/>
+        <p class="pinner">But first...</p>
+      </section>
+
+      <section class="slide">
+        <h3>The Object</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const Object&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>More changes</h3>
+        <pre><code class="cpp hljs" data-noescape>  <span class="hl-code-i">template &lt;typename T&gt;</span>
+  class ObjectWrapper {
+      std::shared_ptr&lt;Object&gt; m_object;
+      std::shared_ptr&lt;Object&gt; m_writeObject;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const Object&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;Object&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
+          return m_writeObject;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>More changes</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
+  class ObjectWrapper {
+      std::shared_ptr&lt;<span class="hl-code-i">T</span>&gt; m_object;
+      std::shared_ptr&lt;<span class="hl-code-i">T</span>&gt; m_writeObject;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const <span class="hl-code-i">T</span>&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;<span class="hl-code-i">T</span>&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          m_writeObject = std::make_shared&lt;T&gt;(*m_object);
+          return m_writeObject;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>More changes</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
+  class <span class="hl-code-i">Object</span> {
+      std::shared_ptr&lt;T&gt; m_object;
+      std::shared_ptr&lt;T&gt; m_writeObject;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const T&gt; detach() const {
+          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;T&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          m_writeObject = std::make_shared&lt;T&gt;(*m_object);
+          return m_writeObject;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&m_object, m_writeObject,
+              std::memory_order_relaxed);
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>More changes</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
+  class Object {
+      std::shared_ptr&lt;T&gt; <span class="hl-code-i">m_data</span>;
+      std::shared_ptr&lt;T&gt; <span class="hl-code-i">m_transactionData</span>;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const T&gt; detach() const {
+          return std::atomic_load_explicit(&<span class="hl-code-i">m_data</span>, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;T&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          <span class="hl-code-i">m_transactionData</span> = std::make_shared&lt;T&gt;(*<span class="hl-code-i">m_data</span>);
+          return <span class="hl-code-i">m_transactionData</span>;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&<span class="hl-code-i">m_data</span>, <span class="hl-code-i">m_transactionData</span>,
+              std::memory_order_relaxed);
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>So, Let's Build the State in C++</h3>
+        <pre><code class="cpp hljs" data-noescape>struct ImagingState {
+      struct PatientData {
+          Orientation orientation;
+          grams weight;
+      };
+      PatientData patient;
+      struct ImageData {
+          string name;
+          string notes;
+          point3 size;
+          vector&lt;byte&gt; buffer;
+          float progress = 0;
+      };
+      ImageData image;
+      struct TableData {
+          point3 pos;
+          float progress = 0;
+      };
+      TableData table;
+  };
+
+  using ImagingStateObject = Object&lt;ImagingState&gt;;
+        </code></pre>
       </section>
 
       <section>
-        <p>Our state</p>
-        <p>tree</p>
+        <p>Obviously that's not enough</p>
+        <p>We copy <span class="fancy">everything</span></p>
+      </section>
+
+      <section class="slide">
+        <h3>So, Let's Build the State in C++</h3>
+        <pre><code class="cpp hljs" data-noescape>struct ImagingState {
+      struct PatientData {
+          Orientation orientation;
+          grams weight;
+      };
+      <span class="hl-code-i">Object&lt;PatientData&gt;</span> patient;
+      struct ImageData {
+          string name;
+          string notes;
+          point3 size;
+          vector&lt;byte&gt; buffer;
+          float progress = 0;
+      };
+      <span class="hl-code-i">Object&lt;ImageData&gt;</span> image;
+      struct TableData {
+          point3 pos;
+          float progress = 0;
+      };
+      <span class="hl-code-i">Object&lt;TableData&gt;</span> table;
+  };
+
+  using ImagingStateObject = Object&lt;ImagingState&gt;;
+        </code></pre>
       </section>
 
       <section>
-        <p>Shallow compares</p>
+        <p>This doesn't work</p>
+        <p>Too many mutexes</p>
+        <p>Not atomic</p>
       </section>
 
       <section>
-        <p>Reactive programming. Functional programming. Tests</p>
+        <p>Kuzco</p>
+      </section>
+
+      <section>
+        <p>Benefits</p>
+      </section>
+
+      <section>
+        <p>Build gui</p>
+        <p>Detach objects</p>
+        <p>"Pure" functions</p>
+        <p>Integration testing with unit tests</p>
       </section>
 
       <section>
