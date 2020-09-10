@@ -516,13 +516,13 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
 ObjectHandle myobj;
 std::thread gui([]() { guiLoop(myobj); });
-ObjectWriteLock(myobj)-&gt;changeSomething();
+<span class="fragment hl-code">ObjectWriteLock(myobj)-&gt;changeSomething();</span>
 
 ...
 
 void guiLoop(ObjectHandle obj) {
   while (true) {
-    display(ObjectReadLock(obj)-&gt;getSomething());
+    display(<span class="fragment hl-code">ObjectReadLock(obj)-&gt;getSomething()</span>);
   }
 }
         </code></pre>
@@ -1038,6 +1038,10 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section>
+        <p>Indeed, at first we didn't think much of it</p>
+      </section>
+
+      <section>
         <p>Hmm... smells like <span class="fancy">React.js</span></p>
       </section>
 
@@ -1155,6 +1159,8 @@ void guiLoop(ObjectHandle obj) {
 
   <span class="fragment hl-code">console.assert(state !== oldState, "Uh-oh");</span> <span class="fragment hl-code-i">// Uh-oh</span>
         </code></pre>
+
+        <p style="text-align: right;"><em>Only the names have changed</em> - Jon Bon Jovi</p>
       </section>
 
       <section class="slide">
@@ -1351,28 +1357,28 @@ void guiLoop(ObjectHandle obj) {
 
       <section class="slide">
         <h3>So, Let's Build the State in C++</h3>
-        <pre><code class="cpp hljs" data-noescape>struct ImagingState {
-      struct PatientData {
+        <pre><code class="cpp hljs" data-noescape>  struct ImagingState {
+<span class="fragment hl-code">      struct PatientData {
           Orientation orientation;
           grams weight;
       };
-      PatientData patient;
-      struct ImageData {
+      PatientData patient;</span>
+<span class="fragment hl-code">      struct ImageData {
           string name;
           string notes;
           point3 size;
           vector&lt;byte&gt; buffer;
           float progress = 0;
       };
-      ImageData image;
-      struct TableData {
+      ImageData image;</span>
+<span class="fragment hl-code">      struct TableData {
           point3 pos;
           float progress = 0;
       };
-      TableData table;
+      TableData table;</span>
   };
 
-  using ImagingStateObject = Object&lt;ImagingState&gt;;
+  <span class="fragment hl-code">using ImagingStateObject = Object&lt;ImagingState&gt;;</span>
         </code></pre>
       </section>
 
