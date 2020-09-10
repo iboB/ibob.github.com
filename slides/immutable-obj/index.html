@@ -1388,7 +1388,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>So, Let's Build the State in C++</h3>
+        <h3>More Objects?</h3>
         <pre><code class="cpp hljs" data-noescape>struct ImagingState {
       struct PatientData {
           Orientation orientation;
@@ -1412,6 +1412,102 @@ void guiLoop(ObjectHandle obj) {
 
   using ImagingStateObject = Object&lt;ImagingState&gt;;
         </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>All of the Objects?</h3>
+        <pre><code class="cpp hljs" data-noescape>struct ImagingState {
+      struct PatientData {
+          <span class="hl-code-i">Object&lt;Orientation&gt;</span> orientation;
+          <span class="hl-code-i">Object&lt;grams&gt;</span> weight;
+      };
+      <span class="hl-code-i">Object&lt;PatientData&gt;</span> patient;
+      struct ImageData {
+          <span class="hl-code-i">Object&lt;string&gt;</span> name;
+          <span class="hl-code-i">Object&lt;string&gt;</span> notes;
+          <span class="hl-code-i">Object&lt;point3&gt;</span> size;
+          <span class="hl-code-i">Object&lt;vector&lt;byte&gt;&gt;</span> buffer;
+          <span class="hl-code-i">Object&lt;float&gt;</span> progress = 0;
+      };
+      <span class="hl-code-i">Object&lt;ImageData&gt;</span> image;
+      struct TableData {
+          <span class="hl-code-i">Object&lt;point3&gt;</span> pos;
+          <span class="hl-code-i">Object&lt;float&gt;</span> progress = 0;
+      };
+      <span class="hl-code-i">Object&lt;TableData&gt;</span> table;
+  };
+
+  using ImagingStateObject = Object&lt;ImagingState&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Some Objects</h3>
+        <pre><code class="cpp hljs" data-noescape>struct ImagingState {
+      struct PatientData {
+          Orientation</span> orientation;
+          grams</span> weight;
+      };
+      <span class="hl-code-i">Object&lt;PatientData&gt;</span> patient;
+      struct ImageData {
+          <span class="hl-code-i">Object&lt;string&gt;</span> name;
+          <span class="hl-code-i">Object&lt;string&gt;</span> notes;
+          <span class="hl-code-i">Object&lt;point3&gt;</span> size;
+          <span class="hl-code-i">Object&lt;vector&lt;byte&gt;&gt;</span> buffer;
+          float</span> progress = 0;
+      };
+      <span class="hl-code-i">Object&lt;ImageData&gt;</span> image;
+      struct TableData {
+          <span class="hl-code-i">Object&lt;point3&gt;</span> pos;
+          float</span> progress = 0;
+      };
+      <span class="hl-code-i">Object&lt;TableData&gt;</span> table;
+  };
+
+  using ImagingStateObject = Object&lt;ImagingState&gt;;
+        </code></pre>
+      </section>
+
+      <section>
+        <p>Ok. Let's try this...</p>
+      </section>
+
+      <section class="slide">
+        <h3>Set Image Name</h3>
+        <br/>
+        <pre><code class="javascript hljs" data-noescape>
+  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  *Transaction(Transaction(Transaction(state)-&gt;image)-&gt;name)) = "Cool image";
+        </code></pre>
+        <ul>
+          <li>That's a lot of transactions, Batman</li>
+          <li>That's a lot of recursive mutex locks, Batman</li>
+          <li>And that's not the worst part</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The Worst Part</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  auto oldImage = state->detach()->image->detach(); // That's a lot of detach() calls, Batman
+  *Transaction(oldImage->name) = "something different";
+  auto curImage = state->detach()->image->detach();
+  assert(*oldImage->name->detach() != newImage->name->detach());
+  // Uh-oh, they both are "something different"
+        </code></pre>
+        <ul>
+          <li>We "kinda" broke the <code class="cinline">detach</code> promise</li>
+          <li>There is no way to implement the way of React.js</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Split the object</h3>
       </section>
 
       <section>
