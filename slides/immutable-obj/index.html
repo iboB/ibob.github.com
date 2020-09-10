@@ -134,7 +134,7 @@
           <li>Has sessions for clients</li>
           <li>Can build type-erased UI objects from the app state</li>
           <li>WS Server - a layer for browsers. Reads and writes JSON</li>
-          <li>Theoretically we can have many other layers</li>
+          <li>Theoretically we can have many other layers (say Qt)</li>
         </ul>
       </section>
 
@@ -346,8 +346,25 @@
         <h3>Referring to Objects</h3>
         <pre><code class="cpp hljs" data-noescape>
 ObjectWrapper myobj;
+<span class="fragment hl-code">std::thread gui([]() { guiLoop(myobj); });</span>
+<span class="fragment hl-code">myobj.write().changeSomething();</span>
+
+...
+
+void guiLoop(ObjectWrapper obj) {
+<span class="fragment hl-code">  while (true) {
+    display(obj.read().getSomething());
+  }</span>
+}
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Referring to Objects</h3>
+        <pre><code class="cpp hljs" data-noescape>
+ObjectWrapper myobj;
 std::thread gui([]() { guiLoop(myobj); });
-myobj.write().changeSomething(); <span class="fragment hl-code-i">// Uh oh! After this line</span>
+myobj.write().changeSomething(); <span class="hl-code-i">// Uh oh! After this line</span>
 
 ...
 
