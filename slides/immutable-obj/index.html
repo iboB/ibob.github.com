@@ -1213,6 +1213,77 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section>
+        <p>React.js-style state in C++?</p>
+        <p>That would be pretty cool!</p>
+      </section>
+
+      <section>
+        <img src="but-why.gif" />
+      </section>
+
+      <section class="slide">
+        <h3>Build GUI</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = getState();
+    buildGUI(state);
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Run Workers</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = getState();
+    findBladder(state->image);
+    findFemurs(state->image);
+    calculateElectronDensity(state->ctImage, state->structures["ptv"]);
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Undo &amp; Redo</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+    undoAction-&gt;old = getState()->structures["bladder"];
+    applyManualUserEditsTo("bladder");
+    undoAction-&gt;cur = getState()->structures["bladder"];
+        </code></pre>
+      </section>
+
+      <section>
+        <p>But most importantly...</p>
+      </section>
+
+      <section>
+        <h2>Integration Testing by Unit Testing</h2>
+      </section>
+
+      <section class="slide">
+        <h3>Here's a thought</h3>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = getState();
+    buildGUI(state);
+        </code></pre>
+        <p>What if...</p>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = somePredefinedState();
+    buildGUI(state);
+    assert(currentGUI == expectedGUI);
+        </code></pre>
+        <p class="pinner">Then what if...</p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = somePredefinedState();
+    treat(state);
+    assert(deepCompare(getState(), expectedState));
+        </code></pre>
+        <p>Big Bang Integration Testing</p>
+      </section>
+
+      <section>
         <p>So... back to our objects...</p>
       </section>
 
@@ -1529,6 +1600,8 @@ void guiLoop(ObjectHandle obj) {
         <p>Detach objects</p>
         <p>"Pure" functions</p>
         <p>Integration testing with unit tests</p>
+        <p>Imaging, contouring, positioning processor</p>
+        <p>Queries</p>
       </section>
 
       <section>
