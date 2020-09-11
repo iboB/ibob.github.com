@@ -1277,10 +1277,34 @@ void guiLoop(ObjectHandle obj) {
       <section>
         <pre><code class="cpp hljs" data-noescape>
     auto state = somePredefinedState();
-    treat(state);
+    treatment(state, receivedNewImageFromMRI, loader.loadImage("test.img"));
     assert(deepCompare(getState(), expectedState));
         </code></pre>
         <p>Big Bang Integration Testing</p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = somePredefinedState();
+    <span class="hl-code-i">imaging</span>(state, receivedNewImageFromMRI, loader.loadImage("test.img"));
+    assert(deepCompare(getState(), expectedState));
+        </code></pre>
+        <p>Top-Down Integration Testing</p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    auto state = somePredefinedState();
+    auto imaging = [](State& s) { if (!s.image) s.image = loader.loadImage("test.img"); };
+    treatment(state);
+    assert(deepCompare(getState(), expectedState));
+        </code></pre>
+        <p>Bottom-Up Integration Testing</p>
+      </section>
+
+      <section class="slide">
+        <h3>Integration Testing by Unit Testing</h3>
+        <br/>
       </section>
 
       <section>
