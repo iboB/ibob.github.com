@@ -1943,7 +1943,7 @@ void guiLoop(ObjectHandle obj) {
             imaging-&gt;images[n]-&gt;name = name;
         }
         else {
-            throw BadAction("SetNameOfScan");
+            throw BadAction(action);
         }
     }
   };
@@ -1965,6 +1965,48 @@ void guiLoop(ObjectHandle obj) {
       }
   }
         </code></pre>
+
+        <p class="pinner">Can a valid action lead to an invalid state invariant?</p>
+        <p class="pinner">What if we want to enforce unique names?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Actions</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class SetNameOfScan {
+    int n = 0;
+    std::string name;
+
+    template &lt;typename State&gt;
+    void operator()(State&amp; state) {
+        auto imaging = query&lt;GetImaging&gt;(state); // may throw "No imaging"
+        if (canSetNameOfScan(imaging, n<span class="hl-code-i">, name</span>)) {
+            imaging-&gt;images[n]-&gt;name = name;
+        }
+        else {
+            throw BadAction(action);
+        }
+    }
+  };</code></pre>
+        <p class="pinner">No way to check validity of state unless we set the name</p>
+      </section>
+
+      <section class="slide">
+        <h3>State Observers</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  void checkValidImageNames(const Imaging&amp; img) {
+      if (!allNamesUnique(img.images)) {
+          throw BadState();
+      }
+  }</code></pre>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename State&gt;
+  void checkValidImaging(const State&amp; state) {
+      auto imaging = query&lt;GetImaging&gt;(state);
+      checkValidImageNames(imaging);
+      checkAllImagesOfSameSize(imaging);
+      checkNoSimultaneousTableMoveAndScan(imaging);
+      // ...
+  }</code></pre>
       </section>
 
       <section>
