@@ -1369,9 +1369,11 @@ void guiLoop(ObjectHandle obj) {
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
           return m_writeObject;
       }
-      void endTransaction() {
-          std::atomic_store_explicit(&amp;m_object, m_writeObject,
-              std::memory_order_relaxed);
+      void endTransaction(bool store) {
+          if (store) {
+              std::atomic_store_explicit(&amp;m_object, m_writeObject,
+                  std::memory_order_relaxed);
+          }
           m_transactionMutex.unlock();
       }
   };
@@ -1393,9 +1395,11 @@ void guiLoop(ObjectHandle obj) {
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
           return m_writeObject;
       }
-      void endTransaction() {
-          std::atomic_store_explicit(&amp;m_object, m_writeObject,
-              std::memory_order_relaxed);
+      void endTransaction(bool store) {
+          if (store) {
+              std::atomic_store_explicit(&amp;m_object, m_writeObject,
+                  std::memory_order_relaxed);
+          }
           m_transactionMutex.unlock();
       }
   };
@@ -1417,9 +1421,11 @@ void guiLoop(ObjectHandle obj) {
           m_writeObject = std::make_shared&lt;T&gt;(*m_object);
           return m_writeObject;
       }
-      void endTransaction() {
-          std::atomic_store_explicit(&amp;m_object, m_writeObject,
-              std::memory_order_relaxed);
+      void endTransaction(bool store) {
+          if (store) {
+              std::atomic_store_explicit(&amp;m_object, m_writeObject,
+                  std::memory_order_relaxed);
+          }
           m_transactionMutex.unlock();
       }
   };
@@ -1441,9 +1447,11 @@ void guiLoop(ObjectHandle obj) {
           m_writeObject = std::make_shared&lt;T&gt;(*m_object);
           return m_writeObject;
       }
-      void endTransaction() {
-          std::atomic_store_explicit(&amp;m_object, m_writeObject,
-              std::memory_order_relaxed);
+      void endTransaction(bool store) {
+          if (store) {
+              std::atomic_store_explicit(&amp;m_object, m_writeObject,
+                  std::memory_order_relaxed);
+          }
           m_transactionMutex.unlock();
       }
   };
@@ -1465,11 +1473,33 @@ void guiLoop(ObjectHandle obj) {
           <span class="hl-code-i">m_transactionData</span> = std::make_shared&lt;T&gt;(*<span class="hl-code-i">m_data</span>);
           return <span class="hl-code-i">m_transactionData</span>;
       }
-      void endTransaction() {
-          std::atomic_store_explicit(&amp;<span class="hl-code-i">m_data</span>, <span class="hl-code-i">m_transactionData</span>,
-              std::memory_order_relaxed);
+      void endTransaction(bool store) {
+          if (store) {
+              std::atomic_store_explicit(&amp;<span class="hl-code-i">m_data</span>, <span class="hl-code-i">m_transactionData</span>,
+                  std::memory_order_relaxed);
+          }
           m_transactionMutex.unlock();
       }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>More Changes</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
+  class Transaction { // used to be WriteLock
+  public:
+      Transaction(Object&lt;T&gt;&amp; obj) : m_object(obj) {
+          m_object.beginTransaction();
+      }
+      ~Transaction() {
+          m_object.endTransaction(<span class="fragment hl-code">std::uncaught_exceptions() == 0</span>);
+      }
+
+      Object* operator-&gt;() { return m_object.m_transactionData.get(); }
+      Object* operator*()  { return *m_object.m_transactionData; }
+  private:
+      Object&lt;T&gt;&amp; m_object;
   };
         </code></pre>
       </section>
@@ -1782,33 +1812,179 @@ void guiLoop(ObjectHandle obj) {
         </code></pre>
       </section>
 
-      <section>
-        <p>Benefits</p>
+      <section class="slide">
+        <h3>More Problems</h3>
+        <pre><code class="cpp hljs" data-noescape>  struct MRIStudy {
+      std::vector&lt;Image&gt; images;
+      // ...
+  };
+  // copy vector on every change?</code></pre>
+        <pre><code class="cpp hljs" data-noescape>  struct MRIStudy {
+      Node&lt;std::vector&lt;Image&gt;&gt; images;
+      // ...
+  };
+  // copy all images on every change?</code></pre>
+        <pre><code class="cpp hljs" data-noescape>  struct MRIStudy {
+      Node&lt;std::vector&lt;Node&lt;Image&gt;&gt;&gt; images;
+      // ...
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>More Problems</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  Transaction(state)->images->emplace_back();
+        </code></pre>
+        <p>What happens here?</p>
+        <ol>
+          <li>Copy <code class="cinline">state</code>. Fine</li>
+          <li>Copy <code class="cinline">images</code>. Er... fine</li>
+          <li><code class="cinline">emplace_back</code> needs to reallocate. Ew... fine</li>
+          <li>Copy <code class="cinline">images</code>. <span class="fancy">This is were I draw the line!</span></li>
+        </ol>
+      </section>
+
+      <section class="slide">
+        <h3>Custom Container Wrappers</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class NodeVector {
+      std::shared_ptr&lt;std::vector&lt;T&gt;&gt; m_data;
+      auto& emplace_back() {
+          auto old = m_data;
+          m_data = std::make_shared&lt;std::vector&lt;T&gt;&gt;();
+          m_data.reserve(old.size());
+          m_data = old;
+          return m_data.emplace_back();
+      }
+      // ...
+  };
+        </code></pre>
+        <p class="pinner">The same for other containers</p>
+      </section>
+
+      <section class="slide">
+        <h3>That's a Lot of Allocations, Batman</h3>
+        <pre><code class="cpp hljs" data-noescape>  // 4 allocs here multiple times per second
+  Transaction(state)-&gt;imaging-&gt;image[0]-&gt;progress-&gt;value = 0.4f;</code></pre>
+        <br/>
+        <ul>
+          <li>So far we haven't done anything about it</li>
+          <li>Better state structure?</li>
+          <li>Custom allocators?</li>
+          <li>Reimplementing <code class="cinline">std::shared_ptr</code>?</li>
+          <li>Do we even need weak pointers?</li>
+          <li>Still gathering information</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Reuse</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  bool shouldTakeScan(const State& state) {
+      return state.image-&gt;empty() || *state.image->retake;
+  }
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  struct Imaging { Node&lt;Image&gt; image; };
+  struct Treatment { Node&lt;Imaging&gt; imaging; };
+  struct Diagnosis { Node&lt;Imaging&gt; phase1; }
+        </code></pre>
+        <p class="pinner">How can we reuse <code class="cinline">shouldTakeScan</code>?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Queries</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  bool shouldTakeScan(const State&amp; state) {
+      auto image = query&lt;GetImaging&gt;(state)-&gt;image;
+      return image-&gt;empty() || *image->retake;
+  }</code></pre>
+        <pre><code class="cpp hljs" data-noescape>  // Chaining
+  bool shouldTakeScan(const State&amp; state) {
+      auto image = query&lt;GetImaging&gt;(state).q&lt;GetImage&gt;();
+      return image-&gt;empty() || *image->retake;
+  }</code></pre>
+        <pre><code class="cpp hljs" data-noescape>  // Mutable
+  void calculateBladder(Transaction&lt;State&gt;&amp; state) {
+      auto b = query&lt;GetOrgans&gt;(state).q&lt;GetOrgan&gt;("bladder");
+      b = calcBladder(query&lt;GetImaging&gt;(state.r()).q&lt;GetImage&gt;());
+  }
+        </code></pre>
       </section>
 
       <section>
-        <p>Build gui</p>
-        <p>Detach objects</p>
-        <p>"Pure" functions</p>
-        <p>Integration testing with unit tests</p>
-        <p>Imaging, contouring, positioning processor</p>
-        <p>Queries</p>
+        <p>That's all very nice and single-threaded</p>
+      </section>
+
+      <section class="slide">
+        <h3>Actions</h3>
+        <br/>
+        <ul>
+          <li>An action changes the state</li>
+          <li>Much like Redux's reducers</li>
+          <li>"Set name of scan N in the study": N and name</li>
+          <li>"Receive new delivery frame": Image, dose, confidence...</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Actions</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class SetNameOfScan {
+    int n = 0;
+    std::string name;
+
+    template &lt;typename State&gt;
+    void operator()(State&amp; state) {
+        auto imaging = query&lt;GetImaging&gt;(state); // may throw "No imaging"
+        if (canSetNameOfScan(imaging, n)) {
+            imaging-&gt;images[n]-&gt;name = name;
+        }
+        else {
+            throw BadAction("SetNameOfScan");
+        }
+    }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Applying Actions</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename Action, typename State&gt;
+  void applyAction(Action&amp; action, RootObject&lt;State&gt;&amp; state) {
+      try {
+          auto t = Transaction(state);
+          action(*t);
+      }
+      catch (Exception&amp; e) {
+          // most likely notify user that their action is invalid
+          // or add fatal error to state (long story)
+      }
+  }
+        </code></pre>
       </section>
 
       <section>
-        <p>Unpleasant stuff</p>
-        <p>Allocators</p>
-        <p>need for mutable objects</p>
+        <p>State observers</p>
+        <p>memoization</p>
+      </section>
+
+      <section>
+        <p>The state of states</p>
       </section>
 
       <section class="slide">
         <h3>Programming with Immutable Objects</h3>
         <br/>
         <ul>
-          <li>State of wrapped <code class="cinline">shared_ptr&lt;const T&gt;</code></li>
-          <li>Processors which work with the state</li>
-          <li>Shallow compare to check for change</li>
-          <li>Shallow CoW from leaf to root on transactions</li>
+          <li>Not a solution for every problem</li>
+          <li>Programming and design is hard</li>
+          <li>The performance is not great</li>
+          <li>Awesome testing and debugging power</li>
+          <li>Unprecedented robustness</li>
         </ul>
       </section>
 
