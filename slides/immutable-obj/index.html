@@ -419,12 +419,12 @@ void guiLoop(<span class="hl-code-i">ObjectHandle</span> obj) {
       std::shared_ptr&lt;Object&gt; m_object;
   public:
 <span class="fragment hl-code">      std::shared_ptr&lt;const Object&gt; read() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }</span>
       Object&amp; write() {
           if (m_object.use_count() &gt; 1) {
 <span class="fragment hl-code">              auto newObject = std::make_shared&lt;Object&gt;(*m_object);
-              std::atomic_store_explicit(&m_object, newObject,
+              std::atomic_store_explicit(&amp;m_object, newObject,
                   std::memory_order_relaxed);</span>
           }
           return *m_object;
@@ -459,14 +459,14 @@ void guiLoop(ObjectHandle obj) {
       <span class="fragment hl-code">std::shared_ptr&lt;Object&gt; m_writeObject;</span>
   public:
       std::shared_ptr&lt;const Object&gt; read() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
 <span class="fragment hl-code">      std::shared_ptr&lt;Object&gt; writeLock() {
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
           return m_writeObject;
       }</span>
 <span class="fragment hl-code">      void writeUnlock() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
       }</span>
   };
@@ -538,14 +538,14 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject; <span class="hl-code-i">// Make this thread safe?</span>
                                              <span class="fragment hl-code-i">// Where is the *real* data then?</span>
       std::shared_ptr&lt;const Object&gt; read() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           m_writeObject = std::make_shared&lt;Object&gt;(*m_object);
           return m_writeObject;
       }
       void writeUnlock() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
       }
   };
@@ -561,7 +561,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       <span class="hl-code-i">std::mutex m_accessMutex;</span>
       std::shared_ptr&lt;const Object&gt; read() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           <span class="hl-code-i">m_accessMutex.lock();</span>
@@ -569,7 +569,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void writeUnlock() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           <span class="hl-code-i">m_accessMutex.unlock();</span>
       }
@@ -607,7 +607,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_accessMutex;
       std::shared_ptr&lt;const Object&gt; read() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           m_accessMutex.lock();
@@ -630,7 +630,7 @@ void guiLoop(ObjectHandle obj) {
       std::mutex m_accessMutex;
       std::shared_ptr&lt;const Object&gt; read() const {
           <span class="hl-code-i">std::lock_guard l(m_accessMutex);</span>
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           m_accessMutex.lock();
@@ -652,13 +652,13 @@ void guiLoop(ObjectHandle obj) {
       std::mutex m_accessMutex;
       std::shared_ptr&lt;const Object&gt; read() const {
           std::lock_guard l(m_accessMutex);
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           m_accessMutex.lock();
 <span class="hl-code-i">          if (m_object.use_count() &gt; 1) {
               auto newObject = std::make_shared&lt;Object&gt;(*m_object);
-              std::atomic_store_explicit(&m_object, newObject,
+              std::atomic_store_explicit(&amp;m_object, newObject,
                   std::memory_order_relaxed);
           }
           return m_object;</span>
@@ -909,7 +909,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_accessMutex;
       std::shared_ptr&lt;const Object&gt; <span class="fragment hl-code">read</span>() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; writeLock() {
           m_accessMutex.lock();
@@ -917,7 +917,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void writeUnlock() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_accessMutex.unlock();
       }
@@ -933,7 +933,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_accessMutex;
       std::shared_ptr&lt;const Object&gt; <span class="hl-code-i">detach</span>() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; <span class="fragment hl-code persist">writeLock</span>() {
           m_accessMutex.lock();
@@ -941,7 +941,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void <span class="fragment hl-code persist">writeUnlock()</span> {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_accessMutex.unlock();
       }
@@ -957,7 +957,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_accessMutex;
       std::shared_ptr&lt;const Object&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; <span class="hl-code-i">beginTransaction()</span> {
           m_accessMutex.lock();
@@ -965,7 +965,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void <span class="hl-code-i">endTransaction()</span> {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_accessMutex.unlock();
       }
@@ -981,7 +981,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex <span class="hl-code-i">m_transactionMutex</span>;
       std::shared_ptr&lt;const Object&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; beginTransaction() {
           <span class="hl-code-i">m_transactionMutex</span>.lock();
@@ -989,7 +989,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void endTransaction() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           <span class="hl-code-i">m_transactionMutex</span>.unlock();
       }
@@ -1005,7 +1005,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_transactionMutex;
       std::shared_ptr&lt;const Object&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; beginTransaction() {
           m_transactionMutex.lock();
@@ -1014,7 +1014,7 @@ void guiLoop(ObjectHandle obj) {
       }
       void endTransaction(<span class="hl-code-i">bool store</span>) {
           <span class="hl-code-i">if (store) {</span>
-            std::atomic_store_explicit(&m_object, m_writeObject,
+            std::atomic_store_explicit(&amp;m_object, m_writeObject,
                 std::memory_order_relaxed);
           }
           m_transactionMutex.unlock();
@@ -1024,7 +1024,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Immutable Objects So Far</h3>
+        <h3>Our Immutable Objects So Far</h3>
         <br/>
         <ul>
           <li><span class="fancy">Atomic transactions</span>: synchronised writes from any thread</li>
@@ -1104,9 +1104,8 @@ void guiLoop(ObjectHandle obj) {
         </code></pre>
       </section>
 
-      <section>
-
-      </section>
+      <!-- <section>
+      </section> -->
 
       <section class="slide">
         <h3>Change the State</h3>
@@ -1235,9 +1234,9 @@ void guiLoop(ObjectHandle obj) {
         <br/>
         <pre><code class="cpp hljs" data-noescape>
     auto state = getState();
-    findBladder(state->image);
-    findFemurs(state->image);
-    calculateElectronDensity(state->ctImage, state->structures["ptv"]);
+    findBladder(state-&gt;image);
+    findFemurs(state-&gt;image);
+    calculateElectronDensity(state-&gt;ctImage, state-&gt;structures["ptv"]);
         </code></pre>
       </section>
 
@@ -1245,9 +1244,9 @@ void guiLoop(ObjectHandle obj) {
         <h3>Undo &amp; Redo</h3>
         <br/>
         <pre><code class="cpp hljs" data-noescape>
-    undoAction-&gt;old = getState()->structures["bladder"];
+    undoAction-&gt;old = getState()-&gt;structures["bladder"];
     applyManualUserEditsTo("bladder");
-    undoAction-&gt;cur = getState()->structures["bladder"];
+    undoAction-&gt;cur = getState()-&gt;structures["bladder"];
         </code></pre>
       </section>
 
@@ -1289,22 +1288,47 @@ void guiLoop(ObjectHandle obj) {
     <span class="hl-code-i">imaging</span>(state, receivedNewImageFromMRI, loader.loadImage("test.img"));
     assert(deepCompare(getState(), expectedState));
         </code></pre>
-        <p>Top-Down Integration Testing</p>
+        <p>Bottom-Up Integration Testing</p>
       </section>
 
       <section>
         <pre><code class="cpp hljs" data-noescape>
     auto state = somePredefinedState();
-    auto imaging = [](State& s) { if (!s.image) s.image = loader.loadImage("test.img"); };
-    treatment(state);
+    // Mock
+    auto <span class="hl-code-i">imaging</span> = [](State& s){ if (!s.image) s.image=loader.loadImage("test.img");};
+    <span class="fragment hl-code">treatment(state);</span>
     assert(deepCompare(getState(), expectedState));
         </code></pre>
-        <p>Bottom-Up Integration Testing</p>
+        <p>Top-Down Integration Testing</p>
       </section>
 
       <section class="slide">
         <h3>Integration Testing by Unit Testing</h3>
         <br/>
+        <ul>
+          <li>When we have the app state in a <span class="fancy">single object</span>...</li>
+          <li>...everything the application does is a <span class="fancy">pure function</span></li>
+          <li><code class="cinline">State doSomething(const State&)</code></li>
+          <li>...which can be unit tested</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Moreover...</h3>
+        <br/>
+        <ul>
+          <li>Since all modules are functions...</li>
+          <li><span class="fancy">...mocks are trivial</span></li>
+          <li>Since the entire state is an object...</li>
+          <li><span class="fancy">...fuzzing is easy</span></li>
+          <li>Since the an object can be saved to and loaded from disk...</li>
+          <li><span class="fancy">...resuming after a crash is trivial</span></li>
+          <li><span class="fancy">...jump in time debugging is possible</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>That got us intrigued</p>
       </section>
 
       <section>
@@ -1338,7 +1362,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_transactionMutex;
       std::shared_ptr&lt;const Object&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; beginTransaction() {
           m_transactionMutex.lock();
@@ -1346,7 +1370,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void endTransaction() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_transactionMutex.unlock();
       }
@@ -1362,7 +1386,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;Object&gt; m_writeObject;
       std::mutex m_transactionMutex;
       std::shared_ptr&lt;const Object&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;Object&gt; beginTransaction() {
           m_transactionMutex.lock();
@@ -1370,7 +1394,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void endTransaction() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_transactionMutex.unlock();
       }
@@ -1386,7 +1410,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;<span class="hl-code-i">T</span>&gt; m_writeObject;
       std::mutex m_transactionMutex;
       std::shared_ptr&lt;const <span class="hl-code-i">T</span>&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;<span class="hl-code-i">T</span>&gt; beginTransaction() {
           m_transactionMutex.lock();
@@ -1394,7 +1418,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void endTransaction() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_transactionMutex.unlock();
       }
@@ -1410,7 +1434,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;T&gt; m_writeObject;
       std::mutex m_transactionMutex;
       std::shared_ptr&lt;const T&gt; detach() const {
-          return std::atomic_load_explicit(&m_object, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;m_object, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;T&gt; beginTransaction() {
           m_transactionMutex.lock();
@@ -1418,7 +1442,7 @@ void guiLoop(ObjectHandle obj) {
           return m_writeObject;
       }
       void endTransaction() {
-          std::atomic_store_explicit(&m_object, m_writeObject,
+          std::atomic_store_explicit(&amp;m_object, m_writeObject,
               std::memory_order_relaxed);
           m_transactionMutex.unlock();
       }
@@ -1434,7 +1458,7 @@ void guiLoop(ObjectHandle obj) {
       std::shared_ptr&lt;T&gt; <span class="hl-code-i">m_transactionData</span>;
       std::mutex m_transactionMutex;
       std::shared_ptr&lt;const T&gt; detach() const {
-          return std::atomic_load_explicit(&<span class="hl-code-i">m_data</span>, std::memory_order_relaxed);
+          return std::atomic_load_explicit(&amp;<span class="hl-code-i">m_data</span>, std::memory_order_relaxed);
       }
       std::shared_ptr&lt;T&gt; beginTransaction() {
           m_transactionMutex.lock();
@@ -1442,7 +1466,7 @@ void guiLoop(ObjectHandle obj) {
           return <span class="hl-code-i">m_transactionData</span>;
       }
       void endTransaction() {
-          std::atomic_store_explicit(&<span class="hl-code-i">m_data</span>, <span class="hl-code-i">m_transactionData</span>,
+          std::atomic_store_explicit(&amp;<span class="hl-code-i">m_data</span>, <span class="hl-code-i">m_transactionData</span>,
               std::memory_order_relaxed);
           m_transactionMutex.unlock();
       }
@@ -1537,7 +1561,7 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
-        <h3>Some Objects</h3>
+        <h3>Some Objects <span class="fragment">(It's hard)</span></h3>
         <pre><code class="cpp hljs" data-noescape>struct ImagingState {
       struct PatientData {
           Orientation</span> orientation;
@@ -1589,30 +1613,173 @@ void guiLoop(ObjectHandle obj) {
         <h3>The Worst Part</h3>
         <br/>
         <pre><code class="cpp hljs" data-noescape>
-  auto oldImage = state->detach()->image->detach(); // That's a lot of detach() calls, Batman
-  *Transaction(oldImage->name) = "something different";
-  auto curImage = state->detach()->image->detach();
-  assert(*oldImage->name->detach() != newImage->name->detach());
+  auto oldImage = state-&gt;detach()-&gt;image-&gt;detach();// That's a lot of detach(), Batman
+  *Transaction(oldImage-&gt;name) = "something different";
+  auto curImage = state-&gt;detach()-&gt;image-&gt;detach();
+  assert(*oldImage-&gt;name-&gt;detach() != *curImage-&gt;name-&gt;detach());
   // Uh-oh, they both are "something different"
         </code></pre>
         <ul>
           <li>We "kinda" broke the <code class="cinline">detach</code> promise</li>
-          <li>There is no way to implement the way of React.js</li>
+          <li>This is not the way of React.js</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>Split the object</h3>
+        <h3>Split the Object</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
+  class <span class="hl-code-i">RootObject</span> {
+      std::shared_ptr&lt;T&gt; m_data;
+      std::shared_ptr&lt;T&gt; m_transactionData;
+      std::mutex m_transactionMutex;
+      std::shared_ptr&lt;const T&gt; detach() const {
+          return std::atomic_load_explicit(&amp;m_data, std::memory_order_relaxed);
+      }
+      std::shared_ptr&lt;T&gt; beginTransaction() {
+          m_transactionMutex.lock();
+          m_transactionData = std::make_shared&lt;T&gt;(*m_data);
+          return m_transactionData;
+      }
+      void endTransaction() {
+          std::atomic_store_explicit(&amp;m_data, m_transactionData,
+              std::memory_order_relaxed);
+          m_transactionMutex.unlock();
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Split the Object</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
+  class Node {
+      std::shared_ptr&lt;T&gt; m_data;
+      const T* operator-&gt;() const { return m_data.get(); }
+      const T&amp; operator*() const { return *m_data; }
+      T* operator-&gt;() {
+          cow();
+          return m_data.get();
+      }
+      T&amp; operator*() {
+          cow();
+          return *m_data;
+      }
+      void cow() { // moo
+          m_data = std::make_shared&lt;T&gt;(*m_data); // no need for atomic
+      }
+      std::shared_ptr&lt;const T&gt; payload() const { return m_data; }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Imaging State</h3>
+        <pre><code class="cpp hljs" data-noescape>struct ImagingState {
+      struct PatientData {
+          Orientation</span> orientation;
+          grams</span> weight;
+      };
+      <span class="hl-code-i">Node&lt;PatientData&gt;</span> patient;
+      struct ImageData {
+          <span class="hl-code-i">Node&lt;string&gt;</span> name;
+          <span class="hl-code-i">Node&lt;string&gt;</span> notes;
+          <span class="hl-code-i">Node&lt;point3&gt;</span> size;
+          <span class="hl-code-i">Node&lt;vector&lt;byte&gt;&gt;</span> buffer;
+          float</span> progress = 0;
+      };
+      <span class="hl-code-i">Node&lt;ImageData&gt;</span> image;
+      struct TableData {
+          <span class="hl-code-i">Node&lt;point3&gt;</span> pos;
+          float</span> progress = 0;
+      };
+      <span class="hl-code-i">Node&lt;TableData&gt;</span> table;
+  };
+
+  using ImagingStateObject = <span class="fragment hl-code">RootObject</span>&lt;ImagingState&gt;;
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Set Image Name</h3>
+        <br/>
+        <pre><code class="javascript hljs" data-noescape>
+  function setImageName() {
+    return { image: { name: "Cool image" }}};
+  }
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  *Transaction(state)-&gt;image-&gt;name = "Cool image";
+        </code></pre>
+        <p class="pinner">Shallow copy-on-write on state-image-name</p>
+      </section>
+
+      <section class="slide">
+        <h3>Test</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  auto oldState = state.detach();
+  auto name = oldState-&gt;image-&gt;name.payload();
+  *Transaction(state)-&gt;image-&gt;name = "something different";
+  auto curState = state.detach();
+  assert(oldState != curState); // shallow compare
+  assert(oldState-&gt;image != curState-&gt;image); // shallow compare
+  assert(oldState-&gt;image-&gt;name != curState-&gt;image-&gt;name); // shallow compare
+  assert(*oldState-&gt;image-&gt;name != *curState-&gt;image-&gt;name); // string compare
+
+        </code></pre>
+        <p class="pinner">This is the React.js way</p>
+      </section>
+
+      <section class="slide">
+        <h3>Problems</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  *Transaction(state)-&gt;image-&gt;name = "Cool name";
+  // we copied the old name, only to replace it with "Cool name"
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  Transaction t(state);
+  t-&gt;image-&gt;name = "foo";
+  t-&gt;image-&gt;notes = "bar";
+  // image gets CoW'd twice
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  Transaction t(state);
+  if (t->image->buffer->empty()) {
+      t-&gt;image-&gt;name = "&lt;empty&gt;";
+  }
+  // we copy-on-write even if we change nothing
+        </code></pre>
       </section>
 
       <section>
-        <p>This doesn't work</p>
-        <p>Too many mutexes</p>
-        <p>Not atomic</p>
+        <section>
+          <img class="diagram" src="kuzco.png" alt="kuzco" />
+          <h2>Kuzco</h2>
+          <p><a href="https://github.com/iboB/kuzco">gh/iboB/kuzco</a></p>
+        </section>
+        <section>
+          <p>TBD</p>
+        </section>
       </section>
 
-      <section>
-        <p>Kuzco</p>
+      <section class="slide">
+        <h3>Kuzco Solutions</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  *Transaction(state)-&gt;image-&gt;name = "Cool name";
+  <span class="fragment">// no copies of name</span>
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  Transaction t(state);
+  t-&gt;image-&gt;name = "foo";
+  t-&gt;image-&gt;notes = "bar";
+  <span class="fragment">// image gets CoW'd once</span>
+        </code></pre>
+        <pre><code class="cpp hljs" data-noescape>
+  Transaction t(state);
+  if (t<span class="fragment hl-code persist">.r()</span>->image->buffer->empty()) {
+      t-&gt;image-&gt;name = "&lt;empty&gt;";
+  }
+  <span class="fragment">// no copies if we don't change</span>
+        </code></pre>
       </section>
 
       <section>
