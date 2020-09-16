@@ -1852,7 +1852,7 @@ void guiLoop(ObjectHandle obj) {
         <pre class="fragment"><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   class NodeVector {
-    <span class="fragment hl-code">std::shared_ptr&lt;std::vector&lt;T&gt;&gt; m_data;</span>
+      <span class="fragment hl-code">std::shared_ptr&lt;std::vector&lt;T&gt;&gt; m_data;</span>
       auto& emplace_back() {
           <span class="fragment hl-code">auto old = m_data;</span>
           <span class="fragment hl-code">m_data = std::make_shared&lt;std::vector&lt;T&gt;&gt;();</span>
@@ -2134,8 +2134,8 @@ void guiLoop(ObjectHandle obj) {
       <section class="slide">
         <h3>UI Example</h3>
         <pre><code class="cpp hljs" data-noescape>
-  <span class="fragment">treatmentState.subscribe([uiThread] {
-      guiThread.wakeUp();
+  <span class="fragment">treatmentState.subscribe([uiThread]() {
+      uiThread-&gt;wakeUp();
   });</span>
   <span class="fragment">// ...
   void UIThread::run() {
@@ -2175,7 +2175,7 @@ void guiLoop(ObjectHandle obj) {
       <section class="slide">
         <h3>State Observers</h3>
         <pre><code class="cpp hljs" data-noescape>
-  void bladderObserver() {  // delcarative code, to imperative code
+  void bladderObserver() {
       <span class="fragment hl-code">if (bladderCalculation.running()) {</span>
           <span class="fragment hl-code">if (query&lt;GetImage&gt;(appState) != query&lt;GetImage&gt;(myState))</span> {
               <span class="fragment hl-code">bladderCalculation.abort();</span>
@@ -2223,8 +2223,9 @@ void guiLoop(ObjectHandle obj) {
           }</span>
           <span class="fragment hl-code">query&lt;GetBladder&gt;(state) = result.bladder;</span>
       }
-  }
+  };
         </code></pre>
+        <p class="fragment pinner">Imperative to declarative code</p>
       </section>
 
       <section class="slide">
@@ -2260,7 +2261,7 @@ void guiLoop(ObjectHandle obj) {
   auto app = newTreatment(patient);
 
   WorkerManager::setThreads(0);
-  WorkerManager::overrideWorker("takeImage", []() {
+  WorkerManager::overrideWorker("MRI.takeImage", []() {
       return load&lt;Image&gt;("test.img"); // mock
   });
 
