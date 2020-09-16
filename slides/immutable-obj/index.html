@@ -107,14 +107,14 @@
           <li>...connecting to an <span class="fancy">application server</span></li>
           <li>...which has multiple services and workers</li>
           <ul>
-            <li><span class="fancy">Service</span>: always alive. Has sessions</li>
-            <ul>
+            <li class="fragment"><span class="fancy">Service</span>: always alive. Has sessions</li>
+            <ul class="fragment">
               <li>Treatment service</li>
               <li>MRI service</li>
               <li>...</li>
             </ul>
-            <li><span class="fancy">Worker</span>: short life. Calculate something and die</li>
-            <ul>
+            <li class="fragment"><span class="fancy">Worker</span>: short life. Calculate something and die</li>
+            <ul class="fragment">
               <li>Identify bladder</li>
               <li>Calculate dose</li>
               <li>...</li>
@@ -133,21 +133,21 @@
         <ul>
           <li>Has sessions for clients</li>
           <li>Can build type-erased UI objects from the app state</li>
-          <li>WS Server - a layer for browsers. Reads and writes JSON</li>
-          <li>Theoretically we can have many other layers (say Qt)</li>
+          <li class="fragment">WS Server - a layer for browsers. Reads and writes JSON</li>
+          <li class="fragment">Theoretically we can have many other layers (say Qt)</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Treatment Service</h3>
         <br/>
-        <p>Creates a Treatment Session</p>
+        <p class="fragment">Creates a Treatment Session</p>
         <ul>
-          <li>Has a state which represents a treatment in progress</li>
-          <li>Fetches imaging info from the MRI Service</li>
-          <li>Issues start/stop to the Radiotherapy Service</li>
-          <li>Gathers information about the delivered dose</li>
-          <li>At the end saves treatment data to the database</li>
+          <li class="fragment">Has a state which represents a treatment in progress</li>
+          <li class="fragment">Fetches imaging info from the MRI Service</li>
+          <li class="fragment">Issues start/stop to the Radiotherapy Service</li>
+          <li class="fragment">Gathers information about the delivered dose</li>
+          <li class="fragment">At the end saves treatment data to the database</li>
         </ul>
       </section>
 
@@ -269,15 +269,15 @@
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWriteLock {
   public:
-    ObjectWriteLock(Object&amp; obj) : m_object(obj) {
-      <span class="hl-code-i">m_object.writeLock();</span>
-    }
-    ~ObjectWriteLock() { <span class="hl-code-i">m_object.writeUnlock();</span> }
+      ObjectWriteLock(Object&amp; obj) : m_object(obj) {
+        <span class="hl-code-i">m_object.writeLock();</span>
+      }
+      ~ObjectWriteLock() { <span class="hl-code-i">m_object.writeUnlock();</span> }
 
-    Object* operator-&gt;() { return &amp;m_object; }
-    Object* operator*()  { return &amp;m_object; }
+      Object* operator-&gt;() { return &amp;m_object; }
+      Object* operator*()  { return &amp;m_object; }
   private:
-    Object&amp; m_object;
+      Object&amp; m_object;
   };
         </code></pre>
       </section>
@@ -495,18 +495,18 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWriteLock {
   public:
-    ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
-      m_object = m_handle.writeLock();
-    }
-    ~ObjectWriteLock() {
-      m_handle.writeUnlock();
-    }
+      ObjectWriteLock(const ObjectHandle& handle) : m_handle(handle) {
+        m_object = m_handle.writeLock();
+      }
+      ~ObjectWriteLock() {
+        m_handle.writeUnlock();
+      }
 
-    Object* operator-&gt;() { return m_object.get(); }
-    Object* operator*()  { return *m_object; }
+      Object* operator-&gt;() { return m_object.get(); }
+      Object* operator*()  { return *m_object; }
   private:
-    ObjectHandle m_handle;
-    std::shared_ptr&lt;Object&gt; m_object;
+      ObjectHandle m_handle;
+      std::shared_ptr&lt;Object&gt; m_object;
   };
         </code></pre>
       </section>
@@ -1032,8 +1032,8 @@ void guiLoop(ObjectHandle obj) {
           <li>Fastest possible <span class="fancy">lockless reads</span> by detaching</li>
           <li>A detached object is possibly outdated</li>
           <li>Every reference to the object is <span class="fancy">safe and valid forever</span></li>
-          <li>Why, yes, this <em>can</em> be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
-          <li>It requires <span class="fancy">a different way of thinking</span></li>
+          <li class="fragment">Why, yes, this <em>can</em> be called a glorified <code class="cinline">shared_ptr</code> wrapper</li>
+          <li class="fragment">It leads to <span class="fancy">a different way of thinking</span></li>
         </ul>
       </section>
 
@@ -1049,18 +1049,18 @@ void guiLoop(ObjectHandle obj) {
         <h3>React.js</h3>
         <br/>
         <ul>
-          <li>It's a GUI library for single-page applications</li>
-          <li>Take a state</li>
-          <li>Create the DOM - the elements on the page</li>
-          <li>That's it</li>
-          <li>Let's see an example...</li>
+          <li class="fragment">It's a GUI library for single-page applications</li>
+          <li class="fragment">Take a state</li>
+          <li class="fragment">Create the DOM - the elements on the page</li>
+          <li class="fragment">That's it</li>
+          <li class="fragment">Let's see an example...</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Imaging Session State</h3>
-        <p>...in JavaScript</p>
-        <pre><code class="javascript hljs" data-noescape>
+        <p class="fragment">...in JavaScript</p>
+        <pre class="fragment"><code class="javascript hljs" data-noescape>
   imagingState = {
     <span class="fragment hl-code">patient</span>: {
       orientation: null,
@@ -1083,7 +1083,7 @@ void guiLoop(ObjectHandle obj) {
 
       <section class="slide">
         <h3>Build Some GUI</h3>
-        <pre><code class="javascript hljs" data-noescape>
+        <pre class="fragment"><code class="javascript hljs" data-noescape>
   <span class="hl-code-i">buildGUI</span>({
     patient: {
       orientation: HeadFirstSuppine,
@@ -1110,17 +1110,17 @@ void guiLoop(ObjectHandle obj) {
       <section class="slide">
         <h3>Change the State</h3>
         <br/>
-        <pre><code class="javascript hljs" data-noescape>
+        <pre class="fragment"><code class="javascript hljs" data-noescape>
   function setImageName() {
     return { image: { name: "Cool image" }}};
   }
         </code></pre>
-        <pre><code class="javascript hljs" data-noescape>
+        <pre class="fragment"><code class="javascript hljs" data-noescape>
   function shiftTable(state) {
     return { table: { pos: { y: state.table.pos.y + 20 }}}};
   }
         </code></pre>
-        <p class="pinner">Thanks to JS reflection. These will be spliced onto the state</p>
+        <p class="fragment pinner">Thanks to JS reflection. These will be spliced onto the state</p>
       </section>
 
       <section class="slide">
@@ -1128,7 +1128,7 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="javascript hljs" data-noescape>  function setImageName() {
     return { image: { name: "Cool image" }}};
   }</code></pre>
-        <pre><code class="ruby hljs" data-noescape>  state:
+        <pre class="fragment"><code class="ruby hljs" data-noescape>  state:
     patient:
       orientation: HeadFirstSuppine
       weight: 80000
@@ -1159,7 +1159,7 @@ void guiLoop(ObjectHandle obj) {
   <span class="fragment hl-code">console.assert(state !== oldState, "Uh-oh");</span> <span class="fragment hl-code-i">// Uh-oh</span>
         </code></pre>
 
-        <p style="text-align: right;"><em>Only the names have changed</em> - Jon Bon Jovi</p>
+        <p class="fragment" style="text-align: right;"><em>Only the names have changed</em> - Jon Bon Jovi</p>
       </section>
 
       <section class="slide">
@@ -1202,10 +1202,10 @@ void guiLoop(ObjectHandle obj) {
       <section class="slide">
         <h3>Building GUI</h3>
         <br/>
-        <pre><code class="javascript hljs" data-noescape>
+        <pre class="fragment"><code class="javascript hljs" data-noescape>
     if (state != oldState) return null;
         </code></pre>
-        <pre><code class="javascript hljs" data-noescape>
+        <pre class="fragment"><code class="javascript hljs" data-noescape>
     if (state.image !== oldState.image) return null;
     return &lt;img src="...
         </code></pre>
@@ -1213,7 +1213,7 @@ void guiLoop(ObjectHandle obj) {
 
       <section>
         <p>React.js-style state in C++?</p>
-        <p>That would be pretty cool!</p>
+        <p class="fragment">That would be pretty cool!</p>
       </section>
 
       <section>
@@ -1234,9 +1234,9 @@ void guiLoop(ObjectHandle obj) {
         <br/>
         <pre><code class="cpp hljs" data-noescape>
     auto state = getState();
-    findBladder(state-&gt;image);
-    findFemurs(state-&gt;image);
-    calculateElectronDensity(state-&gt;ctImage, state-&gt;structures["ptv"]);
+    <span class="fragment hl-code">findBladder(state-&gt;image);</span>
+    <span class="fragment hl-code">findFemurs(state-&gt;image);</span>
+    <span class="fragment hl-code">calculateElectronDensity(state-&gt;ctImage, state-&gt;structures["ptv"]);</span>
         </code></pre>
       </section>
 
@@ -1244,9 +1244,9 @@ void guiLoop(ObjectHandle obj) {
         <h3>Undo &amp; Redo</h3>
         <br/>
         <pre><code class="cpp hljs" data-noescape>
-    undoAction-&gt;old = getState()-&gt;structures["bladder"];
-    applyManualUserEditsTo("bladder");
-    undoAction-&gt;cur = getState()-&gt;structures["bladder"];
+    <span class="fragment hl-code">undoAction-&gt;old = getState()-&gt;structures["bladder"];</span>
+    <span class="fragment hl-code">applyManualUserEditsTo("bladder");</span>
+    <span class="fragment hl-code">undoAction-&gt;cur = getState()-&gt;structures["bladder"];</span>
         </code></pre>
       </section>
 
@@ -1264,22 +1264,22 @@ void guiLoop(ObjectHandle obj) {
     auto state = getState();
     buildGUI(state);
         </code></pre>
-        <p>What if...</p>
-        <pre><code class="cpp hljs" data-noescape>
-    auto state = somePredefinedState();
+        <p class="fragment">What if...</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+    auto state = <span class="fragment hl-code">somePredefinedState();</span>
     buildGUI(state);
-    assert(currentGUI == expectedGUI);
+    <span class="fragment hl-code persist">assert(currentGUI == expectedGUI);</span>
         </code></pre>
-        <p class="pinner">Then what if...</p>
+        <p class="fragment pinner">Then what if...</p>
       </section>
 
       <section>
         <pre><code class="cpp hljs" data-noescape>
-    auto state = somePredefinedState();
-    treatment(state, receivedNewImageFromMRI, loader.loadImage("test.img"));
-    assert(deepCompare(getState(), expectedState));
+    <span class="fragment">auto state = somePredefinedState();</span>
+    <span class="fragment">treatment(state, receivedNewImageFromMRI, loader.loadImage("test.img"));</span>
+    <span class="fragment">assert(deepCompare(getState(), expectedState));</span>
         </code></pre>
-        <p>Big Bang Integration Testing</p>
+        <p class="fragment">Big Bang Integration Testing</p>
       </section>
 
       <section>
@@ -1288,7 +1288,7 @@ void guiLoop(ObjectHandle obj) {
     <span class="hl-code-i">imaging</span>(state, receivedNewImageFromMRI, loader.loadImage("test.img"));
     assert(deepCompare(getState(), expectedState));
         </code></pre>
-        <p>Bottom-Up Integration Testing</p>
+        <p class="fragment">Bottom-Up Integration Testing</p>
       </section>
 
       <section>
@@ -1299,17 +1299,17 @@ void guiLoop(ObjectHandle obj) {
     <span class="fragment hl-code">treatment(state);</span>
     assert(deepCompare(getState(), expectedState));
         </code></pre>
-        <p>Top-Down Integration Testing</p>
+        <p class="fragment">Top-Down Integration Testing</p>
       </section>
 
       <section class="slide">
         <h3>Integration Testing by Unit Testing</h3>
         <br/>
         <ul>
-          <li>When we have the app state in a <span class="fancy">single object</span>...</li>
-          <li>...everything the application does is a <span class="fancy">pure function</span></li>
-          <li><code class="cinline">State doSomething(const State&)</code></li>
-          <li>...which can be unit tested</li>
+          <li class="fragment">When we have the app state in a <span class="fancy">single object</span>...</li>
+          <li class="fragment">...everything the application does is a <span class="fancy">pure function</span></li>
+          <li class="fragment"><code class="cinline">State doSomething(const State&)</code></li>
+          <li class="fragment">...which can be unit tested</li>
         </ul>
       </section>
 
@@ -1317,13 +1317,13 @@ void guiLoop(ObjectHandle obj) {
         <h3>Moreover...</h3>
         <br/>
         <ul>
-          <li>Since all modules are functions...</li>
-          <li><span class="fancy">...mocks are trivial</span></li>
-          <li>Since the entire state is an object...</li>
-          <li><span class="fancy">...fuzzing is easy</span></li>
-          <li>Since the an object can be saved to and loaded from disk...</li>
-          <li><span class="fancy">...resuming after a crash is trivial</span></li>
-          <li><span class="fancy">...jump in time debugging is possible</span></li>
+          <li class="fragment">Since all modules are functions...</li>
+          <li class="fragment"><span class="fancy">...mocks are trivial</span></li>
+          <li class="fragment">Since the entire state is an object...</li>
+          <li class="fragment"><span class="fancy">...fuzzing is easy</span></li>
+          <li class="fragment">Since the an object can be saved to and loaded from disk...</li>
+          <li class="fragment"><span class="fancy">...resuming after a crash is trivial</span></li>
+          <li class="fragment"><span class="fancy">...jump in time debugging is possible</span></li>
         </ul>
       </section>
 
@@ -1339,19 +1339,19 @@ void guiLoop(ObjectHandle obj) {
         <h3><code>shared_ptr</code> Wrapper and React.js</h3>
         <br/>
         <ul>
-          <li><span class="fancy">Shallow compare</span>: <code class="cinline">a == b</code> compares addresses</li>
-          <ul>
+          <li class="fragment"><span class="fancy">Shallow compare</span>: <code class="cinline">a == b</code> compares addresses</li>
+          <ul class="fragment">
             <li>Not <code>string_view</code> anymore</li>
           </ul>
-          <li>CoW on every change is like React splicing</li>
-          <li>Detached references are <span class="fancy">safe and valid forever</span></li>
+          <li class="fragment">CoW on every change is like React splicing</li>
+          <li class="fragment">Detached references are <span class="fancy">safe and valid forever</span></li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Let's Build the State in C++</h3>
         <br/><br/>
-        <p class="pinner">But first...</p>
+        <p class="fragment pinner">But first...</p>
       </section>
 
       <section class="slide">
@@ -1629,13 +1629,13 @@ void guiLoop(ObjectHandle obj) {
     return { image: { name: "Cool image" }}};
   }
         </code></pre>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   *Transaction(Transaction(Transaction(state)-&gt;image)-&gt;name)) = "Cool image";
         </code></pre>
         <ul>
-          <li>That's a lot of transactions, Batman</li>
-          <li>That's a lot of recursive mutex locks, Batman</li>
-          <li>And that's not the worst part</li>
+          <li class="fragment">That's a lot of transactions, Batman</li>
+          <li class="fragment">That's a lot of recursive mutex locks, Batman</li>
+          <li class="fragment">And that's not the worst part</li>
         </ul>
       </section>
 
@@ -1643,15 +1643,15 @@ void guiLoop(ObjectHandle obj) {
         <h3>The Worst Part</h3>
         <br/>
         <pre><code class="cpp hljs" data-noescape>
-  auto oldImage = state-&gt;detach()-&gt;image-&gt;detach();// That's a lot of detach(), Batman
-  *Transaction(oldImage-&gt;name) = "something different";
-  auto curImage = state-&gt;detach()-&gt;image-&gt;detach();
-  assert(*oldImage-&gt;name-&gt;detach() != *curImage-&gt;name-&gt;detach());
-  // Uh-oh, they both are "something different"
+  <span class="fragment hl-code">auto oldImage = state-&gt;detach()-&gt;image-&gt;detach();</span><span class="fragment">// That's a lot of detach(), Batman</span>
+  <span class="fragment hl-code">*Transaction(oldImage-&gt;name) = "something different";</span>
+  <span class="fragment hl-code">auto curImage = state-&gt;detach()-&gt;image-&gt;detach();</span>
+  <span class="fragment hl-code">assert(*oldImage-&gt;name-&gt;detach() != *curImage-&gt;name-&gt;detach());</span>
+  <span class="fragment hl-code-i">// Uh-oh, they both are "something different"</span>
         </code></pre>
         <ul>
-          <li>We "kinda" broke the <code class="cinline">detach</code> promise</li>
-          <li>This is not the way of React.js</li>
+          <li class="fragment">We broke the <code class="cinline">detach</code> promise</li>
+          <li class="fragment">This is not the way of React.js</li>
         </ul>
       </section>
 
@@ -1685,21 +1685,21 @@ void guiLoop(ObjectHandle obj) {
         <h3>Split the Object</h3>
         <pre><code class="cpp hljs" data-noescape>  template &lt;typename T&gt;
   class Node {
-      std::shared_ptr&lt;T&gt; m_data;
+<span class="fragment hl-code">      std::shared_ptr&lt;T&gt; m_data;
       const T* operator-&gt;() const { return m_data.get(); }
-      const T&amp; operator*() const { return *m_data; }
-      T* operator-&gt;() {
+      const T&amp; operator*() const { return *m_data; }</span>
+<span class="fragment hl-code">      T* operator-&gt;() {
           cow();
           return m_data.get();
       }
       T&amp; operator*() {
           cow();
           return *m_data;
-      }
-      void cow() { // moo
+      }</span>
+<span class="fragment hl-code">      void cow() { // moo
           m_data = std::make_shared&lt;T&gt;(*m_data); // no need for atomic
-      }
-      std::shared_ptr&lt;const T&gt; payload() const { return m_data; }
+      }</span>
+      <span class="fragment hl-code">std::shared_ptr&lt;const T&gt; payload() const { return m_data; }</span>
   };
         </code></pre>
       </section>
@@ -1742,7 +1742,7 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   *Transaction(state)-&gt;image-&gt;name = "Cool image";
         </code></pre>
-        <p class="pinner">Shallow copy-on-write on state-image-name</p>
+        <p class="fragment pinner">Shallow copy-on-write on state-image-name</p>
       </section>
 
       <section class="slide">
@@ -1752,33 +1752,33 @@ void guiLoop(ObjectHandle obj) {
   auto name = oldState-&gt;image-&gt;name.payload();
   *Transaction(state)-&gt;image-&gt;name = "something different";
   auto curState = state.detach();
-  assert(oldState != curState); // shallow compare
-  assert(oldState-&gt;image != curState-&gt;image); // shallow compare
-  assert(oldState-&gt;image-&gt;name != curState-&gt;image-&gt;name); // shallow compare
-  assert(*oldState-&gt;image-&gt;name != *curState-&gt;image-&gt;name); // string compare
+  <span class="fragment hl-code">assert(oldState != curState); // shallow compare</span>
+  <span class="fragment hl-code">assert(oldState-&gt;image != curState-&gt;image); // shallow compare</span>
+  <span class="fragment hl-code">assert(oldState-&gt;image-&gt;name != curState-&gt;image-&gt;name); // shallow compare</span>
+  <span class="fragment hl-code">assert(*oldState-&gt;image-&gt;name != *curState-&gt;image-&gt;name); // string compare</span>
 
         </code></pre>
-        <p class="pinner">This is the React.js way</p>
+        <p class="fragment pinner">This is the React.js way</p>
       </section>
 
       <section class="slide">
         <h3>Problems</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   *Transaction(state)-&gt;image-&gt;name = "Cool name";
-  // we copied the old name, only to replace it with "Cool name"
+  <span class="fragment">// we copied the old name, only to replace it with "Cool name"</span>
         </code></pre>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   Transaction t(state);
   t-&gt;image-&gt;name = "foo";
   t-&gt;image-&gt;notes = "bar";
-  // image gets CoW'd twice
+  <span class="fragment">// image gets CoW'd twice</span>
         </code></pre>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   Transaction t(state);
   if (t->image->buffer->empty()) {
       t-&gt;image-&gt;name = "&lt;empty&gt;";
   }
-  // we copy-on-write even if we change nothing
+  <span class="fragment">// we copy-on-write even if we change nothing</span>
         </code></pre>
       </section>
 
@@ -1795,17 +1795,17 @@ void guiLoop(ObjectHandle obj) {
 
       <section class="slide">
         <h3>Kuzco Solutions</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   *Transaction(state)-&gt;image-&gt;name = "Cool name";
   <span class="fragment">// no copies of name</span>
         </code></pre>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   Transaction t(state);
   t-&gt;image-&gt;name = "foo";
   t-&gt;image-&gt;notes = "bar";
   <span class="fragment">// image gets CoW'd once</span>
         </code></pre>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   Transaction t(state);
   if (t<span class="fragment hl-code persist">.r()</span>->image->buffer->empty()) {
       t-&gt;image-&gt;name = "&lt;empty&gt;";
@@ -1816,17 +1816,17 @@ void guiLoop(ObjectHandle obj) {
 
       <section class="slide">
         <h3>More Problems</h3>
-        <pre><code class="cpp hljs" data-noescape>  struct MRIStudy {
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  struct MRIStudy {
       std::vector&lt;Image&gt; images;
       // ...
   };
   // copy vector on every change?</code></pre>
-        <pre><code class="cpp hljs" data-noescape>  struct MRIStudy {
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  struct MRIStudy {
       Node&lt;std::vector&lt;Image&gt;&gt; images;
       // ...
   };
   // copy all images on every change?</code></pre>
-        <pre><code class="cpp hljs" data-noescape>  struct MRIStudy {
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  struct MRIStudy {
       Node&lt;std::vector&lt;Node&lt;Image&gt;&gt;&gt; images;
       // ...
   };
@@ -1838,60 +1838,60 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   Transaction(state)->images->emplace_back();
         </code></pre>
-        <p>What happens here?</p>
+        <p class="fragment">What happens here?</p>
         <ol>
-          <li>Copy <code class="cinline">state</code>. Fine</li>
-          <li>Copy <code class="cinline">images</code>. Er... fine</li>
-          <li><code class="cinline">emplace_back</code> needs to reallocate. Ew... fine</li>
-          <li>Copy <code class="cinline">images</code>. <span class="fancy">This is were I draw the line!</span></li>
+          <li class="fragment">Copy <code class="cinline">state</code>. <span class="fragment">Fine</span></li>
+          <li class="fragment">Copy <code class="cinline">images</code>. <span class="fragment">Er... fine</span></li>
+          <li class="fragment"><code class="cinline">emplace_back</code> needs to reallocate. <span class="fragment">Ew... fine</span></li>
+          <li class="fragment">Copy <code class="cinline">images</code>. <span class="fragment fancy">This is were I draw the line!</span></li>
         </ol>
       </section>
 
       <section class="slide">
         <h3>Custom Container Wrappers</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   class NodeVector {
-      std::shared_ptr&lt;std::vector&lt;T&gt;&gt; m_data;
+    <span class="fragment hl-code">std::shared_ptr&lt;std::vector&lt;T&gt;&gt; m_data;</span>
       auto& emplace_back() {
-          auto old = m_data;
-          m_data = std::make_shared&lt;std::vector&lt;T&gt;&gt;();
-          m_data.reserve(old.size());
-          m_data = old;
-          return m_data.emplace_back();
+          <span class="fragment hl-code">auto old = m_data;</span>
+          <span class="fragment hl-code">m_data = std::make_shared&lt;std::vector&lt;T&gt;&gt;();</span>
+          <span class="fragment hl-code">m_data.reserve(old.size());</span>
+          <span class="fragment hl-code">m_data = old;</span>
+          <span class="fragment hl-code">return m_data.emplace_back();</span>
       }
       // ...
   };
         </code></pre>
-        <p class="pinner">The same for other containers</p>
+        <p class="fragment pinner">The same for other containers</p>
       </section>
 
       <section class="slide">
         <h3>That's a Lot of Allocations, Batman</h3>
-        <pre><code class="cpp hljs" data-noescape>  // 4 allocs here multiple times per second
-  Transaction(state)-&gt;imaging-&gt;image[0]-&gt;progress-&gt;value = 0.4f;</code></pre>
+        <pre><code class="cpp hljs" data-noescape>  Transaction(state)-&gt;imaging-&gt;image[0]-&gt;progress-&gt;value = 0.4f;
+  <span class="fragment">// 4 allocs here multiple times per second</span></code></pre>
         <br/>
         <ul>
-          <li>So far we haven't done anything about it</li>
-          <li>Better state structure?</li>
-          <li>Custom allocators?</li>
-          <li>Reimplementing <code class="cinline">std::shared_ptr</code>?</li>
-          <li>Do we even need weak pointers?</li>
-          <li>Still gathering information</li>
+          <li class="fragment">So far we haven't done anything about it</li>
+          <li class="fragment">Better state structure?</li>
+          <li class="fragment">Custom allocators?</li>
+          <li class="fragment">Reimplementing <code class="cinline">std::shared_ptr</code>?</li>
+          <li class="fragment">Do we even need weak pointers?</li>
+          <li class="fragment">Still gathering information</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>That's a Lot of Copying</h3>
-        <p style="text-align: right;">... Batman</p>
+        <p class="fragment" style="text-align: right;">... Batman</p>
         <ul>
-          <li>Imagine <code class="cinline">setImageVoxel(point3, value)</code></li>
-          <li>Copy <span class="fancy">tens of megabytes</span> of an image?</li>
-          <li><span class="fancy">This is a real limitation</span></li>
-          <li>We just don't do that</li>
-          <li>A mutable placeholder with conventional locks?</li>
-          <li>Manual contouring works like this</li>
-          <li>If this is everything to do, perhaps <span class="fancy">that's not the right pattern</span></li>
+          <li class="fragment">Imagine <code class="cinline">setImageVoxel(point3, value)</code></li>
+          <li class="fragment">Copy <span class="fancy">tens of megabytes</span> of an image?</li>
+          <li class="fragment"><span class="fancy">This is a real limitation</span></li>
+          <li class="fragment">We just don't do that</li>
+          <li class="fragment">A mutable placeholder with conventional locks?</li>
+          <li class="fragment">Manual contouring works like this</li>
+          <li class="fragment">If this is everything to do, perhaps <span class="fancy">that's not the right pattern</span></li>
         </ul>
       </section>
 
@@ -1902,29 +1902,29 @@ void guiLoop(ObjectHandle obj) {
       return state.image-&gt;empty() || *state.image->retake;
   }
         </code></pre>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   struct Imaging { Node&lt;Image&gt; image; };
-  struct Treatment { Node&lt;Imaging&gt; imaging; };
-  struct Diagnosis { Node&lt;Imaging&gt; phase1; }
+  <span class="fragment">struct Treatment { Node&lt;Imaging&gt; imaging; };</span>
+  <span class="fragment">struct Diagnosis { Node&lt;Imaging&gt; phase1; }</span>
         </code></pre>
-        <p class="pinner">How can we reuse <code class="cinline">shouldTakeScan</code>?</p>
+        <p class="fragment pinner">How can we reuse <code class="cinline">shouldTakeScan</code>?</p>
       </section>
 
       <section class="slide">
         <h3>Queries</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   bool shouldTakeScan(const State&amp; state) {
-      auto image = query&lt;GetImaging&gt;(state)-&gt;image;
+      auto image = <span class="hl-code-i">query&lt;GetImaging&gt;(state)</span>-&gt;image;
       return image-&gt;empty() || *image->retake;
   }</code></pre>
-        <pre><code class="cpp hljs" data-noescape>  // Chaining
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  // Chaining
   bool shouldTakeScan(const State&amp; state) {
-      auto image = query&lt;GetImaging&gt;(state).q&lt;GetImage&gt;();
+      auto image = query&lt;GetImaging&gt;(state)<span class="hl-code-i">.q&lt;GetImage&gt;()</span>;
       return image-&gt;empty() || *image->retake;
   }</code></pre>
-        <pre><code class="cpp hljs" data-noescape>  // Mutable
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  // Mutable
   void calculateBladder(Transaction&lt;State&gt;&amp; state) {
-      auto b = query&lt;GetOrgans&gt;(state).q&lt;GetOrgan&gt;("bladder");
+      auto& b = <span class="hl-code-i">query&lt;GetOrgans&gt;(state).q&lt;GetOrgan&gt;("bladder");</span>
       b = calcBladder(query&lt;GetImaging&gt;(state.r()).q&lt;GetImage&gt;());
   }
         </code></pre>
@@ -1934,14 +1934,14 @@ void guiLoop(ObjectHandle obj) {
         <h3>React.js-Style Objects in C++</h3>
         <br/>
         <ul>
-          <li><span class="fancy">Immutable objects</span> based on ref-counted pointers</li>
-          <li>Shallow copies</li>
-          <li>Shallow compares</li>
-          <li><span class="fancy">State composed of nodes</span></li>
-          <li>Special nodes for containers</li>
-          <li>Queries</li>
-          <li>Not always the way to go :(</li>
-          <li><span class="fancy">Mucho potential</span></li>
+          <li class="fragment"><span class="fancy">Immutable objects</span> based on ref-counted pointers</li>
+          <li class="fragment">Shallow copies</li>
+          <li class="fragment">Shallow compares</li>
+          <li class="fragment"><span class="fancy">State composed of nodes</span></li>
+          <li class="fragment">Special nodes for containers</li>
+          <li class="fragment">Queries</li>
+          <li class="fragment">Not always the way to go :(</li>
+          <li class="fragment"><span class="fancy">Mucho potential</span></li>
         </ul>
       </section>
 
@@ -1958,11 +1958,11 @@ void guiLoop(ObjectHandle obj) {
         <h3>Actions</h3>
         <br/>
         <ul>
-          <li>Since we're implementing React, why not implement Redux?</li>
-          <li>An action changes the state</li>
-          <li>"Set name of scan N in the study": N and name</li>
-          <li>"Receive new delivery frame": Image, dose, confidence...</li>
-          <li>"Set the entire state to this"</li>
+          <li class="fragment">Since we're implementing React, why not implement Redux?</li>
+          <li class="fragment">An action changes the state</li>
+          <li class="fragment">"Set name of scan N in the study": N and name</li>
+          <li class="fragment">"Receive new delivery frame": Image, dose, confidence...</li>
+          <li class="fragment">"Set the entire state to this"</li>
         </ul>
       </section>
 
@@ -1970,18 +1970,18 @@ void guiLoop(ObjectHandle obj) {
         <h3>Actions</h3>
         <pre><code class="cpp hljs" data-noescape>
   class SetNameOfScan {
-    int n = 0;
-    std::string name;
+<span class="fragment hl-code">    int n = 0;
+    std::string name;</span>
 
     template &lt;typename State&gt;
     void operator()(State&amp; state) {
-        auto imaging = query&lt;GetImaging&gt;(state); // may throw "No imaging"
-        if (canSetNameOfScan(imaging, n)) {
+        <span class="fragment hl-code">auto imaging = query&lt;GetImaging&gt;(state); // may throw "No imaging"</span>
+<span class="fragment hl-code">        if (canSetNameOfScan(imaging, n)) {
             imaging-&gt;images[n]-&gt;name = name;
-        }
-        else {
+        }</span>
+<span class="fragment hl-code">        else {
             throw BadAction(action);
-        }
+        }</span>
     }
   };
         </code></pre>
@@ -1993,18 +1993,18 @@ void guiLoop(ObjectHandle obj) {
   template &lt;typename Action, typename State&gt;
   void applyAction(Action&amp; action, RootObject&lt;State&gt;&amp; state) {
       try {
-          auto t = Transaction(state);
-          action(*t);
+          <span class="fragment hl-code">auto t = Transaction(state);</span>
+          <span class="fragment hl-code">action(*t);</span>
       }
       catch (Exception&amp; e) {
-          // most likely notify user that their action is invalid
-          // or add fatal error to state (long story)
+<span class="fragment">          // most likely notify user that their action is invalid
+          // or add fatal error to state (long story)</span>
       }
   }
         </code></pre>
 
-        <p class="pinner">Can a valid action lead to an invalid state invariant?</p>
-        <p class="pinner">What if we want to enforce unique names?</p>
+        <p class="fragment pinner">Can a valid action lead to an invalid state invariant?</p>
+        <p class="fragment pinner">What if we want to enforce unique names?</p>
       </section>
 
       <section class="slide">
@@ -2024,19 +2024,19 @@ void guiLoop(ObjectHandle obj) {
         }
     }
   };</code></pre>
-        <p class="pinner">No way to check validity of state unless we set the name</p>
-        <p class="pinner">No way to validate <code class="cinline">SetEntireState</code></p>
+        <p class="fragment pinner">No way to check validity of state unless we set the name</p>
+        <p class="fragment pinner">No way to validate <code class="cinline">SetEntireState</code></p>
       </section>
 
       <section class="slide">
         <h3>State Guards</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   void checkValidImageNames(const Imaging&amp; img) {
       if (!allNamesUnique(img.images)) {
           throw BadState();
       }
   }</code></pre>
-        <pre><code class="cpp hljs" data-noescape>  template &lt;typename State&gt;
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  template &lt;typename State&gt;
   void checkValidImaging(const State&amp; state) {
       auto imaging = query&lt;GetImaging&gt;(state);
       checkValidImageNames(imaging);
@@ -2048,15 +2048,15 @@ void guiLoop(ObjectHandle obj) {
 
       <section class="slide">
         <h3>App</h3>
-        <pre><code class="cpp hljs" data-noescape>  template &lt;typename State&gt;
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  template &lt;typename State&gt;
   class App {
       RootObject&lt;State&gt; state;
       std::vector&lt;std::function&lt;void(const State&amp;)&gt;&gt; guards;
       void runGuards(const State&amp;);
   };
         </code></pre>
-        Or...
-        <pre><code class="cpp hljs" data-noescape>  class TreatmentApp {
+        <p class="fragment pinner">Or...</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  class TreatmentApp {
       RootObject&lt;TreatmentState&gt; state;
       void runGuards(const State&amp; state) {
           checkPatient(state);
@@ -2108,13 +2108,13 @@ void guiLoop(ObjectHandle obj) {
     }
   };
         </code></pre>
-        <p class="pinner">Guards are <span class="fancy">not pure anymore</span> :(</p>
-        <p class="pinner">Promising results on memoizing guards and queries on the state</p>
+        <p class="fragment pinner">Guards are <span class="fancy">not pure anymore</span> :(</p>
+        <p class="fragment pinner">Promising results on memoizing guards and queries on the state</p>
       </section>
 
       <section class="slide">
         <h3>PubSub</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
     void endTransaction(bool store) {
         <span class="fragment hl-code persist">std::shared_ptr&lt;const T&gt; newData</span>;
         if (store) {
@@ -2128,28 +2128,28 @@ void guiLoop(ObjectHandle obj) {
         }</span>
     }
         </code></pre>
-        <p class="pinner">Notify on each state change, but not while locked</p>
+        <p class="fragment pinner">Notify on each state change, but not while locked</p>
       </section>
 
       <section class="slide">
         <h3>UI Example</h3>
         <pre><code class="cpp hljs" data-noescape>
-  treatmentState.subscribe([uiThread] {
+  <span class="fragment">treatmentState.subscribe([uiThread] {
       guiThread.wakeUp();
-  });
-  // ...
+  });</span>
+  <span class="fragment">// ...
   void UIThread::run() {
       waitUntilWokenUp();
       buildGUI(treatmentState.detach()); // ok if we skip states
-  }
-  // ...
+  }</span>
+  <span class="fragment">// ...
   void UIThread::onSetImageName(UserPtr user, int i, std::string name) {
       treatmentSession.pushAction&lt;SetImageName&gt;(user, i, name);
-  }
+  }</span>
 
-  void UIThread::onCalculateBladder(UserPtr user) {
-      // ???
-  }
+  <span class="fragment">void UIThread::onCalculateBladder(UserPtr user) {
+      <span class="fragment hl-code-i">// ???</span>
+  }</span>
         </code></pre>
       </section>
 
@@ -2162,36 +2162,36 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   void UserThread::run() {
       waitUntilWokenUp();
-      std::future&lt;std::optional&lt;Action&gt;&gt; f
-          = makeDecision(myBrainState, observedAppState);
-      f.wait();
-      auto action = f.get();
-      if (action) app.pushAction(*action);
+<span class="fragment hl-code">      std::future&lt;std::optional&lt;Action&gt;&gt; f
+          = makeDecision(<span class="fragment hl-code">myBrainState</span>, observedAppState);</span>
+<span class="fragment hl-code">      f.wait();
+      auto action = f.get();</span>
+      <span class="fragment hl-code">if (action) app.pushAction(*action);</span>
   }
         </code></pre>
-        <p class="pinner">We translate declarative to imperative code</p>
+        <p class="fragment pinner">We translate declarative to imperative code</p>
       </section>
 
       <section class="slide">
         <h3>State Observers</h3>
         <pre><code class="cpp hljs" data-noescape>
   void bladderObserver() {  // delcarative code, to imperative code
-      if (bladderCalculation.running()) {
-          if (query&lt;GetImage&gt;(appState) != query&lt;GetImage&gt;(myState)) {
-              bladderCalculation.abort();
+      <span class="fragment hl-code">if (bladderCalculation.running()) {</span>
+          <span class="fragment hl-code">if (query&lt;GetImage&gt;(appState) != query&lt;GetImage&gt;(myState))</span> {
+              <span class="fragment hl-code">bladderCalculation.abort();</span>
           }
           else {
-              return;
+              <span class="fragment hl-code">return;</span>
           }
       }
-      if (!query&lt;GetBladder&gt;(appState)) {
+<span class="fragment hl-code">      if (!query&lt;GetBladder&gt;(appState)) {
           bladderCalculation.start();
           return;
-      }
-      if (query&lt;GetBladder&gt;(appState)->manualCalcRequested) {
+      }</span>
+<span class="fragment hl-code">      if (query&lt;GetBladder&gt;(appState)-><span class="fragment hl-code">manualCalcRequested</span>) {
           bladderCalculation.start();
           return;
-      }
+      }</span>
   }
         </code></pre>
       </section>
@@ -2200,12 +2200,12 @@ void guiLoop(ObjectHandle obj) {
         <h3>So This Means...</h3>
         <br/>
         <ul>
-          <li><span class="fancy">Managed workers</span>. One does not simply <code class="cinline">std::thread t(func);</code></li>
-          <li>Workers can named, found, started, aborted</li>
-          <li>This means they <span class="fancy">can be single-threaded</span></li>
-          <li>What to do with their result?</li>
-          <li>Don't just post an action and abort, or risk rerun</li>
-          <li>Post an action and wait until the result is collected!</li>
+          <li class="fragment"><span class="fancy">Managed workers</span>. One does not simply <code class="cinline">std::thread t(func);</code></li>
+          <li class="fragment">Workers can named, found, started, aborted</li>
+          <li class="fragment">This means they <span class="fancy">can be single-threaded</span></li>
+          <li class="fragment">What to do with their result?</li>
+          <li class="fragment">Don't just post an action and abort, or risk rerun</li>
+          <li class="fragment">Post an action and wait until the result is collected!</li>
         </ul>
       </section>
 
@@ -2214,14 +2214,14 @@ void guiLoop(ObjectHandle obj) {
         <pre><code class="cpp hljs" data-noescape>
   class SetBladder {
       void operator(State&amp; s) {
-          auto worker = workers("Bladder");
-          if (!worker-&gt;hasResult()) throw BadAction("no bladder");
-          auto result = worker-&gt;collectResult();
-          // only now is the bladder worker complete
-          if (query&lt;GetImage&gt;(state.r()) != result.image {
+          <span class="fragment hl-code">auto worker = workers("Bladder");</span>
+          <span class="fragment hl-code">if (!worker-&gt;hasResult()) throw BadAction("no bladder");</span>
+          <span class="fragment hl-code">auto result = worker-&gt;collectResult();</span>
+          <span class="fragment hl-code">// only now is the bladder worker complete</span>
+<span class="fragment hl-code">          if (query&lt;GetImage&gt;(state.r()) != result.image {
               throw BadAction("outdated bladder");
-          }
-          query&lt;GetBladder&gt;(state) = result.bladder;
+          }</span>
+          <span class="fragment hl-code">query&lt;GetBladder&gt;(state) = result.bladder;</span>
       }
   }
         </code></pre>
@@ -2231,10 +2231,11 @@ void guiLoop(ObjectHandle obj) {
         <h3>State Observers</h3>
         <br/>
         <ul>
-          <li>Run after every state change</li>
-          <li>Manage workers based on their internal state</li>
-          <li>Can also decide to synchronously push actions</li>
-          <li>That's how Services communicate</li>
+          <li class="fragment">Run after every state change</li>
+          <li class="fragment">Potentially in many threads</li>
+          <li class="fragment">Manage workers based on their internal state</li>
+          <li class="fragment">Can also decide to synchronously push actions</li>
+          <li class="fragment">That's how Services communicate</li>
         </ul>
       </section>
 
@@ -2274,13 +2275,17 @@ void guiLoop(ObjectHandle obj) {
         <h3>Programming with Immutable Objects</h3>
         <br/>
         <ul>
-          <li>Not a solution for every problem</li>
-          <li>Programming and design is <span class="fancy">hard</span></li>
-          <li>It can be <span class="fancy">overly verbose</span></li>
-          <li>The performance is not great, not terrible</li>
-          <li>Awesome testing and debugging power</li>
-          <li>Unprecedented robustness</li>
+          <li class="fragment"><span class="fancy">Not a solution for every problem</span></li>
+          <li class="fragment">Programming and design is <span class="fancy">hard</span></li>
+          <li class="fragment">It can be <span class="fancy">overly verbose</span></li>
+          <li class="fragment">The performance is not great<span class="fragment">, not terrible</span></li>
+          <li class="fragment">Awesome testing and debugging power</li>
+          <li class="fragment">And most of all...</li>
         </ul>
+      </section>
+
+      <section>
+        <h2>Unprecedented Robustness</h2>
       </section>
 
       <section>
