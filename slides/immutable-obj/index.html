@@ -1670,9 +1670,11 @@ void guiLoop(ObjectHandle obj) {
           m_transactionData = std::make_shared&lt;T&gt;(*m_data);
           return m_transactionData;
       }
-      void endTransaction() {
-          std::atomic_store_explicit(&amp;m_data, m_transactionData,
-              std::memory_order_relaxed);
+      void endTransaction(bool store) {
+          if (store) {
+              std::atomic_store_explicit(m_data, m_transactionData,
+                  std::memory_order_relaxed);
+          }
           m_transactionMutex.unlock();
       }
   };
@@ -1880,6 +1882,20 @@ void guiLoop(ObjectHandle obj) {
       </section>
 
       <section class="slide">
+        <h3>That's a Lot of Copying</h3>
+        <p style="text-align: right;">... Batman</p>
+        <ul>
+          <li>Imagine <code class="cinline">setImageVoxel(point3, value)</code></li>
+          <li>Copy <span class="fancy">tens of megabytes</span> of an image?</li>
+          <li><span class="fancy">This is a real limitation</span></li>
+          <li>We just don't do that</li>
+          <li>A mutable placeholder with conventional locks?</li>
+          <li>Manual contouring works like this</li>
+          <li>If this is everything to do, perhaps <span class="fancy">that's not the right pattern</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
         <h3>Reuse</h3>
         <pre><code class="cpp hljs" data-noescape>
   bool shouldTakeScan(const State& state) {
@@ -1914,18 +1930,39 @@ void guiLoop(ObjectHandle obj) {
         </code></pre>
       </section>
 
+      <section class="slide">
+        <h3>React.js-Style Objects in C++</h3>
+        <br/>
+        <ul>
+          <li><span class="fancy">Immutable objects</span> based on ref-counted pointers</li>
+          <li>Shallow copies</li>
+          <li>Shallow compares</li>
+          <li><span class="fancy">State composed of nodes</span></li>
+          <li>Special nodes for containers</li>
+          <li>Queries</li>
+          <li>Not always the way to go :(</li>
+          <li><span class="fancy">Mucho potential</span></li>
+        </ul>
+      </section>
+
       <section>
-        <p>That's all very nice and single-threaded</p>
+        <h3>End of Part 1</h3>
+      </section>
+
+      <section>
+        <h3>Part 2</h3>
+        <h2>How do We Use Them?</h2>
       </section>
 
       <section class="slide">
         <h3>Actions</h3>
         <br/>
         <ul>
+          <li>Since we're implementing React, why not implement Redux?</li>
           <li>An action changes the state</li>
-          <li>Much like Redux's reducers</li>
           <li>"Set name of scan N in the study": N and name</li>
           <li>"Receive new delivery frame": Image, dose, confidence...</li>
+          <li>"Set the entire state to this"</li>
         </ul>
       </section>
 
@@ -1972,8 +2009,7 @@ void guiLoop(ObjectHandle obj) {
 
       <section class="slide">
         <h3>Actions</h3>
-        <pre><code class="cpp hljs" data-noescape>
-  class SetNameOfScan {
+        <pre><code class="cpp hljs" data-noescape>class SetNameOfScan {
     int n = 0;
     std::string name;
 
@@ -1989,10 +2025,11 @@ void guiLoop(ObjectHandle obj) {
     }
   };</code></pre>
         <p class="pinner">No way to check validity of state unless we set the name</p>
+        <p class="pinner">No way to validate <code class="cinline">SetEntireState</code></p>
       </section>
 
       <section class="slide">
-        <h3>State Observers</h3>
+        <h3>State Guards</h3>
         <pre><code class="cpp hljs" data-noescape>
   void checkValidImageNames(const Imaging&amp; img) {
       if (!allNamesUnique(img.images)) {
@@ -2009,13 +2046,228 @@ void guiLoop(ObjectHandle obj) {
   }</code></pre>
       </section>
 
-      <section>
-        <p>State observers</p>
-        <p>memoization</p>
+      <section class="slide">
+        <h3>App</h3>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename State&gt;
+  class App {
+      RootObject&lt;State&gt; state;
+      std::vector&lt;std::function&lt;void(const State&amp;)&gt;&gt; guards;
+      void runGuards(const State&amp;);
+  };
+        </code></pre>
+        Or...
+        <pre><code class="cpp hljs" data-noescape>  class TreatmentApp {
+      RootObject&lt;TreatmentState&gt; state;
+      void runGuards(const State&amp; state) {
+          checkPatient(state);
+          checkImaging(state);
+          checkDelivery(state);
+      }
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Applying Actions</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename Action, typename App&gt;
+  void applyAction(Action&amp; action, <span class="hl-code-i">App&amp; app</span>) {
+      try {
+          auto t = Transaction(<span class="hl-code-i">app</span>.state);
+          action(*t);
+          <span class="hl-code-i">app.runGuards(*t);</span>
+      }
+      catch (Exception&amp; e) {
+          // most likely notify user that their action is invalid
+          // or add fatal error to state (long story)
+      }
+  }
+        </code></pre>
       </section>
 
       <section>
-        <p>The state of states</p>
+        <img class="diagram" src="bnr.jpg" alt="Batman and Robin" />
+        <p>That's a lot of guard calls</p>
+
+      </section>
+
+      <section class="slide">
+        <h3>Optimizing Guard Calls</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  struct CheckImaging {
+    <span class="fragment hl-code persist">std::shared_ptr&lt;const Imaging&gt; lastValidatedImaging;</span>
+    template &lt;typename State&gt;
+    void operator()(const State&amp; state) {
+        <span class="fragment hl-code persist">auto imaging = query&lt;GetImaging&gt;(state);</span>
+        if (lastValidatedImaging == imaging) return;
+        checkValidImageNames(imaging);
+        checkAllImagesOfSameSize(imaging);
+        checkNoSimultaneousTableMoveAndScan(imaging);
+        // ...
+        <span class="fragment hl-code persist">lastValidatedImaging = imaging;</span>
+    }
+  };
+        </code></pre>
+        <p class="pinner">Guards are <span class="fancy">not pure anymore</span> :(</p>
+        <p class="pinner">Promising results on memoizing guards and queries on the state</p>
+      </section>
+
+      <section class="slide">
+        <h3>PubSub</h3>
+        <pre><code class="cpp hljs" data-noescape>
+    void endTransaction(bool store) {
+        <span class="fragment hl-code persist">std::shared_ptr&lt;const T&gt; newData</span>;
+        if (store) {
+            std::atomic_store_explicit(m_data, m_transactionData,
+                std::memory_order_relaxed);
+            <span class="fragment hl-code persist">newData = std::move(m_transactionData);</span>
+        }
+        m_transactionMutex.unlock();
+<span class="fragment hl-code persist">        if (newData) {
+            notifySubscribers(newData);
+        }</span>
+    }
+        </code></pre>
+        <p class="pinner">Notify on each state change, but not while locked</p>
+      </section>
+
+      <section class="slide">
+        <h3>UI Example</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  treatmentState.subscribe([uiThread] {
+      guiThread.wakeUp();
+  });
+  // ...
+  void UIThread::run() {
+      waitUntilWokenUp();
+      buildGUI(treatmentState.detach()); // ok if we skip states
+  }
+  // ...
+  void UIThread::onSetImageName(UserPtr user, int i, std::string name) {
+      treatmentSession.pushAction&lt;SetImageName&gt;(user, i, name);
+  }
+
+  void UIThread::onCalculateBladder(UserPtr user) {
+      // ???
+  }
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Multi-Threaded Stuff</h2>
+      </section>
+
+      <section class="slide">
+        <h3>The User's Perspective</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  void UserThread::run() {
+      waitUntilWokenUp();
+      std::future&lt;std::optional&lt;Action&gt;&gt; f
+          = makeDecision(myBrainState, observedAppState);
+      f.wait();
+      auto action = f.get();
+      if (action) app.pushAction(*action);
+  }
+        </code></pre>
+        <p class="pinner">We translate declarative to imperative code</p>
+      </section>
+
+      <section class="slide">
+        <h3>State Observers</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  void bladderObserver() {  // delcarative code, to imperative code
+      if (bladderCalculation.running()) {
+          if (query&lt;GetImage&gt;(appState) != query&lt;GetImage&gt;(myState)) {
+              bladderCalculation.abort();
+          }
+          else {
+              return;
+          }
+      }
+      if (!query&lt;GetBladder&gt;(appState)) {
+          bladderCalculation.start();
+          return;
+      }
+      if (query&lt;GetBladder&gt;(appState)->manualCalcRequested) {
+          bladderCalculation.start();
+          return;
+      }
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>So This Means...</h3>
+        <br/>
+        <ul>
+          <li><span class="fancy">Managed workers</span>. One does not simply <code class="cinline">std::thread t(func);</code></li>
+          <li>Workers can named, found, started, aborted</li>
+          <li>This means they <span class="fancy">can be single-threaded</span></li>
+          <li>What to do with their result?</li>
+          <li>Don't just post an action and abort, or risk rerun</li>
+          <li>Post an action and wait until the result is collected!</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Applying Async Results</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  class SetBladder {
+      void operator(State&amp; s) {
+          auto worker = workers("Bladder");
+          if (!worker-&gt;hasResult()) throw BadAction("no bladder");
+          auto result = worker-&gt;collectResult();
+          // only now is the bladder worker complete
+          if (query&lt;GetImage&gt;(state.r()) != result.image {
+              throw BadAction("outdated bladder");
+          }
+          query&lt;GetBladder&gt;(state) = result.bladder;
+      }
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>State Observers</h3>
+        <br/>
+        <ul>
+          <li>Run after every state change</li>
+          <li>Manage workers based on their internal state</li>
+          <li>Can also decide to synchronously push actions</li>
+          <li>That's how Services communicate</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Examples of Tests</h2>
+      </section>
+
+      <section class="slide">
+        <h3>GUI</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  auto state = load&lt;TreatmentState&gt;("treatment-delivery-beam-on.state");
+  auto gui = generateGui(state);
+  auto expectedGUI = load&lt;GUI&gt;("treatment-delivery-beam-on.gui");
+  assert(gui == expectedGUI);
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Treatment</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  auto patient = load&lt;Patient&gt;("john-doe.patient");
+  auto app = newTreatment(patient);
+
+  WorkerManager::setThreads(0);
+  WorkerManager::overrideWorker("takeImage", []() {
+      return load&lt;Image&gt;("test.img"); // mock
+  });
+
+  WorkerManager::exaustWorkers(); // synchronous
+
+  assert(hasAllImages(app.state)); // auto imaging worked
+  assert(hasAllOrgans(app.state)); // auto contouring worked
+        </code></pre>
       </section>
 
       <section class="slide">
@@ -2023,8 +2275,9 @@ void guiLoop(ObjectHandle obj) {
         <br/>
         <ul>
           <li>Not a solution for every problem</li>
-          <li>Programming and design is hard</li>
-          <li>The performance is not great</li>
+          <li>Programming and design is <span class="fancy">hard</span></li>
+          <li>It can be <span class="fancy">overly verbose</span></li>
+          <li>The performance is not great, not terrible</li>
           <li>Awesome testing and debugging power</li>
           <li>Unprecedented robustness</li>
         </ul>
