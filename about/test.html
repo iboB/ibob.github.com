@@ -4,6 +4,83 @@
 <meta charset="utf-8">
 <title>Borislav Stanimirov</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript">
+function calcLastPositionTime() {
+    var yearElem = document.getElementById('lp_year');
+
+    if (!yearElem) {
+        // no last position year element... so nothing to do
+        return;
+    }
+
+    var now = new Date();
+
+    // years
+    var ydif = now.getFullYear() - parseInt(yearElem.innerHTML);
+
+    var monthPart = '';
+    var monthElem = document.getElementById('lp_month');
+    if (monthElem) {
+        var months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, June: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Noe: 10, Dec: 11 };
+        var imonth = months[monthElem.innerHTML];
+
+        var mdif = now.getMonth() - imonth;
+        if (mdif < 0) {
+            --ydif;
+            mdif += 12;
+        }
+
+        // this is not an else, since the condition may have been made true
+        // by the previous if
+        if (mdif > 0) {
+            monthPart = mdif + ' month';
+            if (mdif > 1) monthPart += 's';
+        }
+    }
+
+    var yearPart = '';
+    if (ydif > 0) {
+        yearPart = ydif + ' year';
+        if (ydif > 1) yearPart += 's';
+    }
+
+    var timeElem = document.getElementById('lp_time');
+
+    if (!yearPart && !monthPart) {
+        timeElem.innerHTML = '(less than a month)';
+    } else {
+        var sep = '';
+        if (yearPart && monthPart) sep = ', ';
+
+        timeElem.innerHTML = '(' + yearPart + sep + monthPart + ')';
+    }
+}
+
+function calcAge() {
+    var YEAR = 1984;
+    var MONTH = 6;
+    var DAY = 25;
+
+    var now = new Date();
+    var age = now.getFullYear() - YEAR;
+    var mdif = now.getMonth() - MONTH + 1; // jan is 0 in getMonth
+
+    if (mdif < 0) {
+        --age;
+    }
+    else if (mdif === 0) {
+        var ddif = now.getDate() - DAY;
+
+        if (ddif < 0) --age;
+    }
+
+    var el = document.getElementById('age');
+    el.innerHTML = '(' + age + ' years old)';
+}
+
+addEventListener('load', calcAge, false);
+addEventListener('load', calcLastPositionTime, false);
+</script>
 <style type="text/css">
 /*reset globals*/
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {margin: 0;padding: 0;border: 0;outline: 0;font-size: 100%;vertical-align: baseline;background: transparent;}
