@@ -25,9 +25,9 @@
       [Chromium Embedded Framework](https://bitbucket.org/chromiumembedded/cef/src/master/).
     github: https://github.com/iboB/cef-demos
     docs: https://github.com/iboB/cef-demos/blob/master/README.md
-  - name: chobo-shl
+  - name: itlib
     desc: A collection of single-header container classes and helpers.
-    github: https://github.com/Chobolabs/chobo-shl
+    github: https://github.com/iboB/itlib
     docsd: Embedded in each header.
   - name: chobo-profiling
     desc: A call-graph intrusive C++ performance profiling library
