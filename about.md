@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-*Click [here](cv-borislav-stanimirov.html) for my professional CV.*
+*Click [here](borislav-stanimirov-cv.html) for my professional CV.*
 
 Hello. I'm Borislav Stanimirov and I'm a programmer from Bulgaria.
 
