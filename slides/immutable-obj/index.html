@@ -156,7 +156,8 @@
       </section>
 
       <section>
-        <h3>Objects</h3>
+        <h2>Objects</h2>
+        <p class="fragment">For Business Logic</p>
       </section>
 
       <section class="slide">
@@ -269,15 +270,15 @@
         <pre><code class="cpp hljs" data-noescape>
   class ObjectWriteLock {
   public:
-      ObjectWriteLock(Object&amp; obj) : m_object(obj) {
-        <span class="hl-code-i">m_object.writeLock();</span>
-      }
-      ~ObjectWriteLock() { <span class="hl-code-i">m_object.writeUnlock();</span> }
+    ObjectWriteLock(Object&amp; obj) : m_object(obj) {
+      <span class="hl-code-i">m_object.writeLock();</span>
+    }
+    ~ObjectWriteLock() { <span class="hl-code-i">m_object.writeUnlock();</span> }
 
-      Object* operator-&gt;() { return &amp;m_object; }
-      Object* operator*()  { return &amp;m_object; }
+    Object* operator-&gt;() { return &amp;m_object; }
+    Object* operator*()  { return &amp;m_object; }
   private:
-      Object&amp; m_object;
+    Object&amp; m_object;
   };
         </code></pre>
       </section>
