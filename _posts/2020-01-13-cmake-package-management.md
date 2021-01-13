@@ -85,11 +85,11 @@ It is performance. FetchContent is just too slow to be used for a serious load. 
 
 | OS | CMake Version | Generator | Machine | ~ ms per item |
 | ------ | ------ | ------ | ------ | ------ |
-| Ubuntu 20.04 | 3.16.3 | Unix Makefiles | ThreadRipper | 200 |
-| Arch Linux | 3.19.2 | Unix Makefiles | 8 core @ 2.4 GHz | 800 |
-| Windows 10 | 3.19.2 | Visual Studio 2019 | ThreadRipper | 1200 |
-| Windows 10 | 3.19.2 | MinGW Makefiles | ThreadRipper | 1200 |
-| Windows 10 | 3.16.3 | MinGW Makefiles | 6 core @ 3 GHz | 1500 |
+| Ubuntu 20.04 | 3.16.3 | Unix Makefiles | ThreadRipper, SSD | 200 |
+| Arch Linux | 3.19.2 | Unix Makefiles | 8 core @ 2.4 GHz, HDD | 800 |
+| Windows 10 | 3.19.2 | Visual Studio 2019 | ThreadRipper, SSD | 1200 |
+| Windows 10 | 3.19.2 | MinGW Makefiles | ThreadRipper, SSD | 1200 |
+| Windows 10 | 3.16.3 | MinGW Makefiles | 6 core @ 3 GHz, SSD | 1500 |
 
 That's at *configure time* so every time the CMake scripts are touched, it will get executed. As you can see, even the best time of roughly 200 ms per item is bad, but the Windows times of over 1 second are abysmal. It's simply prohibitive for a project with hundreds or even tens of dependencies.
 
