@@ -19,7 +19,7 @@ layout: site-base
   </ul>
 </div>
 <div class="share"><i class="icon icon-share"></i> Share:
-  <a href="https://twitter.com/intent/tweet?via=stanimirovb&text={{ page.title }} {{ page.url | absolute_url }}" class="twitter" title="Share on Twitter" target="_blank"><i class="icon icon-social-twitter"></i><span> Twitter</span></a>
+  <a href="https://twitter.com/intent/tweet?via=stanimirovb&text={{ page.title | cgi_escape }} {{ page.url | absolute_url }}" class="twitter" title="Share on Twitter" target="_blank"><i class="icon icon-social-twitter"></i><span> Twitter</span></a>
 
   <a href="https://www.facebook.com/sharer/sharer.php?u={{ page.url | absolute_url }}" class="facebook" title="Share on Facebook" target="_blank"><i class="icon icon-social-facebook"></i><span> Facebook</span></a>
 
