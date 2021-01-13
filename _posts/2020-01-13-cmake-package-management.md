@@ -17,7 +17,7 @@ It can... no, it should... no, it *must* become the stepping stone for future of
 
 ## So, what is FetchContent?
 
-It's pretty straight forward, actually. By using two CMake functions: `Fetch_ContentDeclare` and `FetchContent_MakeAvailable`[^2] users can declare a named content item which can then be... well... fetched *in configure time*. The key here is, as opposed to `file(DOWNLOAD ...)` this allows three important things:
+It's pretty straight forward, actually. By using two CMake functions: `FetchContent_Declare` and `FetchContent_MakeAvailable`[^2] users can declare a named content item which can then be... well... fetched *in configure time*. The key here is, as opposed to `file(DOWNLOAD ...)`, this allows three important things:
 
 * Define the means by which the content is produced (not just source, but also types of sources)
 * Have an identifiable name for the content
@@ -51,7 +51,7 @@ I get it. Conan, vcpkg and the many[^3] others that exist are great, but they ar
 
 So what do we get by bundling the package manager with the build system?
 
-[Nix](https://en.wikipedia.org/wiki/Nix_package_manager) (...which is awesome) or [Rust's Cargo](https://doc.rust-lang.org/cargo/guide/)
+[Nix](https://en.wikipedia.org/wiki/Nix_package_manager) (which is awesome) or [Rust's Cargo](https://doc.rust-lang.org/cargo/guide/)
 
 ### Packages from source
 
@@ -81,7 +81,7 @@ But!
 
 There is a huge problem. Not with CPM, but with FetchContent itself. FetchContent can't be **the** API package managers are built upon today.
 
-It is performance. FetchContent is just too slow to be used for a serious load. It's not an unfixable problem, but as far as I understand the issue, it will most likely have to be reimplemented. Here's a table with me experimentig on different machines containing roughly[^7] how much time it takes to run FetchContent per content item, or package. [Here's the CMakeLists.txt](https://github.com/iboB/cmake-fetch-content-perf/blob/82ee13918550f18bbf22bd3bf38c721a7de9fb80/CMakeLists.txt) I used. Note that these times are not from fetching the packages. They are from a "noop" run. One which identifies that everything is up to date, and does nothing.
+This problem is performance. FetchContent is just too slow to be used for a serious load. It's not an unfixable problem, but as far as I understand the issue, it will most likely have to be reimplemented. Here's a table with me experimentig on different machines containing roughly[^7] how much time it takes to run FetchContent per content item, or package. [Here's the CMakeLists.txt](https://github.com/iboB/cmake-fetch-content-perf/blob/82ee13918550f18bbf22bd3bf38c721a7de9fb80/CMakeLists.txt) I used. Note that these times are not from fetching the packages. They are from a "noop" run. One which identifies that everything is up to date, and does nothing.
 
 | OS | CMake Version | Generator | Machine | ~ ms per item |
 | ------ | ------ | ------ | ------ | ------ |
@@ -91,11 +91,11 @@ It is performance. FetchContent is just too slow to be used for a serious load. 
 | Windows 10 | 3.19.2 | MinGW Makefiles | ThreadRipper, SSD | 1200 |
 | Windows 10 | 3.16.3 | MinGW Makefiles | 6 core @ 3 GHz, SSD | 1500 |
 
-That's at *configure time* so every time the CMake scripts are touched, it will get executed. As you can see, even the best time of roughly 200 ms per item is bad, but the Windows times of over 1 second are abysmal. It's simply prohibitive for a project with hundreds or even tens of dependencies.
+That's at *configure time*, so every time the CMake scripts are touched, it will get executed. As you can see even the best time of roughly 200 ms per item is pretty bad, but the Windows times of over 1 second are abysmal. It's simply prohibitive for a project with hundreds or even tens of dependencies to spend 1 second per dependency only to confirm that it's up to date.
 
-I opened [an issue on CMake's tracker](https://gitlab.kitware.com/cmake/cmake/-/issues/21703)[^8] about that, and hopefully it will get addressed in some way. I even have some ideas of how this can be addressed from the outside, just with CMake user code, but I hope this won't need to be done.
+I opened [an issue on CMake's tracker](https://gitlab.kitware.com/cmake/cmake/-/issues/21703)[^8] about that, and hopefully it will get addressed in some way. I even have some ideas of how this can be addressed from the outside, just with CMake user code, but I hope it won't come to this.
 
-I truly believe that this is the future of C++ package management. If the preformance issue is fixed (or worked around), I think in several years C++ package management will be based on FetchContent. Whether CPM will become *the* new de-facto standard or some other not-yet-written software, I can't tell, but this is it! I can feel it.
+I truly believe that this is the future of C++ package management. If the preformance issue is fixed (or worked around), I think in several years C++ package management will be based on FetchContent. Whether CPM will become *the* new de-facto standard or some other not-yet-written software, I can't tell, but this is it! I can feel it!
 
 ___
 
