@@ -4,10 +4,10 @@ title: CMake and the Future of C++ Package Management
 category: programming
 tags: ['c++', 'cmake']
 
-excerpt: ... well at least according to me
+excerpt: Well, at least according to me
 ---
 
-*... well at least according to me*
+*Well, at least according to me*
 
 I recently encountered a CMake feature which I wasn't aware of. It's [FetchContent](https://cmake.org/cmake/help/latest/module/FetchContent.html). I'm sure this is not news to most people since it was added in CMake 3.14[^1] and that's been around since February of 2019, so two years now, but this feature is a revelation.
 
