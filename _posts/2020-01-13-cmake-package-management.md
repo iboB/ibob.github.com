@@ -97,6 +97,20 @@ I opened [an issue on CMake's tracker](https://gitlab.kitware.com/cmake/cmake/-/
 
 I truly believe that this is the future of C++ package management. If the preformance issue is fixed (or worked around), I think in several years C++ package management will be based on FetchContent. Whether CPM will become *the* new de-facto standard or some other not-yet-written software, I can't tell, but this is it! I can feel it!
 
+---
+
+> When originally posted the article ended here.
+
+## Recent Developments
+
+As of Jan 21, 2021[^9]:
+
+The CMake issue from above has gotten a lot of attention and the principal developer of FetchContent &mdash; [Craig Scott](https://gitlab.kitware.com/craig.scott) &mdash; is already making great progress on optimizing the performance. Hopefully very soon new CMake releases will contain significant performance improvements of the feature.
+
+CPM is already ahead of this and as of [version 0.28.0](https://github.com/TheLartians/CPM.cmake/releases/tag/v0.28.0) it entirely skips the internal calls to FetchContent if possible resulting in single-digit milliseconds per package in the common case. That's some great work by [Lars Melchior](https://github.com/TheLartians).
+
+Things are looking up!
+
 ___
 
 [^1]: aka CMake Pi (3.14% sure I'm the first one ever making this joke)
@@ -106,4 +120,5 @@ ___
 [^5]: The build system we deserve
 [^6]: add_subdirectory is now a verb
 [^7]: Precisely profiling CMake is actually pretty hard. [volo-zyko/cmake-profiler-stats](https://github.com/volo-zyko/cmake-profile-stats) helps, but is not ideal.
-[^8]: Well... [two issues](https://gitlab.kitware.com/cmake/cmake/-/issues/21698)
+[^8]: Well... [two issues](https://gitlab.kitware.com/cmake/cmake/-/issues/21698).
+[^9]: I just now realized that I have the date wrong in my post. It says 2020, but it's actually 2021. &#x1F633; Sadly I can't just fix it as the date is part of the URL and there are lots of links to the post in the wild. Bummer. That'll teach me to be more careful when posting Jekyll blog posts in January.
