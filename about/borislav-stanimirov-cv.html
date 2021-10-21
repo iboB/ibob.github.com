@@ -78,8 +78,17 @@ function calcAge() {
     el.innerHTML = '(' + age + ' years old)';
 }
 
+function calcExperience() {
+    const start = 2002;
+    const now = new Date();
+    const exp = now.getFullYear() - start - 1;
+    var el = document.getElementById('experience');
+    el.innerHTML = exp;
+}
+
 addEventListener('load', calcAge, false);
 addEventListener('load', calcLastPositionTime, false);
+addEventListener('load', calcExperience, false);
 </script>
 <style type="text/css">
 /*reset globals*/
@@ -301,7 +310,7 @@ article {
 <section>
     <h2>Profile</h2>
     <article>
-        18+ years of professional experience with C++. Significant experience with software architecture and design, graphical programming and GPGPU, low level programming, concurrent and multi-threaded programming, algorithms, major platforms, compilers, version control systems, build systems, and IDEs.
+        <span id="experience">18</span>+ years of professional experience with C++. Significant experience with software architecture and design, graphical programming and GPGPU, low level programming, concurrent and multi-threaded programming, algorithms, major platforms, compilers, version control systems, build systems, and IDEs.
     </article>
 </section>
 <section class="work">
