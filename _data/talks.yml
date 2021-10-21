@@ -1,9 +1,15 @@
 - language: English
   talks:
+  - title: "No Touchy! A Case Study of Software Architecture with Immutable Objects"
+    desc: >-
+      A talk at [CppCon](https://cppcon.org/) 2020 about a the immutable object
+      design at ViewRay.
+    slides: /slides/immutable-obj/
+    video: https://www.youtube.com/watch?v=ZSrIZW2Hzhk
   - title: "The Life of a CPU Instruction"
     desc: >-
       A fun talk at [code::dive](https://codedive.pl/) 2019 about modern CPU
-      architecture from the point of view of an instruction
+      architecture from the point of view of an instruction.
     slides: /slides/life-of-i/
     video: https://www.youtube.com/watch?v=Cj86huSL6A4
   - title: "Embrace Modern Technology: Using HTML 5 for GUI in C++"
