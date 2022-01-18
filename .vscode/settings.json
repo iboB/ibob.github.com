@@ -23,5 +23,6 @@
         "deque": "cpp",
         "list": "cpp",
         "vector": "cpp"
-    }
+    },
+    "editor.unicodeHighlight.ambiguousCharacters": false
 }
