@@ -234,6 +234,54 @@
       </section>
 
       <section>
+        <h3>Неволно копиране</h3>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+  class big_obj {
+  public:
+    big_obj();
+    big_obj(const big_obj&amp;);
+    big_obj&amp; operator=(const big_obj&amp;);
+    big_obj(big_obj&amp;&amp;);
+    big_obj&amp; operator=(big_obj&amp;&amp;);
+  private:
+    big_data m_data;
+  };
+  // ...
+  std::vector&lt;big_obj&gt; objects;
+  // ...
+  objects.push_back(std::move(new_object));
+        </code></pre>
+        <p>Какъв е проблемът тук?</p>
+      </section>
+
+      <section>
+        <p><code class="cinline">std::vector</code> използва <code class="cinline">std::move_if_noexcept</code></p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+  class big_obj {
+  public:
+    big_obj();
+    big_obj(const big_obj&amp;);
+    big_obj&amp; operator=(const big_obj&amp;);
+    big_obj(big_obj&amp;&amp;) <span class="fragment hl-code-i">noexcept;</span>
+    big_obj&amp; operator=(big_obj&amp;&amp;) <span class="fragment hl-code-i">noexcept;</span>
+  private:
+    big_data m_data;
+  };
+  // ...
+  std::vector&lt;big_obj&gt; objects;
+  // ...
+  <span class="hl-code-i">objects.push_back(std::move(new_object));</span>
+        </code></pre>
+        <p><a class="fragment" href="https://github.com/iboB/unrealized-problems-demo/blob/master/00-copy-over-move.cpp" target="_blank">Демо</a></p>
+      </section>
+
+      <section>
         <h1>Край</h1>
         <h2>Въпроси?</h2>
         <p>Борислав Станимиров / <a href="https://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
