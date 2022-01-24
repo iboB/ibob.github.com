@@ -296,10 +296,26 @@
         <ul>
           <li>Дотук всичко си работи</li>
           <li>Дебъгвам си нещо несвързано и изведнъж съм във <code class="cinline">vector::vector(const vector&amp;)</code></li>
-          <li>&#x1f632</li>
-          <li>До C++20 <code class="cinline">std::function</code> не е задължително noexcept-move</li>
-          <li>Small-function optimization (и липсата ѝ)</li>
-          <li>В нови версии на libc++ и libstdc++ работи и със C++11</li>
+        </ul>
+        <p>&#x1f632</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::function</code></h3>
+        <p style="text-align: center;"><img class="diagram" src="func-func.png" /></p>
+        <ul>
+          <li>До C++20 <span class="fancy">не е</span> задължително noexcept-move</li>
+          <li>Small-function optimization</li>
+          <ul>
+            <li>Без алокации за малки функции</li>
+            <li>Move трябва да премести и всички captures</li>
+            <li>... които може да не са noexcept-move</li>
+          </ul>
+          <li>В <span class="fancy">нови версии</span> на libc++ и libstdc++ работи и със C++11</li>
+          <ul>
+            <li>Ползваме буфера, само ако можем да местим с noexcept</li>
+          </ul>
+          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/01-func-move-noexcept-false.cpp" target="_blank">Демо</a></li>
         </ul>
       </section>
 
