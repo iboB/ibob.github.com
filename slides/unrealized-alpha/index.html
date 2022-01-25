@@ -282,6 +282,11 @@
       </section>
 
       <section>
+        <h4>За протокола:</h4>
+        <p><em>Aз мисля, че exception от move-constructor е пълна глупост и никога не трябва да съществува</em></p>
+      </section>
+
+      <section>
         <p>Една история със <code class="cinline">std::function</code></p>
       </section>
 
@@ -354,31 +359,73 @@
       </section>
 
       <section>
-        <code>small_vector</code>
+        <p>И след като говорихме за small function optimization...</p>
       </section>
 
       <section>
-        <code>std::array</code>
-        <code>std::static_vector</code>
+        <h3><code>small_vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>small_vector</code></h3>
+        <br/>
+        <ul>
+          <li>Вектор със small-buffer optimization</li>
+          <li><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна и пълна имплементация</li>
+          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/ufunction.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
+          <ul>
+            <li>90% от работата с 10% от кода</li>
+            <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+          </ul>
+          <li>Контейнери, които са с размер по-малък от N в 99% от времето</li>
+          <li>...и тогава нямаме алокации</li>
+          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/03-small_vector.cpp" target="_blank">Демо</a> &ndash; за домашно</li>
+        </ul>
       </section>
 
       <section>
-        <code>pod_vector</code>
+        <p>Ами ако размерът е по-малък от N в <span class="fancy">100%</span> от времето?</p>
       </section>
 
       <section>
-        <code>flat_map, flat_set</code>
+        <h3><code>std::array</code></h3>
+        <p>?</p>
+      </section>
+
+      <section>
+        <h3><code>static_vector</code></h3>
+      </section>
+
+      <section>
+        <p>Ами ако размерът напълно произволен?</p>
+      </section>
+
+      <section>
+        <h3><code>std::vector</code></h3>
+        <p>?</p>
+      </section>
+
+      <section>
+        <h3><code>pod_vector</code></h3>
       </section>
 
       <section>
         <code>span, memory_view</code>
       </section>
 
-      <section>
-        Itlib
-        <code>sentry</code>
-        <code>mscharconv</code>
-        <code>cpm</code>
+      <section class="slide">
+        <h3>Бонус</h3>
+        <br/>
+        <ul>
+          <li><a href="https://github.com/iboB/itlib" target="_blank">gh/iboB/itlib</a></li>
+          <ul>
+            <li><code class="cinline">flat_map, flat_set</code> - map with cache locality</li>
+            <li><code class="cinline">sentry</code> - finally-type blocks</li>
+            <li>Има и други, по-нишови работи</li>
+          </ul>
+          <li><a href="https://github.com/iboB/mscharconv" target="_blank">gh/iboB/mscharconv</a> - charconv за пещерняци</li>
+          <li><a href="https://github.com/cpm-cmake/CPM.cmake" target="_blank">gh/cpm-cmake/CPM.cmake</a> - пакети с одобрение от мен&trade;</li>
+        </ul>
       </section>
 
       <section>
