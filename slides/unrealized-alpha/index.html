@@ -75,7 +75,7 @@
           <li>2006-2018 програмист на <span class="fancy">игри</span></li>
           <li>От 2019 <span class="fancy">медицински софтуер</span></li>
           <li>Софтуер с <span class="fancy">отворен код</span></li>
-          <li><a href="https://github.com/iboB">github.com/iboB</a></li>
+          <li><a href="https://github.com/iboB" target="_blank">github.com/iboB</a></li>
         </ul>
       </section>
 
@@ -320,8 +320,37 @@
       </section>
 
       <section>
-        <code>ufunction</code>
-        <p>non-copy capture demo</p>
+        <h3><code>ufunction</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>itlib::ufunction</code></h3>
+        <br/>
+        <ul>
+          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/ufunction.hpp" target="_blank">gh/iboB/itlib/ufunction.hpp</a></li>
+          <li>Вероятно съществуват и други имплементации</li>
+          <li>Тънка опаковка на <code class="cinline">std::function</code></li>
+          <li>Unique Function</li>
+          <ul>
+            <li><span class="fancy">noexcept move constructible</span></li>
+            <li><span class="fancy">non-copyable</span></li>
+          </ul>
+          <li>... от което произлезе бонус: <span class="fancy">capture non-copyable data</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+          auto pfoo = std::make_unique&lt;foo&gt;
+          <span class="fragment">itlib::ufunction&lt;void()&gt; func = [<span class="fragment hl-code">p = std::move(pfoo)</span>]() <span class="fragment hl-code">mutable</span> {
+            // ...
+            <span class="fragment hl-code">consumer.consume(std::move(pfoo));</span>
+          }</span>
+          <span class="fragment">push_task(func)</span>
+        </code></pre>
+        <p><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/02-capture-non-copy.cpp" target="_blank">Демо</a></p>
+        <p>Според мен в почти всички случаи <code class="cinline">std::function</code></p>
+        <p><span class="fancy">може да бъде заменена</span> с <code class="cinline">ufunction</code></p>
       </section>
 
       <section>
