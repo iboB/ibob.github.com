@@ -48,7 +48,7 @@
         <h1>Често неосъзнати проблеми и решения</h1>
         <br/>
         <p>
-          <a href="http://ibob.github.io">Борислав Станимиров</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+          <a href="http://ibob.bg">Борислав Станимиров</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
         </p>
       </section>
 
@@ -82,19 +82,19 @@
       <section>
         <a href="https://viewray.com" target="_blank"><img class="diagram" src="ViewRay_Logo.png"/></a>
         <br><br>
-        <p>Блог пост за това какво правим там: <a href="https://ibob.bg/blog/2022/01/25/what-we-do-at-viewray/" target="_blank">ibob.bg/blog</a></p>
+        <p class="fragment">Блог пост за това какво правим там: <a href="https://ibob.bg/blog/2022/01/25/what-we-do-at-viewray/" target="_blank">ibob.bg/blog</a></p>
       </section>
 
       <section class="slide">
         <h3>Характеристики на софтуерен проект</h3>
         <br/>
         <ul>
-          <li>Коректност</li>
-          <li>Производителност</li>
-          <li>Ефективност на разработка</li>
+          <li class="fragment">Коректност</li>
+          <li class="fragment">Производителност</li>
+          <li class="fragment">Ефективност на разработка</li>
         </ul>
-        <p>... и още</p>
-        <ul>
+        <p class="fragment">... и още</p>
+        <ul class="fragment">
           <li>Сигурност</li>
           <li>Дизайн</li>
           <li>UX</li>
@@ -149,7 +149,7 @@
 
       <section>
         <h3>Осъзнати проблеми</h3>
-        <p>Имаме избор</p>
+        <p class="fragment">Имаме избор</p>
       </section>
 
       <section>
@@ -175,12 +175,12 @@
         <h3>Тази презентация</h3>
         <br/>
         <ul>
-          <li>Няколко често неосъзнати проблема</li>
-          <li><span class="fancy">Arms race</span> в неосъзнатите проблеми и презентациите</li>
-          <li><em>Когато един проблем се окаже често неосъзнат, започва да се говори повече за него и той става <span class="fancy">често осъзнат</span></em></li>
-          <li>Може би има до болка известни неща</li>
-          <li>Може би има неща, които никой не среща</li>
-          <li>...по-скоро първото</li>
+          <li class="fragment">Няколко често неосъзнати проблема</li>
+          <li class="fragment"><span class="fancy">Arms race</span> в неосъзнатите проблеми и презентациите</li>
+          <li class="fragment"><em>Когато един проблем се окаже често неосъзнат, започва да се говори повече за него и той става <span class="fancy">често осъзнат</span></em></li>
+          <li class="fragment">Може би има до болка известни неща</li>
+          <li class="fragment">Може би има неща, които никой не среща</li>
+          <li class="fragment">...по-скоро първото</li>
         </ul>
       </section>
 
@@ -193,15 +193,15 @@
         <h3>Неосъзнати бъгове</h3>
         <br/>
         <ul>
-          <li>Най-често срещаният проблем</li>
-          <li>Има безкрайно много материали по темата</li>
-          <ul>
+          <li class="fragment">Най-често срещаният проблем</li>
+          <li class="fragment">Има безкрайно много материали по темата</li>
+          <ul class="fragment">
             <li>Unit tests</li>
             <li>Integration tests</li>
             <li>TDD</li>
             <li>...</li>
           </ul>
-          <li>Няма да се занимаваме с тях</li>
+          <li class="fragment">Няма да се занимаваме с тях</li>
         </ul>
       </section>
 
@@ -209,10 +209,10 @@
         <h3>Неосъзнати бавности</h3>
         <br/>
         <ul>
-          <li>Водещата подтема</li>
-          <li>C++ е перфектната среда за тях</li>
-          <li>Езикът може да <span class="fancy">крие много</span></li>
-          <li>Често <span class="fancy">бързодействието е водещо</span></li>
+          <li class="fragment">Водещата подтема</li>
+          <li class="fragment">C++ е перфектната среда за тях</li>
+          <li class="fragment">Често <span class="fancy">бързодействието е водещо</span></li>
+          <li class="fragment">Езикът може да <span class="fancy">крие много</span></li>
         </ul>
       </section>
 
@@ -220,8 +220,8 @@
         <h3>Неосъзнат лош код</h3>
         <br/>
         <ul>
-          <li>По-често <span class="fancy">„непризнат“</span> отколкото неосъзнат</li>
-          <ul>
+          <li class="fragment">По-често <span class="fancy">„непризнат“</span> отколкото неосъзнат</li>
+          <ul class="fragment">
             <li>Design patterns</li>
             <li>Clean code, SOLID</li>
             <li>Modern C++</li>
@@ -229,7 +229,7 @@
             <li>Build systems</li>
             <li>Package managers</li>
           </ul>
-          <li>Няколко дребни трика</li>
+          <li class="fragment">Ще бъде слабо засегнато (но не нула)</li>
         </ul>
       </section>
 
@@ -299,10 +299,10 @@
   //...
   std::vector<simple_struct> stuffs;</code></pre>
         <ul>
-          <li>Дотук всичко си работи</li>
-          <li>Дебъгвам си нещо несвързано и изведнъж съм във <code class="cinline">vector::vector(const vector&amp;)</code></li>
+          <li class="fragment">Дотук всичко си работи</li>
+          <li class="fragment">Дебъгвам си нещо несвързано и изведнъж съм във <code class="cinline">vector::vector(const vector&amp;)</code></li>
         </ul>
-        <p>&#x1f632</p>
+        <p class="fragment">&#x1f632</p>
       </section>
 
       <section class="slide">
@@ -310,17 +310,17 @@
         <p style="text-align: center;"><img class="diagram" src="func-func.png" /></p>
         <ul>
           <li>До C++20 <span class="fancy">не е</span> задължително noexcept-move</li>
-          <li>Small-function optimization</li>
+          <li class="fragment">Small-function optimization</li>
           <ul>
-            <li>Без алокации за малки функции</li>
-            <li>Move трябва да премести и всички captures</li>
-            <li>... които може да не са noexcept-move</li>
+            <li class="fragment">Без алокации за малки функции</li>
+            <li class="fragment">Move трябва да премести и всички captures</li>
+            <li class="fragment">... които може да не са noexcept-move</li>
           </ul>
-          <li>В <span class="fancy">нови версии</span> на libc++ и libstdc++ работи и със C++11</li>
-          <ul>
+          <li class="fragment">В <span class="fancy">нови версии</span> на libc++ и libstdc++ работи и със C++11</li>
+          <ul class="fragment">
             <li>Ползваме буфера, само ако можем да местим с noexcept</li>
           </ul>
-          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/01-func-move-noexcept-false.cpp" target="_blank">Демо</a></li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/01-func-move-noexcept-false.cpp" target="_blank">Демо</a></li>
         </ul>
       </section>
 
@@ -333,14 +333,14 @@
         <br/>
         <ul>
           <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/ufunction.hpp" target="_blank">gh/iboB/itlib/ufunction.hpp</a></li>
-          <li>Вероятно съществуват и други имплементации</li>
-          <li>Тънка опаковка на <code class="cinline">std::function</code></li>
-          <li>Unique Function</li>
-          <ul>
+          <li class="fragment">Вероятно съществуват и други имплементации</li>
+          <li class="fragment">Тънка опаковка на <code class="cinline">std::function</code></li>
+          <li class="fragment">Unique Function</li>
+          <ul class="fragment">
             <li><span class="fancy">noexcept move constructible</span></li>
             <li><span class="fancy">non-copyable</span></li>
           </ul>
-          <li>... от което произлезе бонус: <span class="fancy">capture non-copyable data</span></li>
+          <li class="fragment">... от което произлезе бонус: <span class="fancy">capture non-copyable data</span></li>
         </ul>
       </section>
 
@@ -353,9 +353,11 @@
           }</span>
           <span class="fragment">push_task(func)</span>
         </code></pre>
-        <p><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/02-capture-non-copy.cpp" target="_blank">Демо</a></p>
-        <p>Според мен в почти всички случаи <code class="cinline">std::function</code></p>
-        <p><span class="fancy">може да бъде заменена</span> с <code class="cinline">ufunction</code></p>
+        <p class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/02-capture-non-copy.cpp" target="_blank">Демо</a></p>
+        <span class="fragment">
+          <p>Според мен в почти всички случаи <code class="cinline">std::function</code></p>
+          <p><span class="fancy">може да бъде заменена</span> с <code class="cinline">ufunction</code></p>
+        </span>
       </section>
 
       <section>
@@ -371,15 +373,15 @@
         <br/>
         <ul>
           <li>Вектор със small-buffer optimization</li>
-          <li><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна имплементация</li>
-          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/small_vector.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна имплементация</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/small_vector.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
           <ul>
-            <li>90% от работата с 10% от кода</li>
-            <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+            <li class="fragment">90% от работата с 10% от кода</li>
+            <li class="fragment"><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
           </ul>
-          <li>Контейнери, които са с размер по-малък от N в 99% от времето</li>
-          <li>...и тогава нямаме алокации</li>
-          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/03-small_vector.cpp" target="_blank">Демо</a> &ndash; за домашно</li>
+          <li class="fragment">Контейнери, които са с размер по-малък от N в 99% от времето</li>
+          <li class="fragment">...и тогава нямаме алокации</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/03-small_vector.cpp" target="_blank">Демо</a> &ndash; за домашно</li>
         </ul>
       </section>
 
@@ -389,7 +391,7 @@
 
       <section>
         <h3><code>std::array</code></h3>
-        <p>?</p>
+        <p class="fragment">?</p>
       </section>
 
       <section class="slide">
@@ -397,12 +399,12 @@
         <br/>
         <ul>
           <li>Когато размерът е <span class="fancy">равен на</span> N в <span class="fancy">100%</span> от времето</li>
-          <li>Фиксиран размер</li>
-          <li>Помощно число за реален размер?</li>
-          <li>Трябва да <span class="fancy">конструираме всички</span> елементи</li>
-          <li>Ами ако типът е POD?</li>
-          <li>При копиране <span class="fancy">копираме всички</span> елементи</li>
-          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04a-std-array.cpp" target="_blank">Демо</a></li>
+          <li class="fragment">Фиксиран размер</li>
+          <li class="fragment">Помощно число за реален размер?</li>
+          <li class="fragment">Трябва да <span class="fancy">конструираме всички</span> елементи</li>
+          <li class="fragment">Ами ако типът е POD?</li>
+          <li class="fragment">При копиране <span class="fancy">копираме всички</span> елементи</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04a-std-array.cpp" target="_blank">Демо</a></li>
         </ul>
       </section>
 
@@ -415,15 +417,15 @@
         <br/>
         <ul>
           <li>Вектор с фиксиран капацитет</li>
-          <li><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/static_vector.html" target="_blank"><code>boost::static_vector</code></a> - супер мощна имплементация</li>
-          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/static_vector.hpp" target="_blank"><code>itlib::static_vector</code></a></li>
-          <ul>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/static_vector.html" target="_blank"><code>boost::static_vector</code></a> - супер мощна имплементация</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/static_vector.hpp" target="_blank"><code>itlib::static_vector</code></a></li>
+          <ul class="fragment">
             <li>90% от работата с 10% от кода</li>
             <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
           </ul>
-          <li>Без алокации</li>
-          <li>Копираме каквото трябва</li>
-          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04b-static_vector.cpp" target="_blank">Демо</a></li>
+          <li class="fragment">Без алокации</li>
+          <li class="fragment">Копираме <span class="fancy">само</span> каквото трябва</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04b-static_vector.cpp" target="_blank">Демо</a></li>
         </ul>
       </section>
 
@@ -433,7 +435,7 @@
 
       <section>
         <h3><code>std::vector</code></h3>
-        <p>?</p>
+        <p class="fragment">?</p>
       </section>
 
       <section class="slide">
@@ -1016,9 +1018,9 @@
         <h3><code>std::vector</code> и <code>realloc</code></h3>
         <br/>
         <ul>
-          <li><code class="cinline">memcpy</code> пропуска конструкторите и деструкторите</li>
-          <li>Windows-only: <code class="cinline">_expand</code></li>
-          <li>Ами ако <span class="fancy">не ни пука за конструкторите и деструкторите?</span></li>
+          <li class="fragment"><code class="cinline">memcpy</code> пропуска конструкторите и деструкторите</li>
+          <li class="fragment">Windows-only: <code class="cinline">_expand</code></li>
+          <li class="fragment">Ами ако <span class="fancy">не ни пука за конструкторите и деструкторите?</span></li>
         </ul>
       </section>
 
@@ -1030,23 +1032,29 @@
         <h3><code>itlib::pod_vector</code></h3>
         <br/>
         <ul>
-          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/pod_vector.hpp" target="_blank">gh/iboB/itlib/pod_vector.hpp</a></li>
-          <li>Вероятно съществуват и други имплементации</li>
-          <li>Паметта се джурка с <code class="cinline">realloc</code>, <code class="cinline">memcpy</code> и <code class="cinline">memmove</code></li>
-          <li>Значително подобрява <span class="fancy">Debug performance</span></li>
-          <p><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/05-pod_vector.cpp" target="_blank">Демо</a></p>
+          <li>Когато не ни пука за конструкторите и деструкторите</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/pod_vector.hpp" target="_blank">gh/iboB/itlib/pod_vector.hpp</a></li>
+          <li class="fragment">Вероятно съществуват и други имплементации</li>
+          <li class="fragment">Паметта се джурка с <code class="cinline">realloc</code>, <code class="cinline">memcpy</code> и <code class="cinline">memmove</code></li>
+          <li class="fragment">Значително подобрява <span class="fancy">Debug performance</span></li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/05-pod_vector.cpp" target="_blank">Демо</a></li>
         </ul>
       </section>
 
       <section>
         <h3>Урок</h3>
         <p>При custom алокатор извън Windows: търсете <code class="cinline">_expand</code></p>
-        <p><code class="cinline">optimal_alloc_vector</code></p>
+        <p class="fragment"><code class="cinline">optimal_alloc_vector</code></p>
       </section>
 
       <section>
         <h3>Ами сега?</h3>
         <p>Имаме <span class="fancy">сто вида вектор</span>. Как да напишем алгоритъм?</p>
+      </section>
+
+      <section>
+        <code class="cinline">void work(const std::vector&lt;obj&gt;&amp; data);</code>
+        <p>вече не работи</p>
       </section>
 
       <section>
@@ -1061,11 +1069,11 @@
         <h3><code>span, memory_view</code></h3>
         <br/>
         <ul>
-          <li><a href="https://en.cppreference.com/w/cpp/container/span">C++20 <code>std::span</code></a></li>
-          <li><a href="https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/span.html" target="_blank"><code>boost::span</code></a> - съвместим със C++20</li>
-          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/memory_view.hpp" target="_blank"><code>itlib::memory_view</code></a></li>
-          <li>... и вероятно още много, много имплементации</li>
-          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/06-memory_view.cpp" target="_blank">Демо</a></li>
+          <li class="fragment"><a href="https://en.cppreference.com/w/cpp/container/span">C++20 <code>std::span</code></a></li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/span.html" target="_blank"><code>boost::span</code></a> - съвместим със C++20</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/memory_view.hpp" target="_blank"><code>itlib::memory_view</code></a></li>
+          <li class="fragment">... и вероятно още много, много имплементации</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/06-memory_view.cpp" target="_blank">Демо</a></li>
         </ul>
       </section>
 
@@ -1073,24 +1081,28 @@
         <h3>Бонус</h3>
         <br/>
         <ul>
-          <li><a href="https://github.com/iboB/itlib" target="_blank">gh/iboB/itlib</a></li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib" target="_blank">gh/iboB/itlib</a></li>
           <ul>
-            <li><code class="cinline">flat_map, flat_set</code> - map with cache locality</li>
-            <li><code class="cinline">sentry</code> - finally-type blocks</li>
-            <li>Има и други, по-нишови работи</li>
+            <li class="fragment"><code class="cinline">flat_map, flat_set</code> - map with cache locality</li>
+            <li class="fragment"><code class="cinline">sentry</code> - finally-type blocks</li>
+            <li class="fragment">Има и други, по-нишови работи</li>
           </ul>
-          <li><a href="https://github.com/iboB/mscharconv" target="_blank">gh/iboB/mscharconv</a> - charconv за пещерняци</li>
-          <li><a href="https://github.com/cpm-cmake/CPM.cmake" target="_blank">gh/cpm-cmake/CPM.cmake</a> - пакети с одобрение от мен&trade;</li>
+          <li class="fragment"><a href="https://github.com/iboB/mscharconv" target="_blank">gh/iboB/mscharconv</a> - charconv за пещерняци</li>
+          <li class="fragment"><a href="https://github.com/cpm-cmake/CPM.cmake" target="_blank">gh/cpm-cmake/CPM.cmake</a> - пакети с одобрение от мен&trade;</li>
         </ul>
       </section>
 
       <section>
         <h1>Край</h1>
         <h2>Въпроси?</h2>
-        <p>Борислав Станимиров / <a href="https://ibob.github.io">ibob.github.io</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+        <p>Борислав Станимиров / <a href="https://ibob.bg">ibob.bg</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
         <p>
           <small>
-          Тези слайдове: <a href="https://ibob.github.io/slides/unrealized-alpha/">ibob.github.io/slides/unrealized-alpha/</a>
+          Тези слайдове: <a href="https://ibob.bg/slides/unrealized-alpha/">ibob.bg/slides/unrealized-alpha/</a>
+          </small>
+          <br />
+          <small>
+          Демо код: <a href="https://github.com/iboB/unrealized-problems-demo/">github.com/iboB/unrealized-problems-demo</a>
           </small>
           <br />
           <small>
