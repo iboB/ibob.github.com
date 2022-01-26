@@ -371,8 +371,8 @@
         <br/>
         <ul>
           <li>Вектор със small-buffer optimization</li>
-          <li><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна и пълна имплементация</li>
-          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/ufunction.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
+          <li><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна имплементация</li>
+          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/small_vector.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
           <ul>
             <li>90% от работата с 10% от кода</li>
             <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
@@ -392,8 +392,39 @@
         <p>?</p>
       </section>
 
+      <section class="slide">
+        <h3><code>std::array</code></h3>
+        <br/>
+        <ul>
+          <li>Когато размерът е <span class="fancy">равен на</span> N в <span class="fancy">100%</span> от времето</li>
+          <li>Фиксиран размер</li>
+          <li>Помощно число за реален размер?</li>
+          <li>Трябва да <span class="fancy">конструираме всички</span> елементи</li>
+          <li>Ами ако типът е POD?</li>
+          <li>При копиране <span class="fancy">копираме всички</span> елементи</li>
+          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04a-std-array.cpp" target="_blank">Демо</a></li>
+        </ul>
+      </section>
+
       <section>
         <h3><code>static_vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>small_vector</code></h3>
+        <br/>
+        <ul>
+          <li>Вектор с фиксиран капацитет</li>
+          <li><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/static_vector.html" target="_blank"><code>boost::static_vector</code></a> - супер мощна имплементация</li>
+          <li><a href="https://github.com/iboB/itlib/blob/master/include/itlib/static_vector.hpp" target="_blank"><code>itlib::static_vector</code></a></li>
+          <ul>
+            <li>90% от работата с 10% от кода</li>
+            <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+          </ul>
+          <li>Без алокации</li>
+          <li>Копираме каквото трябва</li>
+          <li><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04b-static_vector.cpp" target="_blank">Демо</a></li>
+        </ul>
       </section>
 
       <section>
