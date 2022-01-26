@@ -24,5 +24,6 @@
         "list": "cpp",
         "vector": "cpp"
     },
-    "editor.unicodeHighlight.ambiguousCharacters": false
+    "editor.unicodeHighlight.ambiguousCharacters": false,
+    "cmake.configureOnOpen": false
 }
