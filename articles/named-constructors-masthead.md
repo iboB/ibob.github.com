@@ -7,7 +7,7 @@ date: 2007-09-15
 
 > Originally published on {{page.date}} in the [Masthead Developer Blog](http://masthead-dev.blogspot.bg/2007/09/named-constructors.html).
 >
-> It was written before C++11 and a significant part of it deals with explaining how named constructors are safe to use performance-wise in a C++98 compiler. Of course after C++11 copy elision is part of the standard.
+> It was written before C++11 and a significant part of it deals with explaining how named constructors are safe to use performance-wise in a C++98 compiler. Of course after C++11 copy elision is now part of the standard.
 
 Here is a little trick, that all you old-school C++ programmers might not know. Obviously it's called "Named Constructors".
 
