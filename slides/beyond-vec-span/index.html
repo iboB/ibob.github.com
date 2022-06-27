@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Beyond std::vector and std::span. Why and How</title>
+
+  <meta name="description" content="Slides about a C++ talk for custom vector and span implementations">
+  <meta name="author" content="Borislav Stanimirov">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/reveal.min.css" />
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/theme/simple.min.css" id="theme" />
+  <link rel="stylesheet" href="../lib/slides.css" />
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
+
+  <!-- Slides-specific styles -->
+  <link rel="stylesheet" href="custom.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ?
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/pdf.min.css' :
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/paper.min.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+      <section class="title">
+        <h1>Beyond <code>std::vector</code> and <code>std::span</code></h1>
+        <h2>Why and How</h2>
+        <br/>
+        <p>
+          <a href="http://ibob.bg">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+        </p>
+      </section>
+
+      <section class="slide">
+        <h3>Hello, World</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  #include &lt;iostream&gt;
+
+  int main()
+  {
+      std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment hl-code">https://is.gd/unrealizedv1</span>\n";
+      return 0;
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav Stanimirov</h3>
+        <br/>
+        <ul>
+          <li>I mostly write <span class="fancy">C++</span></li>
+          <li>2006-2018: <span class="fancy">games</span></li>
+          <li>From 2019 on: <span class="fancy">medical software</span></li>
+          <li><span class="fancy">Open source</span> software</li>
+          <li><a href="https://github.com/iboB" target="_blank">github.com/iboB</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <a href="https://viewray.com" target="_blank"><img class="diagram" src="ViewRay_Logo.png"/></a>
+        <br><br>
+        <p class="fragment">A blog post of what we do: <a href="https://ibob.bg/blog/2022/01/25/what-we-do-at-viewray/" target="_blank">ibob.bg/blog</a></p>
+      </section>
+
+      <section>
+        <h3><code>small_vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>small_vector</code></h3>
+        <br/>
+        <ul>
+          <li>Вектор със small-buffer optimization</li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна имплементация</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/small_vector.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
+          <ul>
+            <li class="fragment">90% от работата с 10% от кода</li>
+            <li class="fragment"><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+          </ul>
+          <li class="fragment">Контейнери, които са с размер по-малък от N в 99% от времето</li>
+          <li class="fragment">...и тогава нямаме алокации</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/03-small_vector.cpp" target="_blank">Демо</a> &ndash; за домашно</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>Ами ако размерът е по-малък от N в <span class="fancy">100%</span> от времето?</p>
+      </section>
+
+      <section>
+        <h3><code>std::array</code></h3>
+        <p class="fragment">?</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::array</code></h3>
+        <br/>
+        <ul>
+          <li>Когато размерът е <span class="fancy">равен на</span> N в <span class="fancy">100%</span> от времето</li>
+          <li class="fragment">Фиксиран размер</li>
+          <li class="fragment">Помощно число за реален размер?</li>
+          <li class="fragment">Трябва да <span class="fancy">конструираме всички</span> елементи</li>
+          <li class="fragment">Ами ако типът е POD?</li>
+          <li class="fragment">При копиране <span class="fancy">копираме всички</span> елементи</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04a-std-array.cpp" target="_blank">Демо</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3><code>static_vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>small_vector</code></h3>
+        <br/>
+        <ul>
+          <li>Вектор с фиксиран капацитет</li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/static_vector.html" target="_blank"><code>boost::static_vector</code></a> - супер мощна имплементация</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/static_vector.hpp" target="_blank"><code>itlib::static_vector</code></a></li>
+          <ul class="fragment">
+            <li>90% от работата с 10% от кода</li>
+            <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+          </ul>
+          <li class="fragment">Без алокации</li>
+          <li class="fragment">Копираме <span class="fancy">само</span> каквото трябва</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04b-static_vector.cpp" target="_blank">Демо</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>Ами ако размерът напълно произволен?</p>
+      </section>
+
+      <section>
+        <h3><code>std::vector</code></h3>
+        <p class="fragment">?</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>realloc</code></h3>
+        <p>Имаме памет:</p>
+        <svg
+          id="svg5"
+          version="1.1"
+          viewBox="0 0 110 147"
+          height="297mm"
+          width="210mm"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:svg="http://www.w3.org/2000/svg">
+          <defs
+            id="defs2">
+            <rect
+              x="219.67997"
+              y="654.93706"
+              width="190.58103"
+              height="56.226431"
+              id="rect56160" />
+            <rect
+              x="228.34774"
+              y="569.09299"
+              width="188.84409"
+              height="48.08055"
+              id="rect47254" />
+            <rect
+              x="153.92422"
+              y="421.2544"
+              width="349.90058"
+              height="106.01861"
+              id="rect7494" />
+            <rect
+              x="153.92422"
+              y="421.25439"
+              width="349.90057"
+              height="106.01861"
+              id="rect7494-4" />
+            <rect
+              x="153.92422"
+              y="421.25439"
+              width="349.90057"
+              height="106.01861"
+              id="rect7494-4-3" />
+            <rect
+              x="219.67998"
+              y="654.93707"
+              width="190.58102"
+              height="56.226433"
+              id="rect56160-7" />
+          </defs>
+          <g
+            id="g1169"
+            transform="translate(82.462715,146.70711)" />
+          <g
+            id="g4107"
+            transform="translate(-53.718911,-122.88959)">
+            <rect
+              style="opacity:1;fill:#ff0000;stroke-width:1"
+              id="rect2067"
+              width="19.999987"
+              height="4.9999976"
+              x="89.444824"
+              y="123.90699" />
+            <g
+              transform="translate(54.444809,123.90699)"
+              id="g2283">
+              <g
+                id="g2277">
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 5,0 V 5"
+                  id="path2239" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 10,0 V 5"
+                  id="path2241" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 15,0 V 5"
+                  id="path2243" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 20,0 V 5"
+                  id="path2245" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 25,0 V 5"
+                  id="path2247" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 30,0 V 5"
+                  id="path2249" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 35,0 V 5"
+                  id="path2251" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 40,0 V 5"
+                  id="path2253" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 45,0 V 5"
+                  id="path2255" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 50,0 V 5"
+                  id="path2257" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 55,0 V 5"
+                  id="path2259" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 60,0 V 5"
+                  id="path2261" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 65,0 V 5"
+                  id="path2263" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 70,0 V 5"
+                  id="path2265" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 75,0 V 5"
+                  id="path2267" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 80,0 V 5"
+                  id="path2269" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 85,0 V 5"
+                  id="path2271" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 90,0 V 5"
+                  id="path2273" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 95,0 V 5"
+                  id="path2275" />
+              </g>
+              <g
+                id="g2279" />
+              <rect
+                x="0"
+                y="0"
+                width="100"
+                height="5"
+                style="fill:none;stroke:#000000;stroke-width:0.264583"
+                id="rect2281" />
+            </g>
+          </g>
+          <g
+            class="fragment"
+            id="g1252">
+            <g
+              id="g4134"
+              transform="translate(-53.301235,-119.09492)">
+              <rect
+                style="opacity:1;fill:#00ff00;stroke-width:1"
+                id="rect2567"
+                width="14.999999"
+                height="4.9999995"
+                x="54.027134"
+                y="133.38173" />
+              <rect
+                style="fill:#ff0000;stroke-width:1"
+                id="rect2067-3"
+                width="19.999987"
+                height="4.9999976"
+                x="89.027138"
+                y="133.38173" />
+              <g
+                transform="translate(54.027133,133.38173)"
+                id="g2283-6">
+                <g
+                  id="g2277-7">
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 5,0 V 5"
+                    id="path2239-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 10,0 V 5"
+                    id="path2241-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 15,0 V 5"
+                    id="path2243-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 20,0 V 5"
+                    id="path2245-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 25,0 V 5"
+                    id="path2247-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 30,0 V 5"
+                    id="path2249-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 35,0 V 5"
+                    id="path2251-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 40,0 V 5"
+                    id="path2253-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 45,0 V 5"
+                    id="path2255-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 50,0 V 5"
+                    id="path2257-0" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 55,0 V 5"
+                    id="path2259-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 60,0 V 5"
+                    id="path2261-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 65,0 V 5"
+                    id="path2263-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 70,0 V 5"
+                    id="path2265-0" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 75,0 V 5"
+                    id="path2267-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 80,0 V 5"
+                    id="path2269-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 85,0 V 5"
+                    id="path2271-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 90,0 V 5"
+                    id="path2273-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 95,0 V 5"
+                    id="path2275-8" />
+                </g>
+                <g
+                  id="g2279-7" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="5"
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  id="rect2281-9" />
+              </g>
+            </g>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-40.090874,-102.17363)"
+              id="text7492"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect7494);fill:#004380;fill-opacity:1;stroke:none"><tspan
+                x="153.92383"
+                y="435.41016"
+                id="tspan1675"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1673">x=malloc(3);</tspan></tspan></text>
+          </g>
+          <text
+            xml:space="preserve"
+            transform="scale(0.26458333)"
+            id="text47252"
+            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect47254);fill:#000000;fill-opacity:1;stroke:none"><tspan
+              x="228.34766"
+              y="583.25"
+              id="tspan1677">
+        </tspan><tspan
+              x="228.34766"
+              y="603.25"
+              id="tspan1679">
+        </tspan></text>
+          <g
+            class="fragment"
+            id="g1221">
+            <g
+              id="g4162"
+              transform="translate(-52.858073,-116.58132)">
+              <rect
+                style="opacity:1;fill:#00ff00;stroke-width:1"
+                id="rect3427"
+                width="15.000002"
+                height="4.9999971"
+                x="68.583969"
+                y="144.13753" />
+              <rect
+                style="fill:#008000;stroke-width:1"
+                id="rect2567-2"
+                width="14.999999"
+                height="4.9999995"
+                x="53.583973"
+                y="144.13754" />
+              <rect
+                style="fill:#ff0000;stroke-width:1"
+                id="rect2067-3-0"
+                width="19.999987"
+                height="4.9999976"
+                x="88.583977"
+                y="144.13754" />
+              <g
+                transform="translate(53.583971,144.13754)"
+                id="g2283-6-2">
+                <g
+                  id="g2277-7-3">
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 5,0 V 5"
+                    id="path2239-5-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 10,0 V 5"
+                    id="path2241-3-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 15,0 V 5"
+                    id="path2243-5-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 20,0 V 5"
+                    id="path2245-6-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 25,0 V 5"
+                    id="path2247-2-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 30,0 V 5"
+                    id="path2249-9-8" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 35,0 V 5"
+                    id="path2251-1-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 40,0 V 5"
+                    id="path2253-2-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 45,0 V 5"
+                    id="path2255-7-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 50,0 V 5"
+                    id="path2257-0-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 55,0 V 5"
+                    id="path2259-9-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 60,0 V 5"
+                    id="path2261-3-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 65,0 V 5"
+                    id="path2263-6-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 70,0 V 5"
+                    id="path2265-0-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 75,0 V 5"
+                    id="path2267-6-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 80,0 V 5"
+                    id="path2269-2-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 85,0 V 5"
+                    id="path2271-6-4" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 90,0 V 5"
+                    id="path2273-1-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 95,0 V 5"
+                    id="path2275-8-8" />
+                </g>
+                <g
+                  id="g2279-7-4" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="5"
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  id="rect2281-9-5" />
+              </g>
+            </g>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-39.590249,-89.083092)"
+              id="text7492-4"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect7494-4);fill:#004380;fill-opacity:1;stroke:none"><tspan
+                x="153.92383"
+                y="435.41016"
+                id="tspan1683"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1681">x=realloc(x, 6);</tspan></tspan></text>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-41.524719,-140.84204)"
+              id="text56158"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect56160);fill:#008000;fill-opacity:1;stroke:none"><tspan
+                x="219.67969"
+                y="669.09375"
+                id="tspan1687"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1685">++end</tspan></tspan></text>
+          </g>
+          <g
+            class="fragment"
+            id="g1186">
+            <g
+              id="g4190"
+              transform="translate(-52.185531,-111.66571)">
+              <rect
+                style="fill:#008000;stroke-width:1"
+                id="rect2567-2-3"
+                width="30.000002"
+                height="4.9999957"
+                x="108.30364"
+                y="155.70898" />
+              <rect
+                style="fill:#00ff00;stroke-width:1"
+                id="rect3427-7"
+                width="15.000002"
+                height="4.9999971"
+                x="138.30365"
+                y="155.70898" />
+              <rect
+                style="fill:#ff0000;stroke-width:1"
+                id="rect2067-3-0-6"
+                width="19.999987"
+                height="4.9999976"
+                x="88.303658"
+                y="155.70898" />
+              <g
+                transform="translate(53.303644,155.70898)"
+                id="g2283-6-2-1">
+                <g
+                  id="g2277-7-3-0">
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 5,0 V 5"
+                    id="path2239-5-7-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 10,0 V 5"
+                    id="path2241-3-5-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 15,0 V 5"
+                    id="path2243-5-9-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 20,0 V 5"
+                    id="path2245-6-2-0" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 25,0 V 5"
+                    id="path2247-2-2-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 30,0 V 5"
+                    id="path2249-9-8-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 35,0 V 5"
+                    id="path2251-1-9-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 40,0 V 5"
+                    id="path2253-2-7-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 45,0 V 5"
+                    id="path2255-7-3-4" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 50,0 V 5"
+                    id="path2257-0-6-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 55,0 V 5"
+                    id="path2259-9-1-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 60,0 V 5"
+                    id="path2261-3-2-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 65,0 V 5"
+                    id="path2263-6-9-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 70,0 V 5"
+                    id="path2265-0-3-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 75,0 V 5"
+                    id="path2267-6-1-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 80,0 V 5"
+                    id="path2269-2-9-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 85,0 V 5"
+                    id="path2271-6-4-4" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 90,0 V 5"
+                    id="path2273-1-7-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 95,0 V 5"
+                    id="path2275-8-8-2" />
+                </g>
+                <g
+                  id="g2279-7-4-5" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="5"
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  id="rect2281-9-5-4" />
+              </g>
+            </g>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-39.177179,-72.426849)"
+              id="text7492-4-0"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect7494-4-3);fill:#004380;fill-opacity:1;stroke:none"><tspan
+                x="153.92383"
+                y="435.41016"
+                id="tspan1691"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1689">x=realloc(x, 9);</tspan></tspan></text>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,4.1827267,-124.75277)"
+              id="text56158-8"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect56160-7);fill:#008000;fill-opacity:1;stroke:none"><tspan
+                x="219.67969"
+                y="669.09375"
+                id="tspan1693">memcpy</tspan></text>
+          </g>
+        </svg>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::vector</code> и <code>realloc</code></h3>
+        <br/>
+        <ul>
+          <li class="fragment"><code class="cinline">memcpy</code> пропуска конструкторите и деструкторите</li>
+          <li class="fragment">Windows-only: <code class="cinline">_expand</code></li>
+          <li class="fragment">Ами ако <span class="fancy">не ни пука за конструкторите и деструкторите?</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3><code>pod_vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>itlib::pod_vector</code></h3>
+        <br/>
+        <ul>
+          <li>Когато не ни пука за конструкторите и деструкторите</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/pod_vector.hpp" target="_blank">gh/iboB/itlib/pod_vector.hpp</a></li>
+          <li class="fragment">Вероятно съществуват и други имплементации</li>
+          <li class="fragment">Паметта се джурка с <code class="cinline">realloc</code>, <code class="cinline">memcpy</code> и <code class="cinline">memmove</code></li>
+          <li class="fragment">Значително подобрява <span class="fancy">Debug performance</span></li>
+          <li class="fragment">Recast</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/05-pod_vector.cpp" target="_blank">Демо</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Урок</h3>
+        <p>При custom алокатор извън Windows: търсете <code class="cinline">_expand</code></p>
+        <p class="fragment"><code class="cinline">optimal_alloc_vector</code></p>
+      </section>
+
+      <section>
+        <h3>Ами сега?</h3>
+        <p>Имаме <span class="fancy">сто вида вектор</span>. Как да напишем алгоритъм?</p>
+      </section>
+
+      <section>
+        <code class="cinline">void work(const std::vector&lt;obj&gt;&amp; data);</code>
+        <p>вече не работи</p>
+      </section>
+
+      <section>
+        <p>Темплейтите, естествено, работят, но си <span class="fancy">имат цена</span>.</p>
+      </section>
+
+      <section>
+        <h3><code>span, memory_view</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>span, memory_view</code></h3>
+        <br/>
+        <ul>
+          <li class="fragment"><a href="https://en.cppreference.com/w/cpp/container/span">C++20 <code>std::span</code></a></li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/span.html" target="_blank"><code>boost::span</code></a> - съвместим със C++20</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/memory_view.hpp" target="_blank"><code>itlib::memory_view</code></a></li>
+          <li class="fragment">... и вероятно още много, много имплементации</li>
+          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/06-memory_view.cpp" target="_blank">Демо</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Край</h1>
+        <h2>Въпроси?</h2>
+        <p>Борислав Станимиров / <a href="https://ibob.bg">ibob.bg</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+        <p>
+          <small>
+          Тези слайдове: <a href="https://ibob.bg/slides/unrealized-alpha/">ibob.bg/slides/unrealized-alpha/</a>
+          </small>
+          <br />
+          <small>
+          Демо код: <a href="https://github.com/iboB/unrealized-problems-demo/">github.com/iboB/unrealized-problems-demo</a>
+          </small>
+          <br />
+          <small>
+          Лиценз на слайдовете <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons By 4.0</a><br /><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+          </small>
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="../lib/reveal.js-3.8.0/js/reveal.min.js"></script>
+  <script src="../lib/slides.js"></script>
+
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'none', // none/fade/slide/convex/concave/zoom
+
+      autoPlayMedia: false,
+      preloadIframes: false,
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        //{ src: 'markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        //{ src: 'markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'highlight/highlight.min.js', async: true, callback: function() {
+          hljs.initHighlightingOnLoad();
+        } },
+        //{ src: 'zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+        //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+      ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
+    });
+
+    slides.footerSetup('https://is.gd/unrealizedv1', '2022');
+  </script>
+
+</body>
+</html>
