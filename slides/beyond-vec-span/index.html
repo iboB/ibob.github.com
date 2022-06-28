@@ -121,11 +121,13 @@
         <h3>Allocations</h3>
         <br/>
         <ul>
+          <li>They are <span class="fancy">bad for performance</span></li>
           <li><code class="cinline">map</code>, <code class="cinline">set</code>, <code class="cinline">list</code> allocate every node</li>
           <li>this is <em>somewhat</em> understandable</li>
           <li><code class="cinline">unoredered_map/set</code> also allocate every node</li>
           <li>No allocator for <code class="cinline">function</code></li>
           <li>...</li>
+          <li>Allocators are notoriously hard to use</li>
         </ul>
       </section>
 
@@ -207,6 +209,7 @@
         <ul>
           <li>Contiguous memory - well, don't use <code class="cinline">std::vector</code></li>
           <li>Owns and allocates memory - use <code class="finline">std::span</code></li>
+          <li>...or at least <code class="cinline">const std::vector&amp;</code></li>
           <li>Owns objects - use <code class="finline">std::reference_wrapper</code></li>
           <li>Mutable container - use <code class="finline">const std::vector</code></li>
         </ul>
@@ -219,7 +222,6 @@
 
       <section class="slide">
         <h3>Where it helps</h3>
-        <br/>
         <ul>
           <li>Predictability</li>
           <ul>
@@ -232,33 +234,57 @@
             <li><code class="cinline">emplace</code> returns a ref since C++17</li>
             <li><code class="cinline">noexcept</code> move since C++17</li>
           </ul>
-          <li>Compilance: <code class="cinline">std::move_if_noexcept</code></li>
+          <li>Compliance: <code class="cinline">std::move_if_noexcept</code></li>
+          <li>Debug performance: not to be underestimated</li>
         </ul>
       </section>
 
       <section>
-        <h3><code>small_vector</code></h3>
+        <p>So, what about them allocations?</p>
       </section>
 
       <section class="slide">
-        <h3><code>small_vector</code></h3>
-        <br/>
+        <h3>Allocations</h3>
         <ul>
-          <li>Вектор със small-buffer optimization</li>
-          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - супер мощна имплементация</li>
-          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/small_vector.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
+          <li class="fragment">Obvious cost</li>
           <ul>
-            <li class="fragment">90% от работата с 10% от кода</li>
-            <li class="fragment"><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+            <li class="fragment">The allocator has to do a bunch of stuff.</li>
+            <li class="fragment">Potentially make a syscall</li>
+            <li class="fragment">Physical memory: pages</li>
+            <li class="fragment">Free chunk of consecutive pages</li>
+            <li class="fragment">Sync between threads and processes</li>
           </ul>
-          <li class="fragment">Контейнери, които са с размер по-малък от N в 99% от времето</li>
-          <li class="fragment">...и тогава нямаме алокации</li>
-          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/03-small_vector.cpp" target="_blank">Демо</a> &ndash; за домашно</li>
+          <li class="fragment">Commit size - it's very helpful</li>
+          <li class="fragment">Not-so-obvious cost</li>
+          <ul>
+            <li class="fragment">Zeroing/clearing of memory</li>
+            <li class="fragment">Fragmentation</li>
+          </ul>
         </ul>
       </section>
 
       <section>
-        <p>Ами ако размерът е по-малък от N в <span class="fancy">100%</span> от времето?</p>
+        <p>Rule of thumb: <span class="fancy">Always Avoid Allocations!</span></p>
+        <small>... unless you <span class="fancy">really</span> know what you're doing</small>
+      </section>
+
+      <section class="slide">
+        <h3>Custom Allocators</h3>
+        <br/>
+        <ul>
+          <li class="fragment">Usually very hard to use</li>
+          <li class="fragment"><code class="cinline">std::pmr</code> helps, but not much</li>
+          <li class="fragment">Some kind of management is still needed</li>
+          <li class="fragment"><code class="cinline">std::pmr</code> is <span class="fancy">not zero cost</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>Sometimes you can <span class="fancy">completely</span> avoid allocations</p>
+      </section>
+
+      <section>
+        <p>What if the size is <span class="fancy">always smaller</span> than a given N?</p>
       </section>
 
       <section>
@@ -270,13 +296,13 @@
         <h3><code>std::array</code></h3>
         <br/>
         <ul>
-          <li>Когато размерът е <span class="fancy">равен на</span> N в <span class="fancy">100%</span> от времето</li>
-          <li class="fragment">Фиксиран размер</li>
-          <li class="fragment">Помощно число за реален размер?</li>
-          <li class="fragment">Трябва да <span class="fancy">конструираме всички</span> елементи</li>
-          <li class="fragment">Ами ако типът е POD?</li>
-          <li class="fragment">При копиране <span class="fancy">копираме всички</span> елементи</li>
-          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04a-std-array.cpp" target="_blank">Демо</a></li>
+          <li>The size <span class="fancy">always equals</span> N</li>
+          <li class="fragment">The size is fixed</li>
+          <li class="fragment">What if we use a helper number for actual size?</li>
+          <li class="fragment">We still have to <span class="fancy">construct all</span> elements</li>
+          <li class="fragment">What if the element is a POD and there are no constructors?</li>
+          <li class="fragment">When copying we still have to <span class="fancy">copy all</span> elements</li>
+          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/std-array.cpp" target="_blank">Demo</a></li>
         </ul>
       </section>
 
@@ -285,24 +311,51 @@
       </section>
 
       <section class="slide">
-        <h3><code>small_vector</code></h3>
+        <h3><code>static_vector</code></h3>
         <br/>
         <ul>
-          <li>Вектор с фиксиран капацитет</li>
-          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/static_vector.html" target="_blank"><code>boost::static_vector</code></a> - супер мощна имплементация</li>
+          <li>A fixed capacity vector</li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/static_vector.html" target="_blank"><code>boost::static_vector</code></a> - a powerful implementation</li>
           <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/static_vector.hpp" target="_blank"><code>itlib::static_vector</code></a></li>
           <ul class="fragment">
-            <li>90% от работата с 10% от кода</li>
-            <li><span class="fancy">Без</span> <code class="cinline">std::move_if_noexcept</code></li>
+            <li>90% of the work with 10% of the code</li>
+            <li><span class="fancy">No</span> <code class="cinline">std::move_if_noexcept</code></li>
+            <li><span class="fancy">No</span> exceptions in <code class="cinline">at</code></li>
           </ul>
-          <li class="fragment">Без алокации</li>
-          <li class="fragment">Копираме <span class="fancy">само</span> каквото трябва</li>
-          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/04b-static_vector.cpp" target="_blank">Демо</a></li>
+          <li class="fragment">No allocations</li>
+          <li class="fragment">We copy <span class="fancy">only</span> what we need</li>
+          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/static_vector.cpp" target="_blank">Demo</a></li>
         </ul>
       </section>
 
       <section>
-        <p>Ами ако размерът напълно произволен?</p>
+        <p>Can we have the best of all worlds?</p>
+      </section>
+
+      <section>
+        <h3><code>small_vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>small_vector</code></h3>
+        <br/>
+        <ul>
+          <li>A vector with a small-buffer optimization</li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_75_0/doc/html/boost/container/small_vector.html" target="_blank"><code>boost::small_vector</code></a> - a poweful implementation</li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/small_vector.hpp" target="_blank"><code>itlib::small_vector</code></a></li>
+          <ul class="fragment">
+            <li>90% of the work with 10% of the code</li>
+            <li><span class="fancy">No</span> <code class="cinline">std::move_if_noexcept</code></li>
+            <li><span class="fancy">No</span> exceptions in <code class="cinline">at</code></li>
+          </ul>
+          <li class="fragment">Vectors which have a size smaller than N the majority of the time</li>
+          <li class="fragment">...in which case, there are no allocations</li>
+          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/small_vector.cpp" target="_blank">Demo</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>What if the size is absolutely random?</p>
       </section>
 
       <section>
@@ -312,7 +365,7 @@
 
       <section class="slide">
         <h3><code>realloc</code></h3>
-        <p>Имаме памет:</p>
+        <p>We have a block of memory:</p>
         <svg
           id="svg5"
           version="1.1"
@@ -882,6 +935,582 @@
                 x="219.67969"
                 y="669.09375"
                 id="tspan1693">memcpy</tspan></text>
+          </g>
+        </svg>
+      </section>
+
+      <section class="slide">
+        <h3><code>_expand</code></h3>
+        <p>We have a block of memory:</p>
+        <svg
+          id="svg5"
+          version="1.1"
+          viewBox="0 0 110 147"
+          height="297mm"
+          width="210mm"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:svg="http://www.w3.org/2000/svg">
+          <defs
+            id="defs2">
+            <rect
+              x="219.67997"
+              y="654.93706"
+              width="190.58103"
+              height="56.226431"
+              id="rect56160" />
+            <rect
+              x="228.34774"
+              y="569.09299"
+              width="188.84409"
+              height="48.08055"
+              id="rect47254" />
+            <rect
+              x="153.92422"
+              y="421.2544"
+              width="349.90058"
+              height="106.01861"
+              id="rect7494" />
+            <rect
+              x="153.92422"
+              y="421.25439"
+              width="349.90057"
+              height="106.01861"
+              id="rect7494-4" />
+            <rect
+              x="153.92422"
+              y="421.25439"
+              width="349.90057"
+              height="106.01861"
+              id="rect7494-4-3" />
+            <rect
+              x="219.67998"
+              y="654.93707"
+              width="190.58102"
+              height="56.226433"
+              id="rect56160-7" />
+          </defs>
+          <g
+            id="g1169"
+            transform="translate(82.462715,146.70711)" />
+          <g
+            id="g4107"
+            transform="translate(-53.718911,-122.88959)">
+            <rect
+              style="opacity:1;fill:#ff0000;stroke-width:1"
+              id="rect2067"
+              width="19.999987"
+              height="4.9999976"
+              x="89.444824"
+              y="123.90699" />
+            <g
+              transform="translate(54.444809,123.90699)"
+              id="g2283">
+              <g
+                id="g2277">
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 5,0 V 5"
+                  id="path2239" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 10,0 V 5"
+                  id="path2241" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 15,0 V 5"
+                  id="path2243" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 20,0 V 5"
+                  id="path2245" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 25,0 V 5"
+                  id="path2247" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 30,0 V 5"
+                  id="path2249" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 35,0 V 5"
+                  id="path2251" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 40,0 V 5"
+                  id="path2253" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 45,0 V 5"
+                  id="path2255" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 50,0 V 5"
+                  id="path2257" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 55,0 V 5"
+                  id="path2259" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 60,0 V 5"
+                  id="path2261" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 65,0 V 5"
+                  id="path2263" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 70,0 V 5"
+                  id="path2265" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 75,0 V 5"
+                  id="path2267" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 80,0 V 5"
+                  id="path2269" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 85,0 V 5"
+                  id="path2271" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 90,0 V 5"
+                  id="path2273" />
+                <path
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  d="M 95,0 V 5"
+                  id="path2275" />
+              </g>
+              <g
+                id="g2279" />
+              <rect
+                x="0"
+                y="0"
+                width="100"
+                height="5"
+                style="fill:none;stroke:#000000;stroke-width:0.264583"
+                id="rect2281" />
+            </g>
+          </g>
+          <g
+            class="fragment"
+            id="g1252">
+            <g
+              id="g4134"
+              transform="translate(-53.301235,-119.09492)">
+              <rect
+                style="opacity:1;fill:#00ff00;stroke-width:1"
+                id="rect2567"
+                width="14.999999"
+                height="4.9999995"
+                x="54.027134"
+                y="133.38173" />
+              <rect
+                style="fill:#ff0000;stroke-width:1"
+                id="rect2067-3"
+                width="19.999987"
+                height="4.9999976"
+                x="89.027138"
+                y="133.38173" />
+              <g
+                transform="translate(54.027133,133.38173)"
+                id="g2283-6">
+                <g
+                  id="g2277-7">
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 5,0 V 5"
+                    id="path2239-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 10,0 V 5"
+                    id="path2241-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 15,0 V 5"
+                    id="path2243-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 20,0 V 5"
+                    id="path2245-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 25,0 V 5"
+                    id="path2247-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 30,0 V 5"
+                    id="path2249-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 35,0 V 5"
+                    id="path2251-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 40,0 V 5"
+                    id="path2253-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 45,0 V 5"
+                    id="path2255-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 50,0 V 5"
+                    id="path2257-0" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 55,0 V 5"
+                    id="path2259-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 60,0 V 5"
+                    id="path2261-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 65,0 V 5"
+                    id="path2263-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 70,0 V 5"
+                    id="path2265-0" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 75,0 V 5"
+                    id="path2267-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 80,0 V 5"
+                    id="path2269-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 85,0 V 5"
+                    id="path2271-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 90,0 V 5"
+                    id="path2273-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 95,0 V 5"
+                    id="path2275-8" />
+                </g>
+                <g
+                  id="g2279-7" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="5"
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  id="rect2281-9" />
+              </g>
+            </g>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-40.090874,-102.17363)"
+              id="text7492"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect7494);fill:#004380;fill-opacity:1;stroke:none"><tspan
+                x="153.92383"
+                y="435.41016"
+                id="tspan1675"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1673">x=malloc(3);</tspan></tspan></text>
+          </g>
+          <text
+            xml:space="preserve"
+            transform="scale(0.26458333)"
+            id="text47252"
+            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:16px;line-height:1.25;font-family:monospace;-inkscape-font-specification:monospace;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect47254);fill:#000000;fill-opacity:1;stroke:none"><tspan
+              x="228.34766"
+              y="583.25"
+              id="tspan1677">
+        </tspan><tspan
+              x="228.34766"
+              y="603.25"
+              id="tspan1679">
+        </tspan></text>
+          <g
+            class="fragment"
+            id="g1221">
+            <g
+              id="g4162"
+              transform="translate(-52.858073,-116.58132)">
+              <rect
+                style="opacity:1;fill:#00ff00;stroke-width:1"
+                id="rect3427"
+                width="15.000002"
+                height="4.9999971"
+                x="68.583969"
+                y="144.13753" />
+              <rect
+                style="fill:#008000;stroke-width:1"
+                id="rect2567-2"
+                width="14.999999"
+                height="4.9999995"
+                x="53.583973"
+                y="144.13754" />
+              <rect
+                style="fill:#ff0000;stroke-width:1"
+                id="rect2067-3-0"
+                width="19.999987"
+                height="4.9999976"
+                x="88.583977"
+                y="144.13754" />
+              <g
+                transform="translate(53.583971,144.13754)"
+                id="g2283-6-2">
+                <g
+                  id="g2277-7-3">
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 5,0 V 5"
+                    id="path2239-5-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 10,0 V 5"
+                    id="path2241-3-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 15,0 V 5"
+                    id="path2243-5-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 20,0 V 5"
+                    id="path2245-6-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 25,0 V 5"
+                    id="path2247-2-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 30,0 V 5"
+                    id="path2249-9-8" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 35,0 V 5"
+                    id="path2251-1-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 40,0 V 5"
+                    id="path2253-2-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 45,0 V 5"
+                    id="path2255-7-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 50,0 V 5"
+                    id="path2257-0-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 55,0 V 5"
+                    id="path2259-9-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 60,0 V 5"
+                    id="path2261-3-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 65,0 V 5"
+                    id="path2263-6-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 70,0 V 5"
+                    id="path2265-0-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 75,0 V 5"
+                    id="path2267-6-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 80,0 V 5"
+                    id="path2269-2-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 85,0 V 5"
+                    id="path2271-6-4" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 90,0 V 5"
+                    id="path2273-1-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 95,0 V 5"
+                    id="path2275-8-8" />
+                </g>
+                <g
+                  id="g2279-7-4" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="5"
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  id="rect2281-9-5" />
+              </g>
+            </g>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-39.590249,-89.083092)"
+              id="text7492-4"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect7494-4);fill:#004380;fill-opacity:1;stroke:none"><tspan
+                x="153.92383"
+                y="435.41016"
+                id="tspan1683"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1681">_expand(x, 6);</tspan></tspan></text>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-41.524719,-140.84204)"
+              id="text56158"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect56160);fill:#008000;fill-opacity:1;stroke:none"><tspan
+                x="219.67969"
+                y="669.09375"
+                id="tspan1687"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1685">++end, return x</tspan></tspan></text>
+          </g>
+          <g
+            class="fragment"
+            id="g1186">
+            <g
+              id="g4162"
+              transform="translate(-52.858073,-100)">
+              <rect
+                style="opacity:1;fill:#00ff00;stroke-width:1"
+                id="rect3427"
+                width="15.000002"
+                height="4.9999971"
+                x="68.583969"
+                y="144.13753" />
+              <rect
+                style="fill:#008000;stroke-width:1"
+                id="rect2567-2"
+                width="14.999999"
+                height="4.9999995"
+                x="53.583973"
+                y="144.13754" />
+              <rect
+                style="fill:#ff0000;stroke-width:1"
+                id="rect2067-3-0"
+                width="19.999987"
+                height="4.9999976"
+                x="88.583977"
+                y="144.13754" />
+              <g
+                transform="translate(53.583971,144.13754)"
+                id="g2283-6-2">
+                <g
+                  id="g2277-7-3">
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 5,0 V 5"
+                    id="path2239-5-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 10,0 V 5"
+                    id="path2241-3-5" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 15,0 V 5"
+                    id="path2243-5-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 20,0 V 5"
+                    id="path2245-6-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 25,0 V 5"
+                    id="path2247-2-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 30,0 V 5"
+                    id="path2249-9-8" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 35,0 V 5"
+                    id="path2251-1-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 40,0 V 5"
+                    id="path2253-2-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 45,0 V 5"
+                    id="path2255-7-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 50,0 V 5"
+                    id="path2257-0-6" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 55,0 V 5"
+                    id="path2259-9-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 60,0 V 5"
+                    id="path2261-3-2" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 65,0 V 5"
+                    id="path2263-6-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 70,0 V 5"
+                    id="path2265-0-3" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 75,0 V 5"
+                    id="path2267-6-1" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 80,0 V 5"
+                    id="path2269-2-9" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 85,0 V 5"
+                    id="path2271-6-4" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 90,0 V 5"
+                    id="path2273-1-7" />
+                  <path
+                    style="fill:none;stroke:#000000;stroke-width:0.264583"
+                    d="M 95,0 V 5"
+                    id="path2275-8-8" />
+                </g>
+                <g
+                  id="g2279-7-4" />
+                <rect
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="5"
+                  style="fill:none;stroke:#000000;stroke-width:0.264583"
+                  id="rect2281-9-5" />
+              </g>
+            </g>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-39.177179,-72.426849)"
+              id="text7492-4-0"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect7494-4-3);fill:#004380;fill-opacity:1;stroke:none"><tspan
+                x="153.92383"
+                y="435.41016"
+                id="tspan1691"><tspan
+                  style="font-family:monospace;-inkscape-font-specification:monospace"
+                  id="tspan1689">_expand(x, 9);</tspan></tspan></text>
+            <text
+              xml:space="preserve"
+              transform="matrix(0.26458333,0,0,0.26458333,-41.1827267,-123.75277)"
+              id="text56158-8"
+              style="font-style:normal;font-weight:normal;font-size:16px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect56160-7);fill:#008000;fill-opacity:1;stroke:none"><tspan
+                x="219.67969"
+                y="669.09375"
+                id="tspan1693">return NULL</tspan></text>
           </g>
         </svg>
       </section>
