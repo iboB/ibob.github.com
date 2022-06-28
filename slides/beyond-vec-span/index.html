@@ -73,7 +73,7 @@
         <br/>
         <ul>
           <li>I mostly write <span class="fancy">C++</span></li>
-          <li>2006-2018: <span class="fancy">games</span></li>
+          <li>2006-2018: <span class="fancy">game development</span></li>
           <li>From 2019 on: <span class="fancy">medical software</span></li>
           <li><span class="fancy">Open source</span> software</li>
           <li><a href="https://github.com/iboB" target="_blank">github.com/iboB</a></li>
@@ -84,6 +84,156 @@
         <a href="https://viewray.com" target="_blank"><img class="diagram" src="ViewRay_Logo.png"/></a>
         <br><br>
         <p class="fragment">A blog post of what we do: <a href="https://ibob.bg/blog/2022/01/25/what-we-do-at-viewray/" target="_blank">ibob.bg/blog</a></p>
+      </section>
+
+      <section>
+        <h2>Standard Library Alternatives</h2>
+        <p>Popular in <span class="fancy">multi-platform software</span> and <span class="fancy">game development</span></p>
+      </section>
+
+      <section class="slide">
+        <h3>Feature Set</h3>
+        <br/>
+        <ul>
+          <li>std::string_view arrived in C++17</li>
+          <li>std::span arrived in C++20.</li>
+          <li><code class="finline">memory_view</code></li>
+          <li><code class="cinline">map/set</code> of string pre-C++14 is useless</li>
+          <li><code class="cinline">unordered_map/set</code> of string pre-C++20 is useless</li></li>
+          <li>The language of bad defaults: <span class="fancy">constness, moving, copying</span></li>
+          <li>...</li>
+          <li>How Boost came to be</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Performance</h3>
+        <br/>
+        <ul>
+          <li><code class="cinline">iostream</code>: a notoriously bad offender</li>
+          <li><code class="finline">flat_map/set</code> in contiguous memory</li>
+          <li><code class="cinline">std::hash</code> (this is a documented extension point)</li>
+          <li>...</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Allocations</h3>
+        <br/>
+        <ul>
+          <li><code class="cinline">map</code>, <code class="cinline">set</code>, <code class="cinline">list</code> allocate every node</li>
+          <li>this is <em>somewhat</em> understandable</li>
+          <li><code class="cinline">unoredered_map/set</code> also allocate every node</li>
+          <li>No allocator for <code class="cinline">function</code></li>
+          <li>...</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Predictability</h3>
+        <br/>
+        <ul>
+          <li>The land of <span class="fancy"><em>"implementation defined"</em></span></li>
+          <li><code class="cinline">sizeof std::&lt;pretty-much-anything&gt;</code></li>
+          <li>Small <code class="cinline">std::string</code> size</li>
+          <li>Iterators are who-knows-what</li>
+          <li><code class="cinline">std::filesystem::path::c_str()</code> returns whatever</li>
+          <li>...</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Compliance</h3>
+        <br/>
+        <ul>
+          <li><code class="cinline">std::move_if_noexcept</code> <span class="fancy">The Great Divider</span></li>
+          <li><code class="cinline">std::function</code> must be copyable</li>
+          <li><code class="cinline">std::map::map</code> is not <code>noexcept</code></li>
+          <li>...</li>
+        </ul>
+      </section>
+
+      <section>
+        <img class="diagram" src="dont.png" />
+        <h2>Don't do any of this!</h2>
+        <p>...usually</p>
+      </section>
+
+      <section class="slide">
+        <h3>A Warning</h3>
+        <br/>
+        <ul>
+          <li>In most cases the standard library is acceptable</li>
+          <li>Make sure you know what you're doing and why</li>
+          <li><span class="fancy">Test</span> religiously</li>
+          <li>Use <span class="fancy">sanitizers</span></li>
+          <li>Always <span class="fancy">benchmark</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>This Talk</h3>
+        <br/>
+        <ul>
+          <li>A deeper dive in <code class="cinline">std::vector</code> and <code class="cinline">std::span</code></li>
+          <li>Likely the most fundamental standard library types</li>
+          <li>Use cases for improvement</li>
+          <li>Concrete alternatives</li>
+          <li>Demos</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3><code>std::vector</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3>Basic Characteristics</h3>
+        <br/>
+        <ul>
+          <li>Holds a <span class="fancy">contiguous</span> block of memory</li>
+          <li><span class="fancy">Allocates</span> memory</li>
+          <li><span class="fancy">Owns</span> the memory</li>
+          <li><span class="fancy">Owns</span> the objects</li>
+          <li><span class="fancy">Mutable</span> container</li>
+          <li>...of <span class="fancy">mutable</span> objects</li>
+          <li>Has a bunch of implementation defined tidbits</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Trivial to Challenge</h3>
+        <br/>
+        <ul>
+          <li>Contiguous memory - well, don't use <code class="cinline">std::vector</code></li>
+          <li>Owns and allocates memory - use <code class="finline">std::span</code></li>
+          <li>Owns objects - use <code class="finline">std::reference_wrapper</code></li>
+          <li>Mutable container - use <code class="finline">const std::vector</code></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3><code>my::vector</code></h3>
+        <p>A 100% compatible drop-in replacement reimplementation</p>
+      </section>
+
+      <section class="slide">
+        <h3>Where it helps</h3>
+        <br/>
+        <ul>
+          <li>Predictability</li>
+          <ul>
+            <li>Growth factor</li>
+            <li>Iterators</li>
+            <li><code class="cinline">shrink_to_fit</code> is not required to shrink</li>
+          </ul>
+          <li>Feature set</li>
+          <ul>
+            <li><code class="cinline">emplace</code> returns a ref since C++17</li>
+            <li><code class="cinline">noexcept</code> move since C++17</li>
+          </ul>
+          <li>Compilance: <code class="cinline">std::move_if_noexcept</code></li>
+        </ul>
       </section>
 
       <section>

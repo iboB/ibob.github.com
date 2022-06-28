@@ -82,6 +82,10 @@ body {
 	color: #003377;
 }
 
+.reveal section code.finline {
+	color: #DF5000;
+}
+
 .reveal pre.ticks {
 	background: white;
 }
