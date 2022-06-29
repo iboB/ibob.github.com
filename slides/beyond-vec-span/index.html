@@ -1623,7 +1623,7 @@
         <pre><code class="cpp hljs" data-noescape>
           float cool_algorithm(std::span&lt;const float&gt; data);
           // ...
-          struct point { float x, y, z};
+          struct point { float x, y, z; };
           // ...
           itlib::pod_vector&lt;point&gt; points;
           // call cool_algorithm for all .y components?
@@ -1649,7 +1649,7 @@
         <pre class="fragment"><code class="cpp hljs" data-noescape>
           float cool_algorithm(itlib::stride_span&lt;const float&gt; data);
           // ...
-          struct point { float x, y, z};
+          struct point { float x, y, z; };
           // ...
           itlib::pod_vector&lt;point&gt; points;
           // ..
@@ -1661,20 +1661,52 @@
       </section>
 
       <section>
-        <h1>Край</h1>
-        <h2>Въпроси?</h2>
-        <p>Борислав Станимиров / <a href="https://ibob.bg">ibob.bg</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
+        <pre><code class="cpp hljs" data-noescape>
+          class point {
+            float c[3];
+          public:
+            float x() const { return x[0]; }
+            float y() const { return x[1]; }
+            float z() const { return x[2]; }
+          };
+        </code></pre>
+        <img class="diagram" src="doesnt-fit.gif" />
+      </section>
+
+      <section class="slide">
+        <h3>Ranges</h3>
+        <br/>
+        <li class="fragment">C++ is not yet ready for ranges</li>
+        <li class="fragment">Compile times are abysmal</li>
+        <li class="fragment">Performance suffers: link</li>
+        <li class="fragment">They are fancy and cool</li>
+        <li class="fragment">... but ultimately useless</li>
+      </section>
+
+      <section>
+        <img class="diagram" src="nedry.jpg" />
+      </section>
+
+      <section>
+        <img class="diagram" src="../unrealized-alpha/jesus.jpg" />
+        <p>But that's just, like, my opinion, man</p>
+      </section>
+
+      <section>
+        <h1>End</h1>
+        <h2>Questions?</h2>
+        <p>Borislav Stanimirov / <a href="https://ibob.bg">ibob.bg</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
         <p>
           <small>
-          Тези слайдове: <a href="https://ibob.bg/slides/beyond-vec-span/">ibob.bg/slides/beyond-vec-span/</a>
+          These slides: <a href="https://ibob.bg/slides/beyond-vec-span/">ibob.bg/slides/beyond-vec-span/</a>
           </small>
           <br />
           <small>
-          Демо код: <a href="https://github.com/iboB/vec-span-demo/">github.com/iboB/vec-span-demo</a>
+          Demo code: <a href="https://github.com/iboB/vec-span-demo/">github.com/iboB/vec-span-demo</a>
           </small>
           <br />
           <small>
-          Лиценз на слайдовете <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons By 4.0</a><br /><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
+          Slides license <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons By 4.0</a><br /><a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a>
           </small>
         </p>
       </section>
