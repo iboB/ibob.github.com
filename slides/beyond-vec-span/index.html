@@ -95,14 +95,13 @@
         <h3>Feature Set</h3>
         <br/>
         <ul>
-          <li>std::string_view arrived in C++17</li>
-          <li>std::span arrived in C++20.</li>
-          <li><code class="finline">memory_view</code></li>
-          <li><code class="cinline">map/set</code> of string pre-C++14 is useless</li>
-          <li><code class="cinline">unordered_map/set</code> of string pre-C++20 is useless</li></li>
-          <li>The language of bad defaults: <span class="fancy">constness, moving, copying</span></li>
-          <li>...</li>
-          <li>How Boost came to be</li>
+          <li class="fragment">std::string_view arrived in C++17</li>
+          <li class="fragment">std::span arrived in C++20.</li>
+          <li class="fragment"><code class="cinline">map/set</code> of string pre-C++14 is useless</li>
+          <li class="fragment"><code class="cinline">unordered_map/set</code> of string pre-C++20 is useless</li></li>
+          <li class="fragment">The language of bad defaults: <span class="fancy">constness, moving, copying</span></li>
+          <li class="fragment">...</li>
+          <li class="fragment">How Boost came to be</li>
         </ul>
       </section>
 
@@ -110,10 +109,10 @@
         <h3>Performance</h3>
         <br/>
         <ul>
-          <li><code class="cinline">iostream</code>: a notoriously bad offender</li>
-          <li><code class="finline">flat_map/set</code> in contiguous memory</li>
-          <li><code class="cinline">std::hash</code> (this is a documented extension point)</li>
-          <li>...</li>
+          <li class="fragment"><code class="cinline">iostream</code>: a notoriously bad offender</li>
+          <li class="fragment"><code class="finline">flat_map/set</code> in contiguous memory</li>
+          <li class="fragment"><code class="cinline">std::hash</code> (this is a documented extension point)</li>
+          <li class="fragment">...</li>
         </ul>
       </section>
 
@@ -121,13 +120,13 @@
         <h3>Allocations</h3>
         <br/>
         <ul>
-          <li>They are <span class="fancy">bad for performance</span></li>
-          <li><code class="cinline">map</code>, <code class="cinline">set</code>, <code class="cinline">list</code> allocate every node</li>
-          <li>this is <em>somewhat</em> understandable</li>
-          <li><code class="cinline">unoredered_map/set</code> also allocate every node</li>
-          <li>No allocator for <code class="cinline">function</code></li>
-          <li>...</li>
-          <li>Allocators are notoriously hard to use</li>
+          <li class="fragment">They are <span class="fancy">bad for performance</span></li>
+          <li class="fragment"><code class="cinline">map</code>, <code class="cinline">set</code>, <code class="cinline">list</code> allocate every node</li>
+          <li class="fragment">this is <em>somewhat</em> understandable</li>
+          <li class="fragment"><code class="cinline">unoredered_map/set</code> also allocate every node</li>
+          <li class="fragment">No allocator for <code class="cinline">function</code></li>
+          <li class="fragment">...</li>
+          <li class="fragment">Allocators are notoriously hard to use</li>
         </ul>
       </section>
 
@@ -135,12 +134,12 @@
         <h3>Predictability</h3>
         <br/>
         <ul>
-          <li>The land of <span class="fancy"><em>"implementation defined"</em></span></li>
-          <li><code class="cinline">sizeof std::&lt;pretty-much-anything&gt;</code></li>
-          <li>Small <code class="cinline">std::string</code> size</li>
-          <li>Iterators are who-knows-what</li>
-          <li><code class="cinline">std::filesystem::path::c_str()</code> returns whatever</li>
-          <li>...</li>
+          <li class="fragment">The land of <span class="fancy"><em>"implementation defined"</em></span></li>
+          <li class="fragment"><code class="cinline">sizeof std::&lt;pretty-much-anything&gt;</code></li>
+          <li class="fragment">Small <code class="cinline">std::string</code> size</li>
+          <li class="fragment">Iterators are who-knows-what</li>
+          <li class="fragment"><code class="cinline">std::filesystem::path::c_str()</code> returns whatever</li>
+          <li class="fragment">...</li>
         </ul>
       </section>
 
@@ -148,17 +147,17 @@
         <h3>Compliance</h3>
         <br/>
         <ul>
-          <li><code class="cinline">std::move_if_noexcept</code> <span class="fancy">The Great Divider</span></li>
-          <li><code class="cinline">std::function</code> must be copyable</li>
-          <li><code class="cinline">std::map::map</code> is not <code>noexcept</code></li>
-          <li>...</li>
+          <li class="fragment"><code class="cinline">std::move_if_noexcept</code> <span class="fancy">The Great Divider</span></li>
+          <li class="fragment"><code class="cinline">std::function</code> must be copyable</li>
+          <li class="fragment"><code class="cinline">std::map::map</code> is not <code>noexcept</code></li>
+          <li class="fragment">...</li>
         </ul>
       </section>
 
       <section>
         <img class="diagram" src="dont.png" />
         <h2>Don't do any of this!</h2>
-        <p>...usually</p>
+        <p class="fragment">...usually</p>
       </section>
 
       <section class="slide">
@@ -179,9 +178,9 @@
         <ul>
           <li>A deeper dive in <code class="cinline">std::vector</code> and <code class="cinline">std::span</code></li>
           <li>Likely the most fundamental standard library types</li>
-          <li>Use cases for improvement</li>
-          <li>Concrete alternatives</li>
-          <li>Demos</li>
+          <li class="fragment">Use cases for altetnatives</li>
+          <li class="fragment">Examples of alternatives</li>
+          <li class="fragment">Demos</li>
         </ul>
       </section>
 
@@ -207,11 +206,11 @@
         <h3>Trivial to Challenge</h3>
         <br/>
         <ul>
-          <li>Contiguous memory - well, don't use <code class="cinline">std::vector</code></li>
-          <li>Owns and allocates memory - use <code class="finline">std::span</code></li>
-          <li>...or at least <code class="cinline">const std::vector&amp;</code></li>
-          <li>Owns objects - use <code class="finline">std::reference_wrapper</code></li>
-          <li>Mutable container - use <code class="finline">const std::vector</code></li>
+          <li class="fragment">Contiguous memory - well, don't use <code class="cinline">std::vector</code></li>
+          <li class="fragment">Owns and allocates memory - use <code class="finline">std::span</code></li>
+          <li class="fragment">...or at least <code class="cinline">const std::vector&amp;</code></li>
+          <li class="fragment">Owns objects - use <code class="finline">std::reference_wrapper</code></li>
+          <li class="fragment">Mutable container - use <code class="finline">const std::vector</code></li>
         </ul>
       </section>
 
@@ -220,28 +219,99 @@
         <p>A 100% compatible drop-in replacement reimplementation</p>
       </section>
 
+      <section>
+        <img class="diagram" src="before-after.webp" />
+      </section>
+
       <section class="slide">
-        <h3>Where it helps</h3>
+        <h3>Where it Helps</h3>
         <ul>
-          <li>Predictability</li>
+          <li class="fragment">Predictability</li>
           <ul>
-            <li>Growth factor</li>
-            <li>Iterators</li>
-            <li><code class="cinline">shrink_to_fit</code> is not required to shrink</li>
+            <li class="fragment">Growth factor</li>
+            <li class="fragment">Iterators</li>
+            <li class="fragment"><code class="cinline">shrink_to_fit</code> is not required to shrink</li>
           </ul>
-          <li>Feature set</li>
-          <ul>
+          <li class="fragment">Feature set</li>
+          <ul class="fragment">
             <li><code class="cinline">emplace</code> returns a ref since C++17</li>
             <li><code class="cinline">noexcept</code> move since C++17</li>
           </ul>
-          <li>Compliance: <code class="cinline">std::move_if_noexcept</code></li>
-          <li>Debug performance: not to be underestimated</li>
+          <li class="fragment">Compliance: <code class="cinline">std::move_if_noexcept</code></li>
+          <li class="fragment">Debug performance: not to be underestimated</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::move_if_noexcept</code> Drama</h3>
+        <br/>
+        <ul>
+          <li class="fragment">Moving elements as a whole is a problem</li>
+          <li class="fragment">It's impossible to maintain coherency if move throws</li>
+          <li class="fragment">Only MS STL deals somewhat gracefully with moves</li>
+          <li class="fragment">Demo A</li>
+          <li class="fragment">Demo B</li>
         </ul>
       </section>
 
       <section>
-        <p>Most <code class="cinline">std::vector</code> alternatives are there to deal with allocations.</p>
-        <p>So, what about them?</p>
+        <p>Speaking of immutable objects</p>
+      </section>
+
+      <section>
+        <h3>Immutable?</h3>
+        <p class="fragment">Think <code class="cinline">std::string_view</code></p>
+        <p class="fragment">You don't change. You copy.</p>
+        <img class="fragment diagram" src="../immutable-obj/cow.png" />
+      </section>
+
+      <section>
+        <h3>A Naive Approach</h3>
+        <pre><code class="cpp hljs" data-noescape>
+    template &lt;typename T&gt;
+    class ivector {
+      std::vector&lt;T&gt; m_vector;
+      // ...
+      vector erase(const_iterator i) {
+        auto offset = i - begin();
+        <span class="fragment hl-code">auto copy = m_vector;</span>
+        <span class="fragment hl-code">copy.erase(copy.begin() + offset);</span>
+        return {copy};
+      }
+    };
+        </code></pre>
+        <p class="fragment">We copied the erased item as well</p>
+        <p class="fragment">We allocated more memory</p>
+      </section>
+
+      <section>
+        <h3>A Better Approach</h3>
+        <pre><code class="cpp hljs" data-noescape>
+    template &lt;typename T&gt;
+    class ivector {
+      std::vector&lt;T&gt; m_vector;
+      // ...
+      vector erase(const_iterator i) {
+        auto offset = i - begin();
+        std::vector&lt;T&gt; copy;
+        <span class="fragment hl-code">copy.reserve(m_vector.size() - 1);</span>
+        <span class="fragment hl-code">copy.insert(copy.end(), m_vector.begin(), i);</span>
+        <span class="fragment hl-code">copy.insert(copy.end(), i+1, m_vector.end());</span>
+        return {copy};
+      }
+    };
+        </code></pre>
+      </section>
+
+      <section>
+        <p><a href="https://github.com/arximboldi/immer" target="_blank">gh/arximboldi/immer</a> - immutable container library</p>
+        <p class="fragment">I've been quite into immutable objects for the past two years.</p>
+        <p class="fragment">Let's chat!</p>
+      </section>
+
+      <section>
+        <p>Most <code class="cinline">std::vector</code> alternatives are there to deal with <span class="fancy">allocations</span>.</p>
+        <p class="fragment">So, what about them?</p>
       </section>
 
       <section class="slide">
@@ -266,7 +336,7 @@
 
       <section>
         <p>Rule of thumb: <span class="fancy">Always Avoid Allocations!</span></p>
-        <small>... unless you <span class="fancy">really</span> know what you're doing</small>
+        <small class="fragment">... unless you <span class="fancy">really</span> know what you're doing</small>
       </section>
 
       <section class="slide">
@@ -1551,7 +1621,7 @@
       </section>
 
       <section class="slide">
-        <h3><code>More Thoughts</code></h3>
+        <h3>More Thoughts</h3>
         <br/>
         <ul>
           <li class="fragment"><code class="cinline">optimal_alloc_vector</code>: uses <code class="cinline">_expand</code></li>
@@ -1573,13 +1643,13 @@
 
       <section>
         <p>Templates, of course work, but <span class="fancy">at a cost</span>.</p>
-        <p>And don't get me started on ranges!</p>
+        <p class="fragment">And don't get me started on ranges!</p>
       </section>
 
       <section>
         <p>How about</p>
         <code class="cinline">void work(const obj* buf, size_t size);</code>
-        <p>The anwswer is yes!</p>
+        <p class="fragment">The answer is yes!</p>
       </section>
 
       <section>
@@ -1590,8 +1660,8 @@
         <h3><code>std::span</code></h3>
         <br/>
         <ul>
+          <li>Packs pointer and size</li>
           <li class="fragment">It's a trivial idea</li>
-          <li class="fragment">Packs pointer and size</li>
           <li class="fragment">Allows ranged for loops</li>
           <li class="fragment">Allows template algorithms</li>
           <li class="fragment">An idea that's been around from the dawn of C++</li>
@@ -1600,11 +1670,11 @@
 
       <section>
         <h3><code class="cinline">std::span</code> alternatives</h3>
-        <p>All about features</p>
+        <p class="fragment">All about features</p>
       </section>
 
       <section class="slide">
-        <h3>my::span</h3>
+        <h3><code>my::span</code></h3>
         <br/>
         <ul>
           <li class="fragment"><a href="https://en.cppreference.com/w/cpp/container/span">C++20 <code>std::span</code></a></li>
@@ -1621,14 +1691,14 @@
 
       <section>
         <pre><code class="cpp hljs" data-noescape>
-          float cool_algorithm(std::span&lt;const float&gt; data);
-          // ...
-          struct point { float x, y, z; };
-          // ...
-          itlib::pod_vector&lt;point&gt; points;
-          // call cool_algorithm for all .y components?
+    float cool_algorithm(std::span&lt;const float&gt; data);
+    // ...
+    struct point { float x, y, z; };
+    // ...
+    itlib::pod_vector&lt;point&gt; points;
+    // call cool_algorithm for all .y components?
         </code></pre>
-        <img class="diagram" src="round-hole-square-peg.webp" />
+        <img class="fragment diagram" src="round-hole-square-peg.webp" />
       </section>
 
       <section class="slide">
@@ -1639,38 +1709,98 @@
         <li class="fragment">Can we have fat spans?</li>
       </section>
 
+      <section>
+        <h3><code>stride_span</code></h3>
+      </section>
+
       <section class="slide">
         <h3><code>stride_span</code></h3>
         <br/>
         <ul>
-          <li class="fragment">Pack pointer, size, <span class="fancy">and stride</span></li>
+          <li>Pack pointer, size, <span class="fancy">and stride</span></li>
           <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/stride_span.hpp" target="_blank"><code>itlib::stride_span</code></a></li>
         </ul>
         <pre class="fragment"><code class="cpp hljs" data-noescape>
-          float cool_algorithm(itlib::stride_span&lt;const float&gt; data);
-          // ...
-          struct point { float x, y, z; };
-          // ...
-          itlib::pod_vector&lt;point&gt; points;
-          // ..
-          auto f = cool_algorithm(
-            <span class="hl-code-i">itlib::make_stride_span_member_view(points, points.size(), &point::y)</span>
-            );
+    float cool_algorithm(itlib::stride_span&lt;const float&gt; data);
+    // ...
+    struct point { float x, y, z; };
+    // ...
+    itlib::pod_vector&lt;point&gt; points;
+    // ..
+    auto f = cool_algorithm(
+      <span class="hl-code-i">itlib::make_stride_span_member_view(points, points.size(), &point::y)</span>
+      );
         </code></pre>
         <p class="fragment" style="text-align:right"><a href="https://github.com/iboB/vec-span-demo/blob/master/stride_span.cpp" target="_blank">Demo</a></p>
       </section>
 
       <section>
         <pre><code class="cpp hljs" data-noescape>
-          class point {
-            float c[3];
-          public:
-            float x() const { return x[0]; }
-            float y() const { return x[1]; }
-            float z() const { return x[2]; }
-          };
+    class point {
+      float c[3];
+    public:
+      float x() const { return x[0]; }
+      float y() const { return x[1]; }
+      float z() const { return x[2]; }
+    };
         </code></pre>
         <img class="diagram" src="doesnt-fit.gif" />
+      </section>
+
+      <section class="slide">
+        <h3>A Poor Man's Solution</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+    struct point_y_wrap {
+      <span class="hl-code fragment">const point&amp; p;</span>
+      <span class="hl-code fragment">point_y_wrap(const point&amp; p) : p(p) {}</span>
+      <span class="hl-code fragment">operator float() const { retrun p.x(); }</span>
+    };
+    // ...
+    <span class="hl-code fragment">vector&lt;point_y_wrap&gt; vec(points.begin(), points.end());</span>
+        </code></pre>
+        <ul>
+          <li class="fragment"><code class="cinline">cool_algorithm</code> must be a template</li>
+          <li class="fragment">We allocate to proxy a buffer which <span class="fancy">is already there</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p><code class="cinline">point_y_wrap</code> is a polymorphic wrapper</p>
+      </section>
+
+      <section>
+        <h3><code>poly_span</code></h3>
+      </section>
+
+      <section class="slide">
+        <h3><code>poly_span</code></h3>
+        <ul>
+          <li>Pack pointer, size, <span class="fancy">and a function</span></li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/stride_span.hpp" target="_blank"><code>itlib::stride_span</code></a></li>
+        </ul>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+  float cool_algorithm(itlib::poly_span&lt;const float&gt; data);
+  // ...
+  struct point { float y() const; /*...*/};
+  // ...
+  itlib::pod_vector&lt;point&gt; points;
+  // ..
+  auto f = cool_algorithm(
+    <span class="hl-code-i">itlib::poly_span(points.data(), points.size(), [](const point& p) -> float {
+      return p.y();
+    }</span>
+  );
+        </code></pre>
+        <p class="fragment" style="text-align:right"><a href="https://github.com/iboB/vec-span-demo/blob/master/stride_span.cpp" target="_blank">Demo</a></p>
+      </section>
+
+      <section>
+        <p>But what about ranges?</p>
+      </section>
+
+      <section>
+        <img src="nope.png" />
       </section>
 
       <section class="slide">
@@ -1679,8 +1809,10 @@
         <li class="fragment">C++ is not yet ready for ranges</li>
         <li class="fragment">Compile times are abysmal</li>
         <li class="fragment">Performance suffers: link</li>
-        <li class="fragment">They are fancy and cool</li>
-        <li class="fragment">... but ultimately useless</li>
+        <li class="fragment">Always open source</li>
+        <li class="fragment">They can lead to fancy and cool code</li>
+        <li class="fragment">... but are ultimately useless</li>
+        <li class="fragment">Demo</li>
       </section>
 
       <section>
@@ -1690,6 +1822,21 @@
       <section>
         <img class="diagram" src="../unrealized-alpha/jesus.jpg" />
         <p>But that's just, like, my opinion, man</p>
+      </section>
+
+      <section class="slide">
+        <h3>Bonus</h3>
+        <br/>
+        <ul>
+          <li class="fragment"><a href="https://github.com/iboB/itlib" target="_blank">gh/iboB/itlib</a></li>
+          <ul>
+            <li class="fragment"><code class="cinline">ufunction</code> - capture non-copyable (like <code class="cinline">unique_ptr</code>)</li>
+            <li class="fragment"><code class="cinline">flat_map, flat_set</code> - map with cache locality</li>
+            <li class="fragment"><code class="cinline">sentry</code> - finally-type blocks</li>
+            <li class="fragment">Other, more niche stuff</li>
+          </ul>
+          <li class="fragment"><a href="https://github.com/iboB/mscharconv" target="_blank">gh/iboB/mscharconv</a> - charconv for cavemen</li>
+        </ul>
       </section>
 
       <section>

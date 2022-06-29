@@ -9,13 +9,20 @@ body {
 /* title */
 .reveal section.title h1 {
 	width: 100%;
-	font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
 	font-size: 1.5em;
+}
+
+.reveal section.title h2 {
+	width: 100%;
+	font-size: 1.3em;
+}
+
+.reveal section.title code {
+	color: #037;
 }
 
 /* custom slides */
 .reveal h4 {
-	font-family: Impact, Haettenschweiler, sans-serif;
 	text-transform: uppercase;
 	margin-top: 0.1em;
 	margin-bottom: 0.1em;
@@ -29,7 +36,6 @@ body {
 
 .reveal section.slide h3 {
 	width: 100%;
-	font-family: Verdana, Geneva, Tahoma, sans-serif;
 	text-align: left;
 	border-bottom: 2px solid #0077BD;
 }
