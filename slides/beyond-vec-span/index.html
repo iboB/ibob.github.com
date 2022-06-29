@@ -240,7 +240,8 @@
       </section>
 
       <section>
-        <p>So, what about them allocations?</p>
+        <p>Most <code class="cinline">std::vector</code> alternatives are there to deal with allocations.</p>
+        <p>So, what about them?</p>
       </section>
 
       <section class="slide">
@@ -276,6 +277,8 @@
           <li class="fragment"><code class="cinline">std::pmr</code> helps, but not much</li>
           <li class="fragment">Some kind of management is still needed</li>
           <li class="fragment"><code class="cinline">std::pmr</code> is <span class="fancy">not zero cost</span></li>
+          <li class="fragment">Work is being done to improve this</li>
+          <li class="fragment">... for C++26</li>
         </ul>
       </section>
 
@@ -940,8 +943,8 @@
       </section>
 
       <section class="slide">
-        <h3><code>_expand</code></h3>
-        <p>We have a block of memory:</p>
+        <h3><code>_expand</code> (Windows only)</h3>
+        <p>We have a block of memory (on Windows):</p>
         <svg
           id="svg5"
           version="1.1"
@@ -1519,9 +1522,12 @@
         <h3><code>std::vector</code> и <code>realloc</code></h3>
         <br/>
         <ul>
-          <li class="fragment"><code class="cinline">memcpy</code> пропуска конструкторите и деструкторите</li>
-          <li class="fragment">Windows-only: <code class="cinline">_expand</code></li>
-          <li class="fragment">Ами ако <span class="fancy">не ни пука за конструкторите и деструкторите?</span></li>
+          <li class="fragment"><code class="cinline">memcpy</code> disregards constructors and destructors</li>
+          <li class="fragment"><code class="cinline">_expand</code> can actually work</li>
+          <li class="fragment">It's sad that expanding is not more popular</li>
+          <li class="fragment"><code class="cinline">_expand</code> can be implemented for any allocator</li>
+          <li class="fragment">C++23's <code class="cinline">allocate_at_least</code> is a poor attempt to help</li>
+          <li class="fragment">But what if <span class="fancy">we dont care about constructors and destructors?</span></li>
         </ul>
       </section>
 
@@ -1533,50 +1539,125 @@
         <h3><code>itlib::pod_vector</code></h3>
         <br/>
         <ul>
-          <li>Когато не ни пука за конструкторите и деструкторите</li>
+          <li>When we don't care about constructors and destructors</li>
           <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/pod_vector.hpp" target="_blank">gh/iboB/itlib/pod_vector.hpp</a></li>
-          <li class="fragment">Вероятно съществуват и други имплементации</li>
-          <li class="fragment">Паметта се джурка с <code class="cinline">realloc</code>, <code class="cinline">memcpy</code> и <code class="cinline">memmove</code></li>
-          <li class="fragment">Значително подобрява <span class="fancy">Debug performance</span></li>
+          <li class="fragment">There are likely other implementations</li>
+          <li class="fragment">Memory is transferred <code class="cinline">realloc</code>, <code class="cinline">memcpy</code>, <code class="cinline">memmove</code>...</li>
+          <li class="fragment">... and <code class="cinline">_expand</code> if available</li>
+          <li class="fragment">Also the other things: <span class="fancy">Debug performance</span>, <span class="fancy">no exceptions on <code>at</code></span></li>
           <li class="fragment">Recast</li>
-          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/05-pod_vector.cpp" target="_blank">Демо</a></li>
+          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/pod_vector.cpp" target="_blank">Demo</a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3><code>More Thoughts</code></h3>
+        <br/>
+        <ul>
+          <li class="fragment"><code class="cinline">optimal_alloc_vector</code>: uses <code class="cinline">_expand</code></li>
+          <li class="fragment"><code class="cinline">uber_vector</code>: can be any of these</li>
+          <li class="fragment"><code class="cinline">std::vector</code> is still quite powerful</li>
+          <li class="fragment">Much of this can be done via allocators <span class="fancy">with a small cost</span></li>
         </ul>
       </section>
 
       <section>
-        <h3>Урок</h3>
-        <p>При custom алокатор извън Windows: търсете <code class="cinline">_expand</code></p>
-        <p class="fragment"><code class="cinline">optimal_alloc_vector</code></p>
-      </section>
-
-      <section>
-        <h3>Ами сега?</h3>
-        <p>Имаме <span class="fancy">сто вида вектор</span>. Как да напишем алгоритъм?</p>
+        <h3>But what now?</h3>
+        <p>We have <span class="fancy">a bajillion vector types</span>. How do we write an algorithm?</p>
       </section>
 
       <section>
         <code class="cinline">void work(const std::vector&lt;obj&gt;&amp; data);</code>
-        <p>вече не работи</p>
+        <p>doesn't work anymore</p>
       </section>
 
       <section>
-        <p>Темплейтите, естествено, работят, но си <span class="fancy">имат цена</span>.</p>
+        <p>Templates, of course work, but <span class="fancy">at a cost</span>.</p>
+        <p>And don't get me started on ranges!</p>
       </section>
 
       <section>
-        <h3><code>span, memory_view</code></h3>
+        <p>How about</p>
+        <code class="cinline">void work(const obj* buf, size_t size);</code>
+        <p>The anwswer is yes!</p>
+      </section>
+
+      <section>
+        <h3>This is <code>std::span</code></h3>
       </section>
 
       <section class="slide">
-        <h3><code>span, memory_view</code></h3>
+        <h3><code>std::span</code></h3>
+        <br/>
+        <ul>
+          <li class="fragment">It's a trivial idea</li>
+          <li class="fragment">Packs pointer and size</li>
+          <li class="fragment">Allows ranged for loops</li>
+          <li class="fragment">Allows template algorithms</li>
+          <li class="fragment">An idea that's been around from the dawn of C++</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3><code class="cinline">std::span</code> alternatives</h3>
+        <p>All about features</p>
+      </section>
+
+      <section class="slide">
+        <h3>my::span</h3>
         <br/>
         <ul>
           <li class="fragment"><a href="https://en.cppreference.com/w/cpp/container/span">C++20 <code>std::span</code></a></li>
-          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/span.html" target="_blank"><code>boost::span</code></a> - съвместим със C++20</li>
-          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/memory_view.hpp" target="_blank"><code>itlib::memory_view</code></a></li>
-          <li class="fragment">... и вероятно още много, много имплементации</li>
-          <li class="fragment"><a href="https://github.com/iboB/unrealized-problems-demo/blob/master/06-memory_view.cpp" target="_blank">Демо</a></li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/span.html" target="_blank"><code>boost::span</code></a></li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/span.hpp" target="_blank"><code>itlib::span</code></a></li>
+          <li class="fragment">... and likely hundreds more</li>
+          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/span.cpp" target="_blank">Demo</a></li>
         </ul>
+      </section>
+
+      <section>
+        <p>What about more features?</p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+          float cool_algorithm(std::span&lt;const float&gt; data);
+          // ...
+          struct point { float x, y, z};
+          // ...
+          itlib::pod_vector&lt;point&gt; points;
+          // call cool_algorithm for all .y components?
+        </code></pre>
+        <img class="diagram" src="round-hole-square-peg.webp" />
+      </section>
+
+      <section class="slide">
+        <h3>Fat Pointers</h3>
+        <br/>
+        <li class="fragment">A pointer with additional data</li>
+        <li class="fragment"><code class="clnline">span</code>s are fat pointers</li>
+        <li class="fragment">Can we have fat spans?</li>
+      </section>
+
+      <section class="slide">
+        <h3><code>stride_span</code></h3>
+        <br/>
+        <ul>
+          <li class="fragment">Pack pointer, size, <span class="fancy">and stride</span></li>
+          <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/stride_span.hpp" target="_blank"><code>itlib::stride_span</code></a></li>
+        </ul>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+          float cool_algorithm(itlib::stride_span&lt;const float&gt; data);
+          // ...
+          struct point { float x, y, z};
+          // ...
+          itlib::pod_vector&lt;point&gt; points;
+          // ..
+          auto f = cool_algorithm(
+            <span class="hl-code-i">itlib::make_stride_span_member_view(points, points.size(), &point::y)</span>
+            );
+        </code></pre>
+        <p class="fragment" style="text-align:right"><a href="https://github.com/iboB/vec-span-demo/blob/master/stride_span.cpp" target="_blank">Demo</a></p>
       </section>
 
       <section>
@@ -1585,7 +1666,7 @@
         <p>Борислав Станимиров / <a href="https://ibob.bg">ibob.bg</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></p>
         <p>
           <small>
-          Тези слайдове: <a href="https://ibob.bg/slides/beyond-vec-span/">ibob.bg/slides/unrealized-alpha/</a>
+          Тези слайдове: <a href="https://ibob.bg/slides/beyond-vec-span/">ibob.bg/slides/beyond-vec-span/</a>
           </small>
           <br />
           <small>
