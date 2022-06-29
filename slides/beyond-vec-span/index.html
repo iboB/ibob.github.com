@@ -95,8 +95,8 @@
         <h3>Feature Set</h3>
         <br/>
         <ul>
-          <li class="fragment">std::string_view arrived in C++17</li>
-          <li class="fragment">std::span arrived in C++20.</li>
+          <li class="fragment"><code class="cinline">std::string_view</code> arrived in C++17</li>
+          <li class="fragment"><code class="cinline">std::span</code> arrived in C++20.</li>
           <li class="fragment"><code class="cinline">map/set</code> of string pre-C++14 is useless</li>
           <li class="fragment"><code class="cinline">unordered_map/set</code> of string pre-C++20 is useless</li></li>
           <li class="fragment">The language of bad defaults: <span class="fancy">constness, moving, copying</span></li>
@@ -147,6 +147,7 @@
         <h3>Compliance</h3>
         <br/>
         <ul>
+          <li class="fragment">64-bit <code class="cinline">size_t</code></li>
           <li class="fragment"><code class="cinline">std::move_if_noexcept</code> <span class="fancy">The Great Divider</span></li>
           <li class="fragment"><code class="cinline">std::function</code> must be copyable</li>
           <li class="fragment"><code class="cinline">std::map::map</code> is not <code>noexcept</code></li>
@@ -271,7 +272,7 @@
     class ivector {
       std::vector&lt;T&gt; m_vector;
       // ...
-      vector erase(const_iterator i) {
+      ivector erase(const_iterator i) {
         auto offset = i - begin();
         <span class="fragment hl-code">auto copy = m_vector;</span>
         <span class="fragment hl-code">copy.erase(copy.begin() + offset);</span>
@@ -290,7 +291,7 @@
     class ivector {
       std::vector&lt;T&gt; m_vector;
       // ...
-      vector erase(const_iterator i) {
+      ivector erase(const_iterator i) {
         auto offset = i - begin();
         std::vector&lt;T&gt; copy;
         <span class="fragment hl-code">copy.reserve(m_vector.size() - 1);</span>
@@ -349,6 +350,10 @@
           <li class="fragment">Work is being done to improve this</li>
           <li class="fragment">... for C++26</li>
         </ul>
+      </section>
+
+      <section>
+        <img class="diagram" alt="sad panda" src="../cpupbg/sad_panda.png" />
       </section>
 
       <section>
@@ -1013,7 +1018,7 @@
 
       <section class="slide">
         <h3><code>_expand</code> (Windows only)</h3>
-        <p>We have a block of memory (on Windows):</p>
+        <p>We have a block of memory <span class="fragment">(on Windows):</span></p>
         <svg
           id="svg5"
           version="1.1"
@@ -1588,7 +1593,7 @@
       </section>
 
       <section class="slide">
-        <h3><code>std::vector</code> и <code>realloc</code></h3>
+        <h3><code>std::vector</code> and <code>realloc</code></h3>
         <br/>
         <ul>
           <li class="fragment"><code class="cinline">memcpy</code> disregards constructors and destructors</li>
@@ -1704,7 +1709,7 @@
         <h3>Fat Pointers</h3>
         <br/>
         <li class="fragment">A pointer with additional data</li>
-        <li class="fragment"><code class="clnline">span</code>s are fat pointers</li>
+        <li class="fragment"><code class="cinline">span</code>s are fat pointers</li>
         <li class="fragment">Can we have fat spans?</li>
       </section>
 
@@ -1807,11 +1812,12 @@
         <br/>
         <li class="fragment">C++ is not yet ready for ranges</li>
         <li class="fragment">Compile times are abysmal</li>
-        <li class="fragment">Performance suffers: link</li>
+        <li class="fragment">Performance suffers</li>
         <li class="fragment">Always open source</li>
         <li class="fragment">They can lead to fancy and cool code</li>
         <li class="fragment">... but are ultimately useless</li>
         <li class="fragment"><a href="https://godbolt.org/z/W6o56zMqa" target="_blank">Demo</a>
+        <li class="fragment"><a href="https://godbolt.org/z/xK76eWMPo" target="_blank">Benchmark</a>
       </section>
 
       <section>
