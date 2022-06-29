@@ -249,8 +249,7 @@
           <li class="fragment">Moving elements as a whole is a problem</li>
           <li class="fragment">It's impossible to maintain coherency if move throws</li>
           <li class="fragment">Only MS STL deals somewhat gracefully with moves</li>
-          <li class="fragment">Demo A</li>
-          <li class="fragment">Demo B</li>
+          <li class="fragment"><a href="https://godbolt.org/z/9hvGcqa3e" target="_blank">Demo</a></li>
         </ul>
       </section>
 
@@ -375,7 +374,7 @@
           <li class="fragment">We still have to <span class="fancy">construct all</span> elements</li>
           <li class="fragment">What if the element is a POD and there are no constructors?</li>
           <li class="fragment">When copying we still have to <span class="fancy">copy all</span> elements</li>
-          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/std-array.cpp" target="_blank">Demo</a></li>
+          <li class="fragment"><a href="https://godbolt.org/z/8nv3Mrc3c" target="_blank">Demo</a></li>
         </ul>
       </section>
 
@@ -397,7 +396,7 @@
           </ul>
           <li class="fragment">No allocations</li>
           <li class="fragment">We copy <span class="fancy">only</span> what we need</li>
-          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/static_vector.cpp" target="_blank">Demo</a></li>
+          <li class="fragment"><a href="https://godbolt.org/z/7svdfv5s8" target="_blank">Demo</a></li>
         </ul>
       </section>
 
@@ -423,7 +422,7 @@
           </ul>
           <li class="fragment">Vectors which have a size smaller than N the majority of the time</li>
           <li class="fragment">...in which case, there are no allocations</li>
-          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/small_vector.cpp" target="_blank">Demo</a></li>
+          <li class="fragment"><a href="https://godbolt.org/z/q7h17YW35" target="_blank">Demo</a></li>
         </ul>
       </section>
 
@@ -1616,7 +1615,7 @@
           <li class="fragment">... and <code class="cinline">_expand</code> if available</li>
           <li class="fragment">Also the other things: <span class="fancy">Debug performance</span>, <span class="fancy">no exceptions on <code>at</code></span></li>
           <li class="fragment">Recast</li>
-          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/pod_vector.cpp" target="_blank">Demo</a></li>
+          <li class="fragment"><a href="https://godbolt.org/z/b4ocaTzn1" target="_blank">Demo</a></li>
         </ul>
       </section>
 
@@ -1681,7 +1680,7 @@
           <li class="fragment"><a href="https://www.boost.org/doc/libs/1_78_0/libs/core/doc/html/core/span.html" target="_blank"><code>boost::span</code></a></li>
           <li class="fragment"><a href="https://github.com/iboB/itlib/blob/master/include/itlib/span.hpp" target="_blank"><code>itlib::span</code></a></li>
           <li class="fragment">... and likely hundreds more</li>
-          <li class="fragment"><a href="https://github.com/iboB/vec-span-demo/blob/master/span.cpp" target="_blank">Demo</a></li>
+          <li class="fragment"><a href="https://godbolt.org/z/W1dqsr5ET" target="_blank">Demo</a></li>
         </ul>
       </section>
 
