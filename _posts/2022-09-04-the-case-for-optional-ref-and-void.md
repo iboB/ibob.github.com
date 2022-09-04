@@ -117,7 +117,7 @@ auto safe_proxy(F& f, Args&&... args) -> std::optional<decltype(f(std::forward<A
 
 Still a bit clunky.
 
-Can we have a an `optional` that is truthy by default? The answer here is "yes". And we will, too. C++23 is about to introduce [`std::expected`](https://en.cppreference.com/w/cpp/header/expected) which is a union type of a value and an error. It is truthy by default. The default constructor constructs a value-initialized object. It has a specialization for a reference value, so that's good, but there are no plans for void specializations. And, thinking about it, `std::expected<void, Error>` makes a lot of sense. Yes, you might say that it is very similar to `std::optional<Error>`, but the truthiness is the opposite. Generic code will have to be specialized for these cases, risking bugs and needlessly overcomplicating stuff.
+Can we have a an `optional` that is truthy by default? The answer here is "yes". And we will, too. C++23 is about to introduce [`std::expected`](https://en.cppreference.com/w/cpp/header/expected) which is a union type of a value and an error. It is truthy by default. The default constructor constructs a value-initialized object. It has a specialization for a reference value *and even for a `void` value, so that's good, but not a for a `void` error*[^1]. ~~so that's good, but there are no plans for void specializations. And, thinking about it, `std::expected<void, Error>` makes a lot of sense. Yes, you might say that it is very similar to `std::optional<Error>`, but the truthiness is the opposite. Generic code will have to be specialized for these cases, risking bugs and needlessly overcomplicating stuff.~~
 
 I, for one, would go full `void` on `expected`. Thus `expected<X, void>` would be almost exactly like `optional<X>`, but with the notable difference that it would be truthy by default. In fact, I *have* gone full `void` on `expected`. Much like many implementations of `optional` were created before it became a part of the standard, many implementations of `expected` exist today. It doesn't require any modern language features and can be safely implemented with C++11. My implementation can be found [here](https://github.com/iboB/itlib/blob/master/include/itlib/expected.hpp), and it does have specializations for ref and `void` values, and for `void` errors. Finally, we can have an even fancier equivalent to `bool`: `itlib::expected<void, void>`. Yay. And, also, we can do this:
 
@@ -188,3 +188,7 @@ void session::on_calc_something_heavy() {
 ```
 
 Much better. No risk of problems. I called this helper class `weak_func`. It accepts a weak pointer and a function and will only call the function if the weak pointer has not expired. My initial implementation had the "bool/pointer/optional" solution, but it annoyed me. I didn't find it clean enough. So, I ended up using `itlib::expected`. You can see the implementation and a small demo [here](https://godbolt.org/z/qzx1bo6dG).
+
+___
+
+[^1]: I made a mistake. I had misread the specification of `std::expected`. It will indeed have a specialization for a `void` value. The misleading text from the original post is striked through. 
