@@ -30,7 +30,7 @@ If we *know* that they return a reference, then we can do:
 
 ```c++
 template <typename F, typename... Args>
-auto safe_proxy(F& f, Args&&... args) -> std::add_pointer_t<decltype(f(std::forward<Args>(args)...)> {
+auto safe_proxy(F& f, Args&&... args) -> std::add_pointer_t<decltype(f(std::forward<Args>(args)...))> {
     if (!f) return nullptr;
     return &f(std::forward<Args>(args)...);
 }
@@ -40,7 +40,7 @@ And, finally, if we *know* that they return a regular value, we can safely use `
 
 ```c++
 template <typename F, typename... Args>
-auto safe_proxy(F& f, Args&&... args) -> std::optional<decltype(f(std::forward<Args>(args)...)> {
+auto safe_proxy(F& f, Args&&... args) -> std::optional<decltype(f(std::forward<Args>(args)...))> {
     if (!f) return std::nullopt;
     return f(std::forward<Args>(args)...);
 }
@@ -172,7 +172,7 @@ void session::on_calc_something_heavy() {
     worker->initiate_heavy_calc(data, [this, payload=weak_from_this()](result r) {
         auto self = payload.lock();
         if (!self) return; // initiator of job has expired, so they don't need this
-        on_heavy_calc_result(std::move(result));
+        on_heavy_calc_result(std::move(r));
     });
 }
 ```
@@ -182,9 +182,9 @@ So the first two lines were getting kind of annoying since they had to be added 
 ```c++
 void session::on_calc_something_heavy() {
     worker->initiate_heavy_calc(data, {weak_from_this(), [this](result r) {
-        on_heavy_calc_result(std::move(result));
+        on_heavy_calc_result(std::move(r));
     }});
 }
 ```
 
-Much better. No risk of problems. `weak_func` accepts a weak pointer and a function and will only call the function if the weak pointer has not expired. My initial implementation had the "bool/pointer/optional" solution, but it annoyed me. I didn't find it clean enough. So, I ended up using `itlib::expected`. You can see the implementation and a small demo [here](https://godbolt.org/z/qzx1bo6dG).
+Much better. No risk of problems. I called this helper class `weak_func`. It accepts a weak pointer and a function and will only call the function if the weak pointer has not expired. My initial implementation had the "bool/pointer/optional" solution, but it annoyed me. I didn't find it clean enough. So, I ended up using `itlib::expected`. You can see the implementation and a small demo [here](https://godbolt.org/z/qzx1bo6dG).
