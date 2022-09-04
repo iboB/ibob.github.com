@@ -1,19 +1,19 @@
 ---
 layout: post
-title: The Case for `std::optional<X&>` and `std::optional<void>`
+title: The Case for std::optional of Reference Types and Void
 category: programming
 tags: ['c++']
 
-excerpt: Well, at least according to me
+excerpt: Also ramblings about void as a first class type and the upcoming `std::expected`
 ---
 
-C++17 introduced `std::optional` in the standard library. It's a pretty useful addition and many people were using custom implementations of it for many years before it finally became part of the standard. Many of those custom implementations, like, say [Boost.Optional](https://www.boost.org/doc/libs/1_80_0/libs/optional/doc/html/index.html), have a specialization of optional for references: `optional<T&>`. Some of them even have a specializaton for `void`. `std::optional` does not allow any of those. I think it should.
+C++17 introduced `std::optional` in the standard library. It's a pretty useful addition and many people were using custom implementations of it for many years before it finally became part of the standard. Many of those custom implementations, like, say [Boost.Optional](https://www.boost.org/doc/libs/1_80_0/libs/optional/doc/html/index.html), have a specialization for optional of references: `optional<T&>`. Some of them even have a specializaton for `void`. `std::optional` does not allow any of those. I think it should.
 
 This issue has been raised many times. Opponents of these specializations say that `std::optional<void>` would be equivalent to `bool` and `std::optional<X&>` would be equivalent to a raw pointer, `X*`, and it would be redundant to have them, since the exact same functionality is already available, without the need for fancy equivalents. I agree that these equivalences are correct. I also say that it makes absolutely no sense to actually type `std::optional<void>` or `std::optional<X&>`. If you find yourself needing those, you can indeed safely and correctly just use `bool` or `X*`.
 
 Using it this in template code, however, is not that pleasant.
 
-Suppose you have a functional object which is nullable, like `std::function`. You want to create a function which safely calls the object. What would be the return type of such safe proxy? It can be the same as the function's and we can throw an exception if it's not accessible, but that will make the calling code complicated, and will be dangerously close to exceptional flow control if we expect null functions often.
+Suppose you have a functional object which is nullable, like `std::function`. You want to create a function which safely calls the object. What would be the return type of such safe proxy? It can be the same as the function's and we can throw an exception if it's not accessible, but that will make the calling code complicated, and will be dangerously close to exceptional control flow if we expect null functions often.
 
 If we *know* that these functions are always void, then it's easy:
 
@@ -75,7 +75,7 @@ There's a small demo of this [here](https://godbolt.org/z/1c3PqE48a). It's also 
 
 This is not a pretty function, but it works. Well, at least as long as we only care about the truthiness of the return value. If we want to propagate the the result into more template code, this has the potential to cause much headache.
 
-Now, imagine we did have an otpional type with specializations for references and `void`. Then we could write something like this:
+Now, imagine we did have an optional type with specializations for references and `void`. Then we could write something like this:
 
 ```c++
 template <typename F, typename... Args>
@@ -119,7 +119,7 @@ Still a bit clunky.
 
 Can we have a an `optional` that is truthy by default? The answer here is "yes". And we will, too. C++23 is about to introduce [`std::expected`](https://en.cppreference.com/w/cpp/header/expected) which is a union type of a value and an error. It is truthy by default. The default constructor constructs a value-initialized object. It has a specialization for a reference value, so that's good, but there are no plans for void specializations. And, thinking about it, `std::expected<void, Error>` makes a lot of sense. Yes, you might say that it is very similar to `std::optional<Error>`, but the truthiness is the opposite. Generic code will have to be specialized for these cases, risking bugs and needlessly overcomplicating stuff.
 
-I, for one, would go full `void` on `expected`. Thus `expected<X, void>` would be almost exactly like `optional<X>`, but with the notable difference that it would be truthy by default. In fact, I have gone full `void` on `expected`. Much like many implementations of `optional` were created before it became a part of the standard, many implementations of `expected` exist today. It doesn't require any modern language features and can be safely implemented with C++11. My implementation can be found [here](https://github.com/iboB/itlib/blob/master/include/itlib/expected.hpp), and it does have specializations for ref and `void` values, and for `void` errors. Finally, we can have an even fancier equivalent to `bool`: `itlib::expected<void, void>`. Yay. And, also, we can do this:
+I, for one, would go full `void` on `expected`. Thus `expected<X, void>` would be almost exactly like `optional<X>`, but with the notable difference that it would be truthy by default. In fact, I *have* gone full `void` on `expected`. Much like many implementations of `optional` were created before it became a part of the standard, many implementations of `expected` exist today. It doesn't require any modern language features and can be safely implemented with C++11. My implementation can be found [here](https://github.com/iboB/itlib/blob/master/include/itlib/expected.hpp), and it does have specializations for ref and `void` values, and for `void` errors. Finally, we can have an even fancier equivalent to `bool`: `itlib::expected<void, void>`. Yay. And, also, we can do this:
 
 In the magical first-class-`void` world:
 
