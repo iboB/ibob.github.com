@@ -103,7 +103,7 @@ auto safe_proxy(F& f, Args&&... args) -> std::optional<decltype(f(std::forward<A
 }
 ```
 
-...But that's wrong! The problem is that optional is falsy by default. Even if we had first class `void` and `std::optional<void>`, the code above wouldn't work, as the default constructor of `optional` would be equivalent to the value constructor, both having a `void` argument. It would have to be rewritten with emplace just like the in the dedicated `void` vode from the previous example:
+...But that's wrong! The problem is that optional is falsy by default. Even if we had first class `void` and `std::optional<void>`, the code above wouldn't work, as the default constructor of `optional` would be equivalent to the value constructor[^1], both having a `void` argument. It would have to be rewritten with emplace just like the in the dedicated `void` vode from the previous example:
 
 ```c++
 template <typename F, typename... Args>
@@ -117,7 +117,7 @@ auto safe_proxy(F& f, Args&&... args) -> std::optional<decltype(f(std::forward<A
 
 Still a bit clunky.
 
-Can we have a an `optional` that is truthy by default? The answer here is "yes". And we will, too. C++23 is about to introduce [`std::expected`](https://en.cppreference.com/w/cpp/header/expected) which is a union type of a value and an error. It is truthy by default. The default constructor constructs a value-initialized object. It has a specialization for a reference value *and even for a `void` value, so that's good, but not a for a `void` error*[^1]. ~~so that's good, but there are no plans for void specializations. And, thinking about it, `std::expected<void, Error>` makes a lot of sense. Yes, you might say that it is very similar to `std::optional<Error>`, but the truthiness is the opposite. Generic code will have to be specialized for these cases, risking bugs and needlessly overcomplicating stuff.~~
+Can we have a an `optional` that is truthy by default? The answer here is "yes". And we will, too. C++23 is about to introduce [`std::expected`](https://en.cppreference.com/w/cpp/header/expected) which is a union type of a value and an error. It is truthy by default. The default constructor constructs a value-initialized object. It has a specialization for a reference value *and even for a `void` value, so that's good, but not a for a `void` error*[^2]. ~~so that's good, but there are no plans for void specializations. And, thinking about it, `std::expected<void, Error>` makes a lot of sense. Yes, you might say that it is very similar to `std::optional<Error>`, but the truthiness is the opposite. Generic code will have to be specialized for these cases, risking bugs and needlessly overcomplicating stuff.~~
 
 I, for one, would go full `void` on `expected`. Thus `expected<X, void>` would be almost exactly like `optional<X>`, but with the notable difference that it would be truthy by default. In fact, I *have* gone full `void` on `expected`. Much like many implementations of `optional` were created before it became a part of the standard, many implementations of `expected` exist today. It doesn't require any modern language features and can be safely implemented with C++11. My implementation can be found [here](https://github.com/iboB/itlib/blob/master/include/itlib/expected.hpp), and it does have specializations for ref and `void` values, and for `void` errors. Finally, we can have an even fancier equivalent to `bool`: `itlib::expected<void, void>`. Yay. And, also, we can do this:
 
@@ -191,4 +191,5 @@ Much better. No risk of problems. I called this helper class `weak_func`. It acc
 
 ___
 
-[^1]: I made a mistake. I had misread the specification of `std::expected`. It will indeed have a specialization for a `void` value. The misleading text from the original post is striked through. 
+[^1]: That's according to my (unpopular) opinion of how `void` should work. More popular ones such as [this one](https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2016/p0146r1.html) would have `f()` be different from `f(void)` and thus allow the differentitation between `std::optional<X>{}` and `std::optional<X>{void{}}` making the code example correct.
+[^2]: I made a mistake. I had misread the specification of `std::expected`. It will indeed have a specialization for a `void` value. The misleading text from the original post is striked through.
