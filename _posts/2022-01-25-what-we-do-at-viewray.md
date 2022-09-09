@@ -54,7 +54,11 @@ The client capabilities are purely involved with presentation. It contains and e
 Here are a couple of screenshots from the client:
 
 [![manual planning](/blog/a3i-manual-planning-thumb.png)](/blog/a3i-manual-planning.png)
-[![manual planning](/blog/a3i-treatment-thumb.png)](/blog/a3i-treatment.png)
+[![treatment](/blog/a3i-treatment-thumb.png)](/blog/a3i-treatment.png)
+
+... and a demo video:
+
+[![demo video](/blog/a3i-demo-video-thumb.png)](https://www.youtube.com/watch?v=xtvAHrjR2QQ "ViewRay - Frontend Demo Reel")
 
 ### Server
 
