@@ -23,10 +23,10 @@ std::set<std::string> s;
 auto sf = s.find("sense in deprecating atomic load/store on shared_ptr");
 
 std::unordered_map<std::string, int> um;
-auto umf = um.find("a good paying job in game development");
+auto umf = um.find("compile-time reflection done right");
 
 std::unordered_set<std::string> us;
-auto usf = um.find("a way to not shoot youself in the foot");
+auto usf = us.find("bullet-proof socks and shoes");
 ```
 
 So... what happens here? Four `std::string`-s are constructed. Four times memory is absolutely pointlessly allocated, just to compare with range which is known at compile time. This problem is quite annoying and it is my opinion that it makes pre-C++14 `std::map/set` and pre-C++20 `std::unordered_map/set` practically useless, even outright a bad choice when the key is a string.
