@@ -4,10 +4,10 @@ title: Transparent Lookups for Maps and Sets
 category: programming
 tags: ['c++']
 
-excerpt: C++14 introduced transparent lookups for map and set. C++20 introduced them for unordered_map and unordered_set. And, since this is C++, they don't just work. So this is a post about thing number 9312 to be mindful of when writing C++
+excerpt: A post about yet another thing to be mindful of when writing C++
 ---
 
-C++14 introduced transparent lookups for `std::map` and `std::set`. C++20 introduced them for `std::unordered_map` and `std::unordered_set`. And, since this is C++, they don't *just work*. So, this is a post about thing number 9312 to be mindful of when writing C++. Nothing newsworthy, really.
+C++14 introduced transparent lookups for `std::map` and `std::set`. C++20 introduced them for `std::unordered_map` and `std::unordered_set`. And, since this is C++, they don't *just work*. So, this is a post about thing #9312 to be mindful of when writing C++. Nothing newsworthy, really.
 
 ## What are They?
 
@@ -37,7 +37,7 @@ And this is precicely what has been done to these standard containers with C++14
 
 However, non-standard containers exist, like the ones in [Boost.Container](https://www.boost.org/doc/libs/1_80_0/doc/html/container.html) and [many](https://github.com/iboB/itlib/blob/master/include/itlib/flat_map.hpp) [other](https://github.com/greg7mdp/sparsepp) [libraries](https://github.com/search?l=C%2B%2B&q=hash+table&type=Repositories) which support transparent lookup for C++11, some even for C++98.
 
-Curiously enough (to me) this is very rarely the default, and indeed it isn't for the standard library containers and Boost.Container. Even with C++20 the code from the example above will still allocate strings. Even though lookup methods are templates by key, they won't try to select an overload of `operator<`, `operator==` or specializations of `std::hash` for the types being searched by default. The compare and hash functors need to explicitly allow it and `std::less<T>`, `std::hash<T>`, and `std::equal_to<T>` don't. Not for a concrete T anyway. `std::less<void>` does, though. This is the default value of the template parameter since C++14, but not the default template argument of the containers themselves.
+Curiously enough (to me) transparent lookup is very rarely enabled by default, and indeed it isn't for the standard library containers and Boost.Container. Even with C++20 the code from the example above will still allocate strings. Even though lookup methods are templates by key, they won't try to select an overload of `operator<`, `operator==` or specializations of `std::hash` for the types being searched by default. The compare and hash functors need to explicitly allow it and `std::less<T>`, `std::hash<T>`, and `std::equal_to<T>` don't. Not for a concrete T anyway. `std::less<void>` does, though. This is the default value of the template parameter since C++14, but not the default template argument of the containers themselves.
 
 Thus, to make lookups transparent in `std::map` and `std::set`, compiling with C++14 is not enough. You also need to explicitly specify comparators. Like so:
 
@@ -93,7 +93,7 @@ void do_something_in_range(const key& rangeBegin, const key& rangeEnd) {
     auto begin = map.lower_bound(rangeBegin);
     auto end = map.upper_bound(rangeEnd);
 
-    // so something from begin to end
+    // do something from begin to end
 }
 ```
 
@@ -114,8 +114,10 @@ struct ref_range {
 };
 
 void do_something_in_range(const key& rangeBegin, const key& rangeEnd) {
-    auto [begin, end] = m.equal_range(ref_range(rangeBegin, rangeEnd));
-    // so something from begin to end
+    // std::map<key, value, std::less<>>
+    auto [begin, end] = map.equal_range(ref_range(rangeBegin, rangeEnd));
+
+    // do something from begin to end
 }
 ```
 
