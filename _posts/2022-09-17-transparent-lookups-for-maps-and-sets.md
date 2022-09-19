@@ -71,7 +71,7 @@ std::unordered_set<std::string, string_hash, std::equal_to<>> us;
 // just like std::less, std::equal_to<> is transparent
 // and std::equal_to<std::string> isn't... d'oh!
 
-auto sf = us.find("one thing to bring them all"); // finally, no string here
+auto sf = us.find("one ring to bring them all"); // finally, no string here
 sf = us.find("and in darkness bind them"_sv); // and no string here
 
 // i would also give and example with std::unordered_map here, but this
@@ -86,7 +86,7 @@ By the way, transparent lookups (once you remember to make use of them) are actu
 
 For example, if you often have to search for the same string in several unordered containers, you might want to invest in a fat string: a pair of a string and its hash. Thus you won't have to hash the same thing over and over again in your multiple lookups.
 
-Another pretty cool example is with the ordered containers. I don't ofen use maps or sets (and if I do, most times they are [flat](https://github.com/iboB/itlib/blob/master/include/itlib/flat_set.hpp)), but when order is needed, ranges are common use case. Many algorithms with a map or a set will start like this:
+Another pretty cool example is with the ordered containers. I don't ofen use maps or sets (and if I do, most times they are [flat](https://github.com/iboB/itlib/blob/master/include/itlib/flat_set.hpp)), but when order is needed, ranges are a common use case. Many algorithms with a map or a set will start like this:
 
 ```c++
 void do_something_in_range(const key& rangeBegin, const key& rangeEnd) {
