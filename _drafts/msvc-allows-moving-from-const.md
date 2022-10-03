@@ -4,7 +4,7 @@ title: Dangerous MSVC Bug Allows Moving and Clearing `const` Variables
 category: programming
 tags: ['c++', 'msvc']
 
-excerpt: Well, at least according to me
+excerpt: to be added
 ---
 
 
