@@ -7,7 +7,7 @@ tags: ['c++', 'cmake']
 excerpt: We sometimes need tests for expected build errors as part of a test suite. How do we do that?
 ---
 
-> If you're not interested in the article and just want a librarified solution for CMake, go to
+> If you're not interested in the article and the implementation details, and just want a librarified solution for CMake, go to
 
 Sometimes you want to test for comilation errors. A well designed API will try to prevent incorrect usage and implicit dangers with compilation errors as much as possible. Ideally one would have tests to guarantee that certain things just don't compile.
 
@@ -29,9 +29,76 @@ Using `<type_traits>`, SFINAE, and C++20 concepts can get you pretty far. If we 
 
 Moreover even if a test with `<type_traits>`, SFINAE, or concepts is possible, it will often require intricate implementation knowledge of the API being tested. Sure, that's not always bad and not necessarily a deal breaker, but writing tests based on implementation details can lead to bugs being reinforced by the test itself[^1].
 
-To avoid these cons, what we need to do is add a bunch of programs with build errors and have tests in our test suite to check that building them produces the expected errors. Unfortunately few build systems have ways of dealing with expected build errors.
+To avoid these cons, what we need to do is add a bunch of programs with build errors and have tests in our test suite to check that building them produces the expected errors. Unfortunately few build systems have ways of dealing with expected build errors. CMake, however, allows it.
 
-Here's what I did with CMake, and why I it is the way it is.
+## What I Did
+
+I've actually ran into this problem several times in the past years. The first time I encountered, back in 2018, as any human being I did a web search and found [this StackOverflow issue](https://stackoverflow.com/questions/30155619/expected-build-failure-tests-in-cmake). I was never completely satisfied by the proposed solutions, so each time I ended up using tests with static assertions which build successfully. A copule of days ago I decided that enough is enough and created a reusable librarified solution which allows adding tests for expected build failure easily, very much the way the original StakOverflow question asks. Here's how:
+
+Let's create a trivial library for which we want to have build-failure tests.
+
+```c++
+// mylib.hpp
+#include <type_traits>
+namespace mylib {
+template <typename A, typename B>
+auto add(A a, B b) {
+    static_assert(std::is_integral_v<A> && std::is_integral_v<B>,
+        "add: values must be integral");
+    return a + b;
+}
+}
+```
+
+We want a test that the compilation will fail if add is called with non-integral arguments.
+
+```c++
+// mylib-build-fail.cpp
+#include <mylib.h>
+auto test = mylib::add(2.3, 1);
+```
+
+We need targets whose build fails. CMake allow us to set a target property [`EXCLUDE_FROM_ALL`](https://cmake.org/cmake/help/latest/prop_tgt/EXCLUDE_FROM_ALL.html). Having this property means that unless building the target is explicitly requested, or another, not excluded, target depends on it, it won't be built. For some reason the Visual Studio generators don't respect this property and another one needs to be added so that it's not built by default in Visual Studio as well: [`EXCLUDE_FROM_DEFAULT_BUILD`](https://cmake.org/cmake/help/latest/prop_tgt/EXCLUDE_FROM_DEFAULT_BUILD.html).
+
+So here's the start:
+
+```cmake
+# executable, yes. An object library might seem like a less intrusive choice,
+# but it won't let us catch linker errors
+add_executable(mylib-build-fail-test mylib-build-fail.cpp)
+target_link_libraries(mylib-build-fail-test mylib)
+set_target_properties(mylib-build-fail-test PROPERTIES
+    EXCLUDE_FROM_ALL TRUE
+    EXCLUDE_FROM_DEFAULT_BUILD TRUE
+)
+```
+
+The only way to build this executable now is to explicity request it. So that's the kind of test we can create:
+
+```cmake
+add_test(
+    NAME mylib-build-fail
+    COMMAND ${CMAKE_COMMAND} --build . --target mylib-build-fail-test --config $<CONFIGURATION>
+    WORKING_DIRECTORY ${CMAKE_BINARY_DIR} # the place where we would run ctest
+)
+```
+
+...and then, since we expect this to fail, we can add:
+
+```cmake
+set_tests_properties(mylib-build-fail PROPERTIES
+                WILL_FAIL TRUE)
+```
+
+Now we run this test and the build fails, so the test is sucessful. Done.
+
+...but uh-oh! Did you spot why this test failed?
+
+The code for mylib is in `mylib.hpp` and the test includes `mylib.h`. The reason the compilation fails here is not our static assertion, but the fact that `mylib.h` doesn't exist and can't be included. So yeah, that's one of the dangers of poor design of expected build failure tests. It's simply not enough to test that the build fails. We must test that it fails as expected.
+
+## The Final solution
+
+## What I Didn't Do
 
 ___
 
