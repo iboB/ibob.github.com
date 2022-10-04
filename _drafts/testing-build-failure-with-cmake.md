@@ -11,11 +11,11 @@ excerpt: We sometimes need tests for expected build errors as part of a test sui
 
 Sometimes you want to test for comilation errors. A well designed API will try to prevent incorrect usage and implicit dangers with compilation errors as much as possible. Ideally one would have tests to guarantee that certain things just don't compile.
 
-I think it's hard to formalize which expected compilation errors should be tested. To me it's obvious that if you have an API like `void foo(int)`, it's pointless to have a test that calling `foo("haha")` will not compile. To me it's also obvious that if you're creating a physical unit library, you do need a test that a length value can't be assigned to a weight one. But this post is not about a when we need such tests. For now let's agree that testing that certain things don't compile is sometimes desired.
+I think it's hard to formalize which expected compilation errors should be tested. To me it's obvious that if you have an API like `void foo(int)`, it's pointless to have a test that calling `foo("haha")` will not compile. To me it's also obvious that if you're creating a physical unit library, you do need a test that a length value can't be assigned to a weight one. But this post is not about when we need such tests. For now let's agree that testing that certain things don't compile is sometimes desired.
 
 I also assume here that we agree that it doesn't count as a test to trigger the required compilation error a couple of times while developing the sofware to make sure that it appears as expected and then leave it at that. As mentioned above, I agree that some behavior doesn't need tests, but the whole point of having tests is to prevent regressions.
 
-And maybe compilation errors are not be enough. Maybe you need to test for expected linker errors as well. Why not?
+And maybe compilation errors are not enough. Maybe you need to test for expected linker errors as well. Why not?
 
 In short, the premise of this post is that *we sometimes need tests for expected build errors as part of a test suite*
 
@@ -111,7 +111,7 @@ Done?
 
 To some this might be enough, and that's perfectly fine. It's not to me, though. I very much dislike the fact that the test is spread between two files (in two different programming languages, even): one which contains the code being tested and another which tests the output against the expected value.
 
-One thing we could do is generate the source for the test from CMake and have the test and the expected output there. I don't like this, too. CMake has crazy and unintuitive substitution and expansion rules, so writing a significant amount of text (or C++ code) in a CMake string can easily lead to pain. Moreover, we wont get syntax highlighting, code completion and nice C++ editing features. And even more... er... over, since this changes the CMake code, we will *have to reconfigure for every change we make*[^2].
+One thing we could do is generate the source for the test from CMake and have the test and the expected output there. I don't like this, too. CMake has very unintuitive substitution and expansion rules, so writing a significant amount of text (or C++ code) in a CMake string can easily lead to pain. Moreover, we won't get syntax highlighting, code completion, and nice C++ editing features. And even more... er... over, since this changes the CMake code, we will *have to reconfigure for every change we make*[^2].
 
 So, I think we can agree that it would be best if the expected error is added to a C++ source file.
 
@@ -203,14 +203,14 @@ Done.
 
 ## The Final Solution
 
-I librarified all this. You can find it as [`icm_build_failure_testing`](https://github.com/iboB/icm/blob/master/icm_build_failure_testing.cmake) in my CMake module collection [icm](https://github.com/iboB/icm).
+I librarified all this. You can find it as [`icm_build_failure_testing`](https://github.com/iboB/icm/blob/master/icm_build_failure_testing.cmake) in my CMake module collection [icm](https://github.com/iboB/icm). There is a [demo] as well.
 
-It adds the following functions:
+The following functions are available:
 
  * `icm_add_build_failure_test` which adds a build failure test. It allows providing the expected error in CMake or in the C++ source, the way described above. It even allows checks that the build simply failed, though this is, as mentioned above, definitely not recommended.
- * `icm_add_multiple_build_failure_tests` to add multiple single file tests. I assume this would be the most common usage. Instead of doing the somewhat verbose `icm_add_build_failure_test` multiple times, add multiple tests with a single function.
+ * `icm_add_multiple_build_failure_tests` to add multiple single-file tests. I assume this would be the most common usage. Instead of doing the somewhat verbose `icm_add_build_failure_test` multiple times, add multiple tests with a single function.
 
- The library is MIT licensed, so feel free to use and modify at will.
+ Check the source for the complete docs. The library is MIT licensed, so feel free to use and modify at will.
 
 ## What I Didn't Do
 
@@ -218,7 +218,7 @@ Having the helper script be embedded in `icm_build_failure_testing.cmake` would'
 
 Having the helper script in yet another language, like Ruby or Python, could have made writing it and making it more powerful considerably easier. For example, creating a more powerful DSL would be a breeze in Ruby and relatively unpleasant in CMake. But, first of all this puts a burden on deployment. At least we can be 100% certain that we have CMake when running this. Second, and this is not to be underestimated, CMake may be an unpleasant language, especially compared to Ruby or Python, but it's quite fast to boot. Like, orders of magnitude faster. With the current solution the speed at which the build tests are executed is bound by the build processes: compiler and linker. With Ruby it would likely be bound by the boot time of the interpreter[^3].
 
-I didn't use `ctest --build-and-test`. Craig Scott, a CMake co-maintainer, and author of [Professional CMake: A Practical Guide](https://crascit.com/professional-cmake/) has a [rather peculiar answer](https://stackoverflow.com/a/50665823/1453047) to the StackOverflow thread from above: to use `ctest --build-and-test`. This would mean that every build failure test is basically a standalone CMake project which is configured and built for each test. To me this simply makes no sense, except for the most trivial of cases. The main problem is transfering all the accumulated target knowledge from the caller to this standalone project. If one uses the required generator expressions and surfaces include directories and targets to the `ctest` call, they still won't be a dependency of it. Running the tests in isolation may lead to unwanted results, for example for linker errors or configured headers. Alternatively one can try to add the same subdirectories in the standalone project, but again, that would lead to code duplication and building the same things over and over again. The second problem is the initial configure time. Even for the most trivial of examples initial CMake configure tends to take several seconds. With a project with hundreds of compilation-failure tests, this could lead to ***tens of minutes*** of initial configure. This can not be acceptable. Anyway, I might be missing something here, but I can *not* see a benefit in using `ctest --build-and-test` in this scenario.
+I didn't use `ctest --build-and-test`. Craig Scott, a CMake co-maintainer, and author of [Professional CMake: A Practical Guide](https://crascit.com/professional-cmake/) has a [rather peculiar answer](https://stackoverflow.com/a/50665823/1453047) to the StackOverflow thread from above: to use `ctest --build-and-test`. This would mean that every build failure test is basically a standalone CMake project which is configured and built for each test. To me this simply makes no sense, except for the most trivial of cases. The main problem is transfering all the accumulated target knowledge from the caller to this standalone project. If one uses the required generator expressions and surfaces include directories and targets to the `ctest` call, they still won't be a dependency of it. Running the tests in isolation may lead to unwanted results, for example for linker errors or configured headers. Alternatively one can try to add the same subdirectories in the standalone project, but again, that would lead to code duplication and building the same things over and over again. The second problem is the time it would take to run `ctest` for the first time. Even for the most trivial of examples an initial CMake configure tends to take several seconds. With a project with hundreds of compilation-failure tests, this could lead to *tens of minutes* of configuring stuff when `ctest` runs for the first time. And on a CI host it's typicall that every `ctest` run runs for the first time. This can not be acceptable. Anyway, I might be missing something here, but I can *not* see a benefit in using `ctest --build-and-test` in this scenario.
 
 ___
 
