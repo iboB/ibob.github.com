@@ -203,7 +203,7 @@ Done.
 
 ## The Final Solution
 
-I librarified all this. You can find it as [`icm_build_failure_testing`](https://github.com/iboB/icm/blob/master/icm_build_failure_testing.cmake) in my CMake module collection [icm](https://github.com/iboB/icm). There is a [demo] as well.
+I librarified all this. You can find it as [`icm_build_failure_testing`](https://github.com/iboB/icm/blob/master/icm_build_failure_testing.cmake) in my CMake module collection [icm](https://github.com/iboB/icm). There is a [demo](https://github.com/iboB/icm/tree/master/demo/build_failure_testing) as well.
 
 The following functions are available:
 
