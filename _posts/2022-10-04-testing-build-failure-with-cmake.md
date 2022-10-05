@@ -78,7 +78,7 @@ The only way to build this executable now is to explicity request it. So that's 
 ```cmake
 add_test(
     NAME mylib-build-fail
-    COMMAND ${CMAKE_COMMAND} --build . --target mylib-build-fail-test --config $<CONFIGURATION>
+    COMMAND ${CMAKE_COMMAND} --build . --target mylib-build-fail-test --config $<CONFIG>
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR} # the place where we would run ctest
 )
 ```
