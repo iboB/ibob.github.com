@@ -9,7 +9,7 @@ excerpt: We sometimes need tests for expected build errors as part of a test sui
 
 > If you're not interested in the article and the implementation details, and just want a librarified solution for CMake, skip to the section [The Final Solution](#the-final-solution) which summarizes the result and links to a demo.
 
-Sometimes you want to test for comilation errors. A well designed API will try to prevent incorrect usage and implicit dangers with compilation errors as much as possible. Ideally one would have tests to guarantee that certain things just don't compile.
+Sometimes you want to test for compilation errors. A well designed API will try to prevent incorrect usage and implicit dangers with compilation errors as much as possible. Ideally one would have tests to guarantee that certain things just don't compile.
 
 I think it's hard to formalize which expected compilation errors should be tested. To me it's obvious that if you have an API like `void foo(int)`, it's pointless to have a test that calling `foo("haha")` will not compile. To me it's also obvious that if you're creating a physical unit library, you do need a test that a length value can't be assigned to a weight one. But this post is not about when we need such tests. For now let's agree that testing that certain things don't compile is sometimes desired.
 
