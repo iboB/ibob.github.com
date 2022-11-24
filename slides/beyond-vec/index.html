@@ -208,8 +208,7 @@
         <br/>
         <ul>
           <li class="fragment">Contiguous memory - well, don't use <code class="cinline">std::vector</code></li>
-          <li class="fragment">Owns and allocates memory - use <code class="finline">std::span</code></li>
-          <li class="fragment">...or at least <code class="cinline">const std::vector&amp;</code></li>
+          <li class="fragment">Owns memory - use a reference</li>
           <li class="fragment">Owns objects - use <code class="finline">std::reference_wrapper</code></li>
           <li class="fragment">Mutable container - use <code class="finline">const std::vector</code></li>
         </ul>
