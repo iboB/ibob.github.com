@@ -17,7 +17,7 @@ struct person {
 
 // ...
 
-auto alice = std::make_shared<Person>("Alice", 38);
+auto alice = std::make_shared<person>("Alice", 38);
 ```
 
 ... then you can make an aliased shared pointer to a Alice's name which uses the same ref count as Alice:
@@ -39,7 +39,7 @@ But what would happen to our aliased shared pointer `name` from above if `alice`
 
 But why? As Peted Dimov, the creator of `shared_ptr`, put it: "it's not `shared_ptr`'s job to ignore the arguments you give it because they are dangerous". In this case however I disagree. I consider this a defect of the standard.
 
-In a world where one accepts non-null shared pointers with a zero use count, the way to check for validity should be precisely the `if (ptr.use_count() == 0)` example from above. The one that wouldn't pass a code review with me. And `std::shared_ptr` doesn't even have a member `expired` like weak pointers do, so only this overly verbose check does it.
+In a world where one accepts non-null shared pointers with a zero use count, the way to check for validity should be precisely the `if (ptr.use_count() == 0)` example from above. The one that wouldn't pass a code review with me. And `std::shared_ptr` doesn't even have a member `expired` like weak pointers do, only this overly verbose check does it.
 
 Now granted, you can use this constructor to create an alias to *something valid* even though the "lifetime carrier" is null. For example:
 
@@ -50,9 +50,9 @@ std::shared_ptr<std::string> weirdo(null, &some_global_string_that_is_always_val
 
 ... and then the boolean checks will pass. This pointer will have a zero use count, but will also be valid forever.
 
-I have not been able to think of a use-case for this. Not one. That, of course, is not to say that there is none. There probably is[^1], but it's the niche of the niche. Also, I would definitely not use a shared pointer for this dangerous invariant. I would create a class which is somewhat similar to `weak_ptr`[^2]. A class that has no boolean interface and no pointer interface, and has explicit checks for the underlying pointer and the expired status. Still, I have not implemented such a class it, because I have no use case for it.
+I have not been able to think of a use-case for this. Not one. That of course is not to say that there is none. There probably is[^1], but it would be the niche of the niche. And I would definitely not use a shared pointer for this dangerous invariant. I would create a class which is somewhat similar to `weak_ptr`[^2]. A class that has no boolean interface and no pointer interface, and has explicit checks for the underlying pointer and the expired status. I have not implemented such a class because I have no use case for it.
 
-What I have implemented (yes, the whole four lines of it) is a safe function to create "normal" aliased shared pointers[^3]:
+What I have implemented (yes, the whole four lines of it) is a safe function to create "normal" aliased shared pointers:
 
 ```c++
 template <typename U, typename T>
@@ -62,7 +62,7 @@ std::shared_ptr<T> make_aliased(const std::shared_ptr<U>& owner, T* ptr) {
 }
 ```
 
-This function will never return a non-null shared pointer with a zero use count. I have banned the use the aliasing constructor where I have the power to do so in favor of this function. I urge you to do the same.
+This function[^3] will never return a non-null shared pointer with a zero use count. I have banned the use the aliasing constructor where I have the power to do so in favor of this function. I urge you to do the same.
 
 ___
 
