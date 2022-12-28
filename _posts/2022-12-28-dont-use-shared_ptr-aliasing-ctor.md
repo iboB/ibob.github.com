@@ -33,13 +33,13 @@ Unfortunately the idiomatic way to create them, through [the aliasing constructo
 
 Pop quiz: how do you check if a shared pointer is valid? Just like any other pointer you would use its boolean interface, like `if (ptr)`, right?
 
-I completely agree. In fact if I see a check like `if (some_shared_ptr->use_count() == 0)` in a code review, I would request this to be changed to `if (some_shared_ptr)`. It *is* the idiomatic way of checking pointer validity, shared or other.
+I completely agree. In fact if I see a check like `if (some_shared_ptr.use_count() == 0)` in a code review, I would request this to be changed to `if (some_shared_ptr)`. It *is* the idiomatic way of checking pointer validity, shared or other.
 
 But what would happen to our aliased shared pointer `name` from above if `alice` is null and thus fails the boolean check at that point? It will also become null? Nope. It will point to the offset of the member `person::name` (likely 8) in the null pointer to person inside `alice`. So you will get a weird shared pointer which is not null, but whose use count is zero.
 
 But why? As Peted Dimov, the creator of `shared_ptr`, put it: "it's not `shared_ptr`'s job to ignore the arguments you give it because they are dangerous". In this case however I disagree. I consider this a defect of the standard.
 
-In a world where one accepts non-null shared pointers with a zero use count, the way to check for validity should be precisely the `if (ptr->use_count() == 0)` example from above. The one that wouldn't pass a code review with me. And `std::shared_ptr` doesn't even have a member `expired` like weak pointers do, so only this overly verbose check does it.
+In a world where one accepts non-null shared pointers with a zero use count, the way to check for validity should be precisely the `if (ptr.use_count() == 0)` example from above. The one that wouldn't pass a code review with me. And `std::shared_ptr` doesn't even have a member `expired` like weak pointers do, so only this overly verbose check does it.
 
 Now granted, you can use this constructor to create an alias to *something valid* even though the "lifetime carrier" is null. For example:
 
