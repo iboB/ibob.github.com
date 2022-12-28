@@ -35,7 +35,19 @@ Pop quiz: how do you check if a shared pointer is valid? Just like any other poi
 
 I completely agree. In fact if I see a check like `if (some_shared_ptr.use_count() == 0)` in a code review, I would request this to be changed to `if (some_shared_ptr)`. It *is* the idiomatic way of checking pointer validity, shared or other.
 
-But what would happen to our aliased shared pointer `name` from above if `alice` is null and thus fails the boolean check at that point? It will also become null? Nope. It will point to the offset of the member `person::name` (likely 8) in the null pointer to person inside `alice`. So you will get a weird shared pointer which is not null, but whose use count is zero.
+But what would happen to our aliased shared pointer `name` from above if `alice` is null and thus fails the boolean check at that point?
+
+Well, with the exact same example from above this will be UB (`&alice->name` is UB if `alice` is null). In practice no compiler would dare touch the code, since it's a popular way of creating a custom `offsetof` implementation and such exist in too many codebases, but let's be pedantic and change the code to something more, ehm... "realistic":
+
+```c++
+auto name_addr = &alice->name;
+alice.reset();
+std::shared_ptr<std::string> name(alice, &name_addr);
+```
+
+This is indeed too suspicious (though not necessarily a bug if we're somehow sure that there are more references to `alice` elsewhere), but the exact same sequence of operations can theoretically happen without them being written right next to each other.[^4]
+
+So, if alice is null at that point, will `name` also be null? Nope. It will happily point to the now invalid address held by `name_addr`. Thus you will get a weird shared pointer which is not null, but whose use count is zero.
 
 But why? As Peter Dimov, the creator of `shared_ptr`, put it: "it's not `shared_ptr`'s job to ignore the arguments you give it because they are dangerous". In this case however I disagree. I consider this a defect of the standard.
 
@@ -62,10 +74,11 @@ std::shared_ptr<T> make_aliased(const std::shared_ptr<U>& owner, T* ptr) {
 }
 ```
 
-This function[^3] will never return a non-null shared pointer with a zero use count. I have banned the use the aliasing constructor where I have the power to do so in favor of this function. I urge you to do the same.
+This function[^3] will never return a non-null shared pointer with a zero use count. I have banned the use the aliasing constructor where I have the power to do so in favor of this function. I urge you to do the same. This shared pointer invariant is an abomination and should not exist!
 
 ___
 
 [^1]: ...likely found in the comments
 [^2]: Similar to `weak_ptr` in terms of interface, and not in terms of functionality
 [^3]: Copied verbatim from [itlib-make-ptr](https://github.com/iboB/itlib/blob/master/include/itlib/make_ptr.hpp)
+[^4]: Initially I just had the UB example in the post, but people seemed too distracted by it for the main point to get across. That's why I added the more contrived non-UB example. In reality the UB one is far more likely to exist in the wild, and, as pointed out, no compiler would dare touch this type of null pointer offset. Maybe in 10 years.
