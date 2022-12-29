@@ -42,7 +42,7 @@ Well, with the exact same example from above this will be UB (`&alice->name` is 
 ```c++
 auto name_addr = &alice->name;
 alice.reset();
-std::shared_ptr<std::string> name(alice, &name_addr);
+std::shared_ptr<std::string> name(alice, name_addr);
 ```
 
 This is indeed too suspicious (though not necessarily a bug if we're somehow sure that there are more references to `alice` elsewhere), but the exact same sequence of operations can theoretically happen without them being written right next to each other.[^4]
