@@ -365,7 +365,7 @@ for (auto& w : registry) {
 
 Then after we start the program several times until we get a leak, we can confirm which pointer leaked where:
 
-<code>
+<pre class="highlight"><code>
 ====================
 found a leak:
 in object: 0000027B1408E6E0 created on 12/30/22 20:45:27 FLE Standard Time here:
@@ -373,12 +373,12 @@ C:\cpmcache\b_stacktrace\8f002d8131cb3c66e10d56856149f16395c99c44\b_stacktrace.h
 C:\prj\xmem\example\e-shared_ptr-leak.cpp(41): myapp::stacktrace::record
 C:\prj\xmem\example\e-shared_ptr-leak.cpp(36): myapp::stacktrace::stacktrace
 C:\prj\xmem\example\e-shared_ptr-leak.cpp(71): myapp::bookkeeping_control_block::bookkeeping_control_block
-C:\prj\xmem\code\xmem\common_control_block.hpp(63): xmem::control_block_resource<myapp::bookkeeping_control_block,int,std::allocator<char> >::control_block_resource<myapp::bookkeeping_control_block,int,std::allocator<char> >
-C:\prj\xmem\code\xmem\common_control_block.hpp(71): xmem::control_block_resource<myapp::bookkeeping_control_block,int,std::allocator<char> >::create
-C:\prj\xmem\code\xmem\common_control_block.hpp(120): xmem::control_block_factory<myapp::bookkeeping_control_block>::make_resource_cb<int,std::allocator<char>,int &>
-C:\prj\xmem\example\e-shared_ptr-leak.cpp(161): myapp::make_shared<int,int &>
-<strong>C:\prj\xmem\example\e-shared_ptr-leak.cpp(184): session_factory
-C:\prj\xmem\example\e-shared_ptr-leak.cpp(196): main</strong>
+C:\prj\xmem\code\xmem\common_control_block.hpp(63): xmem::control_block_resource&lt;myapp::bookkeeping_control_block,int,std::allocator&lt;char&gt; &gt;::control_block_resource&lt;myapp::bookkeeping_control_block,int,std::allocator&lt;char&gt; &gt;
+C:\prj\xmem\code\xmem\common_control_block.hpp(71): xmem::control_block_resource&lt;myapp::bookkeeping_control_block,int,std::allocator&lt;char&gt; &gt;::create
+C:\prj\xmem\code\xmem\common_control_block.hpp(120): xmem::control_block_factory&lt;myapp::bookkeeping_control_block&gt;::make_resource_cb&lt;int,std::allocator&lt;char&gt;,int &amp;&gt;
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(161): myapp::make_shared&lt;int,int &amp;&gt;
+<span class="cp">C:\prj\xmem\example\e-shared_ptr-leak.cpp(184): session_factory
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(196): main</span>
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(79): invoke_main
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(288): __scrt_common_main_seh
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(331): __scrt_common_main
@@ -392,16 +392,16 @@ C:\cpmcache\b_stacktrace\8f002d8131cb3c66e10d56856149f16395c99c44\b_stacktrace.h
 C:\prj\xmem\example\e-shared_ptr-leak.cpp(41): myapp::stacktrace::record
 C:\prj\xmem\example\e-shared_ptr-leak.cpp(89): myapp::bookkeeping_control_block::on_new_strong
 C:\prj\xmem\example\e-shared_ptr-leak.cpp(113): myapp::bookkeeping_control_block::inc_strong_ref
-C:\prj\xmem\code\xmem\basic_shared_ptr.hpp(174): xmem::basic_shared_ptr<xmem::control_block_factory<myapp::bookkeeping_control_block>,int>::init_from_copy<int>
-C:\prj\xmem\code\xmem\basic_shared_ptr.hpp(35): xmem::basic_shared_ptr<xmem::control_block_factory<myapp::bookkeeping_control_block>,int>::operator=
-<strong>C:\prj\xmem\example\e-shared_ptr-leak.cpp(199): main</strong>
+C:\prj\xmem\code\xmem\basic_shared_ptr.hpp(174): xmem::basic_shared_ptr&lt;xmem::control_block_factory&lt;myapp::bookkeeping_control_block&gt;,int&gt;::init_from_copy&lt;int&gt;
+C:\prj\xmem\code\xmem\basic_shared_ptr.hpp(35): xmem::basic_shared_ptr&lt;xmem::control_block_factory&lt;myapp::bookkeeping_control_block&gt;,int&gt;::operator=
+<span class="cp">C:\prj\xmem\example\e-shared_ptr-leak.cpp(199): main</span>
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(79): invoke_main
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(288): __scrt_common_main_seh
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(331): __scrt_common_main
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): mainCRTStartup
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): BaseThreadInitThunk
 D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): RtlUserThreadStart
-</code>
+</code></pre>
 
 A session was assigned to the stray pointer called `leak` in `main`, line 199?! Who would've thought!
 
