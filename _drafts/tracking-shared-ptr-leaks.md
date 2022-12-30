@@ -7,7 +7,7 @@ tags: ['c++']
 excerpt: There are many good practices one can employ. I won't delve into good practices here. I'll go for the heavy guns
 ---
 
-Let's talk about shared pointer leaks. In a piece of software which makes heavy use of shared pointers, these types of leaks are possible. They are very hard and annoying to deal with. They are also very hard to identify in the first place.
+Let's talk about shared pointer leaks. In a piece of software which makes heavy use of shared pointers such leaks are possible. They are very hard and annoying to deal with. They are also very hard to identify in the first place.
 
 But first...
 
@@ -20,7 +20,7 @@ Shared pointers specifically use reference counting. Every copy of a shared poin
 As you can see this presents us with several leak opportunies:
 
 * **Circular referencing**. If an object in a shared pointer *A* references another object through a shared pointer *B*, and *B* also references *A* in the same manner, the use count can never reach zero. In a dead lock of sorts each object has to be destroyed for the other to be destroyed. The cycle can be long, spanning tens of objects, or short: an object may end-up holding a reference to itself.
-* **Loose references**. A shared pointer may make its way in a global collection like a manager, a log, or a garbage collector, and due to a bug or an oversight not get removed from there. Only stopping the process cleares the memory
+* **Loose references**. A shared pointer may make its way in a global collection like a manager, a log, or a garbage collector, and due to a bug or an oversight not get removed from there. Only stopping the process clears the memory
 * **Weak leaks**[^2]. Basically the same as above but with weak pointers. The objects do get destroyed but the memory for the control blocks remains.
 
 Noticing these leaks can be pretty hard. Typically they are noticed when the memory begins growing uncontrollably and at this point it's usually hard (or impossible) to tell exactly which use of shared pointers is to blame. Moreover, due to the facts that even with heavy use, shared pointers are not typically found in hot loops and new shared pointers don't have a high velocity of creation, the suspicious memory growth can take hours, or days, or weeks of run time to become noticeable. Getting a stable repro of such an issue can be quite annoying.
@@ -181,7 +181,8 @@ using weak_ptr = xmem::basic_weak_ptr<bookkeeping_control_block_factory, T>;
 
 template <typename T, typename... Args>
 [[nodiscard]] shared_ptr<T> make_shared(Args&&... args) {
-    return shared_ptr<T>(bookkeeping_control_block_factory::make_resource_cb<T>(std::allocator<char>{}, std::forward<Args>(args)...));
+    return shared_ptr<T>(bookkeeping_control_block_factory::make_resource_cb<T>(
+        std::allocator<char>{}, std::forward<Args>(args)...));
 }
 
 }
@@ -221,13 +222,13 @@ public:
         return false;
     }
 
-    // get use count
-    using super::strong_ref_count;
-
     // control block transferred between shared pointers (move or swap)
     void transfer_strong(const void* dest, const void* src) {
         super::transfer_strong(dest, src);
     }
+
+    // get use count
+    using super::strong_ref_count;
 
     // increment weak count (weak_ptr copy)
     using super::inc_weak_ref;
@@ -242,9 +243,172 @@ public:
 
 Since our application only cares for the use count and not the weak count, we provided no bodies to the weak count functions. We will add our bookkeeping code in the use count ones. For now however `bookkeeping_control_block` still does no bookkeeping. It is yet another reimplementation of the default and standard control block. Those `void` pointers? They are the `shared_ptr` instances which triggered those calls.
 
+Now, what kind of bookkeeping shall we do here? How about we store the stacktrace for the point where each shared pointer acquired a reference to the object. For this we will use two new functions, `on_new_strong` and `on_destroy_strong`. We will store the information for a shared pointer in the first and we will remove it in the second. First let's add the calls:
+
+```c++
+class bookkeeping_control_block : protected xmem::control_block_base<xmem::atomic_ref_count> {
+public:
+    using super = xmem::control_block_base<xmem::atomic_ref_count>;
+
+    void on_new_strong(const void* src) {}
+
+    void on_destroy_strong(const void* src) {}
+
+    void init_strong(const void* src) noexcept {
+        super::init_strong(src);
+        on_new_strong(src); // new pointer here
+    }
+
+    void inc_strong_ref(const void* src) noexcept {
+        super::inc_strong_ref(src);
+        on_new_strong(src); // new pointer here
+    }
+    void dec_strong_ref(const void* src) noexcept {
+        on_destroy_strong(src); // remove pointer here
+        super::dec_strong_ref(src);
+    }
+    bool inc_strong_ref_nz(const void* src) noexcept {
+        if (super::inc_strong_ref_nz(src)) {
+            on_new_strong(src); // new pointer here
+            return true;
+        }
+        return false;
+    }
+
+    void transfer_strong(const void* dest, const void* src) {
+        super::transfer_strong(dest, src);
+        // on a transfer we...
+        on_new_strong(dest); // have a new pointer in dest
+        on_destroy_strong(src); // lost a pointer with src
+    }
+
+    // ...
+};
+```
+
+Let's store the stacktrace for each pointer in our two new functions. For the stacktrace, I'm using a simple stacktrace library: [b_stacktrace](https://github.com/iboB/b_stacktrace)[^5]. Since we're anticipating multi-threaded usage, we will also add a mutex lock for the cases where we update the bookkeeping information. We will also store the creation time of the control block. Thus we can track its lifetime completely
+
+```c++
+class bookkeeping_control_block : protected xmem::control_block_base<xmem::atomic_ref_count> {
+    std::time_t m_creation_time;
+    stacktrace m_creation_trace;
+
+    struct entry {
+        const void* ptr; // associated shared pointer
+        stacktrace trace;
+    };
+    mutable std::mutex m_mutex;
+    std::vector<entry> m_active_strong;
+public:
+    bookkeeping_control_block()
+        : m_creation_time(std::time(nullptr))
+        , m_creation_trace(stacktrace::init)
+    {}
+
+    void on_new_strong(const void* src) {
+        std::lock_guard _l(m_mutex);
+        auto& e = m_active_strong.emplace_back();
+        e.ptr = src;
+        e.trace.record();
+    }
+
+    void on_destroy_strong(const void* src) {
+        std::lock_guard _l(m_mutex);
+        auto f = std::find_if(m_active_strong.begin(), m_active_strong.end(),
+            [&](const entry& e) { return e.ptr == src; });
+        m_active_strong.erase(f);
+    }
+    // ...
+};
+```
+
+Now we only need query functions for the bookkeeping data:
+
+```c++
+class bookkeeping_control_block : protected xmem::control_block_base<xmem::atomic_ref_count> {
+public:
+    // ...
+    const time_t& creation_time() const { return m_creation_time; }
+    const stacktrace& creation_trace() const { return m_creation_trace; }
+    void log_active_strong(std::ostream& out) const {
+        std::lock_guard _l(m_mutex);
+        for (auto& ref : m_active_strong) {
+            out << ref.ptr << ":\n";
+            out << ref.trace << "\n";
+        }
+    }
+};
+```
+
+We don't need locks for the creation data, but we need a lock for the active strong refs list. It can be updated at any point.
+
+The last thing we need to do is log the bookkeeping data in main at the point where we detected the leak:
+
+```c++
+for (auto& w : registry) {
+    if (w.use_count()) {
+#if TRACK_SHARED_PTR_LEAKS
+        std::cout << "\n====================\n";
+        std::cout << "found a leak:\n";
+        auto cb = w.t_owner();
+        auto tm = std::localtime(&cb->creation_time());
+        std::cout << "in object: " << cb << " created on " << std::put_time(tm, "%c %Z") << " here:\n";
+        std::cout << cb->creation_trace();
+        std::cout << "\nwith living refs:\n";
+        cb->log_active_strong(std::cout);
+#else
+        std::cout << "found a leak in " << w.lock() << "\n";
+#endif
+    }
+}
+```
+
+Then after we start the program several times until we get a leak, we can confirm which pointer leaked where:
+
+<code>
+====================
+found a leak:
+in object: 0000027B1408E6E0 created on 12/30/22 20:45:27 FLE Standard Time here:
+C:\cpmcache\b_stacktrace\8f002d8131cb3c66e10d56856149f16395c99c44\b_stacktrace.h(184): b_stacktrace_get
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(41): myapp::stacktrace::record
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(36): myapp::stacktrace::stacktrace
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(71): myapp::bookkeeping_control_block::bookkeeping_control_block
+C:\prj\xmem\code\xmem\common_control_block.hpp(63): xmem::control_block_resource<myapp::bookkeeping_control_block,int,std::allocator<char> >::control_block_resource<myapp::bookkeeping_control_block,int,std::allocator<char> >
+C:\prj\xmem\code\xmem\common_control_block.hpp(71): xmem::control_block_resource<myapp::bookkeeping_control_block,int,std::allocator<char> >::create
+C:\prj\xmem\code\xmem\common_control_block.hpp(120): xmem::control_block_factory<myapp::bookkeeping_control_block>::make_resource_cb<int,std::allocator<char>,int &>
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(161): myapp::make_shared<int,int &>
+<strong>C:\prj\xmem\example\e-shared_ptr-leak.cpp(184): session_factory
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(196): main</strong>
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(79): invoke_main
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(288): __scrt_common_main_seh
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(331): __scrt_common_main
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): mainCRTStartup
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): BaseThreadInitThunk
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): RtlUserThreadStart
+
+with living refs:
+000000D48C6FFC78:
+C:\cpmcache\b_stacktrace\8f002d8131cb3c66e10d56856149f16395c99c44\b_stacktrace.h(184): b_stacktrace_get
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(41): myapp::stacktrace::record
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(89): myapp::bookkeeping_control_block::on_new_strong
+C:\prj\xmem\example\e-shared_ptr-leak.cpp(113): myapp::bookkeeping_control_block::inc_strong_ref
+C:\prj\xmem\code\xmem\basic_shared_ptr.hpp(174): xmem::basic_shared_ptr<xmem::control_block_factory<myapp::bookkeeping_control_block>,int>::init_from_copy<int>
+C:\prj\xmem\code\xmem\basic_shared_ptr.hpp(35): xmem::basic_shared_ptr<xmem::control_block_factory<myapp::bookkeeping_control_block>,int>::operator=
+<strong>C:\prj\xmem\example\e-shared_ptr-leak.cpp(199): main</strong>
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(79): invoke_main
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(288): __scrt_common_main_seh
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_common.inl(331): __scrt_common_main
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): mainCRTStartup
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): BaseThreadInitThunk
+D:\a\_work\1\s\src\vctools\crt\vcstartup\src\startup\exe_main.cpp(17): RtlUserThreadStart
+</code>
+
+A session was assigned to the stray pointer called `leak` in `main`, line 199?! Who would've thought!
+
 ___
 
 [^1]: ...or any type of manually managed resource
 [^2]: I tried to incorporate a "clever" pun here, but ultimately decided against it. I came up with WikiLeaks, weaklings, weak leeks, and weekly eeks. Choose whatever is funniest to you and laugh, please.
 [^3]: `local_shared_ptr` would be a pointer which doesn't have atomic ref counting but regular non-atomic one. In a single-threaded scenario it's a bit faster than the regular `shared_ptr`, especially on ARM or other non-x86 architectures. [Boost offers this type as well](https://www.boost.org/doc/libs/1_78_0/libs/smart_ptr/doc/html/smart_ptr.html#local_shared_ptr).
 [^4]: Well, as long as these empty function calls get optimized away, which is pretty much guaranteed with `-O1` and more, but is not guaranteed with `-O0`. Still, with `-O0` an empty function call here and there will likely be the least of your performance issues.
+[^5]: ...which I will gladly ditch when C++23's [`<stacktrace>`](https://en.cppreference.com/w/cpp/header/stacktrace) finally arrives.
