@@ -31,19 +31,19 @@ Now, there are many good practices one can employ in order to minimize the chanc
 
 This really got me thinking a couple of months ago.
 
-First, what do classic leak detectors do? They log every allocation and every deallocation. At a given point they can provide information about an allocated block, or about all currently living allocated blocks. They can't "know" whether something is a leak. They can strongly suspect so at termination time, but deliberatly not freeing memory upon termination is a widely practiced though dubious pattern. Still in the middle of execution a leak detector can't possibly tell whether an allocated block is a leak or not.
+First, what do classic leak detectors do? They log every allocation and every deallocation. At a given point they can provide information about an allocated block, or about all currently living allocated blocks. They can't "know" whether something is a leak. They can strongly suspect so at termination time, but deliberatly not freeing memory upon termination is a widely practiced, though dubious, pattern. Still, in the middle of execution a leak detector can't possibly tell whether an allocated block is a leak or not.
 
 This can still be useful. If I log all currently allocated blocks (or a select suspicious few), with my domain knowledge I can find or clear leak suspects based on the provided metadata. "Hey, I don't expect this 10 MB buffer, allocated two hours ago in `allocate_temp_blob` to be still alive at this point!"
 
 So, it's settled. I'll attach metadata to each shared pointer control block. Then I can log the current state of affairs and find or clear suspects. "Hey, `SessionManager::m_activeSessions` should not a hold a reference to a session which disconnected an hour ago!". Great! How do I do that?
 
-Ok, how do classic leak deterctors work? They [hook](https://www.gnu.org/software/libc/manual/html_node/Hooks-for-Malloc.html) themselves to `malloc` and `free` of [sometimes](http://wyw.dcweb.cn/leakage.htm) to `new` and `delete` and collect metadata at these points. This is relatively easy and is a documented extension point.
+Ok, how do classic leak deterctors work? They [hook](https://www.gnu.org/software/libc/manual/html_node/Hooks-for-Malloc.html) themselves to `malloc` and `free` or [sometimes](http://wyw.dcweb.cn/leakage.htm) to `new` and `delete` and collect metadata at these points. This is relatively easy and is a documented extension point.
 
 Can this be done for the control block of `std::shared_ptr`?
 
 Nope.
 
-The control block is not standardized. It's opaque and an implementation detail for all intents and purposes. The only way to achieve such behavior would be reimplement `std::shared_ptr` with a custom control block defined by the implementation.
+The control block is not standardized. It's opaque and an implementation detail for all intents and purposes. The only way to achieve such behavior would be to reimplement `std::shared_ptr` with a custom control block defined by the implementation.
 
 So I [went ahead and did that](https://github.com/iboB/xmem) in a library I called **xmem**.
 
@@ -57,7 +57,7 @@ The main drawback is that it's not just an optional plug-in for existing code. T
 
 ## How Does Tracking Work?
 
-A `shared_ptr` instance referes to an object. A `weak_ptr` instance referes to a control block. Every time a referer is added (via copying or creation), or changed (via moving or swapping), the control block gets notified with special method calls. The default implementation of the notification methods is empty, thus achieving identical behavior and performance to standard shared and weak pointers[^4].
+A `shared_ptr` instance refers to an object. A `weak_ptr` instance referes to a control block. Every time a referer is added (via copying or creation), or changed (via moving or swapping), the control block gets notified with special method calls. The default implementation of the notification methods is empty, thus achieving identical behavior and performance to standard shared and weak pointers[^4].
 
 Since the control block factory is a template argument, one can change the default identity control block to be something else. Something which records metadata at the given notification points. Thus the information which living pointers refer to an object and a control block can be queried at any time.
 
@@ -190,7 +190,7 @@ template <typename T, typename... Args>
 #else // ...
 ```
 
-With this we reimplemented `xmem::shared_ptr` in `myapp::shared_ptr`. We did create the type `bookkeeping_control_block`, but it does no bookkeeping yet. It continutes to have behavior identical to the standard control block which can be found in `std::shared_ptr`. And this control block is what we're going to change. The rest of the typedefs below it can remain exactly the same.
+With this we reimplemented `xmem::shared_ptr` in `myapp::shared_ptr`. We did create the type `bookkeeping_control_block`, but it does no bookkeeping yet. It continues to have behavior identical to the standard control block which can be found in `std::shared_ptr`. And this control block is what we're going to change. The rest of the typedefs below it can remain exactly the same.
 
 To have `xmem::basic_shared_ptr` and `xmem::basic_weak_ptr` compile, the control block needs to have a set of methods. `xmem::control_block_base<xmem::atomic_ref_count>` naturally has them, so instead of reimplementing them, let's make use of it in our bookkeeping implementation:
 
