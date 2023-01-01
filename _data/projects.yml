@@ -7,12 +7,57 @@
       objects at runtime.
     github: https://github.com/iboB/dynamix
     docs: https://ibob.github.io/dynamix/
+  - name: itlib
+    desc: A collection of single-header container classes and helpers.
+    github: https://github.com/iboB/itlib
+    docsd: Embedded in each header.
+  - name: jalog
+    desc: A high-performance and compiler-friendly logging library
+    github: https://github.com/iboB/jalog
+    docs: https://github.com/iboB/jalog#documentation
+  - name: xmem
+    desc: A reimplementation of the standard smart pointers
+    github: https://github.com/iboB/xmem
+    docsd: TODO
   - name: picobench
     desc: >-
       A micobenchmarking library and CLI tool. Less powerful than existing
       libraries but much more easier to integrate and faster to build.
     github: https://github.com/iboB/picobench
     docs: https://github.com/iboB/picobench/blob/master/README.md
+  - name: xec
+    desc: >-
+      A small library for multi-threaded execution contexts and task executors
+    github: https://github.com/iboB/xec
+    docsd: TODO
+  - name: fishnets
+    desc: A WebSocket server and client library for C++17
+    github: https://github.com/iboB/fishnets
+    docsd: embedded
+  - name: doctest-util
+    desc: Utilities for C++ unit testing with doctest
+    github: https://github.com/iboB/doctest-util
+    docsd: TODO
+  - name: b_stacktrace
+    desc: A minimalistic single-header multi-platform C89 lib for stack tracing
+    github: https://github.com/iboB/b_stacktrace
+    docs: https://github.com/iboB/b_stacktrace#usage
+  - name: furi
+    desc: A header-only URI decomposition library for C99 and C++17
+    github: https://github.com/iboB/furi
+    docsd: embedded
+  - name: huse
+    desc: A C++ library for HUman-readable SErialization
+    github: https://github.com/iboB/huse
+    docsd: TODO
+  - name: kuzco
+    desc: No touchy! Immutable state for C++
+    github: https://github.com/iboB/kuzco
+    docsd: TODO
+  - name: ftm
+    desc: A C++ time utilities library which wraps std::chrono
+    github: https://github.com/iboB/ftm
+    docsd: TODO
   - name: JSBind
     desc: >-
       A C++ to JavaScript binding library which supports multiple JavaScript
@@ -25,17 +70,9 @@
       [Chromium Embedded Framework](https://bitbucket.org/chromiumembedded/cef/src/master/).
     github: https://github.com/iboB/cef-demos
     docs: https://github.com/iboB/cef-demos/blob/master/README.md
-  - name: itlib
-    desc: A collection of single-header container classes and helpers.
-    github: https://github.com/iboB/itlib
-    docsd: Embedded in each header.
   - name: chobo-profiling
     desc: A call-graph intrusive C++ performance profiling library
     github: https://github.com/Chobolabs/chobo-profiling
-    docsd: TODO
-  - name: chobo-log
-    desc: A high-performance and compiler-friendly logging library
-    github: https://github.com/Chobolabs/chobo-log
     docsd: TODO
   - name: yama
     desc: A simple library for 3D mathematics
@@ -55,12 +92,22 @@
 - category: Other languages
   id: other-lang
   projects:
+    - name: icm
+      desc: A collection of small independent CMake modules
+      github: https://github.com/iboB/icm
+      docsd: Embedded in each module.
     - name: mtime_cache
       desc: >-
         A Ruby CLI tool which helps make use of build artefacts cache in a CI
         system
       github: https://github.com/iboB/mtime_cache
       docs: https://github.com/iboB/mtime_cache/blob/master/README.md
+    - name: envo
+      desc: >-
+       A command-line environment variable manager for the current shell
+       session. It works with bash and Windows cmd.
+      github: https://github.com/iboB/envo
+      docs: https://github.com/iboB/envo/blob/main/doc/commands.md
     - name: This very website.
       desc: Contains my experiments with HTML5.
       github: https://github.com/iboB/ibob.github.com
