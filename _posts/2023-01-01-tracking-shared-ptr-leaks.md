@@ -192,7 +192,7 @@ template <typename T, typename... Args>
 
 With this we reimplemented `xmem::shared_ptr` in `myapp::shared_ptr`. We did create the type `bookkeeping_control_block`, but it does no bookkeeping yet. It continues to have behavior identical to the standard control block which can be found in `std::shared_ptr`. And this control block is what we're going to change. The rest of the typedefs below it can remain exactly the same.
 
-To have `xmem::basic_shared_ptr` and `xmem::basic_weak_ptr` compile, the control block needs to have a set of methods. `xmem::control_block_base<xmem::atomic_ref_count>` naturally has them, so instead of reimplementing them, let's make use of it in our bookkeeping implementation:
+To have `xmem::basic_shared_ptr` and `xmem::basic_weak_ptr` compile, the control block needs to have a set of methods. `control_block_base<atomic_ref_count>` naturally has them, so instead of reimplementing them, let's make use of it in our bookkeeping implementation:
 
 ```c++
 class bookkeeping_control_block : protected xmem::control_block_base<xmem::atomic_ref_count> {
