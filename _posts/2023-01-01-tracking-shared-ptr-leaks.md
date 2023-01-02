@@ -124,30 +124,18 @@ First, as mentioned before, we will have to ditch `<memory>`, `std::shared_ptr`,
 #include <xmem/ostream.hpp> // so we can cout << xmem::shared_ptr
 
 namespace myapp {
-template <typename T>
-using shared_ptr = xmem::shared_ptr<T>;
-template <typename T>
-using weak_ptr = xmem::weak_ptr<T>;
-template <typename T, typename... Args>
-[[nodiscard]] shared_ptr<T> make_shared(Args&&... args) {
-    return xmem::make_shared<T>(std::forward<Args>(args)...);
-
-}
+using xmem::shared_ptr;
+using xmem::weak_ptr;
+using xmem::make_shared;
 }
 
 #else
 
 #include <memory> // don't include <memory> otherwise
 namespace myapp {
-template <typename T>
-using shared_ptr = std::shared_ptr<T>;
-template <typename T>
-using weak_ptr = std::weak_ptr<T>;
-template <typename T, typename... Args>
-[[nodiscard]] shared_ptr<T> make_shared(Args&&... args) {
-    return std::make_shared<T>(std::forward<Args>(args)...);
-
-}
+using std::shared_ptr;
+using std::weak_ptr;
+using std::make_shared;
 }
 
 #endif
