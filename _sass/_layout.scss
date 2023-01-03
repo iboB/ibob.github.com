@@ -44,7 +44,7 @@ label {
 }
 
 header {
-  font-family: $lato;
+  font-family: $mainfont;
   background: linear-gradient(#444, #222);
   padding: 15px 20px;
   color: $color-lighter;
@@ -137,7 +137,7 @@ header {
   margin-left: 260px;
   color: $color-text;
 
-  font-family: $lato;
+  font-family: $mainfont;
 
   @media #{$media-narrow} {
     width: calc(100% - 10px);
@@ -411,7 +411,7 @@ footer {
   .info {
     a {
       font-weight: bold;
-    }    
+    }
   }
 }
 

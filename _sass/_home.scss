@@ -11,7 +11,7 @@ html {
   border-radius: $bradius;
   box-shadow: rgba(#000, 0.2) 0 0 0 1px, rgba(#000, 0.45) 0 3px 10px;
 
-  font-family: $lato;
+  font-family: $mainfont;
 
   @media #{$media-narrow} {
     width: 100%;
@@ -149,7 +149,7 @@ nav.main-nav-mobile {
     //-webkit-transform: translate3d(0, 0, 0);
 
     ul {
-      font-family: $lato;
+      font-family: $mainfont;
     }
 
     li {
