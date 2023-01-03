@@ -8,7 +8,7 @@ $color-link   : #069;
 $bg-border-col: #b2d2e1;
 
 // fonts
-$mainfont: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+$mainfont: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
 // others
 $bradius: 8px;
@@ -20,7 +20,7 @@ $media-short  : "only screen and(max-height: 450px)";
 // other macros
 $shadow-nav: "0 1px 0 rgba(255, 255, 255, 0.9)";
 
-@import url(https://fonts.googleapis.com/css?family=Lato:300italic,700italic,300,700);
+@import url(https://fonts.googleapis.com/css?family=Open+Sans:300italic,600italic,300,600);
 
 // Reset some basic elements
 body, h1, h2, h3, h4, h5, h6,
@@ -69,7 +69,7 @@ a:hover {
 }
 
 .bulgarian {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 @import "foundation-icons"
