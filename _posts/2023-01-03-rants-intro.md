@@ -17,7 +17,7 @@ It's mostly just venting, though.
 
 ![venting](/blog/old-man-yells-at-cloud.jpg)
 
-So I'll create a category [*rants*](/blog/tags/#rants) and post some stuff in it.
+So I'll create a tag [*rants*](/blog/tags/#rants) and post some stuff under it.
 
 And if anyone in power to do something about any of them reads,
 
