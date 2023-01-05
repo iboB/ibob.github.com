@@ -21,17 +21,17 @@ It doesn't work anymore except for the simplest of targets. Trying to compile a 
 
 Here's what I think happened. Now, I don't have internal infomation from the dev team and I don't *know* it for certain, but I'm fairly sure about it:
 
-Before VS 17.4 a CMake project would get reconfigured two times when a CMake source is changed. My guess is that the first configuration is used by Visual Studio to generate hidden vcxproj files, so it could parse the targets and sources for IntelliSense and other IDE-specific stuff (like compiling a single source file). The other configuration would be the one used to actually build the project. In my case the ninja one. Visual Studio can't read ninja or CMake scripts, but it *can* definitely read vcxproj files. That's why it needs the first configuration. This double configure was somewhat annoying but not a terrble pain. If anything it was a motivator to optimize the CMake scripts so that they don't take an excessive amount of time[^4].
+Before VS 17.4 a CMake project would get reconfigured two times when a CMake source is changed. My guess is that the first configuration is used by Visual Studio to generate hidden vcxproj files, so it could parse the targets and sources for IntelliSense and other IDE-specific stuff (like compiling a single source file). The other configuration would be the one used to actually build the project. In my case the ninja one. Visual Studio can't read ninja or CMake scripts, but it *can* definitely read vcxproj files. That's why it needs the first configuration. This double configure was somewhat annoying but not a terrible pain. If anything it was a motivator to optimize the CMake scripts so that configuring doesn't take an excessive amount of time[^4].
 
 With VS 17.4 it started configuring only once. Great! Right?
 
-How does it get the IDE-specific metadata about the project, then? It seems to me that the developers have added a custom CMake parser to Visual Studio for that. I don't know whether it is a reimplementation of CMake (yikes!) or they're integrating some of CMake's code, but they seem to have bugs. The information for single-source targets is lost unless they are a part of a trivially defined binary target. And hence compiling a single source doesn't work most of the time. Well, at least for my not-so-trivial CMakeLists.
+How does it get the IDE-specific metadata for the project, then? It seems to me that the developers have added a custom CMake parser to Visual Studio for that. I don't know whether it is a reimplementation of CMake (yikes!) or they're integrating some of CMake's code, but they seem to have bugs. The information for single-source targets is lost unless they are a part of a trivially defined binary target. And hence compiling a single source doesn't work most of the time. Well, at least for my not-so-trivial CMakeLists.
 
 I [posted an issue here](https://developercommunity.visualstudio.com/t/BuildCompile-Ctrl-F7-stopped-working-/10204454). But it I doesn't seem to be getting a lot of action. It seems to me that it would take a lo-o-o-ong time until it's addressed.
 
 And until then...
 
-* On my personal computer, I've resorted to using VS Code on Windows as well. It really is great for C++ programming, but it's still vastly inferior to Visual Studio for debugging. The fact that it supports only a single loaded .natvis file is also unpleasant. If I have to do more complex debugging, I launch Visual Studio.
+* On my personal computer I've resorted to using VS Code on Windows as well. It really is quite good for C++ programming, but still vastly inferior to Visual Studio for debugging. The fact that it supports only a single loaded .natvis file is also unpleasant. If I have to do more complex debugging, I launch Visual Studio.
 * On my work computer I just haven't upgraded to Visual Studio 17.4. I'll try to stick with 17.3 for as long as possible and when I can't, I'll probably switch to VS Code as well.
 * I'll try to find time this month to evaluate CLion. As I said, I've been reading a lot of good stuff about it. Perhaps it will become my next IDE.
 
