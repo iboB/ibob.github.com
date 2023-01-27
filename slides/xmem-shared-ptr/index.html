@@ -85,8 +85,66 @@
         <p class="fragment">A blog post of what we do: <a href="https://ibob.bg/blog/2022/01/25/what-we-do-at-viewray/" target="_blank">ibob.bg/blog</a></p>
       </section>
 
+      <section class="slide">
+        <h3>This talk</h3>
+        <br/>
+        <ul>
+          <li>What are <span class="fancy">shared pointers</span> and <span class="fancy">weak pointers</span></li>
+          <li>Specifically <code class="cinline">std::shared_ptr</code> and <code class="cinline">std::weak_ptr</code></li>
+          <li>Minor things that <span class="fancy">I don't like</span> about them</li>
+          <li>Potential issues with them: <span class="fancy">shared pointer leaks</span></li>
+          <li>Why would anyone rewrite the standard ones. <span class="fancy">Pros and cons</span></li>
+          <li><span class="fancy">&quot;Exotic&quot;</span> shared pointers</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>NOT This talk</h3>
+        <br/>
+        <ul>
+          <li>Use cases for shared pointers</li>
+          <li>General shared pointer criticism</li>
+          <li>Responding to general shared pointer criticism</li>
+          <li>A guide to rewriting <code class="cinline">std::shared_ptr</code></li>
+        </ul>
+      </section>
+
       <section>
         <h2>A Crash Course in Shared Pointers</h2>
+      </section>
+
+      <section class="slide">
+        <h3>Smart pointers</h3>
+        <br/>
+        <ul>
+          <li>Free memory as needed</li>
+          <li>Smart pointers in C++:</li>
+          <ul>
+            <li><code class="cinline">std::unique_ptr</code></li>
+            <li><code class="cinline">std::shared_ptr</code> <span class="fancy">&#9733;</span></li>
+            <li>but also <code class="cinline">std::vector</code></li>
+            <li>to an extent, every container</li>
+          </ul>
+          <li><span class="fancy">Now you have no excuse to write <code class="cinline">delete</code></span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::shared_ptr</code></h3>
+        <br/>
+        <p>Shared ownership through reference counting</p>
+        <pre><code class="cpp hljs" data-noescape>
+  auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Allocate one person</span>
+                                              <span class="zfragment">// Ref count of Alice is 1</span>
+  auto b = a; <span class="zfragment">// a and b point to Alice. Ref count is 2</span>
+  a.reset(); <span class="zfragment">// a doesn't point to Alice, but b still does. Ref count is 1</span>
+  b.reset(); <span class="zfragment">// b doesn't point to Alice. Ref count is 0. Alice is deleted</span>
+        </code></pre>
+        <p>Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
+      </section>
+
+      <section class="slide">
+
       </section>
 
       <section>
