@@ -143,8 +143,82 @@
         <p>Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
       </section>
 
-      <section class="slide">
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+  class person {
+    std::string m_name;
+  public:
+    person(std::string_view name) : m_name(name) {}
+    const std::string&amp; name() const { return m_name; }
+    void greet() { std::cout &lt;&lt; &quot;Hi, my name is &quot; &lt;&lt; m_name &lt;&lt; '\n'; }
+  };
+        </code></pre>
+        <p>There is no ref count here!</p>
+      </section>
 
+      <section class="slide">
+        <h3>The Control Block</h3>
+        <p><code class="cinline">shared_ptr</code> also points to a wrapper which holds the ref count</p>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class shared_ptr {
+    T* m_ptr;
+    control_block* m_cb;
+    dec_ref() { if (m_cb) m_cb->dec_ref(); }
+    inc_ref() { if (m_cb) m_cb->inc_ref(); }
+  public:
+    ~shared_ptr() {
+      dec_ref();
+    }
+    std::shared_ptr(const shared_ptr&amp; other)
+      : m_ptr(other.m_ptr), m_cb(other.m_cb)
+    {
+      inc_ref();
+    }
+    // ... operator->, *, ...
+  };</code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>The Control Block</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  struct control_block {
+    int m_refs = 1;
+    void inc_ref() { ++m_refs; }
+    void dec_ref() {
+      if (--m_refs == 0) {
+        release();
+      }
+    }
+    virtual void release() = 0;
+  };
+
+  template &lt;typename T&gt;
+  struct control_block_t final : public control_block {
+    T m_t;
+    void release() override { delete this; }
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>The Control Block</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T, typename... Args&gt;
+  shared_ptr&lt;T&gt; make_shared(Args&amp;&amp;... args) {
+    auto cb = new control_block_t&lt;T&gt;(T{std::forward&lt;Args&gt;(args)...});
+    shared_ptr&lt;T&gt; ret;
+    ret->m_ptr = &amp;cb->t;
+    ret->m_cb = cb;
+    return ret;
+  }
+        </code></pre>
+        <p>We skipped:</p>
+        <ul>
+          <li><code class="cinline">shared_ptr</code> from <code class="cinline">unique_ptr</code></li>
+          <li>Allocators</li>
+          <li>Ref count atomicity</li>
+        </ul>
       </section>
 
       <section>
