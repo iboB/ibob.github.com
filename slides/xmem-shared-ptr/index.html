@@ -131,7 +131,6 @@
 
       <section class="slide">
         <h3><code>std::shared_ptr</code></h3>
-        <br/>
         <p>Shared ownership through reference counting</p>
         <pre><code class="cpp hljs" data-noescape>
   auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Allocate one person</span>
@@ -202,7 +201,8 @@
       </section>
 
       <section class="slide">
-        <h3>The Control Block</h3>
+        <h3>Making a Shared Pointer</h3>
+        <br/>
         <pre><code class="cpp hljs" data-noescape>
   template &lt;typename T, typename... Args&gt;
   shared_ptr&lt;T&gt; make_shared(Args&amp;&amp;... args) {
@@ -213,12 +213,34 @@
     return ret;
   }
         </code></pre>
-        <p>We skipped:</p>
+      </section>
+
+      <section class="slide">
+        <h3>What We Skipped</h3>
+        <br/>
         <ul>
-          <li><code class="cinline">shared_ptr</code> from <code class="cinline">unique_ptr</code></li>
+          <li><code class="cinline">shared_ptr</code> from <code class="cinline">unique_ptr</code> or a raw pointer</li>
           <li>Allocators</li>
           <li>Ref count atomicity</li>
         </ul>
+      </section>
+
+      <section>
+        <p>Done?</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>std::weak_ptr</code></h3>
+        <p>A non-owning pointer. Weak count</p>
+        <pre><code class="cpp hljs" data-noescape>
+  auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Ref count = 1. Weak count = 1</span>
+  std::weak_ptr&lt;person&gt; w = a; <span class="zfragment">// Ref count = 1. Weak count = 2</span>
+  auto b = w.lock(); <span class="zfragment">// a and b -> Alice. Ref count = 2. Weak count = 2</span>
+  a.reset(); <span class="zfragment">// Ref count = 1. Weak count = 2</span>
+  b.reset(); <span class="zfragment">// Ref count = 0 => Alice is destroyed => Weak count = 1. CB remains</span>
+  auto c = w.lock(); <span class="zfragment">// c is empty. Ref count = 0. Weak count = 1</span>
+        </code></pre>
+        <p>Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
       </section>
 
       <section>
