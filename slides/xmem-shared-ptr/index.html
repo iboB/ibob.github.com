@@ -131,7 +131,8 @@
 
       <section class="slide">
         <h3><code>std::shared_ptr</code></h3>
-        <p>Shared ownership through reference counting</p>
+        <p><img style="height: 1.2em" class="diagram" src="flag-bg.png"/> Created by Peter Dimov</p>
+        <p><span class="fancy">Shared ownership</span> through reference counting</p>
         <pre><code class="cpp hljs" data-noescape>
   auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Allocate one person</span>
                                               <span class="zfragment">// Ref count of Alice is 1</span>
@@ -186,16 +187,16 @@
     void inc_ref() { ++m_refs; }
     void dec_ref() {
       if (--m_refs == 0) {
-        release();
+        destroy_self();
       }
     }
-    virtual void release() = 0;
+    virtual void destroy_self() = 0;
   };
 
   template &lt;typename T&gt;
   struct control_block_t final : public control_block {
     T m_t;
-    void release() override { delete this; }
+    void destroy_self() override { delete this; }
   }
         </code></pre>
       </section>
@@ -231,7 +232,7 @@
 
       <section class="slide">
         <h3><code>std::weak_ptr</code></h3>
-        <p>A non-owning pointer. Weak count</p>
+        <p>A <span class="fancy">non-owning</span> pointer. Weak count</p>
         <pre><code class="cpp hljs" data-noescape>
   auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Ref count = 1. Weak count = 1</span>
   std::weak_ptr&lt;person&gt; w = a; <span class="zfragment">// Ref count = 1. Weak count = 2</span>
@@ -239,8 +240,35 @@
   a.reset(); <span class="zfragment">// Ref count = 1. Weak count = 2</span>
   b.reset(); <span class="zfragment">// Ref count = 0 => Alice is destroyed => Weak count = 1. CB remains</span>
   auto c = w.lock(); <span class="zfragment">// c is empty. Ref count = 0. Weak count = 1</span>
+  w.reset(); <span class="zfragment">// Weak count = 0. Control block is deleted</span>
         </code></pre>
         <p>Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
+        <p>The <em>control block</em> started it with <code class="cinline">a</code> and ended it with <code class="cinline">w</code></p>
+      </section>
+
+      <section class="slide">
+        <h3>The Control Block With Weak Refs</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  struct control_block {
+    int m_refs = 1;
+    int m_weak_refs = 1;
+    void inc_ref() { ++m_refs; }
+    void dec_ref() {
+      if (--m_refs == 0) {
+        destroy_resouce();
+        dec_weak_ref();
+      }
+    }
+    void inc_weak_ref() { ++m_weak_refs; }
+    void dec_weak_ref() {
+      if(--m_weak_refs == 0) {
+        destroy_self();
+      }
+    }
+    virtual void destroy_resource() = 0;
+    virtual void destroy_self() = 0;
+  };
+        </code></pre>
       </section>
 
       <section>
