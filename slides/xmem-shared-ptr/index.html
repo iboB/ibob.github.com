@@ -373,13 +373,32 @@
           <ul>
             <li>Type erasure becomes impossible</li>
             <li><code class="cinline">std::shared_ptr&lt;shape&gt; s = some_square;</code></li>
-            <li><code class="cinline">std::shared_ptr&lt;void&gt; v = some_ptr;</code></li>
           </ul>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Type Erasure</h3>
+        <pre><code class="cpp hljs" data-noescape>  std::shared_ptr&lt;shape&gt; c = some_square; // classic
+  std::shared_ptr&lt;void&gt; o = some_ptr; // opaque
+  std::shared_ptr&lt;std::string&gt; a(alice, &amp;alice-&gt;name); // aliasing</code></pre>
+
+        <pre><code class="cpp hljs" data-noescape>  std::shared_ptr&lt;void&gt; empty;
+  int x;
+  std::shared_ptr&lt;int&gt; o_O(empty, &amp;x); // abomination</code></pre>
+        <p>Always use this*:</p>
+        <pre><code class="cpp hljs" data-noescape>  template &lt;typename U, typename T&gt;
+  std::shared_ptr&lt;T&gt; make_aliased(const std::shared_ptr&lt;U&gt;&amp; owner, T* ptr) {
+      if (owner.use_count() == 0) return {};
+      return std::shared_ptr&lt;T&gt;(owner, ptr);
+  }</code></pre>
+        <p style="text-align: right">*Peter Dimov doesn't agree</p>
+      </section>
+
+
+      <section>
+        <p>That's why we must have two raw pointers in <code class="cinline">shared_ptr</code></p>
+        <p>Or do we?...</p>
       </section>
 
       <section class="slide">
