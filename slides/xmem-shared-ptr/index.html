@@ -164,8 +164,8 @@
   class shared_ptr {
     T* m_ptr;
     control_block* m_cb;
-    dec_ref() { if (m_cb) m_cb->dec_ref(); }
-    inc_ref() { if (m_cb) m_cb->inc_ref(); }
+    dec_ref() { if (m_cb) m_cb-&gt;dec_ref(); }
+    inc_ref() { if (m_cb) m_cb-&gt;inc_ref(); }
   public:
     ~shared_ptr() {
       dec_ref();
@@ -175,7 +175,7 @@
     {
       inc_ref();
     }
-    // ... operator->, *, ...
+    // ... operator-&gt;, *, ...
   };</code></pre>
       </section>
 
@@ -195,7 +195,7 @@
 
   template &lt;typename T&gt;
   struct control_block_t final : public control_block {
-    T m_t;
+    T m_resource;
     void destroy_self() override { delete this; }
   }
         </code></pre>
@@ -209,8 +209,8 @@
   shared_ptr&lt;T&gt; make_shared(Args&amp;&amp;... args) {
     auto cb = new control_block_t&lt;T&gt;(T{std::forward&lt;Args&gt;(args)...});
     shared_ptr&lt;T&gt; ret;
-    ret->m_ptr = &amp;cb->t;
-    ret->m_cb = cb;
+    ret-&gt;m_ptr = &amp;cb-&gt;m_resource;
+    ret-&gt;m_cb = cb;
     return ret;
   }
         </code></pre>
@@ -236,9 +236,9 @@
         <pre><code class="cpp hljs" data-noescape>
   auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Ref count = 1. Weak count = 1</span>
   std::weak_ptr&lt;person&gt; w = a; <span class="zfragment">// Ref count = 1. Weak count = 2</span>
-  auto b = w.lock(); <span class="zfragment">// a and b -> Alice. Ref count = 2. Weak count = 2</span>
+  auto b = w.lock(); <span class="zfragment">// a and b -&gt; Alice. Ref count = 2. Weak count = 2</span>
   a.reset(); <span class="zfragment">// Ref count = 1. Weak count = 2</span>
-  b.reset(); <span class="zfragment">// Ref count = 0 => Alice is destroyed => Weak count = 1. CB remains</span>
+  b.reset(); <span class="zfragment">// Ref count = 0 =&gt; Alice is destroyed =&gt; Weak count = 1. CB remains</span>
   auto c = w.lock(); <span class="zfragment">// c is empty. Ref count = 0. Weak count = 1</span>
   w.reset(); <span class="zfragment">// Weak count = 0. Control block is deleted</span>
         </code></pre>
@@ -277,8 +277,8 @@
         <pre><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   struct control_block_t final : public control_block {
-    std::optional &lt;T&gt; m_t;
-    void destroy_resource() override { m_t.reset(); }
+    std::optional&lt;T&gt; m_resource;
+    void destroy_resource() override { m_resource.reset(); }
     void destroy_self() override { delete this; }
   }
         </code></pre>
@@ -291,8 +291,8 @@
   class weak_ptr {
     T* m_ptr;
     control_block* m_cb;
-    dec_ref() { if (m_cb) m_cb->dec_weak_ref(); }
-    inc_ref() { if (m_cb) m_cb->inc_weak_ref(); }
+    dec_ref() { if (m_cb) m_cb-&gt;dec_weak_ref(); }
+    inc_ref() { if (m_cb) m_cb-&gt;inc_weak_ref(); }
   public:
     ~weak_ptr() {
       dec_ref();
@@ -317,12 +317,12 @@
     }
     shared_ptr&lt;T&gt; lock() const {
       if (!m_cb) return {}; // empty weak_ptr
-      if (m_cb->m_refs == 0) return {}; // object destroyed
+      if (m_cb-&gt;m_refs == 0) return {}; // object destroyed
 
       shared_ptr&lt;T&gt; ret;
-      ret->m_ptr = m_ptr;
-      ret->m_cb = m_cb;
-      m_cb->inc_ref(); // inc strong ref
+      ret-&gt;m_ptr = m_ptr;
+      ret-&gt;m_cb = m_cb;
+      m_cb-&gt;inc_ref(); // inc strong ref
 
       return ret;
     }
@@ -333,6 +333,88 @@
       <section>
         <img class="diagram" src="../beyond-vec/dont.png"/>
         <p>We <em>are</em> skipping atomic ops!</p>
+      </section>
+
+      <section>
+        <p>... but that's how <code class="cinline">std::shared_ptr</code> works</p>
+      </section>
+
+      <section>
+        <p><span class="fancy">Two raw pointers</span> per shared and weak pointer?
+        <p>Seems like a waste.</p>
+      </section>
+
+      <section>
+        <p>How about...</p>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class shared_ptr {
+    control_block&lt;T&gt;* m_cb;
+    dec_ref() { if (m_cb) m_cb-&gt;dec_ref(); }
+    inc_ref() { if (m_cb) m_cb-&gt;inc_ref(); }
+  public:
+    T* operator-&gt;() { return &amp;m_cb-&gt;m_resource; }
+    // ...
+  };
+        </code></pre>
+        <p>... this could work. But...</p>
+      </section>
+
+      <section class="slide">
+        <h3>Control-Block-Only Pointers</h3>
+        <br/>
+        <ul>
+          <li>Performance:</li>
+          <ul>
+            <li><code class="cinline">&amp;m_cb-&gt;m_resource</code></li>
+            <li>two indirections per deref: <code class="cinline">*</code>, <code class="cinline">-></code>, <code class="cinline">get()</code></li>
+          </ul>
+          <li>Functionality:</li>
+          <ul>
+            <li>Type erasure becomes impossible</li>
+            <li><code class="cinline">std::shared_ptr&lt;shape&gt; s = some_square;</code></li>
+            <li><code class="cinline">std::shared_ptr&lt;void&gt; v = some_ptr;</code></li>
+          </ul>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Type Erasure</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Intrusive Shared Pointer</h3>
+        <p>What if the the object <em>does</em> cary its ref count?</p>
+        <p>Let's <span class="fancy">merge</span> the control block and the object:</p>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class intrusive_shared_ptr {
+    T* m_ptr;
+    dec_ref() { if (m_ptr) m_ptr-&gt;dec_ref(); }
+    inc_ref() { if (m_ptr) m_ptr-&gt;inc_ref(); }
+  public:
+    ...
+  };
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Using Intrusive Shared Pointers</h3>
+        <p>Inherit from a common parent</p>
+        <pre><code class="cpp hljs" data-noescape>
+  class parent : public ref_countable {
+    // ...
+  };
+        </code></pre>
+        <ul>
+          <li>Qt: <code class="cinline">QSharedData</code></li>
+          <li>OWL: <code class="cinline">TObject</code></li>
+          <li>Boost.SmartPtr: <code class="cinline">intrusive_ref_counter&lt;Base&gt;</code></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Intrusive Shared Pointer Pros</h3>
       </section>
 
       <section>
