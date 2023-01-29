@@ -170,7 +170,7 @@
     ~shared_ptr() {
       dec_ref();
     }
-    std::shared_ptr(const shared_ptr&amp; other)
+    shared_ptr(const shared_ptr&amp; other)
       : m_ptr(other.m_ptr), m_cb(other.m_cb)
     {
       inc_ref();
@@ -269,6 +269,95 @@
     virtual void destroy_self() = 0;
   };
         </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>The Control Block With Weak Refs</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  struct control_block_t final : public control_block {
+    std::optional &lt;T&gt; m_t;
+    void destroy_resource() override { m_t.reset(); }
+    void destroy_self() override { delete this; }
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3><code>weak_ptr</code></h3>
+        <pre><code class="cpp hljs" data-noescape>
+  template &lt;typename T&gt;
+  class weak_ptr {
+    T* m_ptr;
+    control_block* m_cb;
+    dec_ref() { if (m_cb) m_cb->dec_weak_ref(); }
+    inc_ref() { if (m_cb) m_cb->inc_weak_ref(); }
+  public:
+    ~weak_ptr() {
+      dec_ref();
+    }
+    weak_ptr(const weak_ptr&amp; other)
+      : m_ptr(other.m_ptr), m_cb(other.m_cb)
+    {
+      inc_ref();
+    }
+    ...
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3><code>weak_ptr</code> cont</h3>
+        <pre><code class="cpp hljs" data-noescape>
+    ...
+    weak_ptr(const shared_ptr&lt;T&gt;&amp; sptr)
+      : m_ptr(sptr.m_ptr), m_cb(sptr.m_cb)
+    {
+      inc_ref();
+    }
+    shared_ptr&lt;T&gt; lock() const {
+      if (!m_cb) return {}; // empty weak_ptr
+      if (m_cb->m_refs == 0) return {}; // object destroyed
+
+      shared_ptr&lt;T&gt; ret;
+      ret->m_ptr = m_ptr;
+      ret->m_cb = m_cb;
+      m_cb->inc_ref(); // inc strong ref
+
+      return ret;
+    }
+  };
+        </code></pre>
+      </section>
+
+      <section>
+        <img class="diagram" src="../beyond-vec/dont.png"/>
+        <p>We <em>are</em> skipping atomic ops!</p>
+      </section>
+
+      <section>
+        <p>Waste to have two raw pointers in shared and weak_ptr?</p>
+        <p>Conversion. Aliasing</p>
+        <p>Even Peter Dimov doesn't agree with me</p>
+      </section>
+
+      <section>
+        <p>Since we do have two pointers, atomic load/store is impossible</p>
+        <p>CAS. MCAS is not supported</p>
+        <p>Deprecated atomic ops. <code>atomic_shared_ptr_storage</code></p>
+      </section>
+
+      <section>
+        <p>So, why rewrite?</p>
+        <p>Leaks</p>
+      </section>
+
+      <section>
+        <p>xmem demo</p>
+      </section>
+
+      <section>
+        <p>Pros and cons</p>
       </section>
 
       <section>
