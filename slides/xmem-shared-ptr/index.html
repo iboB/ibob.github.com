@@ -531,24 +531,61 @@
       </section>
 
       <section>
-        <p>"Smart pointers free memory. Leaks are impossible!"</p>
+        <p><em>"Smart pointers free memory. Leaks are impossible!"</em></p>
       </section>
 
-      <section>
-        <p>Circular ref</p>
+      <section class="slide">
+        <h3>Circular References</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  struct person {
+    std::string name;
+    std::vector&lt;std::shared_ptr&lt;person&gt;&gt; siblings;
+  };
+  // ...
+  alice->siblings.push_back(bob);
+  bob->siblings.push_back(alice);
+  // ...
+  people.erase(alice);
+  people.erase(bob);
+        </code></pre>
+        <p>The most important use-case for <span class="fancy">weak pointers</span></p>
       </section>
 
-      <section>
-        <p>Forgotten shared pointer</p>
-        <p>some way of dealing - store instances</p>
+      <section class="slide">
+        <h3>Loose Shared Pointers</h3>
+        <ul>
+          <li>Managers</li>
+          <li>Structured loggers</li>
+          <li>Delayed garbage collection</li>
+        </ul>
+        <p>Common way to hunt and test:</p>
+        <pre><code class="cpp hljs" data-noescape>
+  struct record_instance {
+    static std::unordered_set&lt;record_instance*&gt; instances;
+    record_instance() { instances.insert(this); }
+    ~record_instance() { instances.erase(this); }
+  };
+        </code></pre>
       </section>
 
-      <section>
-        <p>Forgotten weak pointers</p>
+      <section class="slide">
+        <h3>Loose Weak Pointers</h3>
+        <p>Common way to hunt and test:</p>
+        <img src="dunno.jpg" />
       </section>
 
-      <section>
-        <p>Leaks are usually hard to identify</p>
+      <section class="slide">
+        <h3>Shared Pointer Leaks</h3>
+        <br/>
+        <ul>
+          <li>Hard to impossible to test</li>
+          <li>Hard to <span class="fancy">even notice</span></li>
+          <li>Shared pointers are rarely found in hot loops</li>
+          <li>Objects are usually small</li>
+          <li>Low creation velocity</li>
+          <li>Uncontrolled memory growth is slow</li>
+          <li>May take <span class="fancy">hours, or days, or weeks</span> of runtime</li>
+        </ul>
       </section>
 
       <section>
