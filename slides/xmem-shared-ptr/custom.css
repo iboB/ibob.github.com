@@ -134,3 +134,19 @@ body {
 {
 	text-align: center;
 }
+
+.reveal section li.pro {
+	color: darkgreen;
+}
+.reveal section li.pro::marker {
+	content: '✔  ';
+}
+
+.reveal section li.con {
+	color: darkred;
+}
+.reveal section li.con::marker {
+	content: '✖  ';
+}
+
+

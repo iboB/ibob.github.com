@@ -330,13 +330,37 @@
         </code></pre>
       </section>
 
+
+      <section>
+        <p>...and that's how <code class="cinline">std::shared_ptr</code> works</p>
+      </section>
+
+      <section>
+        <p>We are skipping <code class="cinline">shared_from_this</code></p>
+      </section>
+
       <section>
         <img class="diagram" src="../beyond-vec/dont.png"/>
         <p>We <em>are</em> skipping atomic ops!</p>
       </section>
 
       <section>
-        <p>... but that's how <code class="cinline">std::shared_ptr</code> works</p>
+        <p>What if we leave it at that?</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>local_shared_ptr</code></h3>
+        <br/>
+        <ul>
+          <li>Atomic ops are <span class="fancy">not free</span>. Especially on ARM</li>
+          <li>Sometimes we only have one thread</li>
+          <ul>
+            <li>That's usually niche</li>
+            <li>Single-threaded async programming</li>
+            <li>Single-threaded flavors</li>
+          </ul>
+          <li><a href="https://www.boost.org/doc/libs/1_81_0/libs/smart_ptr/doc/html/smart_ptr.html#local_shared_ptr" target="_blank">Boost.SmartPtr</a>: <code class="cinline">boost::local_shared_ptr</code></li>
+        </ul>
       </section>
 
       <section>
@@ -421,44 +445,128 @@
         <h3>Using Intrusive Shared Pointers</h3>
         <p>Inherit from a common parent</p>
         <pre><code class="cpp hljs" data-noescape>
-  class parent : public ref_countable {
+  class person : public ref_countable {
     // ...
   };
         </code></pre>
         <ul>
-          <li>Qt: <code class="cinline">QSharedData</code></li>
-          <li>OWL: <code class="cinline">TObject</code></li>
-          <li>Boost.SmartPtr: <code class="cinline">intrusive_ref_counter&lt;Base&gt;</code></li>
+          <li><a href="https://doc.qt.io/qt-6/qshareddata.html" target="_blank">Qt</a>: <code class="cinline">QSharedData</code></li>
+          <li><a href="https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.TObject" target="_blank">OWL</a>: <code class="cinline">TObject</code></li>
+          <li><a href="https://www.boost.org/doc/libs/1_81_0/libs/smart_ptr/doc/html/smart_ptr.html#intrusive_ref_counter" target="_blank">Boost.SmartPtr</a>: <code class="cinline">intrusive_ref_counter&lt;Base&gt;</code></li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>Intrusive Shared Pointer Pros</h3>
+        <h3>Intrusive Shared Pointer Facts</h3>
+        <br/>
+        <ul>
+          <li class="pro"><code>sizeof(shared_ptr&lt;T&gt;) == sizeof(void*)</code></li>
+          <li class="pro">Free <code>shared_from_this</code></li>
+          <li class="pro">Free atomic load/store</li>
+          <li class="con">No shared pointers of foreign types</li>
+          <li class="con">Weak pointers are really hard (and almost never implemented)</li>
+          <li class="con">Only hierarchical type erasure</li>
+          <ul>
+            <li><code class="cinline">i_shared_ptr&lt;TObject&gt;</code> &asymp; <code class="cinline">shared_ptr&lt;void&gt;</code> </li>
+            <li class="con">No aliasing</li>
+          </ul>
+        </ul>
       </section>
 
       <section>
-        <p>Waste to have two raw pointers in shared and weak_ptr?</p>
-        <p>Conversion. Aliasing</p>
-        <p>Even Peter Dimov doesn't agree with me</p>
+        <p>Free atomic load/store?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Atomic Load and Store</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  std::shared_ptr&lt;person&gt; alice;
+
+  // thread a
+  std::atomic_store(&amp;alice, std::make_shared&lt;person&gt;(&quot;Alice&quot;));
+
+  // thread b
+  auto ptr = std::atomic_load(&amp;alice);
+        </code></pre>
+        <ul>
+          <li><a href="https://github.com/iboB/kuzco" target="_blank">kuzco</a>: an immutable state library</li>
+          <li>Deprecated in C++20 😠</li>
+          <li>...in favor of <code class="cinline">std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>🤮</li>
+          <li>But... how does it even work?</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Implementing Atomic Load and Store</h3>
+        <ul>
+          <li>Trivial with <code class="cinline">intrusive_shared_ptr</code></li>
+          <li>Impossible with two-word <code class="cinline">shared_ptr</code></li>
+          <ul>
+            <li>DCAS, MCAS</li>
+            <li><span class="fancy">All</span> implementations rely on global locking primitives</li>
+            <li>🤮</li>
+          </ul>
+          <li>Deprecated in C++20 👍</li>
+          <li>...in favor of <code class="cinline">std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>😠</li>
+          <li><span class="fancy">Atomic deref is evil!</span></li>
+          <li><a href=https://github.com/iboB/itlib/blob/master/include/itlib/atomic_shared_ptr_storage.hpp target="_blank"><code>itlib::atomic_shared_ptr_storage</code></a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Problems So Far</h3>
+        <br/>
+        <ul>
+          <li>Unneeded atomic ops: <code class="finline">boost::local_shared_ptr</code></li>
+          <li>Dangerous aliasing ctor: <code class="finline">itlib::make_aliased</code></li>
+          <li>Two-word size: <span class="fancy">intrusive shared pointer</span></li>
+          <li>Evil atomic pointer: <code class="finline">itlib::atomic_shared_ptr_storage</code></li>
+        </ul>
+        <br/><br/>
+        <p class="pinner">Everything is solved. Why rewrite?</p>
       </section>
 
       <section>
-        <p>Since we do have two pointers, atomic load/store is impossible</p>
-        <p>CAS. MCAS is not supported</p>
-        <p>Deprecated atomic ops. <code>atomic_shared_ptr_storage</code></p>
+        <h3>Leaks</h3>
       </section>
 
       <section>
-        <p>So, why rewrite?</p>
-        <p>Leaks</p>
+        <p>"Smart pointers free memory. Leaks are impossible!"</p>
       </section>
 
       <section>
+        <p>Circular ref</p>
+      </section>
+
+      <section>
+        <p>Forgotten shared pointer</p>
+        <p>some way of dealing - store instances</p>
+      </section>
+
+      <section>
+        <p>Forgotten weak pointers</p>
+      </section>
+
+      <section>
+        <p>Leaks are usually hard to identify</p>
+      </section>
+
+      <section>
+        <p>Control-block polymorphism</p>
         <p>xmem demo</p>
       </section>
 
-      <section>
-        <p>Pros and cons</p>
+      <section class="slide">
+        <h3>Control Block Polymorphism Facts</h3>
+        <br/>
+        <ul>
+          <li class="con">No third party libs with <code>std::shared_ptr</code></li>
+          <li class="con">Needs care to avoid slow perf</li>
+          <li class="pro">Catch leaks</li>
+          <li class="pro">API-compatible with <code>std::shared_ptr</code></li>
+          <li class="pro"><code>local_shared_ptr</code> is an artifact</li>
+          <li class="pro">Potential runtime polymorphism</li>
+        </ul>
       </section>
 
       <section>
