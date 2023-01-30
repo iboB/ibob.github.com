@@ -588,9 +588,56 @@
         </ul>
       </section>
 
+      <section class="slide">
+        <h3>Classic Leak Detectors</h3>
+        <br/>
+        <ul>
+          <li>They <span class="fancy">hook</span> themselves to <code class="cinline">malloc</code> and <code class="cinline">free</code></li>
+          <li>Log allocations and deallocations <span class="fancy">with metadata</span></li>
+          <li>They <span class="fancy">can't tell</span> what is a leak</li>
+          <li>It's up to us to <span class="fancy">inspect the metadata</span></li>
+        </ul>
+      </section>
+
       <section>
-        <p>Control-block polymorphism</p>
-        <p>xmem demo</p>
+        <p>Cool. That's adequate</p>
+        <p>Let's do it for <code class="cinline">std::shared_ptr</code></p>
+      </section>
+
+      <section>
+        <p>C++ standard committee:</p>
+        <img class="diagram" src="nope.webp" />
+      </section>
+
+      <section class="slide">
+        <h3>Nope</h3>
+        <br/>
+        <ul>
+          <li>Hooking to <code class="cinline">malloc</code> and <code class="cinline">free</code> is a documented extention point</li>
+          <li><code class="cinline">std::shared_ptr</code> is opaque</li>
+          <li>The control block is an <span class="fancy">implementation detail</span></li>
+        </ul>
+        <br/><br/>
+        <p>This can only be achieved if we were to <span class="fancy">rewrite</span> <code class="cinline">std::shared_ptr</code> with a custom control block</p>
+      </section>
+
+      <section>
+        <p>So I did that</p>
+      </section>
+
+      <section class="slide">
+        <h3>xmem</h3>
+        <br/>
+        <ul>
+          <li><a href="https://github.com/iboB/xmem/" target="_blank">github.com/iboB/xmem</a></li>
+          <li>Reimplementation of std smart pointers</li>
+          <li>... with a twist</li>
+          <li>The control block is a <span class="fancy">template argument</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <p><a herf="https://github.com/iboB/xmem/blob/master/example/e-shared_ptr-leak.cpp" target="_blank">Demo</a></p>
       </section>
 
       <section class="slide">
