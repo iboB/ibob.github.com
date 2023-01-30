@@ -149,4 +149,17 @@ body {
 	content: '✖  ';
 }
 
+/* last slide */
+.reveal section.fin {
+	font-size: 0.8em;
+}
 
+.reveal section.fin h2 {
+	width: 100%;
+	font-size: 4em;
+}
+
+.reveal section.fin h3 {
+	width: 100%;
+	font-size: 3em;
+}
