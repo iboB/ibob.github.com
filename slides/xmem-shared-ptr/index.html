@@ -322,7 +322,7 @@
       shared_ptr&lt;T&gt; ret;
       ret-&gt;m_ptr = m_ptr;
       ret-&gt;m_cb = m_cb;
-      <span class="fragment hl-code">m_cb-&gt;inc_weak_ref(); // inc strong ref</span>
+      <span class="fragment hl-code">m_cb-&gt;inc_ref(); // inc strong ref</span>
 
       return ret;
     }
