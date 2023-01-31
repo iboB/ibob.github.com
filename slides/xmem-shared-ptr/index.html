@@ -117,30 +117,30 @@
         <h3>Smart pointers</h3>
         <br/>
         <ul>
-          <li>Free memory as needed</li>
-          <li>Smart pointers in C++:</li>
+          <li class="fragment">Free memory as needed</li>
+          <li class="fragment">Smart pointers in C++:</li>
           <ul>
-            <li><code class="cinline">std::unique_ptr</code></li>
-            <li><code class="cinline">std::shared_ptr</code> <span class="fancy">&#9733;</span></li>
-            <li>but also <code class="cinline">std::vector</code></li>
-            <li>to an extent, every container</li>
+            <li class="fragment"><code class="cinline">std::unique_ptr</code></li>
+            <li class="fragment"><code class="cinline">std::shared_ptr</code> <span class="fancy">&#9733;</span></li>
+            <li class="fragment">but also <code class="cinline">std::vector</code></li>
+            <li class="fragment">to an extent, every container</li>
           </ul>
-          <li><span class="fancy">Now you have no excuse to write <code class="cinline">delete</code></span></li>
+          <li class="fragment"><span class="fancy">Now you have no excuse to write <code class="cinline">delete</code></span></li>
         </ul>
       </section>
 
       <section class="slide">
         <h3><code>std::shared_ptr</code></h3>
-        <p><img style="height: 1.2em" class="diagram" src="flag-bg.png"/> Created by Peter Dimov</p>
-        <p><span class="fancy">Shared ownership</span> through reference counting</p>
-        <pre><code class="cpp hljs" data-noescape>
-  auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Allocate one person</span>
-                                              <span class="zfragment">// Ref count of Alice is 1</span>
-  auto b = a; <span class="zfragment">// a and b point to Alice. Ref count is 2</span>
-  a.reset(); <span class="zfragment">// a doesn't point to Alice, but b still does. Ref count is 1</span>
-  b.reset(); <span class="zfragment">// b doesn't point to Alice. Ref count is 0. Alice is deleted</span>
+        <p class="fragment"><img style="height: 1.2em" class="diagram" src="flag-bg.png"/> Created by Peter Dimov</p>
+        <p class="fragment"><span class="fancy">Shared ownership</span> through reference counting</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+  auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="fragment">// Allocate one person</span>
+                                              <span class="fragment">// Ref count of Alice is 1</span>
+  auto b = a; <span class="fragment">// a and b point to Alice. Ref count is 2</span>
+  a.reset(); <span class="fragment">// a doesn't point to Alice, but b still does. Ref count is 1</span>
+  b.reset(); <span class="fragment">// b doesn't point to Alice. Ref count is 0. Alice is deleted</span>
         </code></pre>
-        <p>Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
+        <p class="fragment">Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
       </section>
 
       <section>
@@ -153,29 +153,29 @@
     void greet() { std::cout &lt;&lt; &quot;Hi, my name is &quot; &lt;&lt; m_name &lt;&lt; '\n'; }
   };
         </code></pre>
-        <p>There is no ref count here!</p>
+        <p class="fragment">There is no ref count here!</p>
       </section>
 
       <section class="slide">
         <h3>The Control Block</h3>
-        <p><code class="cinline">shared_ptr</code> also points to a wrapper which holds the ref count</p>
-        <pre><code class="cpp hljs" data-noescape>
+        <p class="fragment"><code class="cinline">shared_ptr</code> also points to a wrapper which holds the ref count</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   class shared_ptr {
-    T* m_ptr;
-    control_block* m_cb;
-    dec_ref() { if (m_cb) m_cb-&gt;dec_ref(); }
-    inc_ref() { if (m_cb) m_cb-&gt;inc_ref(); }
+    <span class="fragment hl-code">T* m_ptr;</span>
+    <span class="fragment hl-code">control_block* m_cb;</span>
+    <span class="fragment hl-code">dec_ref() { if (m_cb) m_cb-&gt;dec_ref(); }</span>
+    <span class="fragment hl-code">inc_ref() { if (m_cb) m_cb-&gt;inc_ref(); }</span>
   public:
     ~shared_ptr() {
-      dec_ref();
+      <span class="fragment hl-code">dec_ref();</span>
     }
     shared_ptr(const shared_ptr&amp; other)
       : m_ptr(other.m_ptr), m_cb(other.m_cb)
     {
-      inc_ref();
+      <span class="fragment hl-code">inc_ref();</span>
     }
-    // ... operator-&gt;, *, ...
+    <span class="fragment hl-code">// ... operator-&gt;, *, ...</span>
   };</code></pre>
       </section>
 
@@ -183,21 +183,21 @@
         <h3>The Control Block</h3>
         <pre><code class="cpp hljs" data-noescape>
   struct control_block {
-    int m_refs = 1;
-    void inc_ref() { ++m_refs; }
+    <span class="fragment hl-code">int m_refs = 1;</span>
+    <span class="fragment hl-code">void inc_ref() { ++m_refs; }</span>
     void dec_ref() {
-      if (--m_refs == 0) {
+<span class="fragment hl-code">      if (--m_refs == 0) {
         destroy_self();
-      }
+      }</span>
     }
-    virtual void destroy_self() = 0;
+    <span class="fragment hl-code">virtual void destroy_self() = 0;</span>
   };
 
-  template &lt;typename T&gt;
+  <span class="fragment">template &lt;typename T&gt;
   struct control_block_t final : public control_block {
-    T m_resource;
-    void destroy_self() override { delete this; }
-  }
+    <span class="fragment hl-code">T m_resource;</span>
+    <span class="fragment hl-code">void destroy_self() override { delete this; }</span>
+  }</span>
         </code></pre>
       </section>
 
@@ -207,10 +207,10 @@
         <pre><code class="cpp hljs" data-noescape>
   template &lt;typename T, typename... Args&gt;
   shared_ptr&lt;T&gt; make_shared(Args&amp;&amp;... args) {
-    auto cb = new control_block_t&lt;T&gt;(T{std::forward&lt;Args&gt;(args)...});
+    <span class="fragment hl-code">auto cb = new control_block_t&lt;T&gt;(T{std::forward&lt;Args&gt;(args)...});</span>
     shared_ptr&lt;T&gt; ret;
-    ret-&gt;m_ptr = &amp;cb-&gt;m_resource;
-    ret-&gt;m_cb = cb;
+    <span class="fragment hl-code">ret-&gt;m_ptr = &amp;cb-&gt;m_resource;</span>
+    <span class="fragment hl-code">ret-&gt;m_cb = cb;</span>
     return ret;
   }
         </code></pre>
@@ -232,18 +232,18 @@
 
       <section class="slide">
         <h3><code>std::weak_ptr</code></h3>
-        <p>A <span class="fancy">non-owning</span> pointer. Weak count</p>
-        <pre><code class="cpp hljs" data-noescape>
-  auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="zfragment">// Ref count = 1. Weak count = 1</span>
-  std::weak_ptr&lt;person&gt; w = a; <span class="zfragment">// Ref count = 1. Weak count = 2</span>
-  auto b = w.lock(); <span class="zfragment">// a and b -&gt; Alice. Ref count = 2. Weak count = 2</span>
-  a.reset(); <span class="zfragment">// Ref count = 1. Weak count = 2</span>
-  b.reset(); <span class="zfragment">// Ref count = 0 =&gt; Alice is destroyed =&gt; Weak count = 1. CB remains</span>
-  auto c = w.lock(); <span class="zfragment">// c is empty. Ref count = 0. Weak count = 1</span>
-  w.reset(); <span class="zfragment">// Weak count = 0. Control block is deleted</span>
+        <p class="fragment">A <span class="fancy">non-owning</span> pointer. Weak count</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+  auto a = std::make_shared&lt;person&gt;(&quot;Alice&quot;); <span class="fragment">// Ref count = 1. Weak count = 1</span>
+  std::weak_ptr&lt;person&gt; w = a; <span class="fragment">// Ref count = 1. Weak count = 2</span>
+  auto b = w.lock(); <span class="fragment">// a and b -&gt; Alice. Ref count = 2. Weak count = 2</span>
+  a.reset(); <span class="fragment">// Ref count = 1. Weak count = 2</span>
+  b.reset(); <span class="fragment">// Ref count = 0 =&gt; Alice is destroyed =&gt; Weak count = 1. CB remains</span>
+  auto c = w.lock(); <span class="fragment">// c is empty. Ref count = 0. Weak count = 1</span>
+  w.reset(); <span class="fragment">// Weak count = 0. Control block is deleted</span>
         </code></pre>
-        <p>Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
-        <p>The <em>control block</em> started it with <code class="cinline">a</code> and ended it with <code class="cinline">w</code></p>
+        <p class="fragment">Alice started her lifetime with <code class="cinline">a</code> and ended it with <code class="cinline">b</code></p>
+        <p class="fragment">The <em>control block</em> started it with <code class="cinline">a</code> and ended it with <code class="cinline">w</code></p>
       </section>
 
       <section class="slide">
@@ -251,21 +251,21 @@
         <pre><code class="cpp hljs" data-noescape>
   struct control_block {
     int m_refs = 1;
-    int m_weak_refs = 1;
+    <span class="fragment hl-code">int m_weak_refs = 1;</span>
     void inc_ref() { ++m_refs; }
     void dec_ref() {
       if (--m_refs == 0) {
-        destroy_resouce();
-        dec_weak_ref();
+        <span class="fragment hl-code">destroy_resouce();</span>
+        <span class="fragment hl-code">dec_weak_ref();</span>
       }
     }
     void inc_weak_ref() { ++m_weak_refs; }
     void dec_weak_ref() {
       if(--m_weak_refs == 0) {
-        destroy_self();
+        <span class="fragment hl-code">destroy_self();</span>
       }
     }
-    virtual void destroy_resource() = 0;
+    <span class="fragment hl-code">virtual void destroy_resource() = 0;</span>
     virtual void destroy_self() = 0;
   };
         </code></pre>
@@ -277,8 +277,8 @@
         <pre><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   struct control_block_t final : public control_block {
-    std::optional&lt;T&gt; m_resource;
-    void destroy_resource() override { m_resource.reset(); }
+    <span class="fragment hl-code">std::optional&lt;T&gt;</span> m_resource;
+    <span class="fragment hl-code">void destroy_resource() override { m_resource.reset(); }</span>
     void destroy_self() override { delete this; }
   }
         </code></pre>
@@ -291,16 +291,16 @@
   class weak_ptr {
     T* m_ptr;
     control_block* m_cb;
-    dec_ref() { if (m_cb) m_cb-&gt;dec_weak_ref(); }
-    inc_ref() { if (m_cb) m_cb-&gt;inc_weak_ref(); }
+<span class="fragment hl-code-i">    dec_weak_ref() { if (m_cb) m_cb-&gt;dec_weak_ref(); }
+    inc_weak_ref() { if (m_cb) m_cb-&gt;inc_weak_ref(); }</span>
   public:
     ~weak_ptr() {
-      dec_ref();
+      <span class="fragment hl-code">dec_weak_ref();</span>
     }
     weak_ptr(const weak_ptr&amp; other)
       : m_ptr(other.m_ptr), m_cb(other.m_cb)
     {
-      inc_ref();
+      <span class="fragment hl-code">inc_weak_ref();</span>
     }
     ...
         </code></pre>
@@ -310,19 +310,19 @@
         <h3><code>weak_ptr</code> cont</h3>
         <pre><code class="cpp hljs" data-noescape>
     ...
-    weak_ptr(const shared_ptr&lt;T&gt;&amp; sptr)
+<span class="fragment hl-code">    weak_ptr(const shared_ptr&lt;T&gt;&amp; sptr)
       : m_ptr(sptr.m_ptr), m_cb(sptr.m_cb)
     {
-      inc_ref();
-    }
-    shared_ptr&lt;T&gt; lock() const {
-      if (!m_cb) return {}; // empty weak_ptr
-      if (m_cb-&gt;m_refs == 0) return {}; // object destroyed
+      inc_weak_ref();
+    }</span>
+    <span class="fragment hl-code">shared_ptr&lt;T&gt; lock() const {</span>
+      <span class="fragment hl-code">if (!m_cb) return {}; // empty weak_ptr</span>
+      <span class="fragment hl-code">if (m_cb-&gt;m_refs == 0) return {}; // object destroyed</span>
 
       shared_ptr&lt;T&gt; ret;
       ret-&gt;m_ptr = m_ptr;
       ret-&gt;m_cb = m_cb;
-      m_cb-&gt;inc_ref(); // inc strong ref
+      <span class="fragment hl-code">m_cb-&gt;inc_weak_ref(); // inc strong ref</span>
 
       return ret;
     }
@@ -352,20 +352,20 @@
         <h3><code>local_shared_ptr</code></h3>
         <br/>
         <ul>
-          <li>Atomic ops are <span class="fancy">not free</span>. Especially on ARM</li>
-          <li>Sometimes we only have one thread</li>
-          <ul>
+          <li class="fragment">Atomic ops are <span class="fancy">not free</span>. Especially on ARM</li>
+          <li class="fragment">Sometimes we only have one thread</li>
+          <ul class="fragment">
             <li>That's usually niche</li>
             <li>Single-threaded async programming</li>
             <li>Single-threaded flavors</li>
           </ul>
-          <li><a href="https://www.boost.org/doc/libs/1_81_0/libs/smart_ptr/doc/html/smart_ptr.html#local_shared_ptr" target="_blank">Boost.SmartPtr</a>: <code class="cinline">boost::local_shared_ptr</code></li>
+          <li class="fragment"><a href="https://www.boost.org/doc/libs/1_81_0/libs/smart_ptr/doc/html/smart_ptr.html#local_shared_ptr" target="_blank">Boost.SmartPtr</a>: <code class="cinline">boost::local_shared_ptr</code></li>
         </ul>
       </section>
 
       <section>
         <p><span class="fancy">Two raw pointers</span> per shared and weak pointer?
-        <p>Seems like a waste.</p>
+        <p class="fragment">Seems like a waste.</p>
       </section>
 
       <section>
@@ -373,28 +373,29 @@
         <pre><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   class shared_ptr {
-    control_block&lt;T&gt;* m_cb;
+    <span class="fragment hl-code">/* no T* here */</span>
+    <span class="fragment hl-code">control_block&lt;T&gt;* m_cb;</span>
     dec_ref() { if (m_cb) m_cb-&gt;dec_ref(); }
     inc_ref() { if (m_cb) m_cb-&gt;inc_ref(); }
   public:
-    T* operator-&gt;() { return &amp;m_cb-&gt;m_resource; }
+    <span class="fragment hl-code">T* operator-&gt;() { return &amp;m_cb-&gt;m_resource; }</span>
     // ...
   };
         </code></pre>
-        <p>... this could work. But...</p>
+        <p class="fragment">... this could work. But...</p>
       </section>
 
       <section class="slide">
         <h3>Control-Block-Only Pointers</h3>
         <br/>
         <ul>
-          <li>Performance:</li>
-          <ul>
+          <li class="fragment">Performance:</li>
+          <ul class="fragment">
             <li><code class="cinline">&amp;m_cb-&gt;m_resource</code></li>
             <li>two indirections per deref: <code class="cinline">*</code>, <code class="cinline">-></code>, <code class="cinline">get()</code></li>
           </ul>
-          <li>Functionality:</li>
-          <ul>
+          <li class="fragment">Functionality:</li>
+          <ul class="fragment">
             <li>Type erasure becomes impossible</li>
             <li><code class="cinline">std::shared_ptr&lt;shape&gt; s = some_square;</code></li>
           </ul>
@@ -403,37 +404,40 @@
 
       <section class="slide">
         <h3>Type Erasure</h3>
-        <pre><code class="cpp hljs" data-noescape>  std::shared_ptr&lt;shape&gt; c = some_square; // classic
-  std::shared_ptr&lt;void&gt; o = some_ptr; // opaque
-  std::shared_ptr&lt;std::string&gt; a(alice, &amp;alice-&gt;name); // aliasing</code></pre>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  <span class="fragment">std::shared_ptr&lt;shape&gt; c = some_square; // classic</span>
+  <span class="fragment">std::shared_ptr&lt;void&gt; o = some_ptr; // opaque</span>
+  <span class="fragment">std::shared_ptr&lt;std::string&gt; a(alice, &amp;alice-&gt;name); // aliasing</span></code></pre>
 
-        <pre><code class="cpp hljs" data-noescape>  std::shared_ptr&lt;void&gt; empty;
+        <pre class="fragment"><code class="cpp hljs" data-noescape>  std::shared_ptr&lt;void&gt; empty;
   int x;
   std::shared_ptr&lt;int&gt; o_O(empty, &amp;x); // abomination</code></pre>
+        <span class="fragment">
         <p>Always use this*:</p>
         <pre><code class="cpp hljs" data-noescape>  template &lt;typename U, typename T&gt;
   std::shared_ptr&lt;T&gt; make_aliased(const std::shared_ptr&lt;U&gt;&amp; owner, T* ptr) {
-      if (owner.use_count() == 0) return {};
+      <span class="fragment hl-code">if (owner.use_count() == 0) return {};</span>
       return std::shared_ptr&lt;T&gt;(owner, ptr);
   }</code></pre>
-        <p style="text-align: right">*Peter Dimov doesn't agree</p>
+        </span>
+        <p class="fragment" style="text-align: right">*Peter Dimov doesn't agree</p>
       </section>
 
 
       <section>
         <p>That's why we must have two raw pointers in <code class="cinline">shared_ptr</code></p>
-        <p>Or do we?...</p>
+        <p class="fragment">Or do we?...</p>
       </section>
 
       <section class="slide">
         <h3>Intrusive Shared Pointer</h3>
-        <p>What if the the object <em>does</em> cary its ref count?</p>
-        <p>Let's <span class="fancy">merge</span> the control block and the object:</p>
-        <pre><code class="cpp hljs" data-noescape>
+        <p class="fragment">What if the the object <em>does</em> cary its ref count?</p>
+        <p class="fragment">Let's <span class="fancy">merge</span> the control block and the object:</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   template &lt;typename T&gt;
   class intrusive_shared_ptr {
-    T* m_ptr;
-    dec_ref() { if (m_ptr) m_ptr-&gt;dec_ref(); }
+    <span class="fragment hl-code">/* no control block here */</span>
+    <span class="fragment hl-code">T* m_ptr; // this is also a control block</span>
+    dec_ref() { <span class="fragment hl-code">if (m_ptr) m_ptr-&gt;dec_ref();</span> }
     inc_ref() { if (m_ptr) m_ptr-&gt;inc_ref(); }
   public:
     ...
@@ -443,13 +447,13 @@
 
       <section class="slide">
         <h3>Using Intrusive Shared Pointers</h3>
-        <p>Inherit from a common parent</p>
-        <pre><code class="cpp hljs" data-noescape>
+        <p class="fragment">Inherit from a common parent</p>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   class person : public ref_countable {
     // ...
   };
         </code></pre>
-        <ul>
+        <ul class="fragment">
           <li><a href="https://doc.qt.io/qt-6/qshareddata.html" target="_blank">Qt</a>: <code class="cinline">QSharedData</code></li>
           <li><a href="https://docwiki.embarcadero.com/Libraries/Alexandria/en/System.TObject" target="_blank">OWL</a>: <code class="cinline">TObject</code></li>
           <li><a href="https://www.boost.org/doc/libs/1_81_0/libs/smart_ptr/doc/html/smart_ptr.html#intrusive_ref_counter" target="_blank">Boost.SmartPtr</a>: <code class="cinline">intrusive_ref_counter&lt;Base&gt;</code></li>
@@ -460,15 +464,15 @@
         <h3>Intrusive Shared Pointer Facts</h3>
         <br/>
         <ul>
-          <li class="pro"><code>sizeof(shared_ptr&lt;T&gt;) == sizeof(void*)</code></li>
-          <li class="pro">Free <code>shared_from_this</code></li>
-          <li class="pro">Free atomic load/store</li>
-          <li class="con">No shared pointers of foreign types</li>
-          <li class="con">Weak pointers are really hard (and almost never implemented)</li>
-          <li class="con">Only hierarchical type erasure</li>
+          <li class="pro fragment"><code>sizeof(shared_ptr&lt;T&gt;) == sizeof(void*)</code></li>
+          <li class="pro fragment">Free <code>shared_from_this</code></li>
+          <li class="pro fragment">Free atomic load/store</li>
+          <li class="con fragment">No shared pointers of foreign types</li>
+          <li class="con fragment">Weak pointers are really hard (and almost never implemented)</li>
+          <li class="con fragment">Only hierarchical type erasure</li>
           <ul>
-            <li><code class="cinline">i_shared_ptr&lt;TObject&gt;</code> &asymp; <code class="cinline">shared_ptr&lt;void&gt;</code> </li>
-            <li class="con">No aliasing</li>
+            <li class="fragment"><code class="cinline">i_shared_ptr&lt;TObject&gt;</code> &asymp; <code class="cinline">shared_ptr&lt;void&gt;</code> </li>
+            <li class="con fragment">No aliasing</li>
           </ul>
         </ul>
       </section>
@@ -479,37 +483,37 @@
 
       <section class="slide">
         <h3>Atomic Load and Store</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   std::shared_ptr&lt;person&gt; alice;
 
-  // thread a
-  std::atomic_store(&amp;alice, std::make_shared&lt;person&gt;(&quot;Alice&quot;));
+<span class="fragment">  // thread a
+  std::atomic_store(&amp;alice, std::make_shared&lt;person&gt;(&quot;Alice&quot;));</span>
 
-  // thread b
-  auto ptr = std::atomic_load(&amp;alice);
+<span class="fragment">  // thread b
+  auto ptr = std::atomic_load(&amp;alice);</span>
         </code></pre>
         <ul>
-          <li><a href="https://github.com/iboB/kuzco" target="_blank">kuzco</a>: an immutable state library</li>
-          <li>Deprecated in C++20 😠</li>
-          <li>...in favor of <code class="cinline">std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>🤮</li>
-          <li>But... how does it even work?</li>
+          <li class="fragment"><a href="https://github.com/iboB/kuzco" target="_blank">kuzco</a>: an immutable state library</li>
+          <li class="fragment">Deprecated in C++20 <span class="fragment">😠</span></li>
+          <li class="fragment">...in favor of <code class="cinline">std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code><span class="fragment">🤮</span></li>
+          <li class="fragment">But... how does it even work?</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Implementing Atomic Load and Store</h3>
         <ul>
-          <li>Trivial with <code class="cinline">intrusive_shared_ptr</code></li>
-          <li>Impossible with two-word <code class="cinline">shared_ptr</code></li>
+          <li class="fragment">Trivial with <code class="cinline">intrusive_shared_ptr</code></li>
+          <li class="fragment">Impossible with two-word <code class="cinline">shared_ptr</code></li>
           <ul>
-            <li>DCAS, MCAS</li>
-            <li><span class="fancy">All</span> implementations rely on global locking primitives</li>
-            <li>🤮</li>
+            <li class="fragment">DCAS, MCAS</li>
+            <li class="fragment"><span class="fancy">All</span> implementations rely on global locking primitives</li>
+            <li class="fragment">🤮</li>
           </ul>
-          <li>Deprecated in C++20 👍</li>
-          <li>...in favor of <code class="cinline">std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>😠</li>
-          <li><span class="fancy">Atomic deref is evil!</span></li>
-          <li><a href=https://github.com/iboB/itlib/blob/master/include/itlib/atomic_shared_ptr_storage.hpp target="_blank"><code>itlib::atomic_shared_ptr_storage</code></a></li>
+          <li class="fragment">Deprecated in C++20 👍</li>
+          <li class="fragment">...in favor of <code class="cinline">std::atomic&lt;std::shared_ptr&lt;T&gt;&gt;</code>😠</li>
+          <li class="fragment"><span class="fancy">Atomic deref is evil!</span></li>
+          <li class="fragment"><a href=https://github.com/iboB/itlib/blob/master/include/itlib/atomic_shared_ptr_storage.hpp target="_blank"><code>itlib::atomic_shared_ptr_storage</code></a></li>
         </ul>
       </section>
 
@@ -517,13 +521,13 @@
         <h3>Problems So Far</h3>
         <br/>
         <ul>
-          <li>Unneeded atomic ops: <code class="finline">boost::local_shared_ptr</code></li>
-          <li>Dangerous aliasing ctor: <code class="finline">itlib::make_aliased</code></li>
-          <li>Two-word size: <span class="fancy">intrusive shared pointer</span></li>
-          <li>Evil atomic pointer: <code class="finline">itlib::atomic_shared_ptr_storage</code></li>
+          <li class="fragment">Unneeded atomic ops: <code class="finline">boost::local_shared_ptr</code></li>
+          <li class="fragment">Dangerous aliasing ctor: <code class="finline">itlib::make_aliased</code></li>
+          <li class="fragment">Two-word size: <span class="fancy">intrusive shared pointer</span></li>
+          <li class="fragment">Evil atomic pointer: <code class="finline">itlib::atomic_shared_ptr_storage</code></li>
         </ul>
         <br/><br/>
-        <p class="pinner">Everything is solved. Why rewrite?</p>
+        <p class="pinner fragment">Everything is solved. Why rewrite?</p>
       </section>
 
       <section>
@@ -536,28 +540,29 @@
 
       <section class="slide">
         <h3>Circular References</h3>
-        <pre><code class="cpp hljs" data-noescape>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
   struct person {
     std::string name;
-    std::vector&lt;std::shared_ptr&lt;person&gt;&gt; siblings;
+    <span class="fragment hl-code">std::vector&lt;std::shared_ptr&lt;person&gt;&gt; siblings;</span>
   };
   // ...
-  alice->siblings.push_back(bob);
-  bob->siblings.push_back(alice);
+  <span class="fragment hl-code">alice->siblings.push_back(bob);</span>
+  <span class="fragment hl-code">bob->siblings.push_back(alice);</span>
   // ...
-  people.erase(alice);
-  people.erase(bob);
+<span class="fragment hl-code">  people.erase(alice);
+  people.erase(bob);</span>
         </code></pre>
-        <p>The most important use-case for <span class="fancy">weak pointers</span></p>
+        <p class="fragment">The most important use-case for <span class="fancy">weak pointers</span></p>
       </section>
 
       <section class="slide">
         <h3>Loose Shared Pointers</h3>
-        <ul>
+        <ul class="fragment">
           <li>Managers</li>
           <li>Structured loggers</li>
           <li>Delayed garbage collection</li>
         </ul>
+        <span class="fragment">
         <p>Common way to hunt and test:</p>
         <pre><code class="cpp hljs" data-noescape>
   struct record_instance {
@@ -566,25 +571,26 @@
     ~record_instance() { instances.erase(this); }
   };
         </code></pre>
+        </span>
       </section>
 
       <section class="slide">
         <h3>Loose Weak Pointers</h3>
-        <p>Common way to hunt and test:</p>
-        <img src="dunno.jpg" />
+        <p class="fragment">Common way to hunt and test:</p>
+        <img  class="fragment" src="dunno.jpg" />
       </section>
 
       <section class="slide">
         <h3>Shared Pointer Leaks</h3>
         <br/>
         <ul>
-          <li>Hard to impossible to test</li>
-          <li>Hard to <span class="fancy">even notice</span></li>
-          <li>Shared pointers are rarely found in hot loops</li>
-          <li>Objects are usually small</li>
-          <li>Low creation velocity</li>
-          <li>Uncontrolled memory growth is slow</li>
-          <li>May take <span class="fancy">hours, or days, or weeks</span> of runtime</li>
+          <li class="fragment">Hard to impossible to test</li>
+          <li class="fragment">Hard to <span class="fancy">even notice</span></li>
+          <li class="fragment">Shared pointers are rarely found in hot loops</li>
+          <li class="fragment">Objects are usually small</li>
+          <li class="fragment">Low creation velocity</li>
+          <li class="fragment">Uncontrolled memory growth is slow</li>
+          <li class="fragment">May take <span class="fancy">hours, or days, or weeks</span> of runtime</li>
         </ul>
       </section>
 
@@ -592,10 +598,10 @@
         <h3>Classic Leak Detectors</h3>
         <br/>
         <ul>
-          <li>They <span class="fancy">hook</span> themselves to <code class="cinline">malloc</code> and <code class="cinline">free</code></li>
-          <li>Log allocations and deallocations <span class="fancy">with metadata</span></li>
-          <li>They <span class="fancy">can't tell</span> what is a leak</li>
-          <li>It's up to us to <span class="fancy">inspect the metadata</span></li>
+          <li class="fragment">They <span class="fancy">hook</span> themselves to <code class="cinline">malloc</code> and <code class="cinline">free</code></li>
+          <li class="fragment">Log allocations and deallocations <span class="fancy">with metadata</span></li>
+          <li class="fragment">They <span class="fancy">can't tell</span> what is a leak</li>
+          <li class="fragment">It's up to us to <span class="fancy">inspect the metadata</span></li>
         </ul>
       </section>
 
@@ -613,12 +619,12 @@
         <h3>Nope</h3>
         <br/>
         <ul>
-          <li>Hooking to <code class="cinline">malloc</code> and <code class="cinline">free</code> is a documented extention point</li>
-          <li><code class="cinline">std::shared_ptr</code> is opaque</li>
-          <li>The control block is an <span class="fancy">implementation detail</span></li>
+          <li class="fragment">Hooking to <code class="cinline">malloc</code> and <code class="cinline">free</code> is a documented extention point</li>
+          <li class="fragment"><code class="cinline">std::shared_ptr</code> is opaque</li>
+          <li class="fragment">The control block is an <span class="fancy">implementation detail</span></li>
         </ul>
         <br/><br/>
-        <p>This can only be achieved if we were to <span class="fancy">rewrite</span> <code class="cinline">std::shared_ptr</code> with a custom control block</p>
+        <p class="fragment">This can only be achieved if we were to <span class="fancy">rewrite</span> <code class="cinline">std::shared_ptr</code> with a custom control block</p>
       </section>
 
       <section>
@@ -630,9 +636,9 @@
         <br/>
         <ul>
           <li><a href="https://github.com/iboB/xmem/" target="_blank">github.com/iboB/xmem</a></li>
-          <li>Reimplementation of std smart pointers</li>
-          <li>... with a twist</li>
-          <li>The control block is a <span class="fancy">template argument</span></li>
+          <li class="fragment">Reimplementation of std smart pointers</li>
+          <li class="fragment">... with a twist</li>
+          <li class="fragment">The control block is a <span class="fancy">template argument</span></li>
         </ul>
       </section>
 
@@ -644,12 +650,12 @@
         <h3>Control Block Polymorphism Facts</h3>
         <br/>
         <ul>
-          <li class="con">No third party libs with <code>std::shared_ptr</code></li>
-          <li class="con">Needs care to avoid slow perf</li>
-          <li class="pro">Catch leaks</li>
-          <li class="pro">API-compatible with <code>std::shared_ptr</code></li>
-          <li class="pro"><code>local_shared_ptr</code> is an artifact</li>
-          <li class="pro">Potential runtime polymorphism</li>
+          <li class="con fragment">No third party libs with <code>std::shared_ptr</code></li>
+          <li class="con fragment">Needs care to avoid slow perf</li>
+          <li class="pro fragment">Catch leaks</li>
+          <li class="pro fragment">API-compatible with <code>std::shared_ptr</code></li>
+          <li class="pro fragment"><code>local_shared_ptr</code> is an artifact</li>
+          <li class="pro fragment">Potential runtime polymorphism</li>
         </ul>
       </section>
 
