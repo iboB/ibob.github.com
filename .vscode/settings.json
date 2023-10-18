@@ -25,5 +25,6 @@
         "vector": "cpp"
     },
     "editor.unicodeHighlight.ambiguousCharacters": false,
-    "cmake.configureOnOpen": false
+    "cmake.configureOnOpen": false,
+    "dotnet.defaultSolution": "disable"
 }
