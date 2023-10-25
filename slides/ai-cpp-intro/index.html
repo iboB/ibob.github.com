@@ -85,10 +85,11 @@
         <h3>This talk</h3>
         <br/>
         <ul>
-          <li>&#x26a0;&#xfe0f; More inspirational than educational</li>
-          <li>&#x26a0;&#xfe0f; Contains personal opinion on software</li>
-          <li>More technical than philosophical</li>
-          <li>For programmers who are <span class="fancy">not</span> in the ML field</li>
+          <li>&#x26a0;&#xfe0f; More <span class="fancy">inspirational</span> than educational</li>
+          <li>&#x26a0;&#xfe0f; Contains <span class="fancy">personal opinion</span> on software</li>
+          <li>More <span class="fancy">technical</span> than philosophical</li>
+          <li>The <span class="fancy">gist</span>, rather than the detail</li>
+          <li>Mainly for programmers who are <span class="fancy">not</span> in the ML field</li>
           <li>... and who have experience or interest in <span class="fancy">low-level</span></li>
           <li>Themes</li>
           <ul>
@@ -510,13 +511,24 @@
         <br/>
         <ul>
           <li>What is a model anyway?</li>
-          <li>The computation sequence</li>
+          <li>Any of:</li>
+          <li>The layer/computation sequence</li>
           <li>The parameter (weight) tensors</li>
         </ul>
       </section>
 
       <section>
-        <h2>Mnist LeNet</h2>
+        <h2>LeNet</h2>
+      </section>
+
+      <section>
+        <img class="diagram" src="mnist.png" />
+        <p>MNIST dataset</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="lenet.webp" />
+        <p>LeNet Model</p>
       </section>
 
       <section>
@@ -571,7 +583,100 @@
       </section>
 
       <section>
-        <h2>Resources</h2>
+        <h2>Practical Challenges With Inference</h2>
+      </section>
+
+      <section class="slide">
+        <h3>Number crunching</h3>
+        <br/>
+        <ul>
+          <li>GPGPU is <span class="fancy">the</span> way to go</li>
+          <li>SIMD</li>
+          <li>gemm</li>
+          <li>cache-locality</li>
+          <li>Memory bandwitdh is typically the bottleneck - M2 Ultra's time to shine</li>
+          <li>Quantizations. Yes, Q2 is a thing</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Tweaks</h3>
+        <br/>
+        <ul>
+          <li>They come more often that you would think</li>
+          <li>Quantization</li>
+          <li>Reshapes</li>
+          <li>Custom kernels</li>
+          <li>Sampling and resampling</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>How to Start?</h2>
+      </section>
+
+      <section>
+        <p>First implement a simple model in the most naive way!</p>
+      </section>
+
+      <section>
+        <p>Yes, play with Python, too</p>
+        <p class="fragment"><img style="width: 20%" class="diagram" src="../beyond-vec/nope.png" /></p>
+      </section>
+
+      <section class="slide">
+        <h3>Libs and Frameworks</h3>
+        <br/>
+        <ul>
+          <li>Monsters: PyTorch, TensorFlow/Keras, onnx</li>
+          <li><a href="https://github.com/ggerganov/ggml">ggerganov/ggml</a>: Exotic quantizations, CPU, Metal, CUDA</li>
+          <li><a href="https://github.com/OpenNMT/CTranslate2">OpenNMT/CTranslate2</a>: CUDA</li>
+          <li><a href="https://github.com/Tencent/ncnn">Tencent/ncnn</a>: Vulkan</li>
+          <li>NVIDIA CUDA-only bloat: FasterTrasformer, cuDNN, TensorRT</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Examples and Sources</h3>
+        <br/>
+        <ul>
+          <li>ggml examples</li>
+          <li><a href="https://github.com/ggerganov/llama.cpp">ggerganov/llama.cpp</a>: LLaMa with ggml</li>
+          <li><a href="https://github.com/karpathy/llama2.c">karpathy/llama2.c</a>: LLaMa in pure C</li>
+          <li><a href="https://github.com/intel/intel-extension-for-transformers">intel/intel-extension-for-transformers</a>: Intel-specific</li>
+          <li>NVIDIA CUDA-only bloat: FasterTrasformer, cuDNN, TensorRT</li>
+          <li>And many, many more</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Practical Steps</h3>
+        <br/>
+        <ul>
+          <li>Find a model (for example on HuggingFace)</li>
+          <li>Look at the model description if available</li>
+          <li>Look at the Python implementation</li>
+          <li>Yes, there will be one</li>
+          <li>Implement tensor ops</li>
+          <li>Compare intermediate steps with the Python implementation</li>
+          <li>...</li>
+          <li>Profit</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>But Why?</h3>
+        <br/>
+        <ul>
+          <li>If you like <span class="fancy">number crunching</span></li>
+          <li>If you like <span class="fancy">chasing nanoseconds</span></li>
+          <li>If you like <span class="fancy">doing magic</span></li>
+          <li>If you don't like "scientific" code</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>You are needed!</p>
       </section>
 
       <section class="fin">
