@@ -85,14 +85,14 @@
         <h3>This talk</h3>
         <br/>
         <ul>
-          <li>&#x26a0;&#xfe0f; More <span class="fancy">inspirational</span> than educational</li>
-          <li>&#x26a0;&#xfe0f; Contains <span class="fancy">personal opinion</span> on software</li>
-          <li>More <span class="fancy">technical</span> than philosophical</li>
-          <li>The <span class="fancy">gist</span>, rather than the detail</li>
-          <li>Mainly for programmers who are <span class="fancy">not</span> in the ML field</li>
-          <li>... and who have experience or interest in <span class="fancy">low-level</span></li>
-          <li>Themes</li>
-          <ul>
+          <li class="fragment">&#x26a0;&#xfe0f; More <span class="fancy">inspirational</span> than educational</li>
+          <li class="fragment">&#x26a0;&#xfe0f; Contains <span class="fancy">personal opinion</span> on software</li>
+          <li class="fragment">More <span class="fancy">technical</span> than philosophical</li>
+          <li class="fragment">The <span class="fancy">gist</span>, rather than the detail</li>
+          <li class="fragment">Mainly for programmers who are <span class="fancy">not</span> in the ML field</li>
+          <li class="fragment">... and who have experience or interest in <span class="fancy">low-level</span></li>
+          <li class="fragment">Themes</li>
+          <ul class="fragment">
             <li><em>Why should you consider this?</em></li>
             <li><em>What can you do?</em></li>
           </ul>
@@ -117,13 +117,13 @@
 
       <section>
         <p>A Cambrian explosion of AI tools</p>
-        <p>... and startups</p>
-        <p>... and software as a whole</p>
+        <p class="fragment">... and startups</p>
+        <p class="fragment">... and software as a whole</p>
       </section>
 
       <section>
         <p>There's something new every day.</p>
-        <small>(this talk will probably be outdated by tomorrow)</small>
+        <small class="fragment">(this talk will probably be outdated by tomorrow)</small>
       </section>
 
       <section>
@@ -134,12 +134,12 @@
         <h3>Modern AI Software</h3>
         <br/>
         <ul>
-          <li>In many regards software <span class="fancy">like any other</span></li>
-          <li>Written by teams <span>(of humans)</span></li>
-          <li>...with conventional software development tools</li>
-          <li>It has <em>some</em> unusual, <span class="fancy">but not unique</span>, features</li>
-          <li>Many libraries and frameworks exist to help</li>
-          <li>It's most often done in <span class="fancy">Python</span></li>
+          <li class="fragment">In many regards software <span class="fancy">like any other</span></li>
+          <li class="fragment">Written by teams <span class="fragment">(of humans)</span></li>
+          <li class="fragment">...with conventional software development tools</li>
+          <li class="fragment">It has <em>some</em> unusual, <span class="fancy">but not unique</span>, features</li>
+          <li class="fragment">Many libraries and frameworks exist to help</li>
+          <li class="fragment">It's most often done in <span class="fancy">Python</span></li>
         </ul>
       </section>
 
@@ -147,11 +147,11 @@
         <h3>Python Stacks</h3>
         <br/>
         <ul>
-          <li>The big fish: <span class="fancy">PyTorch</span> and <span class="fancy">TensorFlow</span></li>
-          <li>Every ML framwork has a Python front end</li>
-          <li>Why Python?</li>
+          <li class="fragment">The big fish: <span class="fancy">PyTorch</span> and <span class="fancy">TensorFlow</span></li>
+          <li class="fragment">Every ML framwork has a Python front end</li>
+          <li class="fragment">Why Python?</li>
         </ul>
-        <p class="pinner"><img class="diagram" src="../xmem-shared-ptr/dunno.jpg"/></p>
+        <p class="fragment pinner"><img class="diagram" src="../xmem-shared-ptr/dunno.jpg"/></p>
       </section>
 
       <section>
@@ -162,16 +162,16 @@
         <h3>Borislav on Python</h3>
         <br/>
         <ul>
-          <li>Is Python the best language for ML?</li>
-          <ul>
+          <li class="fragment">Is Python the best language for ML?</li>
+          <ul class="fragment">
             <li>No.</li>
           </ul>
-          <li>It it the worst language for ML?</li>
+          <li class="fragment">It it the worst language for ML?</li>
           <ul>
-            <li>No. But it's down there</li>
+            <li class="fragment">No. <span class="fragment">But it's down there</span></li>
           </ul>
-          <li><span class="fancy">Extreme care</span> is needed for software in duck-typed languages</li>
-          <li>Python stacks are <span class="fancy">a mess</span></li>
+          <li class="fragment"><span class="fancy">Extreme care</span> is needed for software in duck-typed languages</li>
+          <li class="fragment">Python stacks are <span class="fancy">a mess</span></li>
         </ul>
       </section>
 
@@ -183,9 +183,9 @@
         <h3>Python Stacks</h3>
         <br/>
         <ul>
-          <li>Package managers: pip, pipenv, poetry, npm, conda</li>
-          <li>Env managers: conda, mamba, pyenv, containers</li>
-          <li>Notebooks and <span class="fancy"><em>Scientific</em> code</span></li>
+          <li class="fragment">Package managers: pip, pipenv, poetry, npm, conda</li>
+          <li class="fragment">Env managers: conda, mamba, pyenv, containers</li>
+          <li class="fragment">Notebooks and <span class="fancy"><em>Scientific</em> code</span></li>
         </ul>
       </section>
 
@@ -207,11 +207,11 @@
       <section>
         <p><span class="fancy">"No it's not slow!"</span></p>
         <ul>
-          <li>"This Python program is faster than its C++ equivalent!"</li>
-          <li>"<code>.pyc</code> should do it"</li>
-          <li>"Python is the most optimized interpreter there is!"</li>
-          <li>"Python JIT compilers work!"</li>
-          <li>"No matter. The low-level framework does the actual work."</li>
+          <li class="fragment">"This Python program is faster than its C++ equivalent!"</li>
+          <li class="fragment">"<code>.pyc</code> should do it"</li>
+          <li class="fragment">"Python is the most optimized interpreter there is!"</li>
+          <li class="fragment">"Python JIT compilers work!"</li>
+          <li class="fragment">"No matter. The low-level framework does the actual work."</li>
         </ul>
       </section>
 
@@ -219,20 +219,20 @@
         <h3>Opaque Frameworks</h3>
         <br/>
         <ul>
-          <li><span class="fancy">Data flow</span> suffers</li>
-          <li>Tweaks are <span class="fancy">hard to impossible</span></li>
-          <li>Many similarities with <span class="fancy">game engines</span></li>
-          <li>Bloat intensifies <img class="diagram" style="position: absolute; top: 255px; left: 20px;" src="laser-eyes.png" /></li>
+          <li class="fragment"><span class="fancy">Data flow</span> suffers</li>
+          <li class="fragment">Tweaks are <span class="fancy">hard to impossible</span></li>
+          <li class="fragment">Many similarities with <span class="fancy">game engines</span></li>
+          <li class="fragment">Bloat intensifies <img class="diagram" style="position: absolute; top: 255px; left: 20px;" src="laser-eyes.png" /></li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Something Good About Python</h3>
         <br/>
-        <pre><code class="python hljs">
+        <pre class="fragment"><code class="python hljs">
   slice = a[5:10, :20:2] # slicing is pretty neat
         </code></pre>
-        <p style="text-align: right"><small>* Similar syntax coming soon to C++</small></p>
+        <p class="fragment" style="text-align: right"><small>* Similar syntax coming soon to C++</small></p>
       </section>
 
       <section>
@@ -260,11 +260,11 @@
         <h3>Borislav Stanimirov</h3>
         <br/>
         <ul>
-          <li>C++: <span class="fancy">yes</span></li>
-          <li>Low-level: <span class="fancy">yes</span></li>
-          <li>GPGPU: <span class="fancy">yes</span></li>
-          <li>Chasing microseconds: <span class="fancy">yes</span></li>
-          <li>Machine learning: <em>well...</em></li>
+          <li class="fragment">C++: <span class="fancy">yes</span></li>
+          <li class="fragment">Low-level: <span class="fancy">yes</span></li>
+          <li class="fragment">GPGPU: <span class="fancy">yes</span></li>
+          <li class="fragment">Chasing microseconds: <span class="fancy">yes</span></li>
+          <li class="fragment">Machine learning: <em class="fragment">well...</em></li>
         </ul>
       </section>
 
@@ -302,7 +302,7 @@
 
       <section>
         <p>What is a neural network?</p>
-        <p>It's a <span class="fancy">function</span></p>
+        <p class="fragment">It's a <span class="fancy">function</span></p>
       </section>
 
       <section>
@@ -338,7 +338,7 @@
 
       <section>
         <p>What is a neural network?</p>
-        <p>It's a <span class="fancy">computation with parameters</span></p>
+        <p class="fragment">It's a <span class="fancy">computation with parameters</span></p>
       </section>
 
       <section>
@@ -357,11 +357,11 @@
         <h3>Training Neural Networks</h3>
         <br/>
         <ul>
-          <li>Solve the function with respect to the parameters</li>
-          <li>Gradient descent and differentiability</li>
-          <li>Learning rate</li>
-          <li>Over/Underfitting</li>
-          <li>...</li>
+          <li class="fragment">Solve the function with respect to the parameters</li>
+          <li class="fragment">Gradient descent and differentiability</li>
+          <li class="fragment">Learning rate</li>
+          <li class="fragment">Over/Underfitting</li>
+          <li class="fragment">...</li>
         </ul>
       </section>
 
@@ -373,12 +373,12 @@
         <h3>Designing Neural Networks</h3>
         <br/>
         <ul>
-          <li><span class="fancy">It's magic</span></li>
-          <li>Mostly indistinguishable from fortune telling</li>
-          <li><span class="fancy">Years</span> of experience</li>
-          <li>Lots of <span class="fancy">untransferrable knowledge</span></li>
-          <li>Takes <span class="fancy">millions of hours</span></li>
-          <li>It seems that we do need Python here &#x1f622;</li>
+          <li class="fragment"><span class="fancy">It's magic</span></li>
+          <li class="fragment">Mostly indistinguishable from fortune telling</li>
+          <li class="fragment"><span class="fancy">Years</span> of experience</li>
+          <li class="fragment">Lots of <span class="fancy">untransferrable knowledge</span></li>
+          <li class="fragment">Takes <span class="fancy">millions of hours</span></li>
+          <li class="fragment">It seems that we do need Python here &#x1f622;</li>
         </ul>
       </section>
 
@@ -390,16 +390,16 @@
         <h3>Neural Network Applications</h3>
         <br/>
         <ul>
-          <li>Design - not today</li>
-          <li>Training - not today</li>
-          <li><span class="fancy">Inference</span> - executing the computation - today</li>
-          <li>Inference on the edge - tomorrow</li>
+          <li class="fragment">Design - not today</li>
+          <li class="fragment">Training - not today</li>
+          <li class="fragment"><span class="fancy">Inference</span> - executing the computation - today</li>
+          <li class="fragment">Inference on the edge - tomorrow</li>
         </ul>
       </section>
 
       <section>
         <p>What is a neural network?</p>
-        <p>A network of <span class="fancy">neurons</span>, duh</p>
+        <p class="fragment">A network of <span class="fancy">neurons</span>, duh</p>
       </section>
 
       <section>
@@ -414,26 +414,26 @@
 
       <section>
         <img class="diagram" src="single-layer.png" />
-        <p>Wait! I know this</p>
+        <p class="fragment">Wait! I know this</p>
       </section>
 
       <section>
         <p>$\begin{pmatrix} y_1 \\ y_2 \\ y_3 \end{pmatrix} = g \left( \begin{pmatrix} w_{11} & w_{12} & w_{13} & w_{14} \\ w_{21} & w_{22} & w_{23} & w_{24} \\ w_{31} & w_{32} & w_{33} & w_{14} \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{pmatrix} + \begin{pmatrix} b_1 \\ b_2 \\ b_3 \end{pmatrix} \right)$</p>
-        <p>Yes. This is everything</p>
+        <p class="fragment">Yes. This is mostly everything</p>
       </section>
 
       <section class="slide">
         <h3>Types of layers</h3>
         <br/>
         <ul>
-          <li>This was the <span class="fancy">linear</span> (fully connected, dense) layer</li>
-          <li>Every layer type can be represented by a fully connected one</li>
-          <li>It's a matter of efficiency</li>
-          <li>Convolution/Pooling</li>
-          <li>Attention</li>
-          <li>Normalization</li>
-          <li>"Layer" actually is pretty <span class="fancy">fuzzy</span></li>
-          <li><a href="https://www.asimovinstitute.org/neural-network-zoo/">The Neural Network Zoo</a></li>
+          <li class="fragment">This was the <span class="fancy">linear</span> (fully connected, dense) layer</li>
+          <li class="fragment">Almost all layer types can be represented as fully connected</li>
+          <li class="fragment">It's a matter of efficiency</li>
+          <li class="fragment">Convolution/Pooling layers</li>
+          <li class="fragment">Normalization layers</li>
+          <li class="fragment">Attention layers</li>
+          <li class="fragment">"Layer" actually <em>is</em> pretty <span class="fancy">fuzzy</span></li>
+          <li class="fragment"><a href="https://www.asimovinstitute.org/neural-network-zoo/">The Neural Network Zoo</a></li>
         </ul>
       </section>
 
@@ -441,17 +441,17 @@
         <h3>Activation layers</h3>
         <br/>
         <ul>
-          <li>Without them every output would be a linear function of the input</li>
-          <li><span class="fancy">Layer count wouldn't matter</span></li>
-          <li>Sigmoids</li>
-          <ul>
+          <li class="fragment">Without them every output would be a linear function of the input</li>
+          <li class="fragment"><span class="fancy">Layer count wouldn't matter</span></li>
+          <li class="fragment">Sigmoids</li>
+          <ul class="fragment">
             <li>Logistic function</li>
             <li>tanh</li>
             <li>smht</li>
           </ul>
-          <li>ReLU</li>
-          <li>Leaky ReLU</li>
-          <li>GELU</li>
+          <li class="fragment">ReLU</li>
+          <li class="fragment">Leaky ReLU</li>
+          <li class="fragment">GELU</li>
         </ul>
       </section>
 
@@ -461,7 +461,8 @@
 
       <section>
         <img class="diagram" src="conv2d-01.png" />
-        <p>Neurons don't depend on the entire input</p>
+        <p class="fragment">Neurons don't depend on the entire input</p>
+        <p class="fragment">Weights are shared</p>
       </section>
 
       <section>
@@ -475,12 +476,12 @@
 
       <section>
         <img class="diagram" src="pooling.png" />
-        <p>Collecting "important" features</p>
+        <p class="fragment">Collecting "important" features</p>
       </section>
 
       <section>
         <p>What is a neural network?</p>
-        <p>A collection of layers which define a computation</p>
+        <p class="fragment"><span class="fancy">A collection of layers which define a computation</span></p>
       </section>
 
       <section>
@@ -490,17 +491,17 @@
       <section class="slide">
         <h3>Tensors</h3>
         <ul>
-          <li>No, not physical ones.</li>
-          <li>Just <span class="fancy">N-d arrays</span></li>
-          <li>Think <code class="cinline">std::vector</code></li>
-          <li>Shape: <code class="cinline">[[1,2],[3,4],[5,6]] -> (3, 2)</code>... or maybe <code class="cinline">(2, 3)</code></li>
-          <li>Broadcast: </li>
-          <ul>
+          <li class="fragment">No, not physical ones.</li>
+          <li class="fragment">Just <span class="fancy">N-d arrays</span></li>
+          <li class="fragment">Think <code class="cinline">std::vector</code></li>
+          <li class="fragment">Shape: <code class="cinline">[[1,2],[3,4],[5,6]] -> (3, 2)</code>... or maybe <code class="cinline">(2, 3)</code></li>
+          <li class="fragment">Broadcast: </li>
+          <ul class="fragment">
             <li><code class="cinline">f([1,2,3]) = [f(1), f(2), f(3)]</code></li>
             <li><code class="cinline">[[1,2],[3,4]] + [10,20] = [[11,22],[13,24]]</code></li>
           </ul>
-          <li>Tensors for weight, bias, layer</li>
-          <ul>
+          <li class="fragment">Tensors for weight, bias, layer</li>
+          <ul class="fragment">
             <li><code class="cinline">ll_5 = mul(w_5, l_4) + b_5 </code></li>
           </ul>
         </ul>
@@ -510,15 +511,18 @@
         <h3>Models</h3>
         <br/>
         <ul>
-          <li>What is a model anyway?</li>
-          <li>Any of:</li>
-          <li>The layer/computation sequence</li>
-          <li>The parameter (weight) tensors</li>
+          <li class="fragment">What is a model anyway?</li>
+          <li class="fragment">Any of:</li>
+          <ul>
+            <li class="fragment">The layer/computation sequence</li>
+            <li class="fragment">The parameter (weight) tensors</li>
+          </ul>
         </ul>
       </section>
 
       <section>
         <h2>LeNet</h2>
+        <p class="fragment">AI like it's 1989</p>
       </section>
 
       <section>
@@ -590,12 +594,12 @@
         <h3>Number crunching</h3>
         <br/>
         <ul>
-          <li>GPGPU is <span class="fancy">the</span> way to go</li>
-          <li>SIMD</li>
-          <li>gemm</li>
-          <li>cache-locality</li>
-          <li>Memory bandwitdh is typically the bottleneck - M2 Ultra's time to shine</li>
-          <li>Quantizations. Yes, Q2 is a thing</li>
+          <li class="fragment">GPGPU is <span class="fancy">the</span> way to go</li>
+          <li class="fragment">SIMD</li>
+          <li class="fragment">gemm</li>
+          <li class="fragment">cache-locality</li>
+          <li class="fragment">Memory bandwitdh bottlenecks <span class="fragment">- M2 Ultra's time to shine</span></li>
+          <li class="fragment">Quantizations. Yes, Q2 is a thing</li>
         </ul>
       </section>
 
@@ -603,11 +607,11 @@
         <h3>Tweaks</h3>
         <br/>
         <ul>
-          <li>They come more often that you would think</li>
-          <li>Quantization</li>
-          <li>Reshapes</li>
-          <li>Custom kernels</li>
-          <li>Sampling and resampling</li>
+          <li class="fragment">They come more often that you would think</li>
+          <li class="fragment">Quantization</li>
+          <li class="fragment">Reshapes</li>
+          <li class="fragment">Custom kernels</li>
+          <li class="fragment">Sampling and resampling</li>
         </ul>
       </section>
 
@@ -628,11 +632,11 @@
         <h3>Libs and Frameworks</h3>
         <br/>
         <ul>
-          <li>Monsters: PyTorch, TensorFlow/Keras, onnx</li>
-          <li><a href="https://github.com/ggerganov/ggml">ggerganov/ggml</a>: Exotic quantizations, CPU, Metal, CUDA</li>
-          <li><a href="https://github.com/OpenNMT/CTranslate2">OpenNMT/CTranslate2</a>: CUDA</li>
-          <li><a href="https://github.com/Tencent/ncnn">Tencent/ncnn</a>: Vulkan</li>
-          <li>NVIDIA CUDA-only bloat: FasterTrasformer, cuDNN, TensorRT</li>
+          <li class="fragment">Monsters: PyTorch, TensorFlow/Keras, onnx</li>
+          <li class="fragment"><a href="https://github.com/ggerganov/ggml">ggerganov/ggml</a>: Exotic quantizations, CPU, Metal, CUDA</li>
+          <li class="fragment"><a href="https://github.com/OpenNMT/CTranslate2">OpenNMT/CTranslate2</a>: CUDA</li>
+          <li class="fragment"><a href="https://github.com/Tencent/ncnn">Tencent/ncnn</a>: Vulkan</li>
+          <li class="fragment">NVIDIA CUDA-only bloat: FasterTrasformer, cuDNN, TensorRT</li>
         </ul>
       </section>
 
@@ -640,28 +644,28 @@
         <h3>Examples and Sources</h3>
         <br/>
         <ul>
-          <li>ggml examples</li>
-          <li><a href="https://github.com/ggerganov/llama.cpp">ggerganov/llama.cpp</a>: LLaMa with ggml</li>
-          <li><a href="https://github.com/karpathy/llama2.c">karpathy/llama2.c</a>: LLaMa in pure C</li>
-          <li><a href="https://github.com/intel/intel-extension-for-transformers">intel/intel-extension-for-transformers</a>: Intel-specific</li>
-          <li>NVIDIA CUDA-only bloat: FasterTrasformer, cuDNN, TensorRT</li>
-          <li>And many, many more</li>
+          <li class="fragment">ggml examples</li>
+          <li class="fragment"><a href="https://github.com/ggerganov/llama.cpp">ggerganov/llama.cpp</a>: LLaMa with ggml</li>
+          <li class="fragment"><a href="https://github.com/karpathy/llama2.c">karpathy/llama2.c</a>: LLaMa in pure C</li>
+          <li class="fragment"><a href="https://github.com/intel/intel-extension-for-transformers">intel/intel-extension-for-transformers</a>: Intel-specific</li>
+          <li class="fragment">NVIDIA CUDA-only bloat: FasterTrasformer, cuDNN, TensorRT</li>
+          <li class="fragment">And many, many more</li>
         </ul>
       </section>
 
       <section class="slide">
         <h3>Practical Steps</h3>
         <br/>
-        <ul>
-          <li>Find a model (for example on HuggingFace)</li>
-          <li>Look at the model description if available</li>
-          <li>Look at the Python implementation</li>
-          <li>Yes, there will be one</li>
-          <li>Implement tensor ops</li>
-          <li>Compare intermediate steps with the Python implementation</li>
-          <li>...</li>
-          <li>Profit</li>
-        </ul>
+        <ol>
+          <li class="fragment">Find a model (for example on HuggingFace)</li>
+          <li class="fragment">Look at the model description if available</li>
+          <li class="fragment">Look at the Python implementation</li>
+          <li class="fragment">Yes, there will be one</li>
+          <li class="fragment">Implement tensor ops</li>
+          <li class="fragment">Compare intermediate steps with the Python implementation</li>
+          <li class="fragment">...</li>
+          <li class="fragment">Profit</li>
+        </ol>
       </section>
 
       <section class="slide">
@@ -669,7 +673,7 @@
         <br/>
         <ul>
           <li>If you like <span class="fancy">number crunching</span></li>
-          <li>If you like <span class="fancy">chasing nanoseconds</span></li>
+          <li>If you like <span class="fancy">chasing microseconds</span></li>
           <li>If you like <span class="fancy">doing magic</span></li>
           <li>If you don't like "scientific" code</li>
         </ul>
