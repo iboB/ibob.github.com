@@ -80,6 +80,22 @@
         </ul>
       </section>
 
+      <section class="slide">
+        <h3>This talk</h3>
+        <br/>
+        <ul>
+          <li>&#x26a0;&#xfe0f; More inspirational than educational</li>
+          <li>&#x26a0;&#xfe0f; Contains personal opinion on software</li>
+          <li>For programmers who are <span class="fancy">not</span> in the ML field</li>
+          <li>... and who have experience or interest in <span class="fancy">low-level</span></li>
+          <li>Themes</li>
+          <ul>
+            <li><em>Why should you consider this?</em></li>
+            <li><em>What can you do?</em></li>
+          </ul>
+        </ul>
+      </section>
+
       <section>
         <h2>Background</h2>
         <h3>Machine Learning in 2023</h3>
@@ -104,10 +120,24 @@
 
       <section>
         <p>There's something new every day.</p>
+        <small>(this talk will probably be outdated by tomorrow)</small>
       </section>
 
       <section>
         <p>This software is <span class="fancy">no magic</span></p>
+      </section>
+
+      <section class="slide">
+        <h3>Modern AI Software</h3>
+        <br/>
+        <ul>
+          <li>In many regards software <span class="fancy">like any other</span></li>
+          <li>Written by teams <span>(of humans)</span></li>
+          <li>...with conventional software development tools</li>
+          <li>It has <em>some</em> unusual, <span class="fancy">but not unique</span>, features</li>
+          <li>Many libraries and frameworks exist to help</li>
+          <li>It's most often done in <span class="fancy">Python</span></li>
+        </ul>
       </section>
 
       <section class="slide">
@@ -116,30 +146,80 @@
         <ul>
           <li>The big fish: <span class="fancy">PyTorch</span> and <span class="fancy">TensorFlow</span></li>
           <li>Every ML framwork has a Python front end</li>
+          <li>Why Python?</li>
+        </ul>
+        <p class="pinner"><img class="diagram" src="../xmem-shared-ptr/dunno.jpg"/></p>
+      </section>
+
+      <section>
+        <p>&#x26a0;&#xfe0f; Personal opinion time &#x26a0;&#xfe0f;</p>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav on Python</h3>
+        <br/>
+        <ul>
+          <li>Is Python the best language for ML?</li>
+          <ul>
+            <li>No.</li>
+          </ul>
+          <li>It it the worst language for ML?</li>
+          <ul>
+            <li>No. But it's down there</li>
+          </ul>
+          <li><span class="fancy">Extreme care</span> is needed for software in duck-typed languages</li>
+          <li>Python stacks are <span class="fancy">a mess</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <img src="node_modules.png" />
+      </section>
+
+      <section class="slide">
+        <h3>Python Stacks</h3>
+        <br/>
+        <ul>
+          <li>Package managers: pip, pipenv, poetry, npm, conda</li>
+          <li>Env managers: conda, mamba, pyenv, containers</li>
+          <li>Notebooks and <span class="fancy"><em>Scientific</em> code</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Modern ML software</h3>
+        <img class="diagram" src="../unrealized-alpha/moms-spaghetti.jpg" />
+      </section>
+
+      <section>
+        <img class="diagram" src="eye-of-providence.png" />
+        <h3>Objective Truth</h3>
+      </section>
+
+      <section>
+        <p>Python is slow</p>
+        <img class="diagram" src="python-slow.jpg" />
+      </section>
+
+      <section>
+        <p><span class="fancy">"No it's not slow!"</span></p>
+        <ul>
+          <li>"This Python program is faster than its C++ equivalent!"</li>
+          <li>"<code>.pyc</code> should do it"</li>
+          <li>"Python is the most optimized interpreter there is!"</li>
+          <li>"Python JIT compilers work!"</li>
+          <li>"No matter. The low-level framework does the actual work."</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>Problems with Python Stacks</h3>
+        <h3>Opaque Frameworks</h3>
         <br/>
         <ul>
-          <li>The big fish: <span class="fancy">PyTorch</span> and <span class="fancy">TensorFlow</span></li>
-          <li>Every ML framwork has a Python front end</li>
-        </ul>
-      </section>
-
-      <section class="slide">
-        <h3>This talk</h3>
-        <br/>
-        <ul>
-          <li>&#x26a0;&#xfe0f; More inspirational than educational</li>
-        </ul>
-      </section>
-
-      <section class="slide">
-        <h3>NOT This talk</h3>
-        <br/>
-        <ul>
+          <li><span class="fancy">Data flow</span> suffers</li>
+          <li>Tweaks are <span class="fancy">hard to impossible</span></li>
+          <li>Many similarities with <span class="fancy">game engines</span></li>
+          <li>Bloat intensifies <img class="diagram" style="position: absolute; top: 255px; left: 20px;" src="laser-eyes.png" /></li>
         </ul>
       </section>
 
