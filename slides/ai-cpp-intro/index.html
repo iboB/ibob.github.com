@@ -73,6 +73,7 @@
         <br/>
         <ul>
           <li>I mostly write <span class="fancy">C++</span></li>
+          <li>Professionally since 2002</li>
           <li>2006&mdash;2018: <span class="fancy">game development</span></li>
           <li>2019&mdash;2023: <span class="fancy">medical software</span></li>
           <li>2023&mdash;now: <span class="fancy">machine learning</span></li>
@@ -238,7 +239,335 @@
       </section>
 
       <section>
+        <p>I am <span class="fancy">not</span> an ML engineer</p>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav Stanimirov</h3>
+        <br/>
+        <ul>
+          <li>I mostly write <span class="fancy">C++</span></li>
+          <li>Professionally since 2002</li>
+          <li>2006&mdash;2018: <span class="fancy">game development</span></li>
+          <li>2019&mdash;2023: <span class="fancy">medical software</span></li>
+          <li>2023&mdash;now: <span class="fancy">machine learning</span></li>
+          <li><span class="fancy">Open source</span>: <a href="https://github.com/iboB" target="_blank">github.com/iboB</a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav Stanimirov</h3>
+        <br/>
+        <ul>
+          <li>C++: <span class="fancy">yes</span></li>
+          <li>Low-level: <span class="fancy">yes</span></li>
+          <li>GPGPU: <span class="fancy">yes</span></li>
+          <li>Chasing microseconds: <span class="fancy">yes</span></li>
+          <li>Machine learning: <em>well...</em></li>
+        </ul>
+      </section>
+
+      <section>
+        <p>So, this is my perspective...</p>
+      </section>
+
+      <section class="slide">
+        <h3>ML Techniques</h3>
+        <br/>
+        <ul>
+          <li>Linear regression</li>
+          <li>Bayes classification</li>
+          <li>Support vector machine</li>
+          <li>Decision tree</li>
+          <li>Random forest</li>
+          <li>&hellip;</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>NOPE</h3>
+      </section>
+
+      <section>
+        <h3>Neural Networks</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Neural networks</h3>
+        <ul>
+          <li class="fragment strike">History</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>What is a neural network?</p>
+        <p>It's a <span class="fancy">function</span></p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    enum thing { ... };
+    thing classifier(const image&amp; input);
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    enum thing { ... };
+    struct result {
+      thing t;
+      float p;
+    }
+    std::vector&lt;result&gt; classifier(const image&amp; input);
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    std::string gpt(const std::string&amp; input);
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    using gpt_callback = std::function&lt;void(const std::string&amp;)&gt;
+    void gpt(const std::string&amp; input, gpt_callback cb);
+        </code></pre>
+      </section>
+
+      <section>
+        <p>What is a neural network?</p>
+        <p>It's a <span class="fancy">computation with parameters</span></p>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>
+    enum thing { ... };
+    thing classifier(const image&amp; input, <span class="hl-code-i">const std::vector&lt;float&gt;&amp; parameters</span>);
+        </code></pre>
+      </section>
+
+      <section>
+        <p><span class="fancy">Parameters</span></p>
+        <p><code class="cinline">LLaMa-7B</code> - the LLaMa model with 7 billion parameters</p>
+      </section>
+
+      <section class="slide">
+        <h3>Training Neural Networks</h3>
+        <br/>
+        <ul>
+          <li>Solve the function with respect to the parameters</li>
+          <li>Gradient descent and differentiability</li>
+          <li>Learning rate</li>
+          <li>Over/Underfitting</li>
+          <li>...</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>NOPE</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Designing Neural Networks</h3>
+        <br/>
+        <ul>
+          <li><span class="fancy">It's magic</span></li>
+          <li>Mostly indistinguishable from fortune telling</li>
+          <li><span class="fancy">Years</span> of experience</li>
+          <li>Lots of <span class="fancy">untransferrable knowledge</span></li>
+          <li>Takes <span class="fancy">millions of hours</span></li>
+          <li>It seems that we do need Python here &#x1f622;</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>NOPE</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Neural Network Applications</h3>
+        <br/>
+        <ul>
+          <li>Design - not today</li>
+          <li>Training - not today</li>
+          <li><span class="fancy">Inference</span> - executing the computation - today</li>
+          <li>Inference on the edge - tomorrow</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>What is a neural network?</p>
+        <p>A network of <span class="fancy">neurons</span>, duh</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="neuron.png" />
+        <p>$y = g \left( \sum_{i=1}^{n} w_j x_j + b \right)$</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="network.png" />
+        <p>Layers</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="single-layer.png" />
+        <p>Wait! I know this</p>
+      </section>
+
+      <section>
+        <p>$\begin{pmatrix} y_1 \\ y_2 \\ y_3 \end{pmatrix} = g \left( \begin{pmatrix} w_{11} & w_{12} & w_{13} & w_{14} \\ w_{21} & w_{22} & w_{23} & w_{24} \\ w_{31} & w_{32} & w_{33} & w_{14} \end{pmatrix} \begin{pmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{pmatrix} + \begin{pmatrix} b_1 \\ b_2 \\ b_3 \end{pmatrix} \right)$</p>
+        <p>Yes. This is everything</p>
+      </section>
+
+      <section class="slide">
+        <h3>Types of layers</h3>
+        <br/>
+        <ul>
+          <li>This was the <span class="fancy">linear</span> (fully connected, dense) layer</li>
+          <li>Every layer type can be represented by a fully connected one</li>
+          <li>It's a matter of efficiency</li>
+          <li>Convolution/Pooling</li>
+          <li>Attention</li>
+          <li>Normalization</li>
+          <li>"Layer" actually is pretty <span class="fancy">fuzzy</span></li>
+          <li><a href="https://www.asimovinstitute.org/neural-network-zoo/">The Neural Network Zoo</a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Activation layers</h3>
+        <br/>
+        <ul>
+          <li>Without them every output would be a linear function of the input</li>
+          <li><span class="fancy">Layer count wouldn't matter</span></li>
+          <li>Sigmoids</li>
+          <ul>
+            <li>Logistic function</li>
+            <li>tanh</li>
+            <li>smht</li>
+          </ul>
+          <li>ReLU</li>
+          <li>Leaky ReLU</li>
+          <li>GELU</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Convolution</h3>
+      </section>
+
+      <section>
+        <img class="diagram" src="conv2d-01.png" />
+        <p>Neurons don't depend on the entire input</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="conv2d-02.png" />
+        <p>Feature maps</p>
+      </section>
+
+      <section>
+        <h3>Pooling</h3>
+      </section>
+
+      <section>
+        <img class="diagram" src="pooling.png" />
+        <p>Collecting "important" features</p>
+      </section>
+
+      <section>
+        <p>What is a neural network?</p>
+        <p>A collection of layers which define a computation</p>
+      </section>
+
+      <section>
+        <h3>Terminology time</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Tensors</h3>
+        <ul>
+          <li>No, not physical ones.</li>
+          <li>Just <span class="fancy">N-d arrays</span></li>
+          <li>Think <code class="cinline">std::vector</code></li>
+          <li>Shape: <code class="cinline">[[1,2],[3,4],[5,6]] -> (3, 2)</code>... or maybe <code class="cinline">(2, 3)</code></li>
+          <li>Broadcast: </li>
+          <ul>
+            <li><code class="cinline">f([1,2,3]) = [f(1), f(2), f(3)]</code></li>
+            <li><code class="cinline">[[1,2],[3,4]] + [10,20] = [[11,22],[13,24]]</code></li>
+          </ul>
+          <li>Tensors for weight, bias, layer</li>
+          <ul>
+            <li><code class="cinline">ll_5 = mul(w_5, l_4) + b_5 </code></li>
+          </ul>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Models</h3>
+        <br/>
+        <ul>
+          <li>What is a model anyway?</li>
+          <li>The computation sequence</li>
+          <li>The parameter (weight) tensors</li>
+        </ul>
+      </section>
+
+      <section>
         <h2>Mnist LeNet</h2>
+      </section>
+
+      <section>
+        <pre><code class="python hljs" data-noescape>  class LeNet(nn.Module):
+    def __init__(self):
+        super(LeNet, self).__init__()
+
+        self.convs = nn.Sequential(
+          <span class="fragment hl-code">nn.Conv2d(in_channels=1, out_channels=4, kernel_size=(5, 5)),</span>
+          <span class="fragment hl-code">nn.Tanh(),</span>
+          <span class="fragment hl-code">nn.AvgPool2d(2, 2),</span>
+
+          <span class="fragment hl-code">nn.Conv2d(in_channels=4, out_channels=12, kernel_size=(5, 5))</span>,
+          <span class="fragment hl-code">nn.Tanh()</span>,
+          <span class="fragment hl-code">nn.AvgPool2d(2, 2)</span>
+        )
+
+        self.linear = nn.Sequential(
+          <span class="fragment hl-code">nn.Linear(4*4*12,10)</span>
+        )
+
+    def forward(self, x: torch.Tensor):
+        <span class="fragment hl-code">x = self.convs(x)</span>
+        x = torch.flatten(x, 1)
+        <span class="fragment hl-code">x = self.linear(x)</span>
+        <span class="fragment hl-code">return nn.functional.softmax(x, dim = 0)</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="cpp hljs" data-noescape>    m_input = create_tensor("input", {28, 28, 1});
+    ggml_tensor* next;
+    auto conv0_weight = create_weight_tensor("conv0_weight", {5, 5, 1, 4});
+    auto conv0_bias = create_weight_tensor("conv0_bias", {1, 1, 4});
+    <span class="fragment hl-code">next = ggml_conv_2d(m_ctx, conv0_weight, m_input, 1, 1, 0, 0, 1, 1);</span>
+    <span class="fragment hl-code">next = ggml_add(m_ctx, next, <span class="fragment hl-code">ggml_repeat(m_ctx, conv0_bias, next)</span>);</span>
+    <span class="fragment hl-code">next = ggml_tanh(m_ctx, next);</span>
+    <span class="fragment hl-code">next = ggml_pool_2d(m_ctx, next, GGML_OP_POOL_AVG, 2, 2, 2, 2, 0, 0);</span>
+    auto conv1_weight = create_weight_tensor("conv1_weight", {5, 5, 4, 12});
+    auto conv1_bias = create_weight_tensor("conv1_bias", {1, 1, 12});
+    <span class="fragment hl-code">next = ggml_conv_2d(m_ctx, conv1_weight, next, 1, 1, 0, 0, 1, 1);</span>
+    <span class="fragment hl-code">next = ggml_add(m_ctx, next, ggml_repeat(m_ctx, conv1_bias, next));</span>
+    <span class="fragment hl-code">next = ggml_tanh(m_ctx, next);</span>
+    <span class="fragment hl-code">next = ggml_pool_2d(m_ctx, next, GGML_OP_POOL_AVG, 2, 2, 2, 2, 0, 0);</span>
+    <span class="fragment hl-code">next = ggml_reshape_1d(m_ctx, next, 12 * 4 * 4);</span>
+    auto linear_weight = create_weight_tensor("linear_weight", {12 * 4 * 4, 10});
+    auto linear_bias = create_weight_tensor("linear_bias", {10});
+    <span class="fragment hl-code">next = ggml_mul_mat(m_ctx, linear_weight, next);</span>
+    <span class="fragment hl-code">next = ggml_add(m_ctx, next, linear_bias);</span>
+    <span class="fragment hl-code">m_output = ggml_soft_max(m_ctx, next);</span>
+        </code></pre>
       </section>
 
       <section>
@@ -289,7 +618,9 @@
           hljs.initHighlightingOnLoad();
         } },
         //{ src: 'zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-        //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+        //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+        // MathJax
+		    { src: 'math/math.js', async: true }
       ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
     });
 
