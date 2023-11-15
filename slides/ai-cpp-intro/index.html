@@ -236,6 +236,24 @@
       </section>
 
       <section>
+        <p>I'm not the only one with such problems</p>
+      </section>
+
+      <section class="slide">
+        <h3>Alternatives</h3>
+        <br/>
+        <ul>
+          <li class="fragment"><span class="fancy">CUDA</span> <span class="fragment">&mdash; so C++</span></li>
+          <li class="fragment"><span class="fancy">OpenCL</span> <span class="fragment">&mdash; so C++</span></li>
+          <li class="fragment"><span class="fancy">Metal</span> <span class="fragment">&mdash; so C++</span><span class="fragment">, but Objective</span></li>
+          <li class="fragment"><span class="fancy">Vulkan</span> <span class="fragment">&mdash; so C++</span><span class="fragment">... OK! OK! Many more options</span></li>
+          <li class="fragment"><span class="fancy">CPU/SIMD</span> <span class="fragment">(Like REAL men!)</span><span class="fragment">&mdash; Anything but Python</span></li>
+          <li class="fragment"><span class="fancy">Mojo</span> <span class="fragment">&mdash; ???</span> <span class="fragment">&mdash; Definitely not magic, though</span></li>
+          <li class="fragment"><span class="fancy">...</span> &mdash; Alternatives pop up by the hour</li>
+        </ul>
+      </section>
+
+      <section>
         <h2>A Crash Course in ML</h2>
       </section>
 
@@ -409,7 +427,7 @@
 
       <section>
         <img class="diagram" src="network.png" />
-        <p>Layers</p>
+        <p>Layers <span class="fragment">("deep" means more than 2)</span></p>
       </section>
 
       <section>
@@ -522,7 +540,7 @@
 
       <section>
         <h2>LeNet</h2>
-        <p class="fragment">AI like it's 1989</p>
+        <p class="fragment">AI like it's 1998</p>
       </section>
 
       <section>
@@ -533,6 +551,7 @@
       <section>
         <img class="diagram" src="lenet.webp" />
         <p>LeNet Model</p>
+        <p class="fragment">Classify individual hand-wrritten digits</p>
       </section>
 
       <section>
@@ -596,10 +615,12 @@
         <ul>
           <li class="fragment">GPGPU is <span class="fancy">the</span> way to go</li>
           <li class="fragment">SIMD</li>
-          <li class="fragment">gemm</li>
-          <li class="fragment">cache-locality</li>
+          <li class="fragment"><code>gemm</code>, BLAS and custom <code>gemm</code></li>
+          <li class="fragment">Cache-locality</li>
           <li class="fragment">Memory bandwitdh bottlenecks <span class="fragment">- M2 Ultra's time to shine</span></li>
-          <li class="fragment">Quantizations. Yes, Q2 is a thing</li>
+          <li class="fragment">Quantizations<span class="fragment">. Yes, Q2 is a thing</span></li>
+          <li class="fragment">Fusing kernels - hey, remember expression templates?</li>
+          <li class="fragment">Streaming - finally a use for coroutines</li>
         </ul>
       </section>
 
@@ -620,7 +641,11 @@
       </section>
 
       <section>
-        <p>First implement a simple model in the most naive way!</p>
+        <p>First, forget about training!</p>
+      </section>
+
+      <section>
+        <p>Implement a simple model in the most naive way!</p>
       </section>
 
       <section>
@@ -644,7 +669,7 @@
         <h3>Examples and Sources</h3>
         <br/>
         <ul>
-          <li class="fragment"><a href="https://huggingface.co/">Huggging Face</a>: models, datasets, spaces</li>
+          <li class="fragment"><a href="https://huggingface.co/">Hugging Face</a>: models, datasets, spaces</li>
           <li class="fragment">ggml examples</li>
           <li class="fragment"><a href="https://github.com/ggerganov/llama.cpp">ggerganov/llama.cpp</a>: LLaMa with ggml</li>
           <li class="fragment"><a href="https://github.com/karpathy/llama2.c">karpathy/llama2.c</a>: LLaMa in pure C</li>
@@ -670,6 +695,35 @@
       </section>
 
       <section class="slide">
+        <h3>How to continue?</h3>
+        <br/>
+        <ul>
+          <li class="fragment">Try being faster than the Python implementation</li>
+          <ul>
+            <li class="fragment">Really, not such a tall order</li>
+            <li class="fragment">on CPU</li>
+            <li class="fragment">on GPU</li>
+          </ul>
+          <li class="fragment">Do more models</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The Real World</h3>
+        <br/>
+        <ul>
+          <li class="fragment">Plugins</li>
+          <li class="fragment">Profiling can be a challenge</li>
+          <li class="fragment">The periphery</li>
+          <ul>
+            <li class="fragment">Tokenizers, streaming, decoders, encoders, guidance</li>
+            <li class="fragment">Horizontal scaling, MPI</li>
+          </ul>
+          <li class="fragment"><span class="fancy">It's software like any other</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
         <h3>But Why?</h3>
         <br/>
         <ul>
@@ -682,6 +736,10 @@
 
       <section>
         <p>You are needed!</p>
+      </section>
+
+      <section>
+        <p>Let's ride the hype wave!</p>
       </section>
 
       <section class="fin">
@@ -734,7 +792,7 @@
       ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
     });
 
-    slides.footerSetup('is.gd/aicppintro', '2023', 'v1.0.0');
+    slides.footerSetup('is.gd/aicppintro', '2023', 'v1.1.0');
   </script>
 
 </body>
