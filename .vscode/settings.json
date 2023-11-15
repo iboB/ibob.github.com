@@ -26,5 +26,7 @@
     },
     "editor.unicodeHighlight.ambiguousCharacters": false,
     "cmake.configureOnOpen": false,
-    "dotnet.defaultSolution": "disable"
+    "dotnet.defaultSolution": "disable",
+    "csharp.suppressDotnetInstallWarning": true,
+    "csharp.suppressDotnetRestoreNotification": true
 }
