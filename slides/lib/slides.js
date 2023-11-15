@@ -1,13 +1,13 @@
 'use strict';
 
 let slides = {
-    footerSetup(link, conf) {
+    footerSetup(link, conf, ver) {
         let revealWrapper = document.querySelector( '.reveal' );
         let foot = document.createElement('div');
         foot.classList.add('footer');
         revealWrapper.appendChild(foot);
 
-        Reveal.addEventListener('slidechanged', function (event) {
+        let listener = function (event) {
             if (event.indexh != 0) {
                 let index = String(event.indexh);
                 if (event.indexv != 0) {
@@ -15,8 +15,12 @@ let slides = {
                 }
                 foot.innerHTML = index + ' | ' + link + ' | ' + conf + ' | @stanimirovb';
             } else {
-                foot.innerHTML = '';
+                ver = ver || '';
+                foot.innerHTML = ver;
             }
-        }, false);
+        };
+
+        Reveal.addEventListener('slidechanged', listener, false);
+        Reveal.addEventListener('ready', listener, false);
     }
 };
