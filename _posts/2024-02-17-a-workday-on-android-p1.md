@@ -13,6 +13,8 @@ Setting it up wasn't an entirely flawless experience and I'll document the issue
 
 Now, I didn't sit on my sofa with my phone in one hand, typing code on an onscreen keyboard with the other and with the editor on the glorious 25 square centimeters of remaining screen area. This is obviously not viable. I connected my phone to an external display, a physical keyboard, and a mouse and I sat on a desk.
 
+![android workstation](/blog/android-workstation.jpg) <br/><small>Yes, I did clean my desk for the photo</small>
+
 Also, I may be late to the party as people have been posting similar things for years now. I've stumbled on posts and videos about using phones for stuff typically done on desktops or laptops, or connecting them to external displays and physical keyboards for business or pleasure since at least 2019. But I haven't seen anything about doing actual software development with a smartphone. So here goes.
 
 ## What?
@@ -37,7 +39,7 @@ But the thing that prompted me to explore this was actually cost.
 
 Don't get me wrong. I'm not trying to propose a budget solution for people who can't afford a workstation. Such a solution would be a second hand laptop.
 
-My idea was more in the realm of avoiding waste. I hate waste. My first observation was that I was spending increasingly more time working on remote machines. For my pesonal projects I do use my own computer, but sadly I don't have that much time for them. No more than several hours a week. So, I wondered what it would be like to use a modest (old) laptop for personal stuff and rent cloud compute when I need to get serious. With prices of about $1/hour (and without a GPU, considerably less), even if I have the luxury of 10 hours a week for personal projects, such a plan would add up to roughly $500 dollars a year. And always using the best current hardware at that. A top of the line home computer can cost 10 times that and it will likely be close to obsolete in 10 years. It doesn't add up. Not if you only use it for 10 hours a week or less. It then dawned on me that I have a modest computer in my pocket at all times. And it's not even that modest. The Galaxy S23+ has 8 GB of memory, an 8-core 3GHz CPU, and even a decent GPU. This would've been a pretty expensive PC 10 years ago. It's only logical not to waste this great computational power by only using it for phone calls, solitaire, and cat videos. &#x1f596;
+My idea was more in the realm of avoiding waste. I hate waste. My first observation was that I was spending increasingly more time working on remote machines. For my pesonal projects I do use my own computer, but sadly I don't have that much time for them. No more than several hours a week. So, I wondered what it would be like to use a modest (old) laptop for personal stuff and rent cloud compute when I need to get serious. With prices of about $1/hour (and without a GPU, considerably less), even if I have the luxury of 10 hours a week for personal projects, such a plan would add up to roughly $500 dollars a year. And always using the best current hardware at that. A top of the line home computer can cost 10 times that and it will likely be close to obsolete in 10 years. It doesn't add up. Not if you only use it for 10 hours a week or less. It then dawned on me that I have a modest computer in my pocket at all times. And it's not even that modest. The Galaxy S23+ has 8 GB of memory, an 8-core ~3GHz CPU, and even a decent GPU. This would've been a pretty expensive PC 10 years ago. It's only logical not to waste this great computational power by only using it for phone calls, solitaire, and cat videos. &#x1f596;
 
 That is why I decided to give it a try, but I can think of other reasons:
 
@@ -81,7 +83,8 @@ Before moving to the next post, though, do take a look at the list of limitation
 The TLDR of my setup is:
 
 * IDE: [vscode.dev](https://vscode.dev/) with tunnel from the dev machine
-* Terminal with SSH and SFTP: [termius](https://termius.com/)
+* SSH Terminal: [ConnectBot](https://connectbot.org/)
+* SFTP: [termius](https://termius.com/)
 * Browser: Google Chrome + Samsung Internet
 * Email: Gmail + [Outlook for Andoird](https://play.google.com/store/apps/details?id=com.microsoft.office.outlook)
 
