@@ -53,9 +53,9 @@ I only explored a setup which is viable for backend development. The local tools
 
 I don't *think* that a good web frontent development environment can be set up on Andriod. I may be wrong. Chrome's DevTools don't work on Android. To my knowledge Firefox is the only browser which has a developer console on Android. And that's not all. With my SSH-only setup there is no localhost. You'll have to serve HTTP (and possibly HTTPS) from the remote machine and this seems to make things too complicated for my taste. That is not to say that running a local web server is impossible. Perhaps a rooted phone or one with Ubuntu Touch, *may* be turned into a viable web frontend workstation.
 
-I fairly certain that this is not a good way to do desktop development. Even if you do end up running VNC or Remote Desktop succesfully, I suspect everything related to animations, framerates, video, and sound will be completely unreliable.
+I am fairly certain that this is not a good way to do desktop development. Even if you do end up running VNC or Remote Desktop succesfully, I suspect everything related to animations, framerates, video, and sound will be completely unreliable.
 
-Naturally it's not suitable for creating Android applications. It would make the hole thing into a giant chicken-or-egg problem.
+Naturally using Android to create Android applications is not a good idea. It would make the whole thing into a giant chicken-or-egg problem.
 
 * You can't have two displays connected to an Android device. This may change in the future (and I think that it likely will), but in order to work on your phone, you have to be OK to work on a single display.
 * Customization options for your desktop experience on Android are pretty much non-existent. This doesn't matter to me, but if you're the type of person who likes to tweak window transitions and use desktop widgets for everything, you're out of luck. Android does have widgets, but on the desktop. Plus, there no "general look and feel" to speak of. It's every app on its own. Changing the wallpaper is basically all you get.
