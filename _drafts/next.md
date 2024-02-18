@@ -19,6 +19,8 @@ Here's the gist of it short:
 
 > I have a Samsung smartphone. It uses the Samsung-specific app Dex to connect to an external display. It uses the app Samsung Keyboard and the One UI user interface and launcher. While most of the work I did for this setup is applicable to other Android devices, some of it certainly isn't. The topics that are only applicable to Samsung devices are: Display, Keyboard, and, for the most part Fonts.
 
+I wrote this post as a story. If you're not interested in my artistic writing (shame on you), skip [to the end](#TLDR) where I list problems and solutions without the "filler".
+
 ## Hardware Harmony
 
 I've read that Android phones generally have no issues with external keyboards and mice, so I just used ones that I have. They are wired, but wireless ones (Bluetooth included) shoud also work. My keyboard also has a bunch of multimedia buttons (audio volume, video playback, zoom, etc) and they also worked just fine. There's settings for how to treat additional mouse buttons and I was satisfied with the defaults. In this regard things were pretty much flawless.
@@ -55,7 +57,11 @@ I found a fair amount of posts with people having the same problem. In many of t
 
 But there was another class of responses to posts describing my issue. Responses like "Open Good Lock and enable high resolutions in MultiStar". And in some of them the OP had responded with "That solves it. Thanks". What? There was nothing called "Good Lock" on my phone. Nothing in the Samsung store. So, I initially dismissed this as non applicable to me. Perhaps it's something for older versions of One UI, I thought.
 
-But as I kept finding more and more of these types of responses and no solution which was applicable to my case, I eventually researched Good Lock. And yes it [is a thing](https://en.wikipedia.org/wiki/Good_Lock). A thing which is not available in my country. Thanks, Samsung. Bulgarians apparently don't deserve to tweak their Galaxy Devices.
+But as I kept finding more and more of these types of responses and no solution which was applicable to my case, I eventually researched Good Lock. And yes, it [is a thing](https://en.wikipedia.org/wiki/Good_Lock). A thing which apparently started as a lock screen tweaker, hence the name. Also a thing which is not available in my country. Thanks, Samsung. Bulgarians apparently don't deserve to tweak their Galaxy Devices.
+
+I was quite annoyed to find myself on the B-team of the A/B testing once again, but I went on. I briefly considered a road trip to Greece, but the weather was not that good. I knew however what needed to be done... roughly, so I searched for Good Lock alternatives. And it turns out there's lots of those. Surprizingly many, actually, given that this is something which I expected to be, well, very Samsung-specific. The explanation here was simple and discouraging. Good Lock is a downloader and launcher of various sub-applications which do the actual tweaks (and most of which named &lt;"something"&gt;Star for some reason). Good Lock is basically nothing on its own.
+
+OK. So I need the MultiStar sub-app for Good Lock. Is there an alternative for this? Nope, there is not. Road trip to Greece? Too cold. But wait a minute... Why are there so many Good Lock alaternatives? Is it so bad that you would need one? As it turns out no. It's just that surprisingly enough, people in Ireland and Japan also want to tweak their Samsung phones. So they use alternatives to Good Lock with alternative ways of getting WhateverStars.
 
 ## Fonts Fiasco
 
@@ -66,3 +72,21 @@ But as I kept finding more and more of these types of responses and no solution 
 ## IDE Delight
 
 ## And the Rest...
+
+## TLDR
+
+* Hardware: anything should work. You might want to search for the max resolutions supported by your device.
+    * Consider using a monitor which supports Thunderbolt via USB-C and is also a USB hub. That would make things simpler.
+    * Otherwise find a USB-C hub with HDMI, which also supports charging
+    * ... or use a network display
+* Screen resolution is bad (I only have Samsung Dex-specific solutions here):
+    * Install Good Lock from Samsung App Store, install MultiStar
+        * If you don't see Good Lock in the app store, it's likely not available in your country, so:
+        * Travel to a country where it is, maybe?
+        * But, more practically, install [Fine Lock](https://finelock.app/), download an [apk for MultiStar from APKMirror](https://www.apkmirror.com/?post_type=app_release&searchtype=apk&s=com.samsung.android.multistar) and install it manually
+    * In MultiStar open "I &#x2661; Samsung Dex"
+    * Enable high resolution displays
+    * While you're at it, enable "Run many apps at the same time"
+* Fonts are not monospace where they should be (terminal, apps which show code):
+* Terminal app:
+* IDE:
