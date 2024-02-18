@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "An Android Workstation Setup"
+title: "A Setup For Backend Development on an Android Phone"
 category: productivity
 tags: ['android', 'mobile']
 
@@ -11,6 +11,7 @@ Continuing from my previous post. Here's how I set things up and also some alter
 
 Here's the gist of it short:
 
+* The phone is a console. It runs the IDE and terminal, but the actual dev tools are on a remote machines used via SSH
 * IDE: [vscode.dev](https://vscode.dev/) with tunnel from the dev machine
 * SSH Terminal: [ConnectBot](https://connectbot.org/)
 * SFTP: [termius](https://termius.com/)
@@ -59,7 +60,7 @@ But there was another class of responses to posts describing my issue. Responses
 
 But as I kept finding more and more of these types of responses and no solution which was applicable to my case, I eventually researched Good Lock. And yes, it [is a thing](https://en.wikipedia.org/wiki/Good_Lock). A thing which apparently started as a lock screen tweaker, hence the name. Also a thing which is not available in my country. Thanks, Samsung. Bulgarians apparently don't deserve to tweak their Galaxy Devices.
 
-I was quite annoyed to find myself on the B-team of the A/B testing once again, but I went on. I briefly considered a road trip to Greece, but the weather was not that good. I knew however what needed to be done... roughly, so I searched for Good Lock alternatives. And it turns out there's lots of those. Surprizingly many, actually, given that this is something which I expected to be, well, very Samsung-specific. The explanation here was simple and discouraging. Good Lock is a downloader and launcher of various sub-applications which do the actual tweaks (and most of which named &lt;"something"&gt;Star for some reason). Good Lock is basically nothing on its own.
+I was quite annoyed to find myself on the B-team of the A/B testing once again, but if anything, I was even more determined to get this to work so I went on. I briefly considered a road trip to Greece, but the weather was not that good. I knew however what needed to be done... roughly, so I searched for Good Lock alternatives. And it turns out there's lots of those. Surprizingly many, actually, given that this is something which I expected to be, well, very Samsung-specific. The explanation here was simple and discouraging. Good Lock is a downloader and launcher of various sub-applications which do the actual tweaks (and most of which named &lt;"something"&gt;Star for some reason). Good Lock is basically nothing on its own.
 
 OK. So I need the MultiStar sub-app for Good Lock. Is there an alternative for this? Nope, there is not. Road trip to Greece? Too cold. But wait a minute... Why are there so many Good Lock alaternatives? Is it so bad that you would need one? As it turns out no. It's just that surprisingly enough, people in Ireland and Japan also want to tweak their Samsung phones. So they use alternatives to Good Lock with alternative ways of getting WhateverStars.
 
