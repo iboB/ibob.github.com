@@ -62,7 +62,7 @@ But as I kept finding more and more of these types of responses and no solution 
 
 I was quite annoyed to find myself on the B-team of the A/B testing once again, but if anything, I was even more determined to get this to work so I went on. I briefly considered a road trip to Greece, but the weather was not that good. I knew however what needed to be done... roughly, so I searched for Good Lock alternatives. And it turns out there's lots of those. Surprizingly many, actually, given that this is something which I expected to be, well, very Samsung-specific. The explanation here was simple and discouraging. Good Lock is a downloader and launcher of various sub-applications which do the actual tweaks (and most of which named &lt;"something"&gt;Star for some reason). Good Lock is basically nothing on its own.
 
-OK. So I need the MultiStar sub-app for Good Lock. Is there an alternative for this? Nope, there is not. Road trip to Greece? Too cold. But wait a minute... Why are there so many Good Lock alaternatives? Is it so bad that you would need one? As it turns out no. It's just that surprisingly enough, people in Ireland and Japan also want to tweak their Samsung phones. So they use alternatives to Good Lock with alternative ways of getting WhateverStars.
+OK. So I need the MultiStar sub-app for Good Lock. Is there an alternative for this? Nope, there is not. Road trip to Greece? Too cold. But wait a minute... Why are there so many Good Lock alaternatives? Is it so bad that you would need one? As it turns out no. It's just that, surprise, surprise, people in Ireland and Japan also want to tweak their Samsung phones. So they use alternatives to Good Lock with alternative ways of getting WhateverStars.
 
 ## Fonts Fiasco
 
@@ -76,7 +76,8 @@ OK. So I need the MultiStar sub-app for Good Lock. Is there an alternative for t
 
 ## TLDR
 
-* Hardware: anything should work. You might want to search for the max resolutions supported by your device.
+* Hardware:
+    * Anything should work. You might want to check the max resolutions supported by your device.
     * Consider using a monitor which supports Thunderbolt via USB-C and is also a USB hub. That would make things simpler.
     * Otherwise find a USB-C hub with HDMI, which also supports charging
     * ... or use a network display
