@@ -11,12 +11,11 @@ Continuing from my previous post. Here's how I set things up and also some alter
 
 Here's the gist of it short:
 
-* The phone is a console. It runs the IDE and terminal, but the actual dev tools are on a remote machines used via SSH
-* IDE: [vscode.dev](https://vscode.dev/) with tunnel from the dev machine
-* SSH Terminal: [ConnectBot](https://connectbot.org/)
-* SFTP: [termius](https://termius.com/)
-* Browser: Google Chrome + Samsung Internet
-* Email: Gmail + [Outlook for Andoird](https://play.google.com/store/apps/details?id=com.microsoft.office.outlook)
+* The phone is a console
+* It runs the IDE and terminal
+* ... and browser and existing communication apps
+* The actual dev tools are on a remote machine (or multiple machines) used via SSH
+* File transfers (if needed) happen via SFTP
 
 > I have a Samsung smartphone. It uses the Samsung-specific app Dex to connect to an external display. It uses the app Samsung Keyboard and the One UI user interface and launcher. While most of the work I did for this setup is applicable to other Android devices, some of it certainly isn't. The topics that are only applicable to Samsung devices are: Display, Keyboard, and, for the most part Fonts.
 
@@ -89,6 +88,15 @@ OK. So I need the MultiStar sub-app for Good Lock. Is there an alternative for t
     * In MultiStar open "I &#x2661; Samsung Dex"
     * Enable high resolution displays
     * While you're at it, enable "Run many apps at the same time"
-* Fonts are not monospace where they should be (terminal, apps which show code):
-* Terminal app:
-* IDE:
+* Fonts are not monospace where they should be (terminal and other apps which show code):
+    * Change your system font to Default or Roboto (this may be the same thing).
+    * Never customize your system font again &#x1F622;
+* Phone blinks or behaves weirdly while typing:
+    * You have likely installed an alternative onscreen keyboard (like Microsoft SwiftKey)
+    * Most of these don't work well in desktop mode. The system one does
+    * While in desktop/Dex mode change the keyboard to the system default (Samsung Keyboard)
+    * Exit desktop mode and in phone mode change the default again to your favorite one
+    * Desktop selection will be remembered
+* Terminal app: Use [ConnectBot](https://connectbot.org/). It has the best integration with physical keyboards
+* SFTP: [termius](https://termius.com/). It works.
+* IDE: [vscode.dev](https://vscode.dev/) with [tunnel](https://code.visualstudio.com/docs/remote/tunnels) from the dev machine
