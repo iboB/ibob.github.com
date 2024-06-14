@@ -31,13 +31,13 @@ I don't believe this is an uncommon use case. In fact I believe this should be t
 
 And if you want to have fancy build and test presets which actually do something, and you use some IDE or editor which has integration with CMake presets, things get really ugly.
 
-My main point is that there already are tens if not hundreds of scripts, tools, even IDEs like Visual Studio and QtCreator, which predate CMake presets and have their own way of dealing with presets. They have their ways of dealing with this problem. If there is to be a unifying standard way of dealing with presets, it should not require yet more third-party ad hoc tooling to do basic stuff.
+My main point is that there already are tens if not hundreds of scripts, tools, even IDEs like Visual Studio and QtCreator, which predate CMake presets and have their own version of presets along with ways of dealing with this problem. If there is to be a unifying standard way of dealing with presets, it should not require yet more third-party ad hoc tooling to do basic stuff.
 
-So, I have a proposal or two for the CMake developers. In my [previous ranty post about issues with CMake]({% post_url 2020-01-13-cmake-package-management %}) [Craig Scott](https://gitlab.kitware.com/craig.scott) was so kind to take issue with the problem and work on it until finally, after years, [there was a solution](https://x.com/crascit/status/1799562358337212843). So, Craig, please, how about:
+So, I have a proposal or two for the CMake developers. Four years ago after my [previous ranty post about issues with CMake]({% post_url 2020-01-13-cmake-package-management %}) [Craig Scott](https://gitlab.kitware.com/craig.scott) was so kind to take issue with the problem and work on it until finally, after years, [there was a solution](https://x.com/crascit/status/1799562358337212843). So, Craig, please, how about:
 
 ## Simple: Implicit Presets
 
-To cover the most basic use-case and probably 99% of the needs out there a simple change can be made to CMake.
+To cover the most basic use-case and probably 99% of the needs out there, a simple change can be made to CMake.
 
 I would suggest to parse build and test (and why not package and workflow) presets names and have a way to infer a configure preset from there. If we have a configure preset called `myconfig`, how about something like:
 
@@ -49,18 +49,23 @@ I would suggest to parse build and test (and why not package and workflow) prese
 
 ## Complex: Multi Presets
 
-Allow defining non-configure presets which can match multiple configure presets. Thus not just the default values will be accessible but also custom ones. Something like:
+Allow defining non-configure presets which can match multiple configure presets. Thus not just the default values will be accessible, but also custom ones. Something like:
 
 ```json
 "buildPresets": [
     {
-      "multiConfig": true,
-      "name": "${configurePreset}-bench-ab",
-      "targets": ["benchmark-a", "benchmark-b"],
+        "multiConfig": true,
+        "description": "same efect as the previous proposal",
+        "name": "build-${configurePreset}"
+    },
+    {
+        "multiConfig": true,
+        "name": "build-${configurePreset}-bench-ab",
+        "targets": ["benchmark-a", "benchmark-b"],
     }
 ]
 ```
 
-This can be combined with a introducing tags in configure presets and then such "`multiConfig`" presets can match them to indicate their applicability.
+This can be combined with the introduction of tags in configure presets and then such "`multiConfig`" presets can match them to indicate their applicability.
 
 Anyway, having a way to define umbrella or wildcard presets can be really powerful, but more thought needs to be put into this. I don't pretend to be thorough in the suggestion above. It's just an idea.
