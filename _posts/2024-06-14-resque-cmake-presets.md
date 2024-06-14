@@ -31,9 +31,11 @@ I don't believe this is an uncommon use case. In fact I believe this should be t
 
 And if you want to have fancy build and test presets which actually do something, and you use some IDE or editor which has integration with CMake presets, things get really ugly.
 
-The only simple solution would be to address this in CMake itself.
+My main point is that there already are tens if not hundreds of scripts, tools, even IDEs like Visual Studio and QtCreator, which predate CMake presets and have their own way of dealing with presets. They have their ways of dealing with this problem. If there is to be a unifying standard way of dealing with presets, it should not require yet more third-party ad hoc tooling to do basic stuff.
 
-## Simple Proposal: Implicit Presets
+So, I have a proposal or two for the CMake developers. In my [previous ranty post about issues with CMake]({% post_url 2020-01-13-cmake-package-management %}) [Craig Scott](https://gitlab.kitware.com/craig.scott) was so kind to take issue with the problem and work on it until finally, after years, [there was a solution](https://x.com/crascit/status/1799562358337212843). So, Craig, please, how about:
+
+## Simple: Implicit Presets
 
 To cover the most basic use-case and probably 99% of the needs out there a simple change can be made to CMake.
 
@@ -41,12 +43,13 @@ I would suggest to parse build and test (and why not package and workflow) prese
 
 * `cmake --build --preset=myconfig-default`
 * or `ctest --preset=cfg/myconfig`
+* or why not `cmake --build --configure-preset=myconfig`
 
-Or something in this spirit. Just think of this as having implicit build, test, and package presets for each configure preset. The implicit ones only use the default value for each field. 99% of problems solved.
+...or something in this spirit. Just think of this as having implicit build, test, and package presets for each configure preset. The implicit ones only use the default value for each field. 99% of problems solved.
 
-## Complex Proposal: Multi Presets
+## Complex: Multi Presets
 
-Allow defining non-configure presets which can match multiple configure presets. Thus not just the default values will be accessible but also custom ones. Something in the spirit of:
+Allow defining non-configure presets which can match multiple configure presets. Thus not just the default values will be accessible but also custom ones. Something like:
 
 ```json
 "buildPresets": [
@@ -61,7 +64,3 @@ Allow defining non-configure presets which can match multiple configure presets.
 This can be combined with a introducing tags in configure presets and then such "`multiConfig`" presets can match them to indicate their applicability.
 
 Anyway, having a way to define umbrella or wildcard presets can be really powerful, but more thought needs to be put into this. I don't pretend to be thorough in the suggestion above. It's just an idea.
-
-I want something to be done though!
-
-Please.
