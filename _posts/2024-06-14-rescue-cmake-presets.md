@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Let's Resque CMake Presets
+title: Let's Rescue CMake Presets
 category: programming
 tags: ['c++', 'cmake']
 
