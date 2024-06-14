@@ -47,6 +47,8 @@ I would suggest to parse build and test (and why not package and workflow) prese
 
 ...or something in this spirit. Just think of this as having implicit build, test, and package presets for each configure preset. The implicit ones only use the default value for each field. 99% of problems solved.
 
+I posted [an issue in the CMake tracker](https://gitlab.kitware.com/cmake/cmake/-/issues/26049) for this.
+
 ## Complex: Multi Presets
 
 Allow defining non-configure presets which can match multiple configure presets. Thus not just the default values will be accessible, but also custom ones. Something like:
