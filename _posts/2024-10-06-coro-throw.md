@@ -90,7 +90,7 @@ I hate this. I want to have the exception thrown from `generate_stuff_coro` exac
 So what can we do?
 
 * Begrudgingly use the `complete_initialization` pattern? *NEVER!*
-* Live with the leaks? They are expected to be small and rare. This is empting and likely acceptable in many pieces of software, but the problems with deliberate leaks is mainly that tooling (leak detectors and sanitizers) will flood you with this false positive (in practical terms) forever. I don't like it.
+* Live with the leaks? They are expected to be small and rare. This is tempting and likely acceptable in many pieces of software, but the problems with deliberate leaks is mainly that tooling (leak detectors and sanitizers) will flood you with this false positive (in practical terms) forever. I don't like it.
 
 So I decided to do something else. Create a non-standard experimental solution which works in practice. That is, write some code: an eager coroutine which can throw before its first suspend, or after, or not throw at all, and tweak it until it works on popular compilers with no crashes or leaks. These tweaks would be pretty evil and work around specific compiler idiosyncrasies, but since the standard can't help me, I guess I have to get creative.
 
@@ -154,14 +154,14 @@ simple_wrapper generator(int from, int to, int throw_on = -1) {
 * On MSVC this fails when throwing an eager (pre first suspend) exception because of a double free of the coroutine state buffer.
 * On stable GCC versions (11-14) it fails in the exact same way.
     * But! On GCC trunk this works.
-* On clang &lt;17 throwing eagerly to my surprise passes, but as mentioned before because pre-17 clang doesn't cover the first defect report, it crashes when throwing after the first suspend. The local coroutine vars get destroyed two times for some reason[^4].
+* On clang &lt;17 throwing eagerly to my surprise passes, but as mentioned before, because pre-17 clang doesn't cover the first defect report, it crashes when throwing after the first suspend. The local coroutine vars get destroyed two times for some reason[^4].
     * On clang 17 and later (17-19) this passes.
 
-Wow. So, by the sheer benevolence of our compiler-writing overlords, gcc trunk and clang 17-19 actually do something sane about the second defect report. Color me suprized.
+Wow! So, by the sheer benevolence of our compiler-writing overlords, gcc trunk and clang 17-19 actually do something sane about the second defect report. Color me suprized.
 
-Alas the use of clang 17-19 in production is I suspect pretty small (mostly Android NDK) and, as for gcc trunk, I guess pretty much zero.
+Alas the use of clang 17-19 in production is, I suspect, pretty small (mostly Android NDK) and, as for gcc trunk, I guess pretty much zero.
 
-So, the problem twofold. GCC and MSVC don't want me to destroy the coroutine handle on eager throws, and pre-17 clang doesn't want me to directly rethrow from `unhandled_exception`. How about if I keep track of my first suspend and if it hasn't happened yet, I rethrow, otherwise I store the exception:
+So, the problem is twofold. GCC and MSVC don't want me to destroy the coroutine handle on eager throws, and pre-17 clang doesn't want me to directly rethrow from `unhandled_exception` on non-eager throws. How about if I keep track of my first suspend, and if it hasn't happened yet, I rethrow, otherwise I store the exception (like a caveman):
 
 ```cpp
 struct workaround_wrapper {
@@ -209,8 +209,7 @@ struct workaround_wrapper {
     }
 
     int get() {
-        if (!handle) return no_handle;
-        if (handle.done()) return handle_done;
+        if (!handle || handle.done()) return -1;
         auto ret = handle.promise().last_yield;
         handle.resume();
         if (handle.promise().exception) {
@@ -229,7 +228,7 @@ On GCC trunk, the state buffer leaks as expected.
 
 So... I decided not to accommodate gcc trunk and all three of its users in production. I'll just leave it as is and have that as a problem to future me (screw that guy).
 
-Can this be librarified? Sort of, I guess. The problem is that from a library perspective it can't possibly be known where the coroutine would be suspended. The library could try to wrap all awaitables, but this will be too much work and it would make the code which uses it very ugly. So I decided to make this semi-manual helper:
+Can this be librarified? Sort of, I guess. The problem is that from a library's perspective it can't possibly be known where the coroutine would be suspended. The library could try to wrap all awaitables, but this will be too much work and it would make the code which uses it very ugly. So I decided to make this semi-manual helper:
 
 ```cpp
 struct throwing_eager_coro_promise_type_helper {
@@ -300,8 +299,7 @@ struct workaround_wrapper {
     }
 
     int get() {
-        if (!handle) return no_handle;
-        if (handle.done()) return handle_done;
+        if (!handle || handle.done()) return -1;
         auto ret = handle.promise().last_yield;
         handle.resume();
         handle.promise().rethrow_if_exception(); // helper
