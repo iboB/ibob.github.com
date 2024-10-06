@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Throwing exceptions from coroutines"
+title: "Throwing Exceptions From Coroutines"
 category: programming
 tags: ['c++', 'coroutines']
 
