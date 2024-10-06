@@ -13,7 +13,7 @@ I guess the aswer is: *almost*.
 
 This time I was triggered by handling exceptions from coroutines.
 
-So, you want to throw an exception from a coroutine. The wisdom says that in your `promise_type` you have to implement `unhandled_exception`, store the exception in `std::exception_ptr` and then rethrow it or handle it otherwise when it's appropriate. This is a decent approach in many situations. However for synchronous coroutines (think generators) I'd say it's overcomplicated to the point of being stupid.
+So, you want to throw an exception from a coroutine. The wisdom says that in your `promise_type` you have to implement `unhandled_exception`, store the exception in `std::exception_ptr`, and then rethrow it or handle it otherwise when it's appropriate. This is a decent approach in many situations. However for synchronous coroutines (think generators) I'd say it's overcomplicated to the point of being stupid.
 
 In a synchronous coroutine I should be able to implement `unhandled_exception` like so:
 
@@ -27,7 +27,7 @@ void unhandled_exception() {
 
 Anyway.
 
-So, someone finaly figured out that it *is* stupid to require the overly complicated code for something as trivial as propagating the exception, made a defect report and it was even [reflected in the standard](https://cplusplus.github.io/CWG/issues/2451.html)... in 2022, but at least it was retroactive, which means that it applies to C++20 even though it came out later. C++20 conforming compilers must implement it. For example it is available in GCC 11.4.
+So, someone finaly figured out that it *is* stupid to require the overly complicated code for something as trivial as propagating the exception, made a defect report, and it was even [reflected in the standard](https://cplusplus.github.io/CWG/issues/2451.html)... in 2022, but at least it was retroactive, which means that it applies to C++20 even though it came out later. C++20 conforming compilers must implement it. For example it is available in GCC 11.4.
 
 Clang prior to 17 however, doesn't care. Doing this in pre-17 clang will leave the coroutine in a crazy state where its local variables want to be destroyed by both the exit of scope from `throw` *and* by `handle.destroy()`.
 
@@ -35,7 +35,7 @@ OK. So pre-17 clang doesn't work. If you target Apple clang, you can't use the p
 
 Back to storing it into `std::exception_ptr` I guess.
 
-However(!), what no one had thought of was what to do when you throw an exception from an eager coroutine. That would be one which does not suspend on `initial_suspend` or at all. Now, the defect report from above seems to cover it well. You can rethrow in `unhandled_exception` so it should just work, right? Well, as is the norm with C++, it's not so easy. From a pedantic reader's perspective, it is not defined what happens with the coroutine state. Since you throw before the first suspend, it should be the compiler's job to own (and free) the coroutine state, but since there is an exception and the coroutine must be "suspended at its final suspend point" it should be the user code who owns (and must free) the state. As a result no one really owns the state and it may be leaked.
+However(!), what no one had thought of was what to do when you throw an exception from an eager coroutine. That would be one which does not suspend on `initial_suspend` or at all. Now, the defect report from above seems to cover it well. You can rethrow in `unhandled_exception` so it should just work, right? Well, as is the norm with C++, it's not so easy. From a pedantic reader's perspective, it is not defined what happens with the coroutine state. Since you throw before the first suspend, it should be the compiler's job to own (and free) the coroutine state, but since there is an exception and the coroutine must be "suspended at its final suspend point", it should be the user code who owns (and must free) the state. As a result no one really owns the state and it may be leaked.
 
 I'm not the first one to notice this. There *is* a [defect report](https://github.com/cplusplus/CWG/issues/575) about this, too, but it's not yet reflected in the standard. This literally means that **according to the standard, rethrowing from an eager corotuine before the first suspend can be a leak and there's nothing you can do about it**.
 
@@ -161,7 +161,7 @@ Wow. So, by the sheer benevolence of our compiler-writing overlords, gcc trunk a
 
 Alas the use of clang 17-19 in production is I suspect pretty small (mostly Android NDK) and, as for gcc trunk, I guess pretty much zero.
 
-So, the problem twofold. GCC and MSVC don't want me to destroy the coroutine handle on eager throws and pre-17 clang doesn't want me to directly rethrow from `unhandled_exception`. How about if I keep track of my first suspend and if it hasn't happened yet I rethrow, otherwise I store the exception:
+So, the problem twofold. GCC and MSVC don't want me to destroy the coroutine handle on eager throws, and pre-17 clang doesn't want me to directly rethrow from `unhandled_exception`. How about if I keep track of my first suspend and if it hasn't happened yet, I rethrow, otherwise I store the exception:
 
 ```cpp
 struct workaround_wrapper {
