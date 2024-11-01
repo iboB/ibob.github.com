@@ -1,5 +1,22 @@
 - language: English
   talks:
+  - title: "AI Without Python: An Intro to Machine Learning for C++ Programmers"
+    desc: >-
+      A talk at [code::dive](https://codedive.pl/) 2023 about working in the AI
+      industry as a C++ programmer.
+    slides: /slides/ai-cpp-intro/
+    video: https://www.youtube.com/watch?v=YDMAfTcTORA
+  - title: "Why I Rewrote std::shared_ptr"
+    desc: >-
+      A talk from early 2023 about my reimplementation ot `std::shared_ptr` and
+      the motivation behind it. Not yet publicly presented.
+    slides: /slides/xmem-shared-ptr/
+  - title: "Beyond std::vector: Why and How"
+    desc: >-
+      A talk at [code::dive](https://codedive.pl/) 2022 about alternatives to
+      `std::vector`, the motivations behind them, and how to implement them.
+    slides: /slides/beyond-vec/
+    video: https://www.youtube.com/watch?v=WM5suPsfoh8
   - title: "No Touchy! A Case Study of Software Architecture with Immutable Objects"
     desc: >-
       A talk at [CppCon](https://cppcon.org/) 2020 about a the immutable object
@@ -69,6 +86,15 @@
 
 - language: Bulgarian
   talks:
+  - title: Alpaca Core LT
+    desc: >-
+      Ligning talk at [OpenFest](https://www.openfest.org/) 2024 about the Alpaca Core project.
+    slides: /slides/ac-lt-bg/
+  - title: Често неосъзнати проблеми и решения?
+    desc: >-
+      A talk at [Dev.bg](https://dev.bg/groups/c-c-plus-plus/) 2022 about common
+      problems in C++ software development and their solutions.
+    slides: /slides/unrealized-alpha/
   - title: CPU-Friendly Code
     desc: >-
       A talk for C++ User Group Meeting Sofia about microoptimizations.
