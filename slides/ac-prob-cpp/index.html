@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Alpaca Core C++ Problems and Solutions</title>
+
+  <meta name="description" content="Problems and Solutions in the Alpaca Core SDK">
+  <meta name="author" content="Borislav Stanimirov">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/reveal.min.css" />
+  <link rel="stylesheet" href="../lib/reveal.js-3.8.0/css/theme/simple.min.css" id="theme" />
+  <link rel="stylesheet" href="../lib/slides.css" />
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="/third_party/highlight-new/styles/github-gist.css">
+
+  <!-- Slides-specific styles -->
+  <link rel="stylesheet" href="custom.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ?
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/pdf.min.css' :
+      'https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/css/print/paper.min.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.8.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+    <div class="slides">
+      <section class="title">
+        <img width="400px" class="diagram" src="ac-logo.svg" alt="Alpaca Core logo" />
+        <h1>Alpaca Core</h1>
+        <h2>Problems and Solutions in Our C++ Development</h2>
+        <br/>
+        <small>
+          <a href="http://ibob.bg">Borislav Stanimirov</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a>
+        </small>
+      </section>
+
+      <section class="slide">
+        <h3>Hello, World</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+  #include &lt;iostream&gt;
+
+  int main()
+  {
+      std::cout &lt;&lt; "Hi, I'm Borislav!\n";
+      std::cout &lt;&lt; "These slides are here: <span class="fragment hl-code">https://is.gd/aicppintro</span>\n";
+      return 0;
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Borislav Stanimirov</h3>
+        <br/>
+        <ul>
+          <li>I mostly write <span class="fancy">C++</span></li>
+          <li>Professionally since 2002</li>
+          <li>2006&mdash;2018: <span class="fancy">game development</span></li>
+          <li>2019&mdash;2023: <span class="fancy">medical software</span></li>
+          <li>2023&mdash;now: <span class="fancy">machine learning</span></li>
+          <li><span class="fancy">Open source</span>: <a href="https://github.com/iboB" target="_blank">github.com/iboB</a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>This talk</h3>
+        <br/>
+        <ul>
+          <li>What is <span class="fancy">Alpaca Core?</span></li>
+          <li>A <em>tiny</em> bit about <span class="fancy">modules</span></li>
+          <li>A bit about <span class="fancy">coroutines</span></li>
+          <li><span class="fancy">Build systems</span> and <span class="fancy">package managers</span></li>
+          <li><span class="fancy">API design</span></li>
+          <li>Runtime &#128561; <span class="fancy">reflection</span></li>
+        </ul>
+      </section>
+
+      <section>
+        <img width="500px" class="diagram" src="ac-logo.svg" alt="Alpaca Core logo" />
+      </section>
+
+      <section class="slide">
+        <h3>Alpaca Core</h3>
+        <br/>
+        <ul>
+          <li>Est. June 2024</li>
+          <li>Innovating AI, Protecting Privacy</li>
+          <li>Become a leading provider of AI solutions</li>
+          <ul>
+            <li>Feature rich software</li>
+            <li>Open source</li>
+            <li>Privacy in the cloud</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section>
+        <p>What does it all mean in practice?</p>
+      </section>
+
+      <section>
+        <p>Ollama</p>
+      </section>
+
+      <section>
+        <p>Langchain</p>
+      </section>
+
+      <section>
+        <p>That, but in C++</p>
+      </section>
+
+      <section>
+        <p>Modules are useless in practice</p>
+      </section>
+
+      <section>
+        <p>Splicing coroutines</p>
+      </section>
+
+      <section>
+        <p>Eager coroutines</p>
+      </section>
+
+      <section>
+        <p>API - connecting endpoints. ZeroMQ</p>
+      </section>
+
+      <section>
+        <p>Building forks</p>
+        <p>Plugins</p>
+        <p>Consolidating dependencies</p>
+      </section>
+
+      <section>
+        <p>Blob data flow</p>
+      </section>
+
+      <section class="fin">
+        <span class="fragment">
+        <h2>End</h2>
+        <h3>Questions?</h3>
+        </span>
+        <ul>
+          <!-- <li>Demo code: <a href="https://github.com/iboB/ai-cpp-demo/">github.com/iboB/ai-cpp-demo</a></li> -->
+          <li>These slides: <a href="https://ibob.bg/slides/ai-cpp-intro/">ibob.bg/slides/ai-cpp-intro/</a></li>
+          <li>Borislav Stanimirov / <a href="https://ibob.bg">ibob.bg</a> / <a href="https://twitter.com/stanimirovb">@stanimirovb</a></li>
+        </ul>
+        <br/>
+        <br/>
+        <p class="fragment"><small>Slides license: <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>&nbsp;&nbsp;&nbsp;<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" class="diagram" style="height: 1.2em" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a></small></p>
+      </section>
+
+    </div>
+  </div>
+
+  <script src="../lib/reveal.js-3.8.0/js/reveal.min.js"></script>
+  <script src="../lib/slides.js"></script>
+
+  <script>
+    Reveal.initialize({
+      width: 1280,
+      height: 720,
+
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'none', // none/fade/slide/convex/concave/zoom
+
+      autoPlayMedia: false,
+      preloadIframes: false,
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        //{ src: 'markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        //{ src: 'markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+        { src: 'highlight/highlight.min.js', async: true, callback: function() {
+          hljs.initHighlightingOnLoad();
+        } },
+        //{ src: 'zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+        //{ src: 'notes/notes.js', async: true, condition: function() { return !!document.body.classList; } },
+        // MathJax
+		    { src: 'math/math.js', async: true }
+      ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
+    });
+
+    slides.footerSetup('is.gd/aicppintro', '2023', 'v1.1.2');
+  </script>
+
+</body>
+</html>
