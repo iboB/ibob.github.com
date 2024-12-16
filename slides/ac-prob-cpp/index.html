@@ -82,19 +82,6 @@
         </ul>
       </section>
 
-      <section class="slide">
-        <h3>This talk</h3>
-        <br/>
-        <ul>
-          <li>What is <span class="fancy">Alpaca Core?</span></li>
-          <li>A <em>tiny</em> bit about <span class="fancy">modules</span></li>
-          <li>A bit about <span class="fancy">coroutines</span></li>
-          <li><span class="fancy">Build systems</span> and <span class="fancy">package managers</span></li>
-          <li><span class="fancy">API design</span></li>
-          <li>Runtime &#128561; <span class="fancy">reflection</span></li>
-        </ul>
-      </section>
-
       <section>
         <img width="500px" class="diagram" src="ac-logo.svg" alt="Alpaca Core logo" />
       </section>
@@ -111,48 +98,234 @@
             <li>Open source</li>
             <li>Privacy in the cloud</li>
           </ul>
+          <li>There's three of us</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Alpaca Core SDK</h3>
+        <br/>
+        <ul>
+          <li>Ollama, but a for more models and more platforms</li>
+          <li>LangChain, but for more languages</li>
+          <li>And in C++ at that</li>
+          <li>Current state: pre-alfa</li>
+          <li>Still open source, though</li>
+          <li><a href="https://github.com/alpaca-core">github.com/alpaca-core</a></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>This talk</h3>
+        <br/>
+        <ul>
+          <li>A bit about <span class="fancy">modules</span></li>
+          <li>A bit about <span class="fancy">coroutines</span></li>
+          <li><span class="fancy">Build systems</span> musings</li>
+          <li><span class="fancy">API design</span> for multiple languages</li>
+          <li>Runtime &#128561; <span class="fancy">reflection</span></li>
         </ul>
       </section>
 
       <section>
-        <p>What does it all mean in practice?</p>
+        <p>Modules are still not particularly useful in practice</p>
+      </section>
+
+      <section class="slide">
+        <h3>Still no zapcc</h3>
       </section>
 
       <section>
-        <p>Ollama</p>
+        <h3>Declaration/Definition Misconception</h3>
+        <p>My first project with C++20 in prod</p>
+      </section>
+
+      <section class="slide">
+        <h3>Bad export</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  export module foo;
+  export int bar() {
+    <span class="fragment hl-code">return 42;</span> <span class="fragment">// recompile main</span>
+  }
+  export inline int baz() {
+    <span class="fragment hl-code">return 58;</span> <span class="fragment">// recompile main</span>
+  }
+        </code></pre>
+
+        <pre><code class="cpp hljs" data-noescape>
+  import foo;
+  int main() {
+    std::cout &lt;&lt; bar() + baz() &lt;&lt; '\n';
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Still bad export</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  export module foo;
+  export int bar();
+  export int baz();
+  module : private;
+  int bar() { <span class="fragment hl-code persist">return 42;</span> } <span class="fragment">// change here</span>
+  int baz() { return 58; }
+        </code></pre>
+
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+  import foo;
+  void pbar() {
+    std::cout &lt;&lt; bar() &lt;&lt; '\n'; // recompile here
+  }
+        </code></pre>
+        <pre class="fragment"><code class="cpp hljs" data-noescape>
+  import foo;
+  void pbaz() {
+    std::cout &lt;&lt; baz() &lt;&lt; '\n'; // ... but also here
+  }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Modules</h3>
+        <br/>
+        <ul>
+          <li class="pro">Private in the same file</li>
+          <ul>
+            <li>... but with copypasta declarations</li>
+            <li>... especially annoying for classes</li>
+          </ul>
+          <li class="pro">No macro propagation</li>
+          <li class="con">Linked list build pessimization</li>
+          <li class="con">Poor build system and IDE support</li>
+        </ul>
+        <br/><br/>
+        <p class="pinner">We don't use modules</p>
       </section>
 
       <section>
-        <p>Langchain</p>
+        <p>It's 2025. Are coroutines usable yet?</p>
       </section>
 
       <section>
-        <p>That, but in C++</p>
+        <p>Well... almost</p>
+      </section>
+
+      <section class="slide">
+        <h3>Generators</h3>
+        <br/>
+        <ul>
+          <li>No compiler generates optimal code</li>
+          <li>Don't "coroutine"-ize your for loops yet</li>
+          <li>Heterogeneous I/O is terrible</li>
+          <li>Back to coroutine-like classes</li>
+          <li><code class="cinline">std::generator</code> is terrible. Allocates a stack</li>
+          <li>Some generators are better with coroutines</li>
+          <li>... most not</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Async</h3>
+        <br/>
+        <ul>
+          <li>Still no standard execution library</li>
+          <li><code class="cinline">[boost.]asio</code> is the best we got</li>
+          <li>...and it compiles for ages</li>
+          <li>If you want something simple, you have to do it yourself</li>
+          <li>Code reusability is zero</li>
+          <li>Heterogeneous I/O is still terrible</li>
+          <li>Some async code is better with coroutines</li>
+          <li>... most not</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Eager coroutines</h3>
+        <br/>
+        <ul>
+          <li>Throwing an exception in the eager part? No.</li>
+          <li>A full-blown bug in the standard</li>
+          <li><a href="https://ibob.bg/blog/2024/10/06/coro-throw/">ibob.bg/blog/2024/10/06/coro-throw/</a></li>
+          <li>I created an experimental eager throw helper</li>
+          <li>Hacky? Check. Evil? Check. UB? Check.</li>
+          <li>Works? Yes</li>
+          <li>This is real C++!</li>
+        </ul>
       </section>
 
       <section>
-        <p>Modules are useless in practice</p>
+        <p>How do you build forks?</p>
       </section>
 
       <section>
-        <p>Splicing coroutines</p>
+        <img src="build-fork.webp" alt="Building a fork" />
+      </section>
+
+      <section class="slide">
+        <h3>The Setup</h3>
+        <br/>
+        <ul>
+          <li>C++ does not have a package manager</li>
+          <li>Many inference libraries that we'd like to use just splice forks</li>
+          <li>ggml is the worst offender</li>
+          <li>... but also others</li>
+          <li>This makes CMake sad</li>
+        </ul>
       </section>
 
       <section>
-        <p>Eager coroutines</p>
+        <h3>Can't Link This</h3>
+        <p>Can't link forks with the same symbols in the same binary</p>
+        <p>This is a linker error... at best</p>
+      </section>
+
+      <section class="slide">
+        <h3>Merge the forks?</h3>
+        <br/>
+        <ul>
+          <li>The authors didn't do it... mostly</li>
+          <li>Endless support</li>
+          <li>Full time job for at least one engineer</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Rename the symbols?</h3>
+        <br/>
+        <ul>
+          <li>Bespoke scripts for each library</li>
+          <li>Very dangerous if you miss something</li>
+          <li>Still endless support</li>
+          <li>Probably a full time job for again</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Plugins</h3>
+        <br/>
+        <ul>
+          <li>The only sane option, really</li>
+          <li>iOS is stupid: <code class="cinline">dlopen</code> is shadowbanned</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The Build System Problem</h3>
+        <br/>
+        <ul>
+          <li>We want to build multiple forks of ggml</li>
+          <li>CMake targets are globally unique</li>
+          <li>Too easy</li>
+          <li>Most inference libraries use their own custom fork</li>
+          <li>This makes CMake sad</li>
+        </ul>
       </section>
 
       <section>
         <p>API - connecting endpoints. ZeroMQ</p>
       </section>
 
-      <section>
-        <p>Building forks</p>
-        <p>Plugins</p>
-        <p>Consolidating dependencies</p>
-      </section>
-
-      <section>
+       <section>
         <p>Blob data flow</p>
       </section>
 
