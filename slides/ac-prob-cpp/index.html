@@ -92,6 +92,7 @@
         <ul>
           <li>Est. June 2024</li>
           <li>Innovating AI, Protecting Privacy</li>
+          <li>Privately funded</li>
           <li>Become a leading provider of AI solutions</li>
           <ul>
             <li>Feature rich software</li>
@@ -99,19 +100,6 @@
             <li>Privacy in the cloud</li>
           </ul>
           <li>There's three of us</li>
-        </ul>
-      </section>
-
-      <section class="slide">
-        <h3>Alpaca Core SDK</h3>
-        <br/>
-        <ul>
-          <li>Ollama, but a for more models and more platforms</li>
-          <li>LangChain, but for more languages</li>
-          <li>And in C++ at that</li>
-          <li>Current state: pre-alfa</li>
-          <li>Still open source, though</li>
-          <li><a href="https://github.com/alpaca-core">github.com/alpaca-core</a></li>
         </ul>
       </section>
 
@@ -274,11 +262,11 @@
         <h3>The Setup</h3>
         <br/>
         <ul>
+          <li>We want to build multiple inference libraries</li>
           <li>C++ does not have a package manager</li>
           <li>Many inference libraries that we'd like to use just splice forks</li>
           <li>ggml is the worst offender</li>
-          <li>... but also others</li>
-          <li>This makes CMake sad</li>
+          <li>... but not the only one</li>
         </ul>
       </section>
 
@@ -325,6 +313,7 @@
           <li>CMake targets are globally unique</li>
           <li>Rename targets: dangerous, doesn't cover options</li>
           <li>Change CMake: endless support</li>
+          <li>This makes CMake sad</li>
         </ul>
       </section>
 
@@ -352,11 +341,103 @@
       </section>
 
       <section>
+        <p>So, what do we do?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Our Mandate</h3>
+        <br/>
+        <ul>
+          <li>Build an SDK for AI</li>
+          <li>... for many platforms</li>
+          <li>... for many languages</li>
+          <li>... for seamless use for edge and server inference</li>
+          <li>Make it so that people <em>want</em> to use it</li>
+        </ul>
+        <br/><br/>
+        <p class="pinner"><em>If they want to use our SDK, they will have privacy whether they like it or not</em></p>
+      </section>
+
+      <section>
+        <p>Let's start with the API</p>
+      </section>
+
+      <section class="slide">
+        <h3>API Design</h3>
+        <br/>
+        <ul>
+          <li><code>Model</code> - weights loaded into memory. It creates...</li>
+          <li><code>Instance</code> - a state object. It runs...</li>
+          <li><code>Op</code> - a function/method which may change the state</li>
+        </ul>
+        <pre><code class="python hljs" data-noescape>
+  <span class="fragment hl-code">model = Model("llama-2-7b") # create a model</span>
+  <span class="fragment hl-code">instance = model.create_instance() # create an instance</span>
+  <span class="fragment hl-code">result = instance.complete("A recipe for rice cakes:") # run op and get result</span>
+  <span class="fragment hl-code">print(result) # consume the result</span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>API Design</h3>
+        <br/>
+        <ul>
+          <li>Neat, but this is LLM only</li>
+          <li>We want other models</li>
+          <li><code>complete("text")</code> makes no sense for image generation</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>Stringly typed to the rescue!</p>
+        <pre><code class="python hljs" data-noescape>
+  <span class="fragment hl-code">model = Model("llama-2-7b") # load an llm</span>
+
+  <span class="fragment hl-code">instance = model.create_instance("general", dict(context_size = 1024))</span>
+
+  <span class="fragment hl-code">result = instance.run_op("complete",
+    dict(prompt = "A recipe for rice cakes:", max_tokens = 2000))</span>
+
+  <span class="fragment hl-code">recipe = result["text"]
+  print(recipe)</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <p>And now we can also do:</p>
+        <pre><code class="python hljs" data-noescape>
+  <span class="fragment hl-code">model = loader.load("stable-diffusion-3") # load an image generation model</span>
+
+  <span class="fragment hl-code">instance = model.create_instance("general", dict(resolution = 512))</span>
+
+  <span class="fragment hl-code">result = instance.run_op("generate",
+    dict(prompt = "A 17th century oil on canvas portrait of Darth Vader"))</span>
+
+  <span class="fragment hl-code">image_bytes = result["image"]
+  img = Image.open(io.BytesIO(image_bytes))
+  img.show()</span>
+        </code></pre>
+      </section>
+
+      <section>
         <img width="900px" src="ac-sdk-old.svg" alt="Alpaca Core SDK" />
       </section>
 
       <section>
         <img width="900px" src="ac-sdk.svg" alt="Alpaca Core SDK" />
+      </section>
+
+      <section class="slide">
+        <h3>Alpaca Core SDK</h3>
+        <br/>
+        <ul>
+          <li>Ollama, but a for more models and more platforms</li>
+          <li>LangChain, but for more languages</li>
+          <li>And in C++ at that</li>
+          <li>Current state: pre-alfa</li>
+          <li>Still open source, though</li>
+          <li><a href="https://github.com/alpaca-core">github.com/alpaca-core</a></li>
+        </ul>
       </section>
 
       <section class="fin">
