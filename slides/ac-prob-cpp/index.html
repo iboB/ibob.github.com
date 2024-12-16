@@ -123,7 +123,7 @@
           <li>A bit about <span class="fancy">coroutines</span></li>
           <li><span class="fancy">Build systems</span> musings</li>
           <li><span class="fancy">API design</span> for multiple languages</li>
-          <li>Runtime &#128561; <span class="fancy">reflection</span></li>
+          <li>A bit about <em>runtime</em> &#128561; <span class="fancy">reflection</span></li>
         </ul>
       </section>
 
@@ -133,6 +133,7 @@
 
       <section class="slide">
         <h3>Still no zapcc</h3>
+        <br/>
       </section>
 
       <section>
@@ -197,9 +198,13 @@
           <li class="pro">No macro propagation</li>
           <li class="con">Linked list build pessimization</li>
           <li class="con">Poor build system and IDE support</li>
+          <li class="con">Almost no libraries have module interfaces</li>
         </ul>
-        <br/><br/>
-        <p class="pinner">We don't use modules</p>
+      </section>
+
+      <section>
+        <p>Solution: We don't use modules</p>
+        <p>Problem cost: 1 day</p>
       </section>
 
       <section>
@@ -251,6 +256,10 @@
           <li>Works? Yes</li>
           <li>This is real C++!</li>
         </ul>
+      </section>
+
+      <section>
+        <p>Coroutine problems cost: 1 week</p>
       </section>
 
       <section>
@@ -313,20 +322,41 @@
         <h3>The Build System Problem</h3>
         <br/>
         <ul>
-          <li>We want to build multiple forks of ggml</li>
           <li>CMake targets are globally unique</li>
-          <li>Too easy</li>
-          <li>Most inference libraries use their own custom fork</li>
-          <li>This makes CMake sad</li>
+          <li>Rename targets: dangerous, doesn't cover options</li>
+          <li>Change CMake: endless support</li>
         </ul>
       </section>
 
-      <section>
-        <p>API - connecting endpoints. ZeroMQ</p>
+      <section class="slide">
+        <h3>Multiple Roots</h3>
+        <br/>
+        <p>The only sane option, really</p>
+        <br/>
+        <pre><code class="cmake hljs" data-noescape>
+  make_ac_plugin_available(
+      NAME ilib-llama.cpp
+      VERSION 1.0.0
+      GITHUB alpaca-core/ilib-llama.cpp
+  )
+        </code></pre>
       </section>
 
-       <section>
-        <p>Blob data flow</p>
+      <section>
+        <p>Solution: Plugins, multiple roots, CMake library</p>
+        <p>Problem cost: 3 weeks</p>
+      </section>
+
+      <section>
+        <p>How to SDK and API design?</p>
+      </section>
+
+      <section>
+        <img width="900px" src="ac-sdk-old.svg" alt="Alpaca Core SDK" />
+      </section>
+
+      <section>
+        <img width="900px" src="ac-sdk.svg" alt="Alpaca Core SDK" />
       </section>
 
       <section class="fin">
