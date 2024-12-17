@@ -437,17 +437,17 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
         <h3>Async Options?</h3>
         <br/>
         <ul>
-          <li>Wrap callbacks? All languages have callbacks.</li>
+          <li><b>Wrap callbacks?</b> All languages have callbacks.</li>
           <ul class="fragment">
             <li>People will hate this</li>
             <li>A lot of work</li>
           </ul>
-          <li class="fragment">Language specific wrap? Rely on stackful coroutines.</li>
+          <li class="fragment"><b>Language specific wrap?</b> Rely on stackful coroutines.</li>
           <ul class="fragment">
             <li>What if their coroutines are stackless?</li>
-            <li>Even more work</li>
+            <li>Even <em>more work</em></li>
           </ul>
-          <li class="fragment">We would need platform-specific threads</li>
+          <li class="fragment">We would need <span class="fancy">platform-specific threads</span></li>
         </ul>
       </section>
 
@@ -470,7 +470,7 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
         <ul>
           <li class="fragment">Have a low-level API: </li>
           <ul class="fragment">
-            <li>Think <code>get_token</code> instead of <code>complete_text</code></li>
+            <li>Think <code class="cinline">get_token</code> instead of <code class="cinline">complete_text</code></li>
           </ul>
           <li class="fragment">Write high level algoritms using it</li>
           <li class="fragment">Port algorithms to languages using their async primitives</li>
@@ -515,10 +515,10 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
       <section class="slide">
         <h3>Mitigations</h3>
         <br/>
-        <p class="fragment">Run algorithms on the server?</p>
+        <p class="fragment"><b>Run algorithms on the server?</b></p>
         <p class="fragment">But then we have to support async</p>
-        <p class="fragment">How do we send them?</p>
-        <p class="fragment">Aha! We create high-level plugins and use them!</p>
+        <p class="fragment">How do we even send them?</p>
+        <p class="fragment"><b>Aha! We create high-level plugins and use them!</b></p>
         <p class="fragment">But then we don't need the low level API</p>
       </section>
 
@@ -532,12 +532,15 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
         <ul>
           <li class="fragment">We completely scratched AC Local</li>
           <li class="fragment">Plugins are high level</li>
-          <li class="fragment">layer-zero: ZMQ-like sockets for async comms</li>
+          <li class="fragment"><span class="fancy">layer-zero</span>: ZMQ-like sockets for async comms</li>
           <li class="fragment">Every plugin is a server</li>
           <li class="fragment">Only abstract away transport</li>
           <li class="fragment">We've been working on this for almost 2 weeks</li>
         </ul>
-        <p class="fragment pinner">Problem cost: 6 months</p>
+      </section>
+
+      <section>
+        <p class="fragment pinner">Problem cost: <b>6 months</b></p>
       </section>
 
       <section>
