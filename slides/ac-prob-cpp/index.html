@@ -308,10 +308,10 @@
         <h3>The Build System Problem</h3>
         <br/>
         <ul>
-          <li>CMake targets are globally unique</li>
-          <li>Rename targets: dangerous, doesn't cover options</li>
-          <li>Change CMake: endless support</li>
-          <li>This makes CMake sad</li>
+          <li class="fragment">CMake targets are globally unique</li>
+          <li class="fragment">Rename targets: dangerous, doesn't cover options</li>
+          <li class="fragment">Replace CMake: endless support</li>
+          <li class="fragment">This makes CMake sad</li>
         </ul>
       </section>
 
@@ -320,7 +320,7 @@
         <br/>
         <p>The only sane option, really</p>
         <br/>
-        <pre><code class="cmake hljs" data-noescape>
+        <pre class="fragment"><code class="cmake hljs" data-noescape>
   make_ac_plugin_available(
       NAME ilib-llama.cpp
       VERSION 1.0.0
@@ -330,8 +330,8 @@
       </section>
 
       <section>
-        <p>Solution: Plugins, multiple roots, CMake library</p>
-        <p>Problem cost: 3 weeks</p>
+        <p>Solution: <span class="fancy">Plugins, multiple roots, CMake library</span></p>
+        <p class="fragment">Problem cost: <b>3 weeks</b></p>
       </section>
 
       <section>
@@ -347,13 +347,13 @@
         <br/>
         <ul>
           <li>Build an SDK for AI</li>
-          <li>... for many platforms</li>
-          <li>... for many languages</li>
-          <li>... for seamless use for edge and server inference</li>
-          <li>Make it so that people <em>want</em> to use it</li>
+          <li class="fragment">... for many platforms</li>
+          <li class="fragment">... for many languages</li>
+          <li class="fragment">... for seamless use for edge and server inference</li>
+          <li class="fragment">Make it so that people <em>want</em> to use it</li>
         </ul>
         <br/><br/>
-        <p class="pinner"><em>If they want to use our SDK, they will have privacy whether they like it or not</em></p>
+        <p class="fragment pinner"><em>If they want to use our SDK, they will have privacy whether they like it or not</em></p>
       </section>
 
       <section>
@@ -364,17 +364,17 @@
         <h3>API Design</h3>
         <br/>
         <ul>
-          <li><code>Model</code> - weights loaded into memory. It creates...</li>
-          <li><code>Instance</code> - a state object. It runs...</li>
-          <li><code>Op</code> - a function/method which may change the state</li>
+          <li><code class="cinline">Model</code> - weights loaded into memory. It creates...</li>
+          <li><code class="cinline">Instance</code> - a state object. It runs...</li>
+          <li><code class="cinline">Op</code> - a function/method which may change the state</li>
         </ul>
-        <pre><code class="python hljs" data-noescape>
+        <pre class="fragment"><code class="python hljs" data-noescape>
   <span class="fragment hl-code">model = Model("llama-2-7b") # create a model</span>
   <span class="fragment hl-code">instance = model.create_instance() # create an instance</span>
   <span class="fragment hl-code">result = instance.complete("A recipe for rice cakes:") # run op and get result</span>
   <span class="fragment hl-code">print(result) # consume the result</span>
         </code></pre>
-        <ul>
+        <ul class="fragment">
           <li>Neat, but this is LLM only</li>
           <li><code>complete("text")</code> makes no sense for image generation</li>
         </ul>
@@ -421,12 +421,12 @@
 void Model::createInstance(string type, Dict params, function&lt;void(InstancePtr)&gt; cb);
 void Instance::runOp(string type, Dict params, <span class="fragment hl-code">function&lt;void(Dict)&gt; cb</span>);
         </code></pre>
-        <p>We could even think of asio-based coroutines</p>
+        <p class="fragment">We could even think of asio-based coroutines</p>
       </section>
 
       <section>
-        <p>But we have to support Java, Swift, JS, Python, and many more</p>
-        <p>They all have their own idea of how to deal with async</p>
+        <p>But we have to support <span class="fancy">Java, Swift, JS, Python, and many more</span></p>
+        <p class="fragment">They all have <em>their own</em> idea of how to deal with async</p>
       </section>
 
       <section>
@@ -437,17 +437,17 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
         <h3>Async Options?</h3>
         <br/>
         <ul>
-          <li>Wrap callbacks. All languages have callbacks.</li>
-          <ul>
+          <li>Wrap callbacks? All languages have callbacks.</li>
+          <ul class="fragment">
             <li>People will hate this</li>
             <li>A lot of work</li>
           </ul>
-          <li>Language specific wrap. Rely stackful coroutines.</li>
-          <ul>
+          <li class="fragment">Language specific wrap? Rely on stackful coroutines.</li>
+          <ul class="fragment">
             <li>What if their coroutines are stackless?</li>
             <li>Even more work</li>
           </ul>
-          <li>We would need platform-specific threads</li>
+          <li class="fragment">We would need platform-specific threads</li>
         </ul>
       </section>
 
@@ -468,13 +468,13 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
         <h3>No async</h3>
         <br/>
         <ul>
-          <li>Have a low-level API: </li>
-          <ul>
+          <li class="fragment">Have a low-level API: </li>
+          <ul class="fragment">
             <li>Think <code>get_token</code> instead of <code>complete_text</code></li>
           </ul>
-          <li>Write high level algoritms using it</li>
-          <li>Port algorithms to languages using their async primitives</li>
-          <li>This is the Local Inference SDK, or AC Local</li>
+          <li class="fragment">Write high level algoritms using it</li>
+          <li class="fragment">Port algorithms to languages using their async primitives</li>
+          <li class="fragment">This is the <span class="fancy">Local Inference SDK</span>, or AC Local</li>
         </ul>
       </section>
 
@@ -485,23 +485,23 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
       <section class="slide">
         <h3>And so?</h3>
         <br/>
-        <li>We've worked on this for almost 6 months</li>
-        <li>Wrappers for C, Java, and Swift</li>
-        <li>Edge demos for Android and iOS</li>
-        <li>Multiple LLMs through llama.cpp</li>
-        <li>Image generation through Stable Diffusion</li>
-        <li>ASR through Whisper</li>
-        <li>TTS through Tortoise</li>
-        <li>Getting ready for Q1 2025 beta</li>
-        <li>We started work on Acord...</li>
+        <li class="fragment">We've worked on this for almost 6 months</li>
+        <li class="fragment">Wrappers for C, Java, and Swift</li>
+        <li class="fragment">Edge demos for Android and iOS</li>
+        <li class="fragment">Multiple LLMs through llama.cpp</li>
+        <li class="fragment">Image generation through Stable Diffusion</li>
+        <li class="fragment">ASR through Whisper</li>
+        <li class="fragment">TTS through Tortoise</li>
+        <li class="fragment">Getting ready for Q1 2025 beta</li>
+        <li class="fragment">We started work on Acord...</li>
       </section>
 
       <section class="slide">
         <h3>Acord</h3>
         <br/>
-        <li>Local inference daemon (Ollama-style)</li>
-        <li>Basically a server demo</li>
-        <li>The high-level algorithms work through the server...</li>
+        <li class="fragment">Local inference daemon (Ollama-style)</li>
+        <li class="fragment">Basically a server demo</li>
+        <li class="fragment">The high-level algorithms work through the server...</li>
       </section>
 
       <section>
@@ -515,11 +515,11 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
       <section class="slide">
         <h3>Mitigations</h3>
         <br/>
-        <p>Run algorithms on the server?</p>
-        <p>But then we have to support async</p>
-        <p>How do we send them?</p>
-        <p>Aha! We create high-level plugins and use them!</p>
-        <p>But then we don't need the low level API</p>
+        <p class="fragment">Run algorithms on the server?</p>
+        <p class="fragment">But then we have to support async</p>
+        <p class="fragment">How do we send them?</p>
+        <p class="fragment">Aha! We create high-level plugins and use them!</p>
+        <p class="fragment">But then we don't need the low level API</p>
       </section>
 
       <section>
@@ -530,14 +530,14 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
         <h3>And so...</h3>
         <br/>
         <ul>
-          <li>We completely scratched AC Local</li>
-          <li>Plugins are high level</li>
-          <li>layer-zero: ZMQ-like sockets for async comms</li>
-          <li>Every plugin is a server</li>
-          <li>Only abstract away transport</li>
-          <li>We've been working on this for almost 2 weeks</li>
+          <li class="fragment">We completely scratched AC Local</li>
+          <li class="fragment">Plugins are high level</li>
+          <li class="fragment">layer-zero: ZMQ-like sockets for async comms</li>
+          <li class="fragment">Every plugin is a server</li>
+          <li class="fragment">Only abstract away transport</li>
+          <li class="fragment">We've been working on this for almost 2 weeks</li>
         </ul>
-        <p class="pinner">Problem cost: 6 months</p>
+        <p class="fragment pinner">Problem cost: 6 months</p>
       </section>
 
       <section>
@@ -553,7 +553,7 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
           <li>C++ server</li>
           <li>Current state: pre-alfa</li>
           <li>Still open source, though</li>
-          <li><a href="https://github.com/alpaca-core">github.com/alpaca-core</a></li>
+          <li class="fragment"><a href="https://github.com/alpaca-core">github.com/alpaca-core</a></li>
         </ul>
       </section>
 
