@@ -110,7 +110,7 @@
           <li>Problems we've met and our solutions</li>
           <li class="fragment">A small problem with <span class="fancy">modules</span></li>
           <li class="fragment">An annoying problem with <span class="fancy">coroutines</span></li>
-          <li class="fragment">A bad problem with <span class="fancy">Build system</span></li>
+          <li class="fragment">A bad <span class="fancy">build</span> problem</li>
           <li class="fragment">A huge problem with <span class="fancy">API design</span></li>
           <!-- <li>A bit about <em>runtime</em> &#128561; <span class="fancy">reflection</span></li> -->
         </ul>
@@ -142,6 +142,7 @@
 
       <section class="slide">
         <h3>Bad export</h3>
+        <br/>
         <pre><code class="cpp hljs" data-noescape>
   export module foo;
   export int bar() {
@@ -157,6 +158,20 @@
   int main() {
     std::cout &lt;&lt; bar() + baz() &lt;&lt; '\n';
   }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Bad export</h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+          export module foo;
+
+          <span class="fragment hl-code">export int bar();</span>
+          export int baz() { return 58; }
+
+          <span class="fragment hl-code">module : private;</span>
+          <span class="fragment hl-code persist">int bar() { return 42; }</span>
         </code></pre>
       </section>
 
@@ -318,8 +333,9 @@
       <section class="slide">
         <h3>Multiple Roots</h3>
         <br/>
-        <p>The only sane option, really</p>
-        <br/>
+        <ul>
+          <li>The only sane option, really</li>
+        </ul>
         <pre class="fragment"><code class="cmake hljs" data-noescape>
   make_ac_plugin_available(
       NAME ilib-llama.cpp
@@ -327,6 +343,12 @@
       GITHUB alpaca-core/ilib-llama.cpp
   )
         </code></pre>
+        <ul>
+          <li class="fragment">Fetch and build plugin</li>
+          <li class="fragment">But allow relative path</li>
+          <li class="fragment">And also allow static-lib option</li>
+        </ul>
+
       </section>
 
       <section>
@@ -339,7 +361,7 @@
       </section>
 
       <section>
-        <p>Finally. What does Alpaca Core actually do?</p>
+        <p>But first, what does Alpaca Core actually do?</p>
       </section>
 
       <section class="slide">
@@ -418,10 +440,10 @@
       <section>
         <p>If we only had C++, that would be easy</p>
         <pre><code class="cpp hljs" data-noescape>
-void Model::createInstance(string type, Dict params, function&lt;void(InstancePtr)&gt; cb);
-void Instance::runOp(string type, Dict params, <span class="fragment hl-code">function&lt;void(Dict)&gt; cb</span>);
+  void Model::createInstance(string type, Dict params, function&lt;void(InstancePtr)&gt; cb);
+  void Instance::runOp(string type, Dict params, <span class="fragment hl-code persist">function&lt;void(Dict)&gt; cb</span>);
         </code></pre>
-        <p class="fragment">We could even think of asio-based coroutines</p>
+        <p class="fragment">We could even think of (asio-based?) coroutines</p>
       </section>
 
       <section>
@@ -430,7 +452,7 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
       </section>
 
       <section>
-        <blockquote>Turning coroutines into callbacks is trivial.<br>Turning callbacks into (stackless) coroutines is borderline impossible.</blockquote>
+        <blockquote>Turning coroutines into callbacks is trivial.<br>Turning callbacks into stackless coroutines is borderline impossible.</blockquote>
       </section>
 
       <section class="slide">
@@ -443,9 +465,9 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
             <li>A lot of work</li>
           </ul>
           <li class="fragment"><b>Language specific wrap?</b> Rely on stackful coroutines.</li>
-          <ul class="fragment">
-            <li>What if their coroutines are stackless?</li>
-            <li>Even <em>more work</em></li>
+          <ul>
+            <li class="fragment">What if their coroutines are stackless? <span class="fragment">(Hi, Kotlin)</span></li>
+            <li class="fragment">Even <em>more work</em></li>
           </ul>
           <li class="fragment">We would need <span class="fancy">platform-specific threads</span></li>
         </ul>
@@ -540,7 +562,7 @@ void Instance::runOp(string type, Dict params, <span class="fragment hl-code">fu
       </section>
 
       <section>
-        <p class="fragment pinner">Problem cost: <b>6 months</b></p>
+        <p class="pinner">Problem cost: <b class="fragment">6 months</b></p>
       </section>
 
       <section>
