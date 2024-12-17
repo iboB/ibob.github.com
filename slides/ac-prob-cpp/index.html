@@ -91,7 +91,7 @@
         <br/>
         <ul>
           <li>Est. June 2024</li>
-          <li>Innovating AI, Protecting Privacy</li>
+          <li><span class="fancy">Innovating AI, Protecting Privacy</span></li>
           <li>Privately funded</li>
           <li>Become a leading provider of AI solutions</li>
           <ul>
@@ -99,7 +99,7 @@
             <li>Open source</li>
             <li>Privacy in the cloud</li>
           </ul>
-          <li>There's three of us</li>
+          <li class="fragment">There's three of us</li>
         </ul>
       </section>
 
@@ -107,10 +107,11 @@
         <h3>This talk</h3>
         <br/>
         <ul>
-          <li>A bit about <span class="fancy">modules</span></li>
-          <li>A bit about <span class="fancy">coroutines</span></li>
-          <li><span class="fancy">Build systems</span> musings</li>
-          <li><span class="fancy">API design</span> for multiple languages</li>
+          <li>Problems we've met and our solutions</li>
+          <li class="fragment">A small problem with <span class="fancy">modules</span></li>
+          <li class="fragment">An annoying problem with <span class="fancy">coroutines</span></li>
+          <li class="fragment">A bad problem with <span class="fancy">Build system</span></li>
+          <li class="fragment">A huge problem with <span class="fancy">API design</span></li>
           <!-- <li>A bit about <em>runtime</em> &#128561; <span class="fancy">reflection</span></li> -->
         </ul>
       </section>
@@ -127,16 +128,16 @@
         <h3>Still no zapcc</h3>
         <br/>
         <ul>
-          <li>zapcc caches instantiated templates</li>
-          <li>This is hard: includes depend on each other</li>
-          <li>Modules don't</li>
-          <li>No compiler tries to do what zapcc does with modules</li>
+          <li class="fragment">zapcc caches instantiated templates</li>
+          <li class="fragment">This is hard: <em>includes depend on each other</em></li>
+          <li class="fragment">Modules don't</li>
+          <li class="fragment">No compiler tries to do with modules what zapcc does</li>
         </ul>
       </section>
 
       <section>
-        <h3>Declaration/Definition Misconception</h3>
-        <p>My first project with C++20 in prod</p>
+        <p>Declaration/Definition Misconception</p>
+        <small class="fragment">My first project with C++20 in prod</small>
       </section>
 
       <section class="slide">
@@ -149,7 +150,7 @@
   export inline int baz() {
     <span class="fragment hl-code">return 58;</span> <span class="fragment">// recompile main</span>
   }
-        </code></pre>
+  <span class="fragment">// In reality these are equivalent</span></code></pre>
 
         <pre><code class="cpp hljs" data-noescape>
   import foo;
@@ -160,49 +161,24 @@
       </section>
 
       <section class="slide">
-        <h3>Still bad export</h3>
-        <pre><code class="cpp hljs" data-noescape>
-  export module foo;
-  export int bar();
-  export int baz();
-  module : private;
-  int bar() { <span class="fragment hl-code persist">return 42;</span> } <span class="fragment">// change here</span>
-  int baz() { return 58; }
-        </code></pre>
-
-        <pre class="fragment"><code class="cpp hljs" data-noescape>
-  import foo;
-  void pbar() {
-    std::cout &lt;&lt; bar() &lt;&lt; '\n'; // recompile here
-  }
-        </code></pre>
-        <pre class="fragment"><code class="cpp hljs" data-noescape>
-  import foo;
-  void pbaz() {
-    std::cout &lt;&lt; baz() &lt;&lt; '\n'; // ... but also here
-  }
-        </code></pre>
-      </section>
-
-      <section class="slide">
         <h3>Modules</h3>
         <br/>
         <ul>
-          <li class="pro">Private in the same file</li>
-          <ul>
+          <li class="pro fragment">Private in the same file</li>
+          <ul class="fragment">
             <li>... but with copypasta declarations</li>
             <li>... especially annoying for classes</li>
           </ul>
-          <li class="pro">No macro propagation</li>
-          <li class="con">Linked list build pessimization</li>
-          <li class="con">Poor build system and IDE support</li>
-          <li class="con">Almost no libraries have module interfaces</li>
+          <li class="pro fragment">No macro propagation</li>
+          <li class="con fragment">Linked list build pessimization</li>
+          <li class="con fragment">Poor build system and IDE support</li>
+          <li class="con fragment">Almost no libraries have module interfaces</li>
         </ul>
       </section>
 
       <section>
-        <p>Solution: We don't use modules</p>
-        <p>Problem cost: 1 day</p>
+        <p>Solution: <span class="fancy">We don't use modules</span></p>
+        <p class="fragment">Problem cost: <b>1 day</b></p>
       </section>
 
       <section>
@@ -217,13 +193,13 @@
         <h3>Generators</h3>
         <br/>
         <ul>
-          <li>No compiler generates optimal code</li>
-          <li>Don't "coroutine"-ize your for loops yet</li>
-          <li>Heterogeneous I/O is terrible</li>
-          <li>Back to coroutine-like classes</li>
-          <li><code class="cinline">std::generator</code> is terrible. Allocates a stack</li>
-          <li>Some generators are better with coroutines</li>
-          <li>... most aren't</li>
+          <li class="fragment">No compiler generates optimal code</li>
+          <li class="fragment">Don't <em>"coroutinize"</em> your for loops yet</li>
+          <li class="fragment">Heterogeneous I/O is terrible</li>
+          <li class="fragment">Back to coroutine-like classes</li>
+          <li class="fragment"><code class="cinline">std::generator</code> is terrible. Allocates a stack</li>
+          <li class="fragment"><span class="fancy">Some</span> generators are better with coroutines</li>
+          <li class="fragment">... most aren't</li>
         </ul>
       </section>
 
@@ -231,15 +207,15 @@
         <h3>Async</h3>
         <br/>
         <ul>
-          <li>Still no standard execution library</li>
-          <li><code class="cinline">[boost.]asio</code> is the best we got</li>
-          <li>...and it compiles for ages</li>
-          <li>If you want something simple, you have to do it yourself</li>
-          <li>Code reusability is zero</li>
-          <li>Heterogeneous I/O is still terrible</li>
-          <li>Splicing coroutines is neat, though</li>
-          <li>Some async code is better with coroutines</li>
-          <li>... most isn't</li>
+          <li class="fragment">Still <span class="fancy">no standard execution library</span></li>
+          <li class="fragment"><code class="cinline">[boost.]asio</code> is the best we got</li>
+          <li class="fragment">...and it compiles for ages</li>
+          <li class="fragment">If you want something simple, <span class="fancy">you have to do it yourself</span></li>
+          <li class="fragment">Code reusability is zero</li>
+          <li class="fragment">Heterogeneous I/O is still terrible</li>
+          <li class="fragment">Splicing coroutines is neat though</li>
+          <li class="fragment"><span class="fancy">Some</span> async code is better with coroutines</li>
+          <li class="fragment">... most isn't</li>
         </ul>
       </section>
 
@@ -247,18 +223,25 @@
         <h3>Eager coroutines</h3>
         <br/>
         <ul>
-          <li>Throwing an exception in the eager part? No.</li>
-          <li>A full-blown bug in the standard</li>
-          <li><a href="https://ibob.bg/blog/2024/10/06/coro-throw/">ibob.bg/blog/2024/10/06/coro-throw/</a></li>
-          <li>I created an experimental eager throw helper</li>
-          <li>Hacky? Check. Evil? Check. UB? Check.</li>
-          <li>Works? Yes</li>
-          <li>This is real C++!</li>
+          <li class="fragment">Throwing an exception in the eager part? <span class="fragment">No.</span></li>
+          <li class="fragment">A full-blown <span class="fancy">bug in the standard</span></li>
+          <li class="fragment"><a href="https://ibob.bg/blog/2024/10/06/coro-throw/">ibob.bg/blog/2024/10/06/coro-throw/</a></li>
+          <li class="fragment">I created an experimental eager throw helper</li>
+          <li class="fragment">Hacky?
+            <span class="fragment">Check.
+              <span class="fragment">Evil?
+                <span class="fragment">Check.
+                  <span class="fragment">UB?
+                    <span class="fragment">Check.
+            </span></span></span></span></span>
+          </li>
+          <li class="fragment">Works? <span class="fragment">Yes!</span></li>
+          <li class="fragment">This is <span class="fancy">real</span> C++!</li>
         </ul>
       </section>
 
       <section>
-        <p>Coroutine problems cost: 1 week</p>
+        <p>Total Coroutine problems cost: <b>1 week</b></p>
       </section>
 
       <section>
@@ -273,18 +256,18 @@
         <h3>The Setup</h3>
         <br/>
         <ul>
-          <li>We want to build multiple inference libraries</li>
-          <li>C++ does not have a package manager</li>
-          <li>Many inference libraries, that we'd like to build, just use forks</li>
-          <li>ggml is the worst offender</li>
-          <li>... but not the only one</li>
+          <li class="fragment">We want to build <span class="fancy">multiple inference libraries</span></li>
+          <li class="fragment">C++ does <span class="fancy">not</span> have a package manager</li>
+          <li class="fragment">Many inference libraries, that we'd like to build, just use forks</li>
+          <li class="fragment"><a href="https://github.com/ggerganov/ggml">ggml</a> is the worst offender</li>
+          <li class="fragment">... but not the only one</li>
         </ul>
       </section>
 
       <section>
         <h3>Can't Link This</h3>
         <p>Can't link forks with the same symbols in the same binary</p>
-        <p>This is a linker error... at best</p>
+        <p class="fragment">This is a linker error... at best</p>
       </section>
 
       <section class="slide">
@@ -293,7 +276,8 @@
         <ul>
           <li>The authors didn't do it... mostly</li>
           <li>Endless support</li>
-          <li>Full time job for at least one engineer</li>
+          <li class="fragment">Full time job for at least one engineer</li>
+          <li class="con fragment">Nope</li>
         </ul>
       </section>
 
@@ -304,16 +288,19 @@
           <li>Bespoke scripts for each library</li>
           <li>Very dangerous if you miss something</li>
           <li>Still endless support</li>
-          <li>Probably a full time job for again</li>
+          <li>Probably a full time job again</li>
+          <li class="con fragment">Nope</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>Plugins</h3>
+        <h3>Shared Library Plugins</h3>
         <br/>
         <ul>
           <li>The only sane option, really</li>
+          <li>Version management will be hard</li>
           <li>iOS is stupid: <code class="cinline">dlopen</code> is shadowbanned</li>
+          <li class="pro fragment">Begrugingly yes</li>
         </ul>
       </section>
 
