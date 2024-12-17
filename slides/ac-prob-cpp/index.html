@@ -111,7 +111,7 @@
           <li>A bit about <span class="fancy">coroutines</span></li>
           <li><span class="fancy">Build systems</span> musings</li>
           <li><span class="fancy">API design</span> for multiple languages</li>
-          <li>A bit about <em>runtime</em> &#128561; <span class="fancy">reflection</span></li>
+          <!-- <li>A bit about <em>runtime</em> &#128561; <span class="fancy">reflection</span></li> -->
         </ul>
       </section>
 
@@ -119,9 +119,19 @@
         <p>Modules are still not particularly useful in practice</p>
       </section>
 
+      <section>
+        <p>Missed optimization opportunities</p>
+      </section>
+
       <section class="slide">
         <h3>Still no zapcc</h3>
         <br/>
+        <ul>
+          <li>zapcc caches instantiated templates</li>
+          <li>This is hard: includes depend on each other</li>
+          <li>Modules don't</li>
+          <li>No compiler tries to do what zapcc does with modules</li>
+        </ul>
       </section>
 
       <section>
@@ -213,7 +223,7 @@
           <li>Back to coroutine-like classes</li>
           <li><code class="cinline">std::generator</code> is terrible. Allocates a stack</li>
           <li>Some generators are better with coroutines</li>
-          <li>... most not</li>
+          <li>... most aren't</li>
         </ul>
       </section>
 
@@ -227,8 +237,9 @@
           <li>If you want something simple, you have to do it yourself</li>
           <li>Code reusability is zero</li>
           <li>Heterogeneous I/O is still terrible</li>
+          <li>Splicing coroutines is neat, though</li>
           <li>Some async code is better with coroutines</li>
-          <li>... most not</li>
+          <li>... most isn't</li>
         </ul>
       </section>
 
@@ -264,7 +275,7 @@
         <ul>
           <li>We want to build multiple inference libraries</li>
           <li>C++ does not have a package manager</li>
-          <li>Many inference libraries that we'd like to use just splice forks</li>
+          <li>Many inference libraries, that we'd like to build, just use forks</li>
           <li>ggml is the worst offender</li>
           <li>... but not the only one</li>
         </ul>
@@ -341,7 +352,7 @@
       </section>
 
       <section>
-        <p>So, what do we do?</p>
+        <p>Finally. What does Alpaca Core actually do?</p>
       </section>
 
       <section class="slide">
@@ -376,14 +387,8 @@
   <span class="fragment hl-code">result = instance.complete("A recipe for rice cakes:") # run op and get result</span>
   <span class="fragment hl-code">print(result) # consume the result</span>
         </code></pre>
-      </section>
-
-      <section class="slide">
-        <h3>API Design</h3>
-        <br/>
         <ul>
           <li>Neat, but this is LLM only</li>
-          <li>We want other models</li>
           <li><code>complete("text")</code> makes no sense for image generation</li>
         </ul>
       </section>
@@ -420,7 +425,132 @@
       </section>
 
       <section>
+        <p>That's synchronous. Not server friendly</p>
+      </section>
+
+      <section>
+        <p>If we only had C++, that would be easy</p>
+        <pre><code class="cpp hljs" data-noescape>
+void Model::createInstance(string type, Dict params, function&lt;void(InstancePtr)&gt; cb);
+void Instance::runOp(string type, Dict params, <span class="fragment hl-code">function&lt;void(Dict)&gt; cb</span>);
+        </code></pre>
+        <p>We could even think of asio-based coroutines</p>
+      </section>
+
+      <section>
+        <p>But we have to support Java, Swift, JS, Python, and many more</p>
+        <p>They all have their own idea of how to deal with async</p>
+      </section>
+
+      <section>
+        <blockquote>Turning coroutines into callbacks is trivial.<br>Turning callbacks into (stackless) coroutines is borderline impossible.</blockquote>
+      </section>
+
+      <section class="slide">
+        <h3>Async Options?</h3>
+        <br/>
+        <ul>
+          <li>Wrap callbacks. All languages have callbacks.</li>
+          <ul>
+            <li>People will hate this</li>
+            <li>A lot of work</li>
+          </ul>
+          <li>Language specific wrap. Rely stackful coroutines.</li>
+          <ul>
+            <li>What if their coroutines are stackless?</li>
+            <li>Even more work</li>
+          </ul>
+          <li>We would need platform-specific threads</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>What if there is no async?</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="drake-no.jpg" alt="Drake NO!" />
+        <p>Ridiculous!</p>
+      </section>
+
+      <section>
+        <p>... or is it?</p>
+      </section>
+
+      <section class="slide">
+        <h3>No async</h3>
+        <br/>
+        <ul>
+          <li>Have a low-level API: </li>
+          <ul>
+            <li>Think <code>get_token</code> instead of <code>complete_text</code></li>
+          </ul>
+          <li>Write high level algoritms using it</li>
+          <li>Port algorithms to languages using their async primitives</li>
+          <li>This is the Local Inference SDK, or AC Local</li>
+        </ul>
+      </section>
+
+      <section>
         <img width="900px" src="ac-sdk-old.svg" alt="Alpaca Core SDK" />
+      </section>
+
+      <section class="slide">
+        <h3>And so?</h3>
+        <br/>
+        <li>We've worked on this for almost 6 months</li>
+        <li>Wrappers for C, Java, and Swift</li>
+        <li>Edge demos for Android and iOS</li>
+        <li>Multiple LLMs through llama.cpp</li>
+        <li>Image generation through Stable Diffusion</li>
+        <li>ASR through Whisper</li>
+        <li>TTS through Tortoise</li>
+        <li>Getting ready for Q1 2025 beta</li>
+        <li>We started work on Acord...</li>
+      </section>
+
+      <section class="slide">
+        <h3>Acord</h3>
+        <br/>
+        <li>Local inference daemon (Ollama-style)</li>
+        <li>Basically a server demo</li>
+        <li>The high-level algorithms work through the server...</li>
+      </section>
+
+      <section>
+        <p><em>*Record scratch sound effect*</em></p>
+      </section>
+
+      <section>
+        <p>Every call adds a client-server latency</p>
+      </section>
+
+      <section class="slide">
+        <h3>Mitigations</h3>
+        <br/>
+        <p>Run algorithms on the server?</p>
+        <p>But then we have to support async</p>
+        <p>How do we send them?</p>
+        <p>Aha! We create high-level plugins and use them!</p>
+        <p>But then we don't need the low level API</p>
+      </section>
+
+      <section>
+        <img class="diagram" src="flip-table.webp" alt="Flip table" />
+      </section>
+
+      <section class="slide">
+        <h3>And so...</h3>
+        <br/>
+        <ul>
+          <li>We completely scratched AC Local</li>
+          <li>Plugins are high level</li>
+          <li>layer-zero: ZMQ-like sockets for async comms</li>
+          <li>Every plugin is a server</li>
+          <li>Only abstract away transport</li>
+          <li>We've been working on this for almost 2 weeks</li>
+        </ul>
+        <p class="pinner">Problem cost: 6 months</p>
       </section>
 
       <section>
@@ -433,7 +563,7 @@
         <ul>
           <li>Ollama, but a for more models and more platforms</li>
           <li>LangChain, but for more languages</li>
-          <li>And in C++ at that</li>
+          <li>C++ server</li>
           <li>Current state: pre-alfa</li>
           <li>Still open source, though</li>
           <li><a href="https://github.com/alpaca-core">github.com/alpaca-core</a></li>
@@ -441,10 +571,8 @@
       </section>
 
       <section class="fin">
-        <span class="fragment">
         <h2>End</h2>
         <h3>Questions?</h3>
-        </span>
         <ul>
           <!-- <li>Demo code: <a href="https://github.com/iboB/ai-cpp-demo/">github.com/iboB/ai-cpp-demo</a></li> -->
           <li>These slides: <a href="https://ibob.bg/slides/ai-cpp-intro/">ibob.bg/slides/ai-cpp-intro/</a></li>
@@ -452,7 +580,7 @@
         </ul>
         <br/>
         <br/>
-        <p class="fragment"><small>Slides license: <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>&nbsp;&nbsp;&nbsp;<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" class="diagram" style="height: 1.2em" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a></small></p>
+        <p><small>Slides license: <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>&nbsp;&nbsp;&nbsp;<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" class="diagram" style="height: 1.2em" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a></small></p>
       </section>
 
     </div>
