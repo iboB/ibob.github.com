@@ -37,7 +37,7 @@ The program executes fine, mind you. There is no *actual* error. It's just the a
 
 Now, address sanitizer bugs do happen, and I've been hit by several with various degrees of annoyance, but this one is especially weird. Let me show you why.
 
-If you remove the heap allocation (the first line in `main`), this produces no errors. If you remove the alignment of the `bool` in `io`, this produces no errors. So far, so good. Heap allocations and exotic alighments are understandable sources of address sanitizer confusion. The crazy thing here is that if you don't use template argument deduction in `io x(7);`, and instead specify the type manually as in `io<int> x(7);`, this produces no errors as well.
+If you remove the heap allocation (the first line in `main`), this produces no errors. If you remove the alignment of the `bool` in `io`, this produces no errors. So far, so good. Heap allocations and exotic alignments are understandable sources of address sanitizer confusion. The crazy thing here is that if you don't use template argument deduction in `io x(7);`, and instead specify the type manually as in `io<int> x(7);`, this produces no errors as well.
 
 This leads me to believe that there is a compiler bug involved as well. There is absolutely no reason for those two lines to produce different code. But indeed they do, as can be seen in [this Compiler Explorer demo](https://godbolt.org/z/hs5e7be56). Note the subtle differences in stack initialization in both cases. I, for one can't see anything wrong in both outputs except that they're subtly different. Someone more knowledgable is welcome to chime in.
 
