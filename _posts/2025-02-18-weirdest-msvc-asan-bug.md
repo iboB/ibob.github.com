@@ -7,20 +7,22 @@ tags: ['c++', 'rants']
 excerpt: ... and quite likely a compiler bug as well
 ---
 
-So, using an address sanitizer is in most cases very beneficial. Ever since MSVC got one, I've used it in my build pipeline to, erm... varying success. At first it did have its fair share of issues and was not really applicable in production, but for the past several years, I've actually had little to no problems with it.
+Using an address sanitizer is in most cases very beneficial. Ever since MSVC got one, I've used it in my build pipeline to, erm... varying success. At first it did have its fair share of issues and was not really applicable in production, but for the past several years, I've actually had little to no problems with it.
 
-Today I got hit by the weirtest one, though.
+Today I got hit by the weirtest one.
 
 This is the repro:
 
 ```c++
 #include <memory>
 #include <type_traits>
+
 template <typename stream>
 struct io {
     io(stream) : b(false) {}
     alignas(64) bool b;
 };
+
 int main() {
     auto pi = std::make_unique<int>(543);
     using iio = io<int>;
@@ -31,7 +33,7 @@ int main() {
 
 Build this with `/fsanitize=address` (and a contemporary standard) and you get a `stack-buffer-overflow`.
 
-The program executes fine, mind you. It's just the address sanitizer that complains here.
+The program executes fine, mind you. There is no *actual* error. It's just the address sanitizer that complains here.
 
 Now, address sanitizer bugs do happen, and I've been hit by several with various degrees of annoyance, but this one is especially weird. Let me show you why.
 
