@@ -9,7 +9,7 @@ excerpt: ... and quite likely a compiler bug as well
 
 Using an address sanitizer is in most cases very beneficial. Ever since MSVC got one, I've used it in my build pipeline to, erm... varying success. At first it did have its fair share of issues and was not really applicable in production, but for the past several years, I've actually had little to no problems with it.
 
-Today I got hit by the weirtest one.
+Today I got hit by the weirdest one.
 
 This is the repro:
 
