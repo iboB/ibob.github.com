@@ -82,7 +82,7 @@ There's a catch. With code written like this, you lose the ability to forward de
 ## With *This* One Trick You Lose the Ability to Forward Declare Things
 ### People Who Care About Compilation Times Are Furious
 
-Now, you can still forward declare the templates themselves. `template <lowecase_locakble Mutex> struct lock_guard;` is perfectly fine (well, as long as `lowercase_lockable` is defined) but templates are rarely forward declared. It's much more common to forward declare the template arguments.
+Now, you can still forward declare the templates themselves. `template <lowercase_lockable Mutex> struct lock_guard;` is perfectly fine (well, as long as `lowercase_lockable` is defined), but templates are rarely forward declared. It's much more common to forward declare the template arguments.
 
 Here's a use case:
 
