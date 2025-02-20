@@ -60,7 +60,7 @@ struct lock_guard {
 
 And this is both an extension point *and* prouduces nice[^1] compilation errors when something can't be locked/unlocked like this.
 
-"Wait", I head people saying, "I'm not the author of `lock_guard`! In this example the author of `lock_guard` 'envisioned' that it could be extended by constraining its argument with a concept, just like the author of `lock_guard<Mutex, SFINAE_Hook>` did."
+"Wait", I hear people saying, "I'm not the author of `lock_guard`! In this example the author of `lock_guard` 'envisioned' that it could be extended by constraining its argument with a concept, just like the author of `lock_guard<Mutex, SFINAE_Hook>` did."
 
 We've come to *The Thing&trade;*: **With concepts you can partially specialize existing templates with a single template argument.**
 
