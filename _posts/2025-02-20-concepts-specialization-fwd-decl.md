@@ -9,7 +9,7 @@ excerpt: This One Thing Is Possible With Concepts, but Not With SFINAE. `enable_
 
 I recently started using C++ concepts. Yes, it took me five years. Well, the main reason for avoiding them was the need to support older standards, but also, I didn't see any particular need. The differences between concepts and "old-school" (say, `enable_if`-based) SFINAE are purely cosmetic. There is seemingly nothing which is possible with concepts and impossible with `enable_if`. Concepts are just syntactic sugar. They make some things easier. Plus, they offer (arguably[^1]) better error messages.
 
-## This One Thing Is Possible With Concepts, but Not With Sfinae
+## This One Thing Is Possible With Concepts, but Not With SFINAE
 ### `enable_if` Fans Are Furious
 
 Notice that I did say "seemingly"? Yes, there is one thing which makes concepts superior. There is one thing concepts allow you, which is impossible with pre-C++20 SFINAE. It is extensibility.
@@ -80,7 +80,7 @@ So, OK. Let's adopt the *concepts everywhere* mindset. If we are the author of `
 There's a catch. With code written like this, you lose the ability to forward declare things.
 
 ## With *This* One Trick You Lose the Ability to Forward Declare Things
-### People Who Care About Compilation Times are Furious
+### People Who Care About Compilation Times Are Furious
 
 Now, you can still forward declare the templates themselves. `template <lowecase_locakble Mutex> struct lock_guard;` is perfectly fine (well, as long as `lowercase_lockable` is defined) but templates are rarely forward declared. It's much more common to forward declare the template arguments.
 
