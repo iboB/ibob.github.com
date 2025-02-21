@@ -7,7 +7,7 @@ tags: ['c++']
 excerpt: This One Thing Is Possible With Concepts, but Not With SFINAE. `enable_if` Fans Are Furious
 ---
 
-I recently started using C++ concepts. Yes, it took me five years. Well, the main reason for avoiding them was the need to support older standards, but also, I didn't see any particular need. The differences between concepts and "old-school" (say, `enable_if`-based) SFINAE are purely cosmetic. There is seemingly nothing which is possible with concepts and impossible with `enable_if`. Concepts are just syntactic sugar. They make some things easier. Plus, they offer (arguably[^1]) better error messages.
+I recently started using C++ concepts. Yes, it took me five years. Well, the main reason for avoiding them was the need to support older standards, but also, I didn't see any particular need. The differences between concepts and "old-school" (say, `enable_if`-based) SFINAE are purely cosmetic. There is seemingly nothing which is possible with concepts and impossible with `enable_if`. Concepts are just syntax sugar. They make some things easier. Plus, they offer (arguably[^1]) better error messages.
 
 ## This One Thing Is Possible With Concepts, but Not With SFINAE
 ### `enable_if` Fans Are Furious
@@ -117,7 +117,7 @@ So the guideline I use now is:
 
 > For the sake of forward declarations, don't constrain class template arguments, unless you speicifically know that they will not be forward declared
 
-Do I still make use of concepts? Yes. I do prefer their error output, and I enjoy syntactic sugar. Here's how `intrusive_shared_ptr` looks following the guideline:
+Do I still make use of concepts? Yes. I do prefer their error output, and I enjoy syntax sugar. Here's how `intrusive_shared_ptr` looks following the guideline:
 
 ```c++
 template <typename T> // T can be forward declared
