@@ -44,7 +44,7 @@ The problem here is that we may be wasting 1 bit of entropy. Suppose our interva
 
 For most if not all distributions there are multiple possible implementations with varying pros and cons and the standard does not specify which should be chosen.
 
-So it's up to standard library authors to decide how and if to deal with common problems in distribution implementations. This brings us to the state illustrated in this [Compiler Explorer demo](https://chatgpt.com/c/68f75682-d4bc-8331-a8cf-34b2e15eb5ba): MSSTL, libstdc++, and libc++ producing three differents sets of values with the most common distributions.
+So it's up to standard library authors to decide how and if to deal with common problems in distribution implementations. This brings us to the state illustrated in this [Compiler Explorer demo](https://godbolt.org/z/qv9zbfvEW): MSSTL, libstdc++, and libc++ producing three differents sets of values with the most common distributions.
 
 Now, I don't think it's the standard library's job to handle all possible high-risk scenarios like the ones I mentioned above. If perfect entropy and perfect distributions are critical for your software, by all means, write your own distribution code. Write your own random engine while you're at it. The vast majority of use cases are not this however. Most games and Monte Carlo heuristics are perfectly fine using distributions like a bias of 10<sup>-9</sup> or a waste of 10<sup>-15</sup> entropy. Sadly if they value cross-platform determinism in any way, they can't use the standard library's distribution types.
 
