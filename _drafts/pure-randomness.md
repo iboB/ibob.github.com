@@ -62,17 +62,39 @@ This is the issue responsible for the title of the blog post. It seems that it's
 
 A pure function would be one that produces the same result for the same input and does not change any external state. We consider methods to be functions which take an instance of the class as an argument, so we can extend purity to methods as well.
 
-Pure functions are good. They allow optimizations. The compiler can optimize away calls to a pure function if a result for a set of paramters is known. For example in a loop like `for (i=0; i<vec.size(); ++i)` very often the compiler can see that `size()` is pure and if the loop doesn't change the vector's size, it can cache its result and not perform `end-begin` on every iteration.
+Pure functions are good. They allow optimizations. The compiler can optimize away calls to a pure function if a result for a set of paramters is known. For example in a loop like `for (i=0; i<vec.size(); ++i)` the compiler should see that `size()` is pure and if the loop doesn't change the vector's size, it can cache its result and not perform `end-begin` on every iteration.
 
-Another benefit of pure functions is that they can be safely used in multiple threads without worry that they would lead to race conditions.
+Another benefit of pure functions is that they can be safely used concurrently (in multiple threads) without worry that they would lead to race conditions. Extending this to classes, too, an object can safely be shared between threads without locking if all access is done through pure methods.
 
-Unfortunately C++ does not have a way of explicitly marking a function as pure[^4]. Still, as a matter of convention if all arguments are by value or const ref, a C++ function is considered pure unless explicitly documented not to be. Extending this to classes, a const method with the same argument restrictions is considered pure.
+Unfortunately C++ does not have a way of explicitly marking a function as pure[^4] and hence the need for "thread safety" entries in documentation. The somewhat accepted convention is that a const method is pure, and a non-const one isn't.
 
+`<random>` types are not pure.
 
+This, of course, is expected for engines. They need a state to produce random numbers and that state must change in order for them to produce *different* random numbers[^5].
+
+But distributions... Some distributions might also need, or at least benefit from, a mutable state to work. For example normal distributions often use the Box-Muller transform, which produces a pair of normally distributed values with two engine samples. Since the standard demands one value per call from `std::normal_distribution`, implementations are much more efficient if they cache the second element from the produced pair. Otherwise they would have to discard half of their work.
+
+And that's why all standard distributions are allowed to store a mutable state. All overloads of `operator()` in standard distributions are not const.
+
+You would think that this would make it impossible to use a distribution as a parameter to an algorithm that would use it concurrently, but that's not true. This use case was specifically a considered when designing `<random>`. Distributions have a member type `param_type` which is data only and makes it possible to construct a distribution. To make use of it one would do something like:
+
+```c++
+template <typename DistroParams>
+void concurrent_function(const DistroParams& params) {
+    typename DistroParams::distribution_type dist{params};
+
+    // remember: we can't share this, threads need their seeds and
+    std::mt19937 rng(thread_specific);
+
+}
+```
+
+The thing is *some* distributions don't need a mutable state. Uniform distributions, Bernouli distribution, and likely others,
 
 ___
 
 [^1]: Though I predict we will have a similar problem for a while with the newly introduced [`philox_engine`](https://en.cppreference.com/w/cpp/numeric/random/philox_engine.html)
 [^2]: ...and arguably it doesn't do it very well
 [^3]: ...and I gladly would
-[^4]: GCC and clang provide the extension `__attribute__((pure))`. But notably MSVC doesn't have anything for this.
+[^4]: GCC and clang provide the extension `__attribute__((pure))`, but notably MSVC has nothing.
+[^5]: Except [this one](https://xkcd.com/221/), of course.
