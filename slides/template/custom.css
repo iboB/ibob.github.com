@@ -1,8 +1,128 @@
-/* Deck-specific tweaks only. Everything else is stock reveal.js. */
-
 body {
+	background: white; /* For browsers that do not support gradients */
+	background: -webkit-radial-gradient(white, lightgray); /* Safari 5.1 to 6.0 */
+	background: -o-radial-gradient(white, lightgray); /* For Opera 11.6 to 12.0 */
+	background: -moz-radial-gradient(white, lightgray); /* For Firefox 3.6 to 15 */
+	background: radial-gradient(white, lightgray); /* Standard syntax */
+}
+
+/* title */
+.reveal section.title h1 {
+	width: 100%;
+	font-size: 1.5em;
+}
+
+.reveal section.title h2 {
+	width: 100%;
+	font-size: 1.3em;
+}
+
+.reveal section.title code {
+	color: #037;
+}
+
+/* custom slides */
+.reveal h4 {
+	text-transform: uppercase;
+	margin-top: 0.1em;
+	margin-bottom: 0.1em;
+}
+
+.reveal section.slide {
+	height: 100%;
+	display: table;
+	text-align: left;
+}
+
+.reveal section.slide h3 {
+	width: 100%;
+	text-align: left;
+	border-bottom: 2px solid #0077BD;
+}
+
+/* fragment strike through */
+.reveal .slides section .fragment.ss {
+	text-decoration: line-through;
+}
+.reveal .slides section .fragment.ss.current-fragment {
+	text-decoration: none;
+}
+
+/* code highlight */
+.reveal code {
+	font-family: Consolas, monospace;
+}
+
+.reveal .slides section .fragment.hl-code {
+    opacity: 1;
+    visibility: inherit;
+}
+.reveal .slides section .fragment.hl-code.visible.persist {
+    font-weight: bold;
+    background-color: lightgray;
+}
+.reveal .slides section .fragment.hl-code.current-fragment {
+    font-weight: bold;
+    background-color: lightgray;
+}
+.reveal .slides section .hl-code-i {
+    font-weight: bold;
+    background-color: lightgray;
+}
+
+.reveal .slides section .fragment.red-code {
+    opacity: 1;
+    visibility: inherit;
+}
+.reveal .slides section .red-code.visible {
+	font-weight: bold;
+	background-color: lightcoral;
+}
+
+/* other code */
+.reveal pre code {
+    max-height: 80%;
+}
+
+.reveal section code.cinline {
+	color: #003377;
+}
+
+.reveal section code.finline {
+	color: #DF5000;
+}
+
+.reveal pre.ticks {
 	background: white;
-	background: radial-gradient(white, lightgray);
+}
+
+/* other */
+.reveal section img {
+	background: white;
+}
+
+.reveal section img.diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+	margin: 0;
+}
+
+.reveal section img.ui-diagram
+{
+	border: none;
+	background: none;
+	box-shadow: none;
+	height: 500px;
+}
+
+.reveal section .inline {
+	display: inline-block;
+}
+
+.reveal section span.tiny {
+	font-size: 0.5em;
 }
 
 .reveal section span.fancy {
@@ -10,27 +130,26 @@ body {
 	color: #DF5000;
 }
 
-/* Utility: the ul/ol themselves are already text-align:left in reveal.js,
-   but they are display:inline-block so the *block* still floats centered.
-   Stretching it to the full slide width flushes bullets to the left edge. */
-.reveal .slides section ul.left-block,
-.reveal .slides section ol.left-block {
-	width: 100%;
+.reveal section p.pinner
+{
+	text-align: center;
 }
 
-/* Section-divider style slide: single heading, centered both ways
-   (reveal.js already centers text-align + `center: true` handles the
-   vertical axis, this just keeps it from looking like a normal title). */
-.reveal section.divider h2 {
-	width: 100%;
+.reveal section li.pro {
+	color: darkgreen;
+}
+.reveal section li.pro::marker {
+	content: '✔  ';
 }
 
-/* Auto-animate demo box */
-.reveal .aa-box {
-	border-radius: 8px;
+.reveal section li.con {
+	color: darkred;
+}
+.reveal section li.con::marker {
+	content: '✖  ';
 }
 
-/* Last slide, mirrors other decks in this repo */
+/* last slide */
 .reveal section.fin {
 	font-size: 0.8em;
 }
@@ -43,15 +162,4 @@ body {
 .reveal section.fin h3 {
 	width: 100%;
 	font-size: 3em;
-}
-
-/* Footer: slide number, is.gd link, year, version, twitter handle */
-.reveal .footer {
-	position: fixed;
-	z-index: 32;
-	bottom: 0;
-	right: 0;
-	padding: 0 16px 10px 0;
-	font-size: 0.4em;
-	color: #222;
 }
