@@ -1,0 +1,57 @@
+/* Deck-specific tweaks only. Everything else is stock reveal.js. */
+
+body {
+	background: white;
+	background: radial-gradient(white, lightgray);
+}
+
+.reveal section span.fancy {
+	font-weight: bold;
+	color: #DF5000;
+}
+
+/* Utility: the ul/ol themselves are already text-align:left in reveal.js,
+   but they are display:inline-block so the *block* still floats centered.
+   Stretching it to the full slide width flushes bullets to the left edge. */
+.reveal .slides section ul.left-block,
+.reveal .slides section ol.left-block {
+	width: 100%;
+}
+
+/* Section-divider style slide: single heading, centered both ways
+   (reveal.js already centers text-align + `center: true` handles the
+   vertical axis, this just keeps it from looking like a normal title). */
+.reveal section.divider h2 {
+	width: 100%;
+}
+
+/* Auto-animate demo box */
+.reveal .aa-box {
+	border-radius: 8px;
+}
+
+/* Last slide, mirrors other decks in this repo */
+.reveal section.fin {
+	font-size: 0.8em;
+}
+
+.reveal section.fin h2 {
+	width: 100%;
+	font-size: 4em;
+}
+
+.reveal section.fin h3 {
+	width: 100%;
+	font-size: 3em;
+}
+
+/* Footer: slide number, is.gd link, year, version, twitter handle */
+.reveal .footer {
+	position: fixed;
+	z-index: 32;
+	bottom: 0;
+	right: 0;
+	padding: 0 16px 10px 0;
+	font-size: 0.4em;
+	color: #222;
+}
