@@ -62,7 +62,7 @@
   int main()
   {
       std::println("Hi, I'm Borislav!");
-      std::println("These slides are here: <span class="fragment hl-code">https://is.gd/pojobuf</span>");
+      std::println("These slides are here: <span class="fragment hl-code">https://bit.ly/pojobuf</span>");
       return 0;
   }
         </code></pre>
@@ -80,6 +80,164 @@
         </ul>
       </section>
 
+      <section class="slide">
+        <h3>JSON Routing</h3>
+        <br/>
+        <ul>
+          <li>Receive JSON</li>
+          <li>Parse, validate</li>
+          <li>Walk it once and, based on select key fields</li>
+          <li>... route to the next stage</li>
+          <li>No schema. No known shape</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2><span class="fancy">Run-Time</span> Duck-Typing</h2>
+      </section>
+
+      <section class="slide">
+        <h3>Compile-Time Duck-Typing</h3>
+        <br/>
+        <ul>
+          <li>Templates</li>
+          <li>Concepts gave the shape a name</li>
+          <li>Know the shape when you build the program</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Run-Time Toolbox</h3>
+        <br/>
+        <ul>
+          <li>Virtual interfaces - the interface is a schema</li>
+          <li><code class="cinline">std::variant</code> - the alternatives are a schema</li>
+          <li><code class="cinline">std::any, std::shared_ptr&lt;void&gt;</code></li>
+          <ul>
+            <li>Complete type erasure - can't inspect</li>
+            <li>Only thing is asking whether the type is X</li>
+            <li>Carry data past code that doesn't need to know</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Self-Describing Formats</h3>
+        <br/>
+        <ul>
+          <li>Not just JSON!</li>
+          <li>YAML, TOML, XML (ew), CBOR, MessagePack, BSON, etc</li>
+          <li>Closed universe of value kinds</li>
+          <li>Every value carries its own kind</li>
+          <li>Traversable without schema</li>
+        </ul>
+        <p>These are the properties we need.</p>
+        <p>... and which classic C++ type erasure doesn't give us.</p>
+      </section>
+
+      <section class="slide">
+        <h3>Side Note about Values</h3>
+        <br/>
+        <ul>
+          <li>We are talking about <span class="fancy">values</span> here</li>
+          <li><span class="fancy">Data.</span> No constructors or destructors. No behavior.</li>
+          <li>Behavior goes into virtual interfaces</li>
+          <li>... or, you know, my awesome library <a href="https://github.com/iboB/dynamix">gh/iboB/dynamix</a></li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Stringly Typed</h2>
+        <small>Yes, it's <em>not</em> a typo</small>
+      </section>
+
+      <section class="slide">
+        <h3>Anti-Pattern?</h3>
+        <br/>
+        <ul>
+          <li><code class="cinline">state = &quot;running&quot;</code></li>
+          <li>Yes, this should be an enum</li>
+          <li><code class="cinline">&quot;my = 'dsl'; is? awesome or not;&quot;</code></li>
+          <li>Likely not. A DSL could be a solution, but first, remember:</li>
+          <ul>
+            <li>Everybody speaks JSON</li>
+            <li>TOML and YAML are good</li>
+            <li>XML... exists</li>
+          </ul>
+        </ul>
+      </section>
+
+      <section>
+        <p>So... pass a JSON string?</p>
+        <p>The model isn't the problem here. The representation is</p>
+      </section>
+
+      <section class="slide">
+        <h3>POJO</h3>
+        <br/>
+        <ul>
+          <li class="fragment">C++ has POD. And it's good</li>
+          <li class="ss fragment">Plain Ol' Java Object. Java's answer. <span class="fragment">But it's not 1998</span></li>
+          <li class="fragment">Retronymming</li>
+          <li class="ss fragment">Plain Ol' JavaScript Object</li>
+          <li class="fragment"><span class="fancy">Plain Ol' JSON Object</span></li>
+          <li class="fragment">Yes, technically a JSON string is one</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Plain Ol' JSON Object</h3>
+        <br/>
+        <ul>
+          <li>Easy with true duck typing</li>
+          <li>Literally JavaScript's type system</li>
+          <li>What does C++ have?</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>POJO in C++</h3>
+        <pre><code class="cpp hljs" data-noescape>
+  struct pojo {
+    std::variant&lt;
+      std::nullptr_t,
+      bool,
+      double,
+      std::string,
+      std::vector&lt;pojo&gt;
+      std::map&lt;std::string, pojo&gt;
+    &gt; value;
+  };
+        </code></pre>
+        <p>This is literally <code>nlohmann::json</code> (JSON for Modern C++) under the hood</p>
+      </section>
+
+      <section class="slide">
+        <h3>POJO in C++</h3>
+        <br/>
+        <ul>
+          <li><a href="https://github.com/nlohmann/json">JSON for Modern C++ (<code>nlohmann::json</code>)</a></li>
+          <li><a href="https://www.boost.org/doc/libs/latest/libs/json/doc/html/index.html">Boost.JSON</a></li>
+          <li><a href="https://github.com/tencent/rapidjson">rapidjson</a></li>
+          <li>Many others for other formats</li>
+          <li>Mutability</li>
+          <li>Ergonomics</li>
+          <li>A POJO that feels like a native part of the language</li>
+          <li>The price: allocation and memory layout</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Mutable POJO Types in C++</h3>
+        <br/>
+        <ul>
+          <li>They are not inherently bad</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3></h3>
+      </section>
 
       <section class="fin">
         <span class="fragment">
@@ -129,7 +287,7 @@
       ].map(p => { p.src = '../lib/reveal.js-3.8.0/plugin/' + p.src; return p; })
     });
 
-    slides.footerSetup('is.gd/pojobuf', '2026', 'v1.0.0');
+    slides.footerSetup('bit.ly/pojobuf', '2026', 'v1.0.0');
   </script>
 
 </body>
