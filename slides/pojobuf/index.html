@@ -218,25 +218,52 @@
         <ul>
           <li><a href="https://github.com/nlohmann/json">JSON for Modern C++ (<code>nlohmann::json</code>)</a></li>
           <li><a href="https://www.boost.org/doc/libs/latest/libs/json/doc/html/index.html">Boost.JSON</a></li>
-          <li><a href="https://github.com/tencent/rapidjson">rapidjson</a></li>
+          <li><a href="https://github.com/tencent/rapidjson">RapidJSON</a></li>
           <li>Many others for other formats</li>
           <li>Mutability</li>
           <li>Ergonomics</li>
           <li>A POJO that feels like a native part of the language</li>
-          <li>The price: allocation and memory layout</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>Mutable POJO Types in C++</h3>
+        <h3>The Price of Mutability</h3>
         <br/>
         <ul>
-          <li>They are not inherently bad</li>
+          <li>Multiple allocations when building</li>
+          <li>Traversing is chasing pointers</li>
+          <li>Mutable POJOs are not evil</li>
+          <li>Choose based on how you select custom map or array types</li>
+          <li>Consider using custom allocators</li>
         </ul>
       </section>
 
+      <section>
+        <p>The reality: most consumers never mutate</p>
+      </section>
+
       <section class="slide">
-        <h3></h3>
+        <h3>Most Use Cases for POJOs</h3>
+        <br/>
+        <ul>
+          <li>Build once. Likely parsing text (JSON)</li>
+          <li>Traverse several times. Likely once</li>
+          <li>Which of you use a mutable POJO library and never mutate?</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>But what about Protobuf?</p>
+      </section>
+
+      <section class="slide">
+        <h3>Serialization Libraries</h3>
+        <br/>
+        <ul>
+          <li><a href="https://protobuf.dev/">Protobuf</a></li>
+          <li><a href="https://capnproto.org/">Cap'n Proto</a></li>
+          <li><a href="https://flatbuffers.dev/">FlatBuffers</a></li>
+        </ul>
       </section>
 
       <section class="fin">
