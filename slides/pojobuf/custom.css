@@ -69,6 +69,10 @@ body {
     font-weight: bold;
     background-color: lightgray;
 }
+.reveal .slides section .fragment.hl-code-f.current-fragment {
+    font-weight: bold;
+    background-color: lightgray;
+}
 
 .reveal .slides section .fragment.red-code {
     opacity: 1;
@@ -128,6 +132,11 @@ body {
 .reveal section span.fancy {
 	font-weight: bold;
 	color: #DF5000;
+}
+
+.reveal section span.fancy2 {
+	font-weight: bold;
+	color: #0077BD;
 }
 
 .reveal section p.pinner

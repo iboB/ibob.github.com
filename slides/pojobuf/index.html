@@ -172,6 +172,10 @@
         <p>The model isn't the problem here. The representation is</p>
       </section>
 
+      <section>
+        <h2>POJO</h2>
+      </section>
+
       <section class="slide">
         <h3>POJO</h3>
         <br/>
@@ -270,6 +274,10 @@
         </ul>
       </section>
 
+      <section>
+        <h2>POJO Buffers</h2>
+      </section>
+
       <section class="slide">
         <h3>POJO Buffers</h3>
         <br/>
@@ -283,22 +291,289 @@
           <ul>
             <li>Few allocations</li>
             <li>Cache friendly</li>
-            <li>Immutable</li>
+            <li>Brick-wall-style mutability</li>
           </ul>
         </ul>
       </section>
 
       <section class="slide">
-        <h3>Almost POJO Buffers</h3>
+        <h3>POJO Buffers</h3>
         <br/>
         <ul>
           <li><a href="https://github.com/simdjson/simdjson">simdjson - gh/simdjson/simdjson</a></li>
           <li><a href="https://github.com/chadaustin/sajson">sajson - gh/chadaustin/sajson</a></li>
+          <li>... well, almost</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>simdjson</h2>
+      </section>
+
+      <section class="slide">
+        <h3>Buffers</h3>
+        <br/>
+        <ul>
+          <li>Buffers of 64-bit integers: <code class="cinline">std::vector&lt;uint64_t&gt;</code></li>
+          <li>Descriptors: a type and optional additional value info</li>
+          <li>Interpretation depends on the descriptor</li>
+          <li>8-bits for type and 56 bits for other info</li>
+        </ul>
+        <pre><code class="nohighlight hljs" data-noescape>
+  <span class="fancy">00101010</span>00000000000000000000000000000000000000000000000000000000
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>Buffer Interpretation</h3>
+        <br/>
+        <ul>
+          <li>Literals (<code class="cinline">true, false, null</code>): no info</li>
+          <li>Numbers (integers and reals): no info, still</li>
+          <ul>
+            <li>... but the next 64-bit integer contains the actual value</li>
+          </ul>
+          <li>Strings: info is offset into a buffer of zero-terminated strings</li>
+          <li>Compound types (array, object): length | offset to end</li>
+          <li>Compound end: offset to begin</li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          {"skill": "Sword", "MP": 1},
+          {"skill": "Immortality", "MP": 10}
+      ],
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>words:
+  obj_begin|4|26,
+    string|0, string|14,
+    string|28, int, 20,
+    string|35, int, 10,
+    string|42, array_begin|2|25,
+      obj_begin|2|17, string|53, string|63, string|73, int, 1, obj_end|11,
+      obj_begin|2|24, string|80, string|90, string|106, int, 10, obj_end|18,
+    array_end|16,
+  obj_end|0,
+bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
+       5,"skill", 5,"Sword", 2,"MP", 5,"skill", 11,"Immortality", 2,"MP"
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3><code>simdjson::value</code></h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+    namespace simdjson::dom { // idealized
+
+    struct document {
+      uint64_t* data_ptr;
+      char* byte_ptr;
+    };
+
+    struct element {
+      const document* doc;
+      size_t index;
+    };
+
+    }
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>What Does This Mean?</h3>
+        <br/>
+        <ul>
+          <li class="pro">Super-fast parsing. Buffer is equivalent to JSON structure</li>
+          <li class="pro">Linear DFS traversal has the best perf possible</li>
+          <li class="con">Random access is O(n)</li>
+          <li class="con">... with uneven strides!</li>
+          <li>Also, some nitpicking but:</li>
+          <li class="con">String length: 32 bits</li>
+          <li class="con">Compound object length: 24 bits</li>
         </ul>
       </section>
 
       <section class="slide">
-        <h3></h3>
+        <h3>The Incongruity of simdjson... With Itself</h3>
+        <br/>
+        <ul>
+          <li>The fastest possible linear traversal implies a known schema</li>
+          <li>An unknown schema implies some "wandering" in the object</li>
+          <li>If the schema is known, serialization libraries are already better</li>
+          <li>Why even bother with a buffer? Just provide a generator</li>
+          <ul>
+            <li>... the library does provide one</li>
+          </ul>
+          <li>My theory: benchmaxxing</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>My Verdict</h3>
+        <p>The generator interface has its <em>niche</em> uses</p>
+        <p>As a POJO it's not very practical</p>
+      </section>
+
+      <section>
+        <h2>sajson</h2>
+      </section>
+
+      <section class="slide">
+        <h3>Buffers</h3>
+        <br/>
+        <ul>
+          <li>Buffers of <code>size_t</code>: <code class="cinline">std::vector&lt;size_t&gt;</code></li>
+          <li>Descriptors: optional offset to value and a type</li>
+          <li>Value interpretation depends on the descriptor</li>
+          <li>61 bits for offset (29 on 32-bit systems) followed by 3 bits for type</li>
+        </ul>
+        <pre><code class="nohighlight hljs" data-noescape>
+  0000000000000000000000000000000000000000000000000000000000000<span class="fancy">101</span>
+        </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>JSON Types</h3>
+        <br/>
+        <ol>
+          <li>null</li>
+          <li>bool</li>
+          <li>number</li>
+          <li>string</li>
+          <li>array</li>
+          <li>object</li>
+        </ol>
+      </section>
+
+      <section class="slide">
+        <h3>sajson Types</h3>
+        <br/>
+        <ol>
+          <li>null</li>
+          <li>bool: <span class="fancy">true</span></li>
+          <li>bool: <span class="fancy">false</span></li>
+          <li>number: <span class="fancy2">int32</span></li>
+          <li>number: <span class="fancy2">double</span></li>
+          <li>string</li>
+          <li>array</li>
+          <li>object</li>
+        </ol>
+      </section>
+
+      <section class="slide">
+        <h3>Neat Trivia: sajson Packing</h3>
+        <br/>
+        <ul>
+          <li>On 32-bit systems <code>size_t</code> is 32 bits</li>
+          <li>Effective addressable space is 2<sup>32</sup> bytes</li>
+          <li>But in practice it's 2<sup>31</sup> bytes</li>
+          <li>Which means 2<sup>30</sup> 16-bit values</li>
+          <li>2<sup>29</sup> 32-bit values</li>
+          <li>... which is precisely the bits provided for offset by the library</li>
+          <li>Cool, huh?</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Buffer Interpretation</h3>
+        <br/>
+        <ul>
+          <li>Literals (<code class="cinline">true, false, null</code>): no offset</li>
+          <li>Integers: offset to value</li>
+          <li>Double: offset to value (2 words on 32-bit)</li>
+          <li>Strings: two words: begin, end</li>
+          <li>Array: length, descriptors of elements</li>
+          <li>Object: length, triplets of string and value descriptor</li>
+        </ul>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          {"skill": "Sword", "MP": 1},
+          {"skill": "Immortality", "MP": 10}
+      ],
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>data:
+  4,  0,9,string|25  18,20,int|27  20,22,int|28  22,28,array|13
+    2,object|3,object|4
+      2,  28,33,string|4,  38,40,int|6,
+        33,38,  1
+      2,  38,43,string|4,  48,50,int|6,
+        43,48,  10
+    9,18,  20,  10,
+strings: "characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP"
+        </code></pre>
+
+        <p>Many alternative representations of the same data are possible.</p>
+      </section>
+
+      <section class="slide">
+        <h3><code>sajson::value</code></h3>
+        <br/>
+        <pre><code class="cpp hljs" data-noescape>
+    namespace sajson { // idealized
+
+    struct element {
+      type type;
+      const size_t* data_ptr;
+      const char* byte_ptr;
+    };
+
+    }
+        </code></pre>
+      </section>
+
+      <section>
+        <p>Why This Order?</p>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  <span class="hl-code fragment" data-fragment-index="1">{</span>
+      <span class="hl-code fragment" data-fragment-index="2">"character":</span> <span class="hl-code fragment" data-fragment-index="4">"John Snow"</span>,
+      <span class="hl-code fragment" data-fragment-index="6">"HP":</span> <span class="hl-code fragment" data-fragment-index="7">20</span>,
+      <span class="hl-code fragment" data-fragment-index="8">"MP":</span> <span class="hl-code fragment" data-fragment-index="9">10</span>,
+      <span class="hl-code fragment" data-fragment-index="10">"skills":</span> <span class="hl-code fragment" data-fragment-index="11">[</span>
+          <span class="hl-code fragment" data-fragment-index="12">{</span><span class="hl-code fragment" data-fragment-index="13">"skill": "Sword", "MP": 1</span>},
+          {"skill": "Immortality", "MP": 10}
+      ],
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>
+head: <span class="hl-code-f fragment" data-fragment-index="3">0,9</span><span class="hl-code-f fragment" data-fragment-index="5">,string|100</span><span class="hl-code-f fragment" data-fragment-index="6">, 18,20</span><span class="hl-code-f fragment" data-fragment-index="7">,int|99</span><span class="hl-code-f fragment" data-fragment-index="8">, 20,22</span><span class="hl-code-f fragment" data-fragment-index="9">,int|98</span><span class="hl-code-f fragment" data-fragment-index="10">, 22,28</span><span class="hl-code-f fragment" data-fragment-index="11">,object|0</span>
+      <span class="hl-code-f fragment" data-fragment-index="12">, array|9</span><span class="hl-code-f fragment" data-fragment-index="13">, 28,33,string|96, 33,35,int|95</span>
+tail: <span class="hl-code-f fragment" data-fragment-index="13">1, 33,38, </span><span class="hl-code-f fragment" data-fragment-index="9">10, </span><span class="hl-code-f fragment" data-fragment-index="7">20, </span><span class="hl-code-f fragment" data-fragment-index="5">9,18</span>
+strings: <span class="hl-code-f fragment" data-fragment-index="3">character</span><span class="hl-code-f fragment" data-fragment-index="5">John Snow</span><span class="hl-code-f fragment" data-fragment-index="6">HP</span><span class="hl-code-f fragment" data-fragment-index="8">MP</span><span class="hl-code-f fragment" data-fragment-index="10">skills</span><span class="hl-code-f fragment" data-fragment-index="13">skillSwordMP</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          {"skill": "Sword", "MP": 1},
+          <span class="hl-code fragment" data-fragment-index="4">{</span><span class="hl-code fragment" data-fragment-index="5">"skill": "Immortality", "MP": 10</span>}
+      ],
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>
+head: 0,9,string|100, 18,20,int|99, 20,22,int|98, 22,28,object|0
+      <span class="hl-code fragment" data-fragment-index="1">, object|88</span><span class="hl-code-f fragment" data-fragment-index="4">, array|9</span><span class="hl-code-f fragment" data-fragment-index="5">, 38,43,string|86, 54,55,int|85</span>
+tail: <span class="hl-code-f fragment" data-fragment-index="5">10, 43,54, </span><span class="hl-code fragment" data-fragment-index="1"><span class="hl-code fragment" data-fragment-index="2">2,</span> 28,33,string<span class="hl-code fragment" data-fragment-index="3">|8</span>, 33,35,int<span class="hl-code fragment" data-fragment-index="3">|7</span>,</span>  1, 33,38, 10, 20, 9,18
+strings: characterJohn SnowHPMPskillsskillSwordMP<span class="hl-code-f fragment" data-fragment-index="5">skillImmortalityMP</span>
+        </code></pre>
       </section>
 
       <section class="fin">
