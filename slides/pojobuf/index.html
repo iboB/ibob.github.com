@@ -100,9 +100,9 @@
         <h3>Compile-Time Duck-Typing</h3>
         <br/>
         <ul>
-          <li>Templates</li>
-          <li>Concepts gave the shape a name</li>
-          <li>Know the shape when you build the program</li>
+          <li class="fragment">Templates</li>
+          <li class="fragment">Concepts give the shape a name</li>
+          <li class="fragment">Know the shape when you build the program</li>
         </ul>
       </section>
 
@@ -110,13 +110,13 @@
         <h3>Run-Time Toolbox</h3>
         <br/>
         <ul>
-          <li>Virtual interfaces - the interface is a schema</li>
-          <li><code class="cinline">std::variant</code> - the alternatives are a schema</li>
-          <li><code class="cinline">std::any, std::shared_ptr&lt;void&gt;</code></li>
-          <ul>
+          <li class="fragment">Virtual interfaces - the interface is a schema</li>
+          <li class="fragment"><code class="cinline">std::variant</code> - the alternatives are a schema</li>
+          <li class="fragment"><code class="cinline">std::any, std::shared_ptr&lt;void&gt;</code></li>
+          <ul class="fragment">
             <li>Complete type erasure - can't inspect</li>
             <li>Only thing is asking whether the type is X</li>
-            <li>Carry data past code that doesn't need to know</li>
+            <li class="fragment">Carry objects past code that doesn't need to know</li>
           </ul>
         </ul>
       </section>
@@ -125,51 +125,51 @@
         <h3>Self-Describing Formats</h3>
         <br/>
         <ul>
-          <li>Not just JSON!</li>
-          <li>YAML, TOML, XML (ew), CBOR, MessagePack, BSON, etc</li>
-          <li>Closed universe of value kinds</li>
-          <li>Every value carries its own kind</li>
-          <li>Traversable without schema</li>
+          <li class="fragment">Not just JSON!</li>
+          <li class="fragment">YAML, TOML, XML (ew), CBOR, MessagePack, BSON, etc</li>
+          <li class="fragment">Closed universe of value kinds</li>
+          <li class="fragment">Every value carries its own kind</li>
+          <li class="fragment">Traversable without schema</li>
         </ul>
-        <p>These are the properties we need.</p>
-        <p>... and which classic C++ type erasure doesn't give us.</p>
+        <p class="fragment">These are the properties we need.</p>
+        <p class="fragment">... and which classic C++ type erasure doesn't give us.</p>
       </section>
 
       <section class="slide">
         <h3>Side Note about Values</h3>
         <br/>
         <ul>
-          <li>We are talking about <span class="fancy">values</span> here</li>
-          <li><span class="fancy">Data.</span> No constructors or destructors. No behavior.</li>
-          <li>Behavior goes into virtual interfaces</li>
-          <li>... or, you know, my awesome library <a href="https://github.com/iboB/dynamix">gh/iboB/dynamix</a></li>
+          <li class="fragment">We are talking about <span class="fancy">values</span> here</li>
+          <li class="fragment"><span class="fancy">Data.</span> No constructors or destructors. No behavior.</li>
+          <li class="fragment">Behavior goes into virtual interfaces</li>
+          <li class="fragment">... or, you know, my awesome library <a href="https://github.com/iboB/dynamix">gh/iboB/dynamix</a></li>
         </ul>
       </section>
 
       <section>
         <h2>Stringly Typed</h2>
-        <small>Yes, it's <em>not</em> a typo</small>
+        <small class="fragment">Yes, it's <em>not</em> a typo</small>
       </section>
 
       <section class="slide">
         <h3>Anti-Pattern?</h3>
         <br/>
         <ul>
-          <li><code class="cinline">state = &quot;running&quot;</code></li>
-          <li>Yes, this should be an enum</li>
-          <li><code class="cinline">&quot;my = 'dsl'; is? awesome or not;&quot;</code></li>
-          <li>Likely not. A DSL could be a solution, but first, remember:</li>
+          <li class="fragment"><code class="cinline">state = &quot;running&quot;</code></li>
+          <li class="fragment">Yes, this should be an enum</li>
+          <li class="fragment"><code class="cinline">&quot;my = 'dsl'; is? awesome or not;&quot;</code></li>
+          <li class="fragment">Likely not. A DSL could be a solution, but first, remember:</li>
           <ul>
-            <li>Everybody speaks JSON</li>
-            <li>TOML and YAML are good</li>
-            <li>XML... exists</li>
+            <li class="fragment">Everybody speaks JSON</li>
+            <li class="fragment">TOML and YAML are good</li>
+            <li class="fragment">XML... exists</li>
           </ul>
         </ul>
       </section>
 
       <section>
         <p>So... pass a JSON string?</p>
-        <p>The model isn't the problem here. The representation is</p>
+        <p class="fragment">The model isn't the problem here. The representation is</p>
       </section>
 
       <section>
@@ -195,7 +195,7 @@
         <ul>
           <li>Easy with true duck typing</li>
           <li>Literally JavaScript's type system</li>
-          <li>What does C++ have?</li>
+          <li class="fragment">What does C++ have?</li>
         </ul>
       </section>
 
@@ -213,7 +213,7 @@
     &gt; value;
   };
         </code></pre>
-        <p>This is literally <code>nlohmann::json</code> (JSON for Modern C++) under the hood</p>
+        <p class="fragment">This is literally <code>nlohmann::json</code> (JSON for Modern C++) under the hood</p>
       </section>
 
       <section class="slide">
@@ -223,10 +223,10 @@
           <li><a href="https://github.com/nlohmann/json">JSON for Modern C++ (<code>nlohmann::json</code>)</a></li>
           <li><a href="https://www.boost.org/doc/libs/latest/libs/json/doc/html/index.html">Boost.JSON</a></li>
           <li><a href="https://github.com/tencent/rapidjson">RapidJSON</a></li>
-          <li>Many others for other formats</li>
-          <li>Mutability</li>
-          <li>Ergonomics</li>
-          <li>A POJO that feels like a native part of the language</li>
+          <li class="fragment">Many others for other formats</li>
+          <li class="fragment">Mutability</li>
+          <li class="fragment">Ergonomics</li>
+          <li class="fragment">A POJO <span class="fancy">container</span> that feels like a native part of the language</li>
         </ul>
       </section>
 
@@ -235,10 +235,10 @@
         <br/>
         <ul>
           <li>Multiple allocations when building</li>
-          <li>Traversing is chasing pointers</li>
-          <li>Mutable POJOs are not evil</li>
-          <li>Choose based on how you select custom map or array types</li>
-          <li>Consider using custom allocators</li>
+          <li>Traversing means chasing pointers</li>
+          <li class="fragment">POJO containers are not evil</li>
+          <li class="fragment">Choose based on how you select custom map or array types</li>
+          <li class="fragment">Consider using custom allocators</li>
         </ul>
       </section>
 
@@ -251,9 +251,11 @@
         <br/>
         <ul>
           <li>Build once. Likely parsing text (JSON)</li>
-          <li>Traverse several times. Likely once</li>
-          <li>Which of you use a mutable POJO library and never mutate?</li>
+          <li class="fragment">Traverse several times. <span class="fragment">Likely once</span></li>
         </ul>
+        <br/>
+        <br/>
+        <p class="fragment">Which of you use a mutable POJO library exactly like this?</p>
       </section>
 
       <section>
@@ -267,10 +269,10 @@
           <li><a href="https://protobuf.dev/">Protobuf</a></li>
           <li><a href="https://capnproto.org/">Cap'n Proto</a></li>
           <li><a href="https://flatbuffers.dev/">FlatBuffers</a></li>
-          <li class="pro">Super fast</li>
-          <li class="pro">Single buffer</li>
-          <li class="con">Schema</li>
-          <li class="con">Codegen on both ends</li>
+          <li class="pro fragment">Super fast</li>
+          <li class="pro fragment">Single buffer</li>
+          <li class="con fragment">Schema</li>
+          <li class="con fragment">Codegen on both ends</li>
         </ul>
       </section>
 
@@ -282,13 +284,13 @@
         <h3>POJO Buffers</h3>
         <br/>
         <ul>
-          <li>Flexibility of POJOs</li>
-          <ul>
+          <li class="fragment">Flexibility of POJOs</li>
+          <ul class="fragment">
             <li>Self-describing data format</li>
             <li>No schema</li>
           </ul>
-          <li>Performance of single-buffer serialization libraries</li>
-          <ul>
+          <li class="fragment">Performance of single-buffer serialization libraries</li>
+          <ul class="fragment">
             <li>Few allocations</li>
             <li>Cache friendly</li>
             <li>Brick-wall-style mutability</li>
@@ -302,7 +304,7 @@
         <ul>
           <li><a href="https://github.com/simdjson/simdjson">simdjson - gh/simdjson/simdjson</a></li>
           <li><a href="https://github.com/chadaustin/sajson">sajson - gh/chadaustin/sajson</a></li>
-          <li>... well, almost</li>
+          <li class="fragment">... well, almost</li>
         </ul>
       </section>
 
@@ -314,12 +316,12 @@
         <h3>Buffers</h3>
         <br/>
         <ul>
-          <li>Buffers of 64-bit integers: <code class="cinline">std::vector&lt;uint64_t&gt;</code></li>
-          <li>Descriptors: a type and optional additional value info</li>
-          <li>Interpretation depends on the descriptor</li>
-          <li>8-bits for type and 56 bits for other info</li>
+          <li class="fragment">Buffers of 64-bit integers: <code class="cinline">std::vector&lt;uint64_t&gt;</code></li>
+          <li class="fragment">Descriptors: a type and optional additional value info</li>
+          <li class="fragment">Interpretation depends on the descriptor</li>
+          <li class="fragment">8-bits for type and 56 bits for other info</li>
         </ul>
-        <pre><code class="nohighlight hljs" data-noescape>
+        <pre class="fragment"><code class="nohighlight hljs" data-noescape>
   <span class="fancy">00101010</span>00000000000000000000000000000000000000000000000000000000
         </code></pre>
       </section>
@@ -328,39 +330,39 @@
         <h3>Buffer Interpretation</h3>
         <br/>
         <ul>
-          <li>Literals (<code class="cinline">true, false, null</code>): no info</li>
-          <li>Numbers (integers and reals): no info, still</li>
-          <ul>
+          <li class="fragment">Literals (<code class="cinline">true, false, null</code>): no info</li>
+          <li class="fragment">Numbers (integers and reals): no info, still</li>
+          <ul class="fragment">
             <li>... but the next 64-bit integer contains the actual value</li>
           </ul>
-          <li>Strings: info is offset into a buffer of zero-terminated strings</li>
-          <li>Compound types (array, object): length | offset to end</li>
-          <li>Compound end: offset to begin</li>
+          <li class="fragment">Strings: info is offset into a buffer of zero-terminated strings</li>
+          <li class="fragment">Compound types (array, object): length | offset to end</li>
+          <li class="fragment">Compound end: offset to begin</li>
         </ul>
       </section>
 
       <section>
-        <pre><code class="json hljs" data-noescape>  {
-      "character": "John Snow",
-      "HP": 20,
+        <pre><code class="json hljs" data-noescape>  <span class="hl-code fragment" data-fragment-index="1">{</span>
+      <span class="hl-code fragment" data-fragment-index="2">"character": "John Snow",</span>
+      <span class="hl-code fragment" data-fragment-index="3">"HP": 20,</span>
       "MP": 10,
-      "skills": [
+      <span class="hl-code fragment" data-fragment-index="4">"skills": [</span>
           {"skill": "Sword", "MP": 1},
           {"skill": "Immortality", "MP": 10}
-      ],
-  }
+      <span class="hl-code fragment" data-fragment-index="5">]</span>
+  <span class="hl-code fragment" data-fragment-index="6">}</span>
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>words:
-  obj_begin|4|26,
-    string|0, string|14,
-    string|28, int, 20,
+  <span class="hl-code fragment" data-fragment-index="1">obj_begin|4|26,</span>
+    <span class="hl-code fragment" data-fragment-index="2">string|0, string|14,</span>
+    <span class="hl-code fragment" data-fragment-index="3">string|28, int, 20,</span>
     string|35, int, 10,
-    string|42, array_begin|2|25,
+    <span class="hl-code fragment" data-fragment-index="4">string|42, array_begin|2|25,</span>
       obj_begin|2|17, string|53, string|63, string|73, int, 1, obj_end|11,
       obj_begin|2|24, string|80, string|90, string|106, int, 10, obj_end|18,
-    array_end|16,
-  obj_end|0,
-bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
+    <span class="hl-code fragment" data-fragment-index="5">array_end|16,</span>
+  <span class="hl-code fragment" data-fragment-index="3">obj_end|0,</span>
+bytes: <span class="hl-code fragment" data-fragment-index="2">9,"character", 9,"John Snow",</span> 2,"HP", 2,"MP", <span class="hl-code fragment" data-fragment-index="4">6,"skills",</span>
        5,"skill", 5,"Sword", 2,"MP", 5,"skill", 11,"Immortality", 2,"MP"
         </code></pre>
       </section>
@@ -373,7 +375,7 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
 
     struct document {
       uint64_t* data_ptr;
-      char* byte_ptr;
+      char* byte_ptr; <span class="fragment">// may point in data_ptr</span>
     };
 
     struct element {
@@ -389,13 +391,13 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
         <h3>What Does This Mean?</h3>
         <br/>
         <ul>
-          <li class="pro">Super-fast parsing. Buffer is equivalent to JSON structure</li>
-          <li class="pro">Linear DFS traversal has the best perf possible</li>
-          <li class="con">Random access is O(n)</li>
-          <li class="con">... with uneven strides!</li>
-          <li>Also, some nitpicking but:</li>
-          <li class="con">String length: 32 bits</li>
-          <li class="con">Compound object length: 24 bits</li>
+          <li class="pro fragment">Super-fast parsing. Buffer is equivalent to JSON structure</li>
+          <li class="pro fragment">Linear DFS traversal has the best perf possible</li>
+          <li class="con fragment">Random access is O(n)</li>
+          <li class="con fragment">... with uneven strides!</li>
+          <li class="fragment">Also, some nitpicking but:</li>
+          <li class="con fragment">String length: 32 bits</li>
+          <li class="con fragment">Compound object length: 24 bits</li>
         </ul>
       </section>
 
@@ -403,14 +405,14 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
         <h3>The Incongruity of simdjson... With Itself</h3>
         <br/>
         <ul>
-          <li>The fastest possible linear traversal implies a known schema</li>
-          <li>An unknown schema implies some "wandering" in the object</li>
-          <li>If the schema is known, serialization libraries are already better</li>
-          <li>Why even bother with a buffer? Just provide a generator</li>
-          <ul>
+          <li class="fragment">The fastest possible linear traversal implies a known schema</li>
+          <li class="fragment">An unknown schema implies some "wandering" in the object</li>
+          <li class="fragment">If the schema is known, serialization libraries are already better</li>
+          <li class="fragment">Why even bother with a buffer? Just provide a generator</li>
+          <ul class="fragment">
             <li>... the library does provide one</li>
           </ul>
-          <li>My theory: benchmaxxing</li>
+          <li class="fragment">My theory: benchmaxxing</li>
         </ul>
       </section>
 
@@ -428,12 +430,12 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
         <h3>Buffers</h3>
         <br/>
         <ul>
-          <li>Buffers of <code>size_t</code>: <code class="cinline">std::vector&lt;size_t&gt;</code></li>
-          <li>Descriptors: optional offset to value and a type</li>
-          <li>Value interpretation depends on the descriptor</li>
-          <li>61 bits for offset (29 on 32-bit systems) followed by 3 bits for type</li>
+          <li class="fragment">Buffers of <code>size_t</code>: <code class="cinline">std::vector&lt;size_t&gt;</code></li>
+          <li class="fragment">Descriptors: optional offset to value and a type</li>
+          <li class="fragment">Value interpretation depends on the descriptor</li>
+          <li class="fragment">61 bits for offset (29 on 32-bit systems) followed by 3 bits for type</li>
         </ul>
-        <pre><code class="nohighlight hljs" data-noescape>
+        <pre class="fragment"><code class="nohighlight hljs" data-noescape>
   0000000000000000000000000000000000000000000000000000000000000<span class="fancy">101</span>
         </code></pre>
       </section>
@@ -470,13 +472,13 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
         <h3>Neat Trivia: sajson Packing</h3>
         <br/>
         <ul>
-          <li>On 32-bit systems <code>size_t</code> is 32 bits</li>
-          <li>Effective addressable space is 2<sup>32</sup> bytes</li>
-          <li>But in practice it's 2<sup>31</sup> bytes</li>
-          <li>Which means 2<sup>30</sup> 16-bit values</li>
-          <li>2<sup>29</sup> 32-bit values</li>
-          <li>... which is precisely the bits provided for offset by the library</li>
-          <li>Cool, huh?</li>
+          <li class="fragment">On 32-bit systems <code>size_t</code> is 32 bits</li>
+          <li class="fragment">Effective addressable space is 2<sup>32</sup> bytes</li>
+          <li class="fragment">But in practice it's 2<sup>31</sup> bytes</li>
+          <li class="fragment">Which means 2<sup>30</sup> 16-bit values</li>
+          <li class="fragment">2<sup>29</sup> 32-bit values</li>
+          <li class="fragment">... which is precisely the bits provided for offset by the library</li>
+          <li class="fragment">Cool, huh?</li>
         </ul>
       </section>
 
@@ -484,36 +486,36 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
         <h3>Buffer Interpretation</h3>
         <br/>
         <ul>
-          <li>Literals (<code class="cinline">true, false, null</code>): no offset</li>
-          <li>Integers: offset to value</li>
-          <li>Double: offset to value (2 words on 32-bit)</li>
-          <li>Strings: two words: begin, end</li>
-          <li>Array: length, descriptors of elements</li>
-          <li>Object: length, triplets of string and value descriptor</li>
+          <li class="fragment">Literals (<code class="cinline">true, false, null</code>): no offset</li>
+          <li class="fragment">Integers: offset to value</li>
+          <li class="fragment">Double: offset to value (2 words on 32-bit)</li>
+          <li class="fragment">Strings: two words: begin, end</li>
+          <li class="fragment">Array: length, descriptors of elements</li>
+          <li class="fragment">Object: length, triplets of string and value descriptor</li>
         </ul>
       </section>
 
       <section>
-        <pre><code class="json hljs" data-noescape>  {
-      "character": "John Snow",
-      "HP": 20,
+        <pre><code class="json hljs" data-noescape>  <span class="hl-code fragment" data-fragment-index="1">{</span>
+      <span class="hl-code fragment" data-fragment-index="2">"character":</span> <span class="hl-code fragment" data-fragment-index="3">"John Snow"</span>,
+      <span class="hl-code fragment" data-fragment-index="4">"HP": 20,</span>
       "MP": 10,
-      "skills": [
-          {"skill": "Sword", "MP": 1},
-          {"skill": "Immortality", "MP": 10}
-      ],
+      <span class="hl-code fragment" data-fragment-index="5">"skills": <span class="hl-code fragment" data-fragment-index="6">[</span></span>
+          <span class="hl-code fragment" data-fragment-index="7">{"skill": "Sword", "MP": 1},</span>
+          <span class="hl-code fragment" data-fragment-index="8">{"skill": "Immortality", "MP": 10}</span>
+      ]
   }
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>words:
-    4, 0,9,string|38, 18,20,int|37, 20,22,int|36, 22,28,array|13
-      2, object|13, object|3
-        2, 38,43,string|8, 54,55,int|7, 10, 43,54,
-        2, 28,33,string|8, 33,35,int|7, 1, 33,38,
-      10, 20, 9,18
-bytes: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
+    <span class="hl-code fragment" data-fragment-index="1">4, <span class="hl-code fragment" data-fragment-index="2">0,9,</span><span class="hl-code fragment" data-fragment-index="3">string|38</span>, <span class="hl-code fragment" data-fragment-index="4">18,20,int|37</span>, 20,22,int|36, <span class="hl-code fragment" data-fragment-index="5">22,28,array|13</span></span>
+      <span class="hl-code fragment" data-fragment-index="6">2, <span class="hl-code fragment" data-fragment-index="7">object|13</span>, <span class="hl-code fragment" data-fragment-index="8">object|3,</span></span>
+        <span class="hl-code fragment" data-fragment-index="8">2, 38,43,string|8, 54,55,int|7, 10, 43,54,</span>
+        <span class="hl-code fragment" data-fragment-index="7">2, 28,33,string|8, 33,35,int|7, 1, 33,38,</span>
+      10, <span class="hl-code fragment" data-fragment-index="4">20</span>, <span class="hl-code fragment" data-fragment-index="3">9,18</span>
+bytes: <span class="hl-code fragment" data-fragment-index="2">character</span><span class="hl-code fragment" data-fragment-index="3">John Snow</span><span class="hl-code fragment" data-fragment-index="4">HP</span>MP<span class="hl-code fragment" data-fragment-index="5">skills</span><span class="hl-code fragment" data-fragment-index="7">skillSwordMP</span><span class="hl-code fragment" data-fragment-index="8">skillImmortalityMP</span>
         </code></pre>
 
-        <p>Many alternative representations of the same data are possible.</p>
+        <p class="fragment">Many alternative representations of the same data are possible.</p>
       </section>
 
       <section class="slide">
@@ -544,7 +546,7 @@ bytes: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       <span class="hl-code fragment" data-fragment-index="10">"skills":</span> <span class="hl-code fragment" data-fragment-index="11">[</span>
           <span class="hl-code fragment" data-fragment-index="12">{</span><span class="hl-code fragment" data-fragment-index="13">"skill": "Sword", "MP": 1</span><span class="hl-code fragment" data-fragment-index="15">}</span>,
           {"skill": "Immortality", "MP": 10}
-      ],
+      ]
   }
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
@@ -567,7 +569,7 @@ strings: <span class="hl-code-f fragment" data-fragment-index="3">character</spa
       "skills": [
           {"skill": "Sword", "MP": 1<span class="hl-code fragment" data-fragment-index="1">}</span>,
           <span class="hl-code fragment" data-fragment-index="4">{</span><span class="hl-code fragment" data-fragment-index="5">"skill": "Immortality", "MP": 10</span><span class="hl-code fragment" data-fragment-index="6">}</span>
-      ],
+      ]
   }
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
@@ -590,7 +592,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMP<span class="hl-code-f fragment
       "skills": [
           {"skill": "Sword", "MP": 1},
           {"skill": "Immortality", "MP": 10<span class="hl-code fragment" data-fragment-index="1">}</span>
-      <span class="hl-code fragment" data-fragment-index="2">]</span>,
+      <span class="hl-code fragment" data-fragment-index="2">]</span>
   }
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
@@ -613,7 +615,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       "skills": [
           {"skill": "Sword", "MP": 1},
           {"skill": "Immortality", "MP": 10}
-      <span class="hl-code fragment" data-fragment-index="1">]</span>,
+      <span class="hl-code fragment" data-fragment-index="1">]</span>
   <span class="hl-code fragment" data-fragment-index="2">}</span>
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
@@ -636,7 +638,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       "skills": [
           {"skill": "Sword", "MP": 1},
           {"skill": "Immortality", "MP": 10}
-      ],
+      ]
   <span class="hl-code-i">}</span>
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
@@ -655,15 +657,15 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>What Does This Mean?</h3>
         <br/>
         <ul>
-          <li>Array indexing is O(1)</li>
-          <li>Object key lookup is still O(n) ☹️</li>
+          <li class="fragment">Array indexing is O(1)</li>
+          <li class="fragment">Object key lookup is still O(n) ☹️</li>
           <ul>
-            <li>... but you can access by index</li>
-            <li>Sorting objects may allow O(log n) lookups</li>
+            <li class="fragment">... but you can access by index</li>
+            <li class="fragment">Sorting objects may allow O(log n) lookups</li>
           </ul>
-          <li>Linear DFS traversal does lead to some weird jumps</li>
-          <li>Some cost exists when parsing for installing compounds</li>
-          <li>Dump buffers: everything is an offset</li>
+          <li class="fragment">Linear DFS traversal does lead to some weird jumps</li>
+          <li class="fragment">Some cost exists when parsing for installing compounds</li>
+          <li class="fragment">Dump buffers: everything is an offset</li>
         </ul>
       </section>
 
@@ -671,31 +673,31 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>The Bad Parts</h3>
         <br/>
         <ul>
-          <li>Uses the back of the buffer. Must design around this</li>
-          <li>Two buffers. Strings are always separate</li>
-          <ul>
+          <li class="fragment">Uses the back of the buffer. Must design around this</li>
+          <li class="fragment">Two buffers. Strings are always separate</li>
+          <ul class="fragment">
             <li class="pro">Reusing the original string</li>
           </ul>
-          <li>Building is interwoven with the JSON parser</li>
-          <li>Custom number parsing. No <code class="cinline">double</code> roundtrips</li>
-          <li>Only compound roots</li>
+          <li class="fragment">Building is interwoven with the JSON parser</li>
+          <li class="fragment">Custom number parsing. No <code class="cinline">double</code> roundtrips</li>
+          <li class="fragment">Only compound roots</li>
         </ul>
       </section>
 
       <section>
         <h2>pojobuf</h2>
         <p><a href="https://github.com/iboB/pojobuf">gh/iboB/pojobuf</a></p>
-        <p><small>pojo + protobuf = pojobuf</small></p>
+        <p class="fragment"><small>pojo + protobuf = pojobuf</small></p>
       </section>
 
       <section class="slide">
         <h3>What is it?</h3>
         <br/>
         <ul>
-          <li>Sajson values, but with 4 bits for type in descriptors</li>
-          <li><code class="cinline">int64_t</code> buffers</li>
-          <li><code class="cinline">value</code> is decoupled</li>
-          <li>Mix and match allocators, builders, and parsers</li>
+          <li class="fragment">Sajson values, but with 4 bits for type in descriptors</li>
+          <li class="fragment"><code class="cinline">int64_t</code> buffers</li>
+          <li class="fragment"><code class="cinline">value</code> is decoupled</li>
+          <li class="fragment">Mix and match allocators, builders, and parsers</li>
         </ul>
       </section>
 
@@ -733,10 +735,10 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>Allocators</h3>
         <br/>
         <ul>
-          <li>Single allocation</li>
-          <li>Reuse large buffer</li>
-          <li><span class="fancy2">Reuse unknown buffer</span></li>
-          <li><span class="fancy2">Growable</span></li>
+          <li class="fragment">Single allocation</li>
+          <li class="fragment">Reuse large buffer</li>
+          <li class="fragment"><span class="fancy2">Reuse unknown buffer</span></li>
+          <li class="fragment"><span class="fancy2">Growable</span></li>
         </ul>
       </section>
 
@@ -744,11 +746,11 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>Builders</h3>
         <br/>
         <ul>
-          <li>Front builder</li>
-          <li>Scratch buf builder</li>
-          <li><span class="fancy2">Key-reuse builder</span></li>
-          <li class="con">Back builder</li>
-          <li>JSON writer</li>
+          <li class="fragment">Front builder</li>
+          <li class="fragment">Scratch buf builder</li>
+          <li class="fragment"><span class="fancy2">Key-reuse builder</span></li>
+          <li class="fragment con">Back builder</li>
+          <li class="fragment">JSON writer</li>
         </ul>
       </section>
 
@@ -756,13 +758,13 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>Parsers</h3>
         <br/>
         <ul>
-          <li>JSON <code>&lt;charconv&gt;</code></li>
-          <li>JSON custom num</li>
-          <li><span class="fancy2">pojobuf</span></li>
-          <li><span class="fancy2">TOML</span></li>
-          <li><span class="fancy2">CBOR</span></li>
-          <li><span class="fancy2">MessagePack</span></li>
-          <li class="con">simdjson</li>
+          <li class="fragment">JSON <code>&lt;charconv&gt;</code></li>
+          <li class="fragment">JSON custom num</li>
+          <li class="fragment"><span class="fancy2">pojobuf</span></li>
+          <li class="fragment"><span class="fancy2">TOML</span></li>
+          <li class="fragment"><span class="fancy2">CBOR</span></li>
+          <li class="fragment"><span class="fancy2">MessagePack</span></li>
+          <li class="fragment con">simdjson</li>
         </ul>
       </section>
 
@@ -771,7 +773,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       </section>
 
       <section>
-        <h3>canada.json</h3>
+        <p><span class="fancy2">canada.json</span> - float vector array</p>
         <table>
         <thead>
         <tr>
@@ -829,7 +831,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       </section>
 
       <section>
-        <h3>gsoc.json</h3>
+        <p><span class="fancy2">gsoc.json</span> - lots of long complex strings</p>
         <table>
         <thead>
         <tr>
@@ -887,7 +889,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       </section>
 
       <section>
-        <h3>marine-ik.json</h3>
+        <p><span class="fancy2">marine-ik.json</span> - very complex structure</p>
         <table>
         <thead>
         <tr>
@@ -945,7 +947,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       </section>
 
       <section>
-        <h3>Traverse</h3>
+        <p><span class="fancy2">traverse</span> - many real JSONs</p>
         <table>
         <thead>
         <tr>
@@ -994,10 +996,10 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>Future</h3>
         <br/>
         <ul>
-          <li>More allocators, builders, parsers</li>
-          <li>Improve JSON string parsing</li>
-          <li>Investigate <code class="cinline">instring</code></li>
-          <li>Remember the brick wall analogy?</li>
+          <li class="fragment">More allocators, builders, parsers</li>
+          <li class="fragment">Improve JSON string parsing</li>
+          <li class="fragment">Investigate <code class="cinline">instring</code></li>
+          <li class="fragment">Remember the brick wall analogy?</li>
         </ul>
       </section>
 
@@ -1006,18 +1008,17 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
       </section>
 
       <section class="slide">
-        <h3>Splicing</h3>
+        <h3>Splicing: Limited Mutability</h3>
         <br/>
         <ul>
-          <li>Limited mutability</li>
-          <li>You can reorder elements</li>
-          <li>You can replace elements with ones which are not larger</li>
-          <li>With relative indices, you can efficiently extract elements</li>
+          <li class="fragment">You can reorder elements</li>
+          <li class="fragment">You can replace elements with ones which are not larger</li>
+          <li class="fragment">With relative indices, you can efficiently extract elements</li>
         </ul>
       </section>
 
       <section class="fin">
-        <span class="fragment">
+        <span class="fragment" data-fragment-index="1">
         <h2>End</h2>
         <h3>Questions?</h3>
         </span>
@@ -1028,7 +1029,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         </ul>
         <br/>
         <br/>
-        <p class="fragment"><small>Slides license: <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>&nbsp;&nbsp;&nbsp;<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" class="diagram" style="height: 1.2em" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a></small></p>
+        <p class="fragment" data-fragment-index="1"><small>Slides license: <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC-BY 4.0</a>&nbsp;&nbsp;&nbsp;<a rel="license" href="https://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" class="diagram" style="height: 1.2em" src="http://i.creativecommons.org/l/by/4.0/88x31.png" /></a></small></p>
       </section>
 
     </div>
