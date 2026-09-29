@@ -158,6 +158,23 @@ body {
 	content: '✖  ';
 }
 
+.reveal section table.ctable {
+	width: 100%;
+}
+
+.reveal .slides section .fragment.fr-fancy {
+    opacity: 1;
+    visibility: inherit;
+}
+.reveal .slides section .fragment.fr-fancy.current-fragment {
+    font-weight: bold;
+    color: #DF5000;
+}
+.reveal .slides section .fragment.fr-fancy.visible.persist {
+    font-weight: bold;
+    color: #DF5000;
+}
+
 /* last slide */
 .reveal section.fin {
 	font-size: 0.8em;

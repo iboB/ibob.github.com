@@ -504,15 +504,13 @@ bytes: 9,"character", 9,"John Snow", 2,"HP", 2,"MP", 6,"skills"
       ],
   }
         </code></pre>
-        <pre><code class="nohighlight hljs" data-noescape>data:
-  4,  0,9,string|25  18,20,int|27  20,22,int|28  22,28,array|13
-    2,object|3,object|4
-      2,  28,33,string|4,  38,40,int|6,
-        33,38,  1
-      2,  38,43,string|4,  48,50,int|6,
-        43,48,  10
-    9,18,  20,  10,
-strings: "characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP"
+        <pre><code class="nohighlight hljs" data-noescape>words:
+    4, 0,9,string|38, 18,20,int|37, 20,22,int|36, 22,28,array|13
+      2, object|13, object|3
+        2, 38,43,string|8, 54,55,int|7, 10, 43,54,
+        2, 28,33,string|8, 33,35,int|7, 1, 33,38,
+      10, 20, 9,18
+bytes: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         </code></pre>
 
         <p>Many alternative representations of the same data are possible.</p>
@@ -651,6 +649,371 @@ tail: <span class="hl-code-i">4, 0,9,string|38, 18,20,int|37, 20,22,int|36, 22,2
         10, 20, 9,18
 strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         </code></pre>
+      </section>
+
+      <section class="slide">
+        <h3>What Does This Mean?</h3>
+        <br/>
+        <ul>
+          <li>Array indexing is O(1)</li>
+          <li>Object key lookup is still O(n) ☹️</li>
+          <ul>
+            <li>... but you can access by index</li>
+            <li>Sorting objects may allow O(log n) lookups</li>
+          </ul>
+          <li>Linear DFS traversal does lead to some weird jumps</li>
+          <li>Some cost exists when parsing for installing compounds</li>
+          <li>Dump buffers: everything is an offset</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>The Bad Parts</h3>
+        <br/>
+        <ul>
+          <li>Uses the back of the buffer. Must design around this</li>
+          <li>Two buffers. Strings are always separate</li>
+          <ul>
+            <li class="pro">Reusing the original string</li>
+          </ul>
+          <li>Building is interwoven with the JSON parser</li>
+          <li>Custom number parsing. No <code class="cinline">double</code> roundtrips</li>
+          <li>Only compound roots</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>pojobuf</h2>
+        <p><a href="https://github.com/iboB/pojobuf">gh/iboB/pojobuf</a></p>
+        <p><small>pojo + protobuf = pojobuf</small></p>
+      </section>
+
+      <section class="slide">
+        <h3>What is it?</h3>
+        <br/>
+        <ul>
+          <li>Sajson values, but with 4 bits for type in descriptors</li>
+          <li><code class="cinline">int64_t</code> buffers</li>
+          <li><code class="cinline">value</code> is decoupled</li>
+          <li>Mix and match allocators, builders, and parsers</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Types</h3>
+        <br/>
+        <table class="ctable">
+          <tr>
+            <td>
+              <ol>
+                <li class="fragment fr-fancy persist">undefined</li>
+                <li>null</li>
+                <li>false</li>
+                <li>true</li>
+                <li class="fragment fr-fancy persist">int32</li>
+                <li class="fragment fr-fancy persist">int64</li>
+                <li>real</li>
+              </ol>
+            </td>
+            <td>
+              <ol start="8">
+                <li>string</li>
+                <li class="fragment fr-fancy persist">blob</li>
+                <li>array</li>
+                <li>object</li>
+                <li class="fragment fr-fancy persist">sorted_object</li>
+                <li class="fragment fr-fancy persist">custom</li>
+              </ol>
+            </td>
+          </tr>
+        </table>
+      </section>
+
+      <section class="slide">
+        <h3>Allocators</h3>
+        <br/>
+        <ul>
+          <li>Single allocation</li>
+          <li>Reuse large buffer</li>
+          <li><span class="fancy2">Reuse unknown buffer</span></li>
+          <li><span class="fancy2">Growable</span></li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Builders</h3>
+        <br/>
+        <ul>
+          <li>Front builder</li>
+          <li>Scratch buf builder</li>
+          <li><span class="fancy2">Key-reuse builder</span></li>
+          <li class="con">Back builder</li>
+          <li>JSON writer</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>Parsers</h3>
+        <br/>
+        <ul>
+          <li>JSON <code>&lt;charconv&gt;</code></li>
+          <li>JSON custom num</li>
+          <li><span class="fancy2">pojobuf</span></li>
+          <li><span class="fancy2">TOML</span></li>
+          <li><span class="fancy2">CBOR</span></li>
+          <li><span class="fancy2">MessagePack</span></li>
+          <li class="con">simdjson</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Benchmarks</h3>
+      </section>
+
+      <section>
+        <h3>canada.json</h3>
+        <table>
+        <thead>
+        <tr>
+        <th>Name (* = baseline)</th>
+        <th align="right">Total ms</th>
+        <th align="right">Baseline</th>
+        <th align="right">Ops/second</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>pojobuf-mut *</td>
+        <td align="right">1.375</td>
+        <td align="right">-</td>
+        <td align="right">727.0</td>
+        </tr>
+        <tr>
+        <td>pojobuf-mut charconv</td>
+        <td align="right">1.561</td>
+        <td align="right" class="fr-fancy fragment">1.135</td>
+        <td align="right">640.6</td>
+        </tr>
+        <tr>
+        <td>sajson-mut</td>
+        <td align="right">1.336</td>
+        <td align="right" class="fr-fancy fragment">0.972</td>
+        <td align="right">748.3</td>
+        </tr>
+        <tr>
+        <td>pojobuf-const</td>
+        <td align="right">1.357</td>
+        <td align="right" class="fr-fancy fragment">0.987</td>
+        <td align="right">736.8</td>
+        </tr>
+        <tr>
+        <td>sajson-const</td>
+        <td align="right">1.534</td>
+        <td align="right" class="fr-fancy fragment">1.116</td>
+        <td align="right">651.7</td>
+        </tr>
+        <tr>
+        <td>simdjson</td>
+        <td align="right">1.282</td>
+        <td align="right" class="fr-fancy fragment">0.932</td>
+        <td align="right">779.8</td>
+        </tr>
+        <tr>
+        <td>boost</td>
+        <td align="right">1.625</td>
+        <td align="right" class="fr-fancy fragment">1.181</td>
+        <td align="right">615.5</td>
+        </tr>
+        </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>gsoc.json</h3>
+        <table>
+        <thead>
+        <tr>
+        <th>Name (* = baseline)</th>
+        <th align="right">Total ms</th>
+        <th align="right">Baseline</th>
+        <th align="right">Ops/second</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>pojobuf-mut *</td>
+        <td align="right">0.996</td>
+        <td align="right">-</td>
+        <td align="right">1004.1</td>
+        </tr>
+        <tr>
+        <td>pojobuf-mut charconv</td>
+        <td align="right">0.999</td>
+        <td align="right" class="fr-fancy fragment">1.003</td>
+        <td align="right">1001.1</td>
+        </tr>
+        <tr>
+        <td>sajson-mut</td>
+        <td align="right">0.972</td>
+        <td align="right" class="fr-fancy fragment">0.976</td>
+        <td align="right">1029.2</td>
+        </tr>
+        <tr>
+        <td>pojobuf-const</td>
+        <td align="right">1.180</td>
+        <td align="right" class="fr-fancy fragment">1.185</td>
+        <td align="right">847.1</td>
+        </tr>
+        <tr>
+        <td>sajson-const</td>
+        <td align="right">1.120</td>
+        <td align="right" class="fr-fancy fragment">1.125</td>
+        <td align="right">892.8</td>
+        </tr>
+        <tr>
+        <td>simdjson</td>
+        <td align="right">0.466</td>
+        <td align="right" class="fr-fancy fragment">0.467</td>
+        <td align="right">2148.0</td>
+        </tr>
+        <tr>
+        <td>boost</td>
+        <td align="right">0.784</td>
+        <td align="right" class="fr-fancy fragment">0.787</td>
+        <td align="right">1275.3</td>
+        </tr>
+        </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>marine-ik.json</h3>
+        <table>
+        <thead>
+        <tr>
+        <th>Name (* = baseline)</th>
+        <th align="right">Total ms</th>
+        <th align="right">Baseline</th>
+        <th align="right">Ops/second</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>pojobuf-mut *</td>
+        <td align="right">1.757</td>
+        <td align="right" class="fr-fancy fragment">-</td>
+        <td align="right">569.0</td>
+        </tr>
+        <tr>
+        <td>pojobuf-mut charconv</td>
+        <td align="right">2.351</td>
+        <td align="right" class="fr-fancy fragment">1.338</td>
+        <td align="right">425.3</td>
+        </tr>
+        <tr>
+        <td>sajson-mut</td>
+        <td align="right">1.869</td>
+        <td align="right" class="fr-fancy fragment">1.064</td>
+        <td align="right">535.0</td>
+        </tr>
+        <tr>
+        <td>pojobuf-const</td>
+        <td align="right">1.784</td>
+        <td align="right" class="fr-fancy fragment">1.015</td>
+        <td align="right">560.7</td>
+        </tr>
+        <tr>
+        <td>sajson-const</td>
+        <td align="right">1.959</td>
+        <td align="right" class="fr-fancy fragment">1.115</td>
+        <td align="right">510.4</td>
+        </tr>
+        <tr>
+        <td>simdjson</td>
+        <td align="right">1.549</td>
+        <td align="right" class="fr-fancy fragment">0.881</td>
+        <td align="right">645.6</td>
+        </tr>
+        <tr>
+        <td>boost</td>
+        <td align="right">2.343</td>
+        <td align="right" class="fr-fancy fragment">1.333</td>
+        <td align="right">426.8</td>
+        </tr>
+        </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h3>Traverse</h3>
+        <table>
+        <thead>
+        <tr>
+        <th>Name (* = baseline)</th>
+        <th align="right">Total ms</th>
+        <th align="right">Baseline</th>
+        <th align="right">Ops/second</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+        <td>pojobuf *</td>
+        <td align="right">0.025</td>
+        <td align="right" class="fr-fancy fragment">-</td>
+        <td align="right">29930990.2</td>
+        </tr>
+        <tr>
+        <td>pojobuf+str</td>
+        <td align="right">0.026</td>
+        <td align="right" class="fr-fancy fragment">1.046</td>
+        <td align="right">28613071.5</td>
+        </tr>
+        <tr>
+        <td>sajson</td>
+        <td align="right">0.028</td>
+        <td align="right" class="fr-fancy fragment">1.116</td>
+        <td align="right">26815240.8</td>
+        </tr>
+        <tr>
+        <td>simdjson</td>
+        <td align="right">0.071</td>
+        <td align="right" class="fr-fancy fragment">2.865</td>
+        <td align="right">10446131.0</td>
+        </tr>
+        <tr>
+        <td>boost</td>
+        <td align="right">0.854</td>
+        <td align="right" class="fr-fancy fragment">34.259</td>
+        <td align="right">873656.0</td>
+        </tr>
+        </tbody>
+        </table>
+      </section>
+
+      <section class="slide">
+        <h3>Future</h3>
+        <br/>
+        <ul>
+          <li>More allocators, builders, parsers</li>
+          <li>Improve JSON string parsing</li>
+          <li>Investigate <code class="cinline">instring</code></li>
+          <li>Remember the brick wall analogy?</li>
+        </ul>
+      </section>
+
+      <section>
+        <img src="brick-wall.jpg" alt="brick wall with several bricks missing"/>
+      </section>
+
+      <section class="slide">
+        <h3>Splicing</h3>
+        <br/>
+        <ul>
+          <li>Limited mutability</li>
+          <li>You can reorder elements</li>
+          <li>You can replace elements with ones which are not larger</li>
+          <li>With relative indices, you can efficiently extract elements</li>
+        </ul>
       </section>
 
       <section class="fin">
