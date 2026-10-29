@@ -21,7 +21,7 @@ function calcLastPositionTime() {
     var monthPart = '';
     var monthElem = document.getElementById('lp_month');
     if (monthElem) {
-        var months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, June: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Noe: 10, Dec: 11 };
+        var months = { Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5, Jul: 6, Aug: 7, Sep: 8, Oct: 9, Noe: 10, Dec: 11 };
         var imonth = months[monthElem.innerHTML];
 
         var mdif = now.getMonth() - imonth;
@@ -310,14 +310,19 @@ article {
 <section>
     <h2>Profile</h2>
     <article>
-        <span id="experience">19</span>+ years of professional experience with C++. Significant experience with software architecture and design, graphical programming and GPGPU, low level programming, concurrent and multi-threaded programming, algorithms, major platforms, compilers, version control systems, build systems, and IDEs.
+        <span id="experience">20</span>+ years of professional experience with C++. Significant experience with software architecture and design, graphical programming and GPGPU, low level programming, concurrent and multi-threaded programming, algorithms, major platforms, compilers, version control systems, build systems, and IDEs.
     </article>
 </section>
 <section class="work">
     <h2>Work Experience</h2>
+        <article>
+        <h3>Staff Software Engineer at <a href="https://viewraysystems.com/">ViewRay Systems</a></h3>
+        <div class="period"><span id="lp_month">Jun</span>, <span id="lp_year">2025</span> &ndash; present <span id="lp_time"></span></div>
+        <p>Return to the cancer treatment software. Architecture, design, implementation. Computational optimizations. Service architecture. UI Backend.</p>
+    </article>
     <article>
         <h3>Lead Software Engineer at <a href="https://github.com/alpaca-core">Alpaca Core</a></h3>
-        <div class="period"><span id="lp_month">Jun</span>, <span id="lp_year">2024</span> &ndash; present <span id="lp_time"></span></div>
+        <div class="period">Jun, 2024 &ndash; May, 2025 (1 year)</span></div>
         <p>Design and implementation of an open source C++ SDK for local AI inference. Plugin system and management. Async client-server communication. Daemon. C, Swift, and Java bindings.</p>
     </article>
     <article>
