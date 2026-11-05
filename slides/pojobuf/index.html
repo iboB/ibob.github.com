@@ -100,8 +100,8 @@
         <h3>Compile-Time Duck-Typing</h3>
         <br/>
         <ul>
-          <li class="fragment">Templates</li>
-          <li class="fragment">Concepts give the shape a name</li>
+          <li class="fragment">Generics/Templates/Macros</li>
+          <li class="fragment">The name of the shape: Concepts</li>
           <li class="fragment">Know the shape when you build the program</li>
         </ul>
       </section>
@@ -110,9 +110,11 @@
         <h3>Run-Time Toolbox</h3>
         <br/>
         <ul>
-          <li class="fragment">Virtual interfaces - the interface is a schema</li>
-          <li class="fragment"><code class="cinline">std::variant</code> - the alternatives are a schema</li>
-          <li class="fragment"><code class="cinline">std::any, std::shared_ptr&lt;void&gt;</code></li>
+          <li class="fragment">Classic C++/Java polymorphism: Interfaces</li>
+          <ul><li class="fragment">The interface is a schema</li></ul>
+          <li class="fragment">Variant types (<code class="cinline">std::variant</code>, Rust enums)</li>
+          <ul><li class="fragment">The alternatives are a schema</li></ul>
+          <li class="fragment">Opaque handles</li>
           <ul class="fragment">
             <li>Complete type erasure - can't inspect</li>
             <li>Only thing is asking whether the type is X</li>
@@ -132,7 +134,7 @@
           <li class="fragment">Traversable without schema</li>
         </ul>
         <p class="fragment">These are the properties we need.</p>
-        <p class="fragment">... and which classic C++ type erasure doesn't give us.</p>
+        <p class="fragment">... and which classic type erasure doesn't give us.</p>
       </section>
 
       <section class="slide">
@@ -180,7 +182,7 @@
         <h3>POJO</h3>
         <br/>
         <ul>
-          <li class="fragment">C++ has POD. And it's good</li>
+          <li class="fragment">We knot the term POD. And it's good</li>
           <li class="ss fragment">Plain Ol' Java Object. Java's answer. <span class="fragment">But it's not 1998</span></li>
           <li class="fragment">Retronymming</li>
           <li class="ss fragment">Plain Ol' JavaScript Object</li>
@@ -195,7 +197,7 @@
         <ul>
           <li>Easy with true duck typing</li>
           <li>Literally JavaScript's type system</li>
-          <li class="fragment">What does C++ have?</li>
+          <li class="fragment">What about statically typed languages?</li>
         </ul>
       </section>
 
@@ -227,6 +229,19 @@
           <li class="fragment">Mutability</li>
           <li class="fragment">Ergonomics</li>
           <li class="fragment">A POJO <span class="fancy">container</span> that feels like a native part of the language</li>
+        </ul>
+      </section>
+
+      <section class="slide">
+        <h3>POJO Containers</h3>
+        <br/>
+        <ul>
+          <li class="fragment">C++: <code class="cinline">nlohmann::json</code>, <code class="cinline">boost::json::value</code></li>
+          <li class="fragment">Rust: <code class="cinline">serde_json::Value</code></li>
+          <li class="fragment">Java: <code class="cinline">...jackson...JsonNode</code></li>
+          <li class="fragment">C#: <code class="cinline">System.Text.Json.JsonElement</code></li>
+          <li class="fragment">go: <code class="cinline">map[string]interface{}</code></li>
+          <li class="fragment">Swift: <code class="cinline">Any</code></li>
         </ul>
       </section>
 
