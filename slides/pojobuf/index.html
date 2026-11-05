@@ -313,25 +313,16 @@
         </ul>
       </section>
 
-      <section class="slide">
-        <h3>POJO Buffers</h3>
-        <br/>
-        <ul>
-          <li><a href="https://github.com/simdjson/simdjson">simdjson - gh/simdjson/simdjson</a></li>
-          <li><a href="https://github.com/chadaustin/sajson">sajson - gh/chadaustin/sajson</a></li>
-          <li class="fragment">... well, almost</li>
-        </ul>
-      </section>
-
       <section>
         <h2>simdjson</h2>
+        <p><a href="https://github.com/simdjson/simdjson">gh/simdjson/simdjson</a></p>
       </section>
 
       <section class="slide">
         <h3>Buffers</h3>
         <br/>
         <ul>
-          <li class="fragment">Buffers of 64-bit integers: <code class="cinline">std::vector&lt;uint64_t&gt;</code></li>
+          <li class="fragment">Buffers of 64-bit integers</li>
           <li class="fragment">Descriptors: a type and optional additional value info</li>
           <li class="fragment">Interpretation depends on the descriptor</li>
           <li class="fragment">8-bits for type and 56 bits for other info</li>
@@ -342,7 +333,7 @@
       </section>
 
       <section class="slide">
-        <h3>Buffer Interpretation</h3>
+        <h3>Descriptor Interpretation</h3>
         <br/>
         <ul>
           <li class="fragment">Literals (<code class="cinline">true, false, null</code>): no info</li>
@@ -438,20 +429,37 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">9,"character", 9,"
       </section>
 
       <section>
-        <h2>sajson</h2>
+        <h2>pojobuf</h2>
+        <p><a href="https://github.com/iboB/pojobuf">gh/iboB/pojobuf</a></p>
+        <p class="fragment"><small>pojo + protobuf = pojobuf</small></p>
+      </section>
+
+      <section class="slide">
+        <h3>History</h3>
+        <br/>
+        <ul>
+          <li class="fragment"><a href="https://github.com/chadaustin/sajson">sajson - gh/chadaustin/sajson</a></li>
+          <ul>
+            <li class="fragment">Two buffers. Strings are always separate</li>
+            <li class="fragment">Building is interwoven with the JSON parser</li>
+            <li class="fragment">Custom number parsing. No <code class="cinline">double</code> roundtrips</li>
+            <li class="fragment">Only compound roots</li>
+          </ul>
+          <li class="fragment">I rewrote it</li>
+        </ul>
       </section>
 
       <section class="slide">
         <h3>Buffers</h3>
         <br/>
         <ul>
-          <li class="fragment">Buffers of <code>size_t</code>: <code class="cinline">std::vector&lt;size_t&gt;</code></li>
+          <li class="fragment">Buffers of 64-bit integers</li>
           <li class="fragment">Descriptors: optional offset to value and a type</li>
           <li class="fragment">Value interpretation depends on the descriptor</li>
-          <li class="fragment">61 bits for offset (29 on 32-bit systems) followed by 3 bits for type</li>
+          <li class="fragment">60 bits for offset followed by 4 bits for type</li>
         </ul>
         <pre class="fragment"><code class="nohighlight hljs" data-noescape>
-  0000000000000000000000000000000000000000000000000000000000000<span class="fancy">101</span>
+  000000000000000000000000000000000000000000000000000000000000<span class="fancy">1101</span>
         </code></pre>
       </section>
 
@@ -469,44 +477,45 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">9,"character", 9,"
       </section>
 
       <section class="slide">
-        <h3>sajson Types</h3>
+        <h3>pojobuf Types</h3>
         <br/>
-        <ol>
-          <li>null</li>
-          <li>bool: <span class="fancy">true</span></li>
-          <li>bool: <span class="fancy">false</span></li>
-          <li>number: <span class="fancy2">int32</span></li>
-          <li>number: <span class="fancy2">double</span></li>
-          <li>string</li>
-          <li>array</li>
-          <li>object</li>
-        </ol>
+        <table class="ctable">
+          <tr>
+            <td>
+              <ol>
+                <li class="fragment fr-fancy persist">undefined</li>
+                <li>null</li>
+                <li class="fragment fr-fancy persist">false</li>
+                <li class="fragment fr-fancy persist">true</li>
+                <li class="fragment fr-fancy persist">int32</li>
+                <li class="fragment fr-fancy persist">int64</li>
+                <li>real</li>
+              </ol>
+            </td>
+            <td>
+              <ol start="8">
+                <li>string</li>
+                <li class="fragment fr-fancy persist">blob</li>
+                <li>array</li>
+                <li>object</li>
+                <li class="fragment fr-fancy persist">sorted_object</li>
+                <li class="fragment fr-fancy persist">custom</li>
+              </ol>
+            </td>
+          </tr>
+        </table>
       </section>
 
       <section class="slide">
-        <h3>Neat Trivia: sajson Packing</h3>
-        <br/>
-        <ul>
-          <li class="fragment">On 32-bit systems <code>size_t</code> is 32 bits</li>
-          <li class="fragment">Effective addressable space is 2<sup>32</sup> bytes</li>
-          <li class="fragment">But in practice it's 2<sup>31</sup> bytes</li>
-          <li class="fragment">Which means 2<sup>30</sup> 16-bit values</li>
-          <li class="fragment">2<sup>29</sup> 32-bit values</li>
-          <li class="fragment">... which is precisely the bits provided for offset by the library</li>
-          <li class="fragment">Cool, huh?</li>
-        </ul>
-      </section>
-
-      <section class="slide">
-        <h3>Buffer Interpretation</h3>
+        <h3>Descriptor Offset Interpretation</h3>
         <br/>
         <ul>
           <li class="fragment">Literals (<code class="cinline">true, false, null</code>): no offset</li>
-          <li class="fragment">Integers: offset to value</li>
-          <li class="fragment">Double: offset to value (2 words on 32-bit)</li>
-          <li class="fragment">Strings: two words: begin, end</li>
-          <li class="fragment">Array: length, descriptors of elements</li>
-          <li class="fragment">Object: length, triplets of string and value descriptor</li>
+          <li class="fragment">Numbers: to value</li>
+          <li class="fragment">Double: to value</li>
+          <li class="fragment">Strings, Blobs: to two words: begin, end</li>
+          <li class="fragment">Array: to length, followed by descriptors of elements</li>
+          <li class="fragment">Object: to length, followed by triplets of string and descriptor</li>
         </ul>
       </section>
 
@@ -534,14 +543,14 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">character</span><s
       </section>
 
       <section class="slide">
-        <h3><code>sajson::value</code></h3>
+        <h3><code>pojobuf::value</code></h3>
         <br/>
         <pre><code class="cpp hljs" data-noescape>
-    namespace sajson { // idealized
+    namespace pojobuf { // idealized
 
-    struct element {
-      type type;
-      const size_t* data_ptr;
+    struct value {
+      value_type type;
+      const int64_t* data_ptr;
       const char* byte_ptr;
     };
 
@@ -679,71 +688,13 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
             <li class="fragment">Sorting objects may allow O(log n) lookups</li>
           </ul>
           <li class="fragment">Linear DFS traversal does lead to some weird jumps</li>
-          <li class="fragment">Some cost exists when parsing for installing compounds</li>
+          <li class="fragment">Some cost exists for installing compounds when parsing</li>
           <li class="fragment">Dump buffers: everything is an offset</li>
         </ul>
       </section>
 
-      <section class="slide">
-        <h3>The Bad Parts</h3>
-        <br/>
-        <ul>
-          <li class="fragment">Uses the back of the buffer. Must design around this</li>
-          <li class="fragment">Two buffers. Strings are always separate</li>
-          <ul class="fragment">
-            <li class="pro">Reusing the original string</li>
-          </ul>
-          <li class="fragment">Building is interwoven with the JSON parser</li>
-          <li class="fragment">Custom number parsing. No <code class="cinline">double</code> roundtrips</li>
-          <li class="fragment">Only compound roots</li>
-        </ul>
-      </section>
-
       <section>
-        <h2>pojobuf</h2>
-        <p><a href="https://github.com/iboB/pojobuf">gh/iboB/pojobuf</a></p>
-        <p class="fragment"><small>pojo + protobuf = pojobuf</small></p>
-      </section>
-
-      <section class="slide">
-        <h3>What is it?</h3>
-        <br/>
-        <ul>
-          <li class="fragment">Sajson values, but with 4 bits for type in descriptors</li>
-          <li class="fragment"><code class="cinline">int64_t</code> buffers</li>
-          <li class="fragment"><code class="cinline">value</code> is decoupled</li>
-          <li class="fragment">Mix and match allocators, builders, and parsers</li>
-        </ul>
-      </section>
-
-      <section class="slide">
-        <h3>Types</h3>
-        <br/>
-        <table class="ctable">
-          <tr>
-            <td>
-              <ol>
-                <li class="fragment fr-fancy persist">undefined</li>
-                <li>null</li>
-                <li>false</li>
-                <li>true</li>
-                <li class="fragment fr-fancy persist">int32</li>
-                <li class="fragment fr-fancy persist">int64</li>
-                <li>real</li>
-              </ol>
-            </td>
-            <td>
-              <ol start="8">
-                <li>string</li>
-                <li class="fragment fr-fancy persist">blob</li>
-                <li>array</li>
-                <li>object</li>
-                <li class="fragment fr-fancy persist">sorted_object</li>
-                <li class="fragment fr-fancy persist">custom</li>
-              </ol>
-            </td>
-          </tr>
-        </table>
+        <p>Mix and match allocators, builders, and parsers</p>
       </section>
 
       <section class="slide">
@@ -752,6 +703,7 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <ul>
           <li class="fragment">Single allocation</li>
           <li class="fragment">Reuse large buffer</li>
+          <li class="fragment">Reuse mutable input string</li>
           <li class="fragment"><span class="fancy2">Reuse unknown buffer</span></li>
           <li class="fragment"><span class="fancy2">Growable</span></li>
         </ul>
@@ -761,10 +713,9 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <h3>Builders</h3>
         <br/>
         <ul>
-          <li class="fragment">Front builder</li>
+          <li class="fragment">Single buf builder</li>
           <li class="fragment">Scratch buf builder</li>
           <li class="fragment"><span class="fancy2">Key-reuse builder</span></li>
-          <li class="fragment con">Back builder</li>
           <li class="fragment">JSON writer</li>
         </ul>
       </section>
@@ -785,6 +736,18 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
 
       <section>
         <h3>Benchmarks</h3>
+      </section>
+
+      <section class="slide">
+        <h3>Entries</h3>
+        <br/>
+        <ul>
+          <li class="fragment"><span class="fancy2">pojobuf-mut</span> - mutable input string</li>
+          <li class="fragment"><span class="fancy2">pojobuf-const</span> - copy string data in buf</li>
+          <li class="fragment"><span class="fancy2">simdjson</span> - simdjson</li>
+          <li class="fragment"><span class="fancy2">boost</span> - Boost.Json - optimized POJO container</li>
+          <li class="fragment"><span class="fancy2">nlohmann</span> - naive POJO container</li>
+        </ul>
       </section>
 
       <section>
@@ -946,12 +909,6 @@ strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
         <td align="right">0.024</td>
         <td align="right">-</td>
         <td align="right">30582544.2</td>
-        </tr>
-        <tr>
-        <td>pojobuf+str</td>
-        <td align="right">0.027</td>
-        <td align="right" class="fr-fancy fragment">1.087</td>
-        <td align="right">28137140.3</td>
         </tr>
         <tr>
         <td>simdjson</td>
