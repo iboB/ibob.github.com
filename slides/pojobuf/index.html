@@ -454,7 +454,7 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">9,"character", 9,"
         <br/>
         <ul>
           <li class="fragment">Buffers of 64-bit integers</li>
-          <li class="fragment">Descriptors: optional offset to value and a type</li>
+          <li class="fragment">Descriptors: optional <em>relative</em> offset to value and a type</li>
           <li class="fragment">Value interpretation depends on the descriptor</li>
           <li class="fragment">60 bits for offset followed by 4 bits for type</li>
         </ul>
@@ -512,8 +512,7 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">9,"character", 9,"
         <ul>
           <li class="fragment">Literals (<code class="cinline">true, false, null</code>): no offset</li>
           <li class="fragment">Numbers: to value</li>
-          <li class="fragment">Double: to value</li>
-          <li class="fragment">Strings, Blobs: to two words: begin, end</li>
+          <li class="fragment">Strings, Blobs: to two words: <em>absolute</em> byte begin and end</li>
           <li class="fragment">Array: to length, followed by descriptors of elements</li>
           <li class="fragment">Object: to length, followed by triplets of string and descriptor</li>
         </ul>
@@ -530,13 +529,16 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">9,"character", 9,"
       ]
   }
         </code></pre>
-        <pre><code class="nohighlight hljs" data-noescape>words:
-    <span class="hl-code fragment" data-fragment-index="1">4, <span class="hl-code fragment" data-fragment-index="2">0,9,</span><span class="hl-code fragment" data-fragment-index="3">string|38</span>, <span class="hl-code fragment" data-fragment-index="4">18,20,int|37</span>, 20,22,int|36, <span class="hl-code fragment" data-fragment-index="5">22,28,array|13</span></span>
-      <span class="hl-code fragment" data-fragment-index="6">2, <span class="hl-code fragment" data-fragment-index="7">object|13</span>, <span class="hl-code fragment" data-fragment-index="8">object|3,</span></span>
-        <span class="hl-code fragment" data-fragment-index="8">2, 38,43,string|8, 54,55,int|7, 10, 43,54,</span>
-        <span class="hl-code fragment" data-fragment-index="7">2, 28,33,string|8, 33,35,int|7, 1, 33,38,</span>
-      10, <span class="hl-code fragment" data-fragment-index="4">20</span>, <span class="hl-code fragment" data-fragment-index="3">9,18</span>
-bytes: <span class="hl-code fragment" data-fragment-index="2">character</span><span class="hl-code fragment" data-fragment-index="3">John Snow</span><span class="hl-code fragment" data-fragment-index="4">HP</span>MP<span class="hl-code fragment" data-fragment-index="5">skills</span><span class="hl-code fragment" data-fragment-index="7">skillSwordMP</span><span class="hl-code fragment" data-fragment-index="8">skillImmortalityMP</span>
+        <pre><code class="nohighlight hljs" data-noescape>
+root: <span class="hl-code fragment" data-fragment-index="1">object|41</span>
+words:
+  <span class="hl-code fragment" data-fragment-index="2">"characte", "r"</span>p, <span class="hl-code fragment" data-fragment-index="3">"John Sno", "w"</span>p, <span class="hl-code fragment" data-fragment-index="3">8*2, 8*2+9</span>, <span class="hl-code fragment" data-fragment-index="4">"HP"p, 20</span>, "MP"p, 10, <span class="hl-code fragment" data-fragment-index="5">"skills"p</span>,
+      <span class="hl-code fragment" data-fragment-index="7">"skill"p, "Sword"p, 8*12, 8*12+5, "MP"p, 1,
+      2, 8*11, 8*11+5, string|-4, 8*15, 8*15+2, int|-1</span>,
+      <span class="hl-code fragment" data-fragment-index="8">"skill"p, "Immortal", "ity"p, 8*25, 8*25+11, "MP"p, 10,
+      2, 8*24, 8*24+5, string|-4, 8*29, 8*29+2, int|-1</span>,
+    <span class="hl-code fragment" data-fragment-index="6">2</span>, <span class="hl-code fragment" data-fragment-index="7">object|-21</span>, <span class="hl-code fragment" data-fragment-index="8">object|-7</span>,
+  <span class="hl-code fragment" data-fragment-index="1">4</span>, <span class="hl-code fragment" data-fragment-index="2">0, 9</span>, <span class="hl-code fragment" data-fragment-index="3">string|-37</span>, <span class="hl-code fragment" data-fragment-index="4">8*6, 8*6+2, int|-34</span>, 8*8, 8*8+2, int|-32, <span class="hl-code fragment" data-fragment-index="5">8*10, 8*10+6, <span class="hl-code fragment" data-fragment-index="6">array|-3</span></span>
         </code></pre>
 
         <p class="fragment">Many alternative representations of the same data are possible.</p>
@@ -568,20 +570,85 @@ bytes: <span class="hl-code fragment" data-fragment-index="2">character</span><s
       <span class="hl-code fragment" data-fragment-index="6">"HP":</span> <span class="hl-code fragment" data-fragment-index="7">20</span>,
       <span class="hl-code fragment" data-fragment-index="8">"MP":</span> <span class="hl-code fragment" data-fragment-index="9">10</span>,
       <span class="hl-code fragment" data-fragment-index="10">"skills":</span> <span class="hl-code fragment" data-fragment-index="11">[</span>
-          <span class="hl-code fragment" data-fragment-index="12">{</span><span class="hl-code fragment" data-fragment-index="13">"skill": "Sword", "MP": 1</span><span class="hl-code fragment" data-fragment-index="15">}</span>,
+          {"skill": "Sword", "MP": 1},
           {"skill": "Immortality", "MP": 10}
       ]
   }
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
-head: <span class="hl-code-f fragment" data-fragment-index="3">0,9</span><span class="hl-code-f fragment" data-fragment-index="5">,string|100</span><span class="hl-code-f fragment" data-fragment-index="6">, 18,20</span><span class="hl-code-f fragment" data-fragment-index="7">,int|99</span><span class="hl-code-f fragment" data-fragment-index="8">, 20,22</span><span class="hl-code-f fragment" data-fragment-index="9">,int|98</span><span class="hl-code-f fragment" data-fragment-index="10">, 22,28</span><span class="hl-code-f fragment" data-fragment-index="11">,object|0</span>
-      <span class="hl-code-f fragment" data-fragment-index="12">, array|9</span><span class="hl-code-f fragment" data-fragment-index="13">, 28,33,string|96, 33,35,int|95</span>
+root: <span class="hl-code-f fragment" data-fragment-index="1"><span class="hl-code fragment" data-fragment-index="12">object|0</span></span>
+head:
+  <span class="hl-code-f fragment" data-fragment-index="2">"characte", "r"p</span><span class="hl-code-f fragment" data-fragment-index="4">, "John Sno", "w"p</span><span class="hl-code-f fragment" data-fragment-index="5">, 8*2, 8*2+9</span><span class="hl-code-f fragment" data-fragment-index="6">, "HP"p</span><span class="hl-code-f fragment" data-fragment-index="7">, 20</span><span class="hl-code-f fragment" data-fragment-index="8">, "MP"p</span><span class="hl-code-f fragment" data-fragment-index="9">, 10</span><span class="hl-code-f fragment" data-fragment-index="10">, "skills"p,</span>
+tail:
+  <span class="hl-code-f fragment" data-fragment-index="10">8*10+6, 8*10, </span><span class="hl-code-f fragment" data-fragment-index="9">int|9, </span><span class="hl-code-f fragment" data-fragment-index="8">8*8+2, 8*8, </span><span class="hl-code-f fragment" data-fragment-index="7">int|7, </span><span class="hl-code-f fragment" data-fragment-index="6">8*6+2, 8*6, </span><span class="hl-code-f fragment" data-fragment-index="5">string|4, </span><span class="hl-code-f fragment" data-fragment-index="3">9, 0</span>
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          <span class="hl-code fragment persist" data-fragment-index="3">{</span>"skill": "Sword", "MP": 1},
+          {"skill": "Immortality", "MP": 10}
+      ]
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
+root: <span class="hl-code-f fragment" data-fragment-index="2"><span class="hl-code fragment" data-fragment-index="4">array|11</span></span>
+head:
+  "characte", "r"p, "John Sno", "w"p, 8*2, 8*2+9, "HP"p, 20, "MP"p, 10, "skills"p,
+tail:
+  <span class="hl-code-f fragment" data-fragment-index="1">object|0</span>, 8*10+6, 8*10, int|9, 8*8+2, 8*8, int|7, 8*6+2, 8*6, string|4, 9, 0
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          <span class="hl-code fragment" data-fragment-index="2">{</span><span class="hl-code fragment" data-fragment-index="3">"skill": "Sword", "MP": 1</span><span class="hl-code fragment persist" data-fragment-index="4">}</span>,
+          {"skill": "Immortality", "MP": 10}
+      ]
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
+root: <span class="hl-code-f fragment" data-fragment-index="2"><span class="hl-code fragment persist" data-fragment-index="5">object|12</span></span>
+head:
+  "characte", "r"p, "John Sno", "w"p, 8*2, 8*2+9, "HP"p, 20, "MP"p, 10, "skills"p,
+      <span class="hl-code-f fragment" data-fragment-index="3">"skill"p, "Sword"p, 8*12, 8*12+5, "MP"p, 1,</span>
+      <span class="hl-code-f fragment" data-fragment-index="7">2, </span><span class="hl-code-f fragment" data-fragment-index="8">8*11</span><span class="hl-code-f fragment" data-fragment-index="9">, 8*11+5</span><span class="hl-code-f fragment" data-fragment-index="10">, string</span><span class="hl-code-f fragment" data-fragment-index="11">|-4</span><span class="hl-code-f fragment" data-fragment-index="12">, 8*15</span><span class="hl-code-f fragment" data-fragment-index="13">, 8*15+2</span><span class="hl-code-f fragment" data-fragment-index="14">, int</span><span class="hl-code-f fragment" data-fragment-index="15">|-1,</span>
+tail:
+      <span class="hl-code-f fragment" data-fragment-index="3"><span class="hl-code fragment" data-fragment-index="6"><span class="hl-code fragment" data-fragment-index="14">int</span><span class="hl-code fragment" data-fragment-index="15">|16</span>, <span class="hl-code fragment" data-fragment-index="13">8*15+2</span>, <span class="hl-code fragment" data-fragment-index="12">8*15</span>, <span class="hl-code fragment" data-fragment-index="10">string</span><span class="hl-code fragment" data-fragment-index="11">|13</span>, <span class="hl-code fragment" data-fragment-index="9">8*11+5</span>, <span class="hl-code fragment" data-fragment-index="8">8*11</span>,</span></span>
+    <span class="hl-code-f fragment" data-fragment-index="1">array|11, </span>
+  object|0, 8*10+6, 8*10, int|9, 8*8+2, 8*8, int|7, 8*6+2, 8*6, string|4, 9, 0
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          {"skill": "Sword", "MP": 1<span class="hl-code fragment persist" data-fragment-index="1">}</span>,
+          {"skill": "Immortality", "MP": 10}
+      ]
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
+root: <span class="hl-code fragment persist" data-fragment-index="1">object|12</span>
+head:
+  "characte", "r"p, "John Sno", "w"p, 8*2, 8*2+9, "HP"p, 20, "MP"p, 10, "skills"p,
+      "skill"p, "Sword"p, 8*12, 8*12+5, "MP"p, 1,
+      2, 8*11, 8*11+5, string|-4, 8*15, 8*15+2, int|-1,
 tail:
 
-
-                                          <span class="hl-code-f fragment" data-fragment-index="13">1, 33,38, </span>
-        <span class="hl-code-f fragment" data-fragment-index="9">10, </span><span class="hl-code-f fragment" data-fragment-index="7">20, </span><span class="hl-code-f fragment" data-fragment-index="5">9,18</span>
-strings: <span class="hl-code-f fragment" data-fragment-index="3">character</span><span class="hl-code-f fragment" data-fragment-index="5">John Snow</span><span class="hl-code-f fragment" data-fragment-index="6">HP</span><span class="hl-code-f fragment" data-fragment-index="8">MP</span><span class="hl-code-f fragment" data-fragment-index="10">skills</span><span class="hl-code-f fragment" data-fragment-index="13">skillSwordMP</span>
+    <span class="hl-code-f fragment" data-fragment-index="2">object|18,</span>
+  object|0, 8*10+6, 8*10, int|9, 8*8+2, 8*8, int|7, 8*6+2, 8*6, string|4, 9, 0
         </code></pre>
       </section>
 
@@ -592,88 +659,20 @@ strings: <span class="hl-code-f fragment" data-fragment-index="3">character</spa
       "MP": 10,
       "skills": [
           {"skill": "Sword", "MP": 1<span class="hl-code fragment" data-fragment-index="1">}</span>,
-          <span class="hl-code fragment" data-fragment-index="4">{</span><span class="hl-code fragment" data-fragment-index="5">"skill": "Immortality", "MP": 10</span><span class="hl-code fragment" data-fragment-index="6">}</span>
+          <span class="hl-code fragment" data-fragment-index="2">{</span>"skill": "Immortality", "MP": 10}
       ]
   }
         </code></pre>
         <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
-head: 0,9,string|100, 18,20,int|99, 20,22,int|98, 22,28,object|0
-      <span class="hl-code fragment" data-fragment-index="1">, object|88</span><span class="hl-code fragment" data-fragment-index="7"><span class="hl-code-f fragment" data-fragment-index="4">, array|9</span><span class="hl-code-f fragment" data-fragment-index="5">, 38,43,string|86, 54,55,int|85</span></span>
-tail:
-
-                                          <span class="hl-code-f fragment" data-fragment-index="5">10, 43,54, </span>
-          <span class="hl-code fragment" data-fragment-index="1"><span class="hl-code fragment" data-fragment-index="2">2,</span> 28,33,string<span class="hl-code fragment" data-fragment-index="3">|8</span>, 33,35,int<span class="hl-code fragment" data-fragment-index="3">|7</span>,</span> 1, 33,38,
-        10, 20, 9,18
-strings: characterJohn SnowHPMPskillsskillSwordMP<span class="hl-code-f fragment" data-fragment-index="5">skillImmortalityMP</span>
-        </code></pre>
-      </section>
-
-      <section>
-        <pre><code class="json hljs" data-noescape>  {
-      "character": "John Snow",
-      "HP": 20,
-      "MP": 10,
-      "skills": [
-          {"skill": "Sword", "MP": 1},
-          {"skill": "Immortality", "MP": 10<span class="hl-code fragment" data-fragment-index="1">}</span>
-      <span class="hl-code fragment" data-fragment-index="2">]</span>
-  }
-        </code></pre>
-        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
-head: 0,9,string|100, 18,20,int|99, 20,22,int|98, 22,28,<span class="hl-code fragment" data-fragment-index="2">object|0
-      , object|88, <span class="hl-code fragment" data-fragment-index="1">object|78</span></span>
-tail:
-
-          <span class="hl-code fragment" data-fragment-index="1">2, 38,43,string|8, 54,55,int|7,</span> 10, 43,54,
-          2, 28,33,string|8, 33,35,int|7, 1, 33,38,
-        10, 20, 9,18
-strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
-        </code></pre>
-      </section>
-
-      <section>
-        <pre><code class="json hljs" data-noescape>  {
-      "character": "John Snow",
-      "HP": 20,
-      "MP": 10,
-      "skills": [
-          {"skill": "Sword", "MP": 1},
-          {"skill": "Immortality", "MP": 10}
-      <span class="hl-code fragment" data-fragment-index="1">]</span>
-  <span class="hl-code fragment" data-fragment-index="2">}</span>
-        </code></pre>
-        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
-head: 0,9,string|100, 18,20,int|99, 20,22,int|98, 22,28,<span class="hl-code fragment" data-fragment-index="1">array|75</span>
-
-tail:
-        <span class="hl-code fragment" data-fragment-index="1">2, object|13, object|3</span>
-          2, 38,43,string|8, 54,55,int|7, 10, 43,54,
-          2, 28,33,string|8, 33,35,int|7, 1, 33,38,
-        10, 20, 9,18
-strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
-        </code></pre>
-      </section>
-
-      <section>
-        <pre><code class="json hljs" data-noescape>  {
-      "character": "John Snow",
-      "HP": 20,
-      "MP": 10,
-      "skills": [
-          {"skill": "Sword", "MP": 1},
-          {"skill": "Immortality", "MP": 10}
-      ]
-  <span class="hl-code-i">}</span>
-        </code></pre>
-        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
+root: <span class="hl-code-f fragment" data-fragment-index="1">array|11</span>
 head:
+  "characte", "r"p, "John Sno", "w"p, 8*2, 8*2+9, "HP"p, 20, "MP"p, 10, "skills"p,
+      "skill"p, "Sword"p, 8*12, 8*12+5, "MP"p, 1,
+      2, 8*11, 8*11+5, string|-4, 8*15, 8*15+2, int|-1,
+tail:
 
-tail: <span class="hl-code-i">4, 0,9,string|38, 18,20,int|37, 20,22,int|36, 22,28,array|13</span>
-        2, object|13, object|3
-          2, 38,43,string|8, 54,55,int|7, 10, 43,54,
-          2, 28,33,string|8, 33,35,int|7, 1, 33,38,
-        10, 20, 9,18
-strings: characterJohn SnowHPMPskillsskillSwordMPskillImmortalityMP
+    object|18,
+  object|0, 8*10+6, 8*10, int|9, 8*8+2, 8*8, int|7, 8*6+2, 8*6, string|4, 9, 0
         </code></pre>
       </section>
 
