@@ -658,7 +658,31 @@ tail:
       "HP": 20,
       "MP": 10,
       "skills": [
-          {"skill": "Sword", "MP": 1<span class="hl-code fragment" data-fragment-index="1">}</span>,
+          {"skill": "Sword", "MP": 1},
+          <span class="hl-code fragment" data-fragment-index="2">{</span>"skill": "Immortality", "MP": 10}
+      ]
+  }
+        </code></pre>
+        <pre><code class="nohighlight hljs" data-noescape>102 elem buffer
+root: <span class="hl-code-f fragment" data-fragment-index="1">array|11</span>
+head:
+  "characte", "r"p, "John Sno", "w"p, 8*2, 8*2+9, "HP"p, 20, "MP"p, 10, "skills"p,
+      "skill"p, "Sword"p, 8*12, 8*12+5, "MP"p, 1,
+      2, 8*11, 8*11+5, string|-4, 8*15, 8*15+2, int|-1,
+tail:
+
+    object|18,
+  object|0, 8*10+6, 8*10, int|9, 8*8+2, 8*8, int|7, 8*6+2, 8*6, string|4, 9, 0
+        </code></pre>
+      </section>
+
+      <section>
+        <pre><code class="json hljs" data-noescape>  {
+      "character": "John Snow",
+      "HP": 20,
+      "MP": 10,
+      "skills": [
+          {"skill": "Sword", "MP": 1},
           <span class="hl-code fragment" data-fragment-index="2">{</span>"skill": "Immortality", "MP": 10}
       ]
   }
